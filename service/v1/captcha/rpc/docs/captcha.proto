@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package captcha_proto;
+
+option go_package = "./captcha_pb";
+
+message CaptchaBgColor {
+  uint32 r = 1;
+  uint32 g = 2;
+  uint32 b = 3;
+  uint32 a = 4;
+}
+
+message GetCaptchaReq {
+  int32 height = 1;
+  int32 width = 2;
+  CaptchaBgColor bg_color = 3;
+}
+
+message GetCaptchaResp {
+  string captcha_id = 1;
+  string base64_image = 2;
+}
+
+message VerifyCaptchaReq {
+  string captcha_id = 1;
+  string solution = 2;
+}
+
+message VerifyCaptchaResp {
+  bool success = 1;
+}
+
+message GetEmailCaptchaReq {
+  string email = 1;
+}
+
+message GetEmailCaptchaResp {
+  string captcha_id = 1;
+  int64 expires_at = 2; //验证码过期时间
+}
+
+message AuthEmailCaptchaReq {
+  string email = 1;
+  string captcha_id = 3;
+  string solution = 2;
+}
+
+message AuthEmailCaptchaResp {
+  bool success = 1;
+}
+
+service Captcha {
+  //获取数学验证码
+  rpc GetMathCaptcha (GetCaptchaReq) returns (GetCaptchaResp);
+
+  //校验验证码
+  rpc VerifyCaptcha (VerifyCaptchaReq) returns (VerifyCaptchaResp);
+
+  //获取邮箱验证码
+  rpc GetEmailCaptcha (GetEmailCaptchaReq) returns (GetEmailCaptchaResp);
+
+  //校验邮箱验证码
+  rpc AuthEmailCaptcha (AuthEmailCaptchaReq) returns (AuthEmailCaptchaResp);
+
+}

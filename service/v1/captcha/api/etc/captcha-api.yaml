@@ -1,0 +1,40 @@
+Name: captcha-api
+Host: 0.0.0.0
+Port: ${CAPTCHA_API_PORT}
+
+Mode: ${SERVICE_MODE}
+Debug: ${SERVICE_DEBUG}
+
+Log:
+  Level: error
+  Mode: file
+
+RootDir: ./
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7103
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: captcha-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+CaptchaRpc:
+  Endpoints:
+    - 127.0.0.1:${CAPTCHA_RPC_PORT}
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: captcha.rpc
+
+Redis:
+  Addr: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+  DB: 1

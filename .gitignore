@@ -1,0 +1,52 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+.DS_Store
+*/.DS_Store
+*.log
+*/api/logs/*
+*/rpc/logs/*
+*/logs/
+build/
+data/
+static/
+logs/
+ui/admin/node_modules
+ui/luckdraw/node_modules
+ui/luckdraw/*/node_modules
+
+# 取消忽略go文件
+!*.go
+
+# 忽略掉所有文件
+# *
+# # 取消忽略所有带有后缀名的文件
+# !*.*
+# # 取消忽略所有目录
+# !*/
+
+captcha-rpc
+captcha-api
+luckdraw-rpc
+luckdraw-api
+luckdraw-mq
+admin-rpc
+admin-api
+
+# Go workspace file
+go.work
+
+service/v1/admin/api/logs

@@ -1,0 +1,95 @@
+# 负载均衡的写法
+# 在http块中的全局块中配置
+# upstream固定写法 后面的myserver可以自定义
+upstream admin_server {
+    server mixbench:${ADMIN_API_PORT}; # 被代理的服务地址
+    #可以继续添加，如： server mixbench1:${ADMIN_API_PORT};
+    keepalive 1000;  # 默认值100，可能不够用
+}
+
+
+server {
+    listen 80;
+    listen 443 ssl http2;
+    server_name ${BACKEND_HOST};
+    index index.php index.html index.htm default.php default.htm default.html;
+    root /www/${BACKEND_HOST};
+
+    #SSL-START SSL相关配置，请勿删除或修改下一行带注释的404规则
+    #HTTP_TO_HTTPS_START
+    # if ($server_port !~ 443) {
+    #     rewrite ^(/.*)$ https://$host$1 permanent;
+    # }
+    #error_page 404/404.html;
+    ssl_certificate /etc/nginx/ssl/${BACKEND_HOST}/server.pem;
+    ssl_certificate_key /etc/nginx/ssl/${BACKEND_HOST}/server.key;
+    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_prefer_server_ciphers on;
+    # ssl_session_cache shared:SSL:5m;
+    ssl_session_timeout 5m;
+    #SSL-END
+
+    #ERROR-PAGE-START  404配置，可以注释、删除或修改
+    error_page 404 /www/common/404.html;
+    #error_page 502 /502.html;
+    #ERROR-PAGE-END
+
+    #禁止访问的文件或目录
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md) {
+        return 404;
+    }
+
+    #设置代理，指向本地端口
+    # proxy_pass http://localhost:3000/;
+    # proxy_redirect off;
+
+    # add_header 'port' $admin_api_port;
+
+    # 允许跨域请求的域，*代表所有
+    add_header 'Access-Control-Allow-Origin' *;
+    # 允许带上cookie请求
+    add_header 'Access-Control-Allow-Credentials' 'true';
+    #允许请求的方法，比如 GET/POST/PUT/DELETE
+    add_header 'Access-Control-Allow-Methods' *;
+    # 允许请求的header
+    add_header 'Access-Control-Allow-Headers' *;
+
+    # 请求头加入IP地址
+    proxy_set_header X-Real_IP $remote_addr;
+    # Socket.IO Support
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_http_version 1.1;
+
+    #代理端口
+    location /v1/api/admin/ {
+        proxy_pass http://admin_server; # 负载均衡
+    }
+
+    location /v1/api/captcha/ {
+        proxy_pass http://mixbench:${CAPTCHA_API_PORT};
+    }
+    location /v1/api/luckdraw/ {
+        proxy_pass http://mixbench:${LUCKDRAW_API_PORT};
+    }
+
+    # 使用 root 声明的是根目录，经过 location 匹配后，直接去根目录下找访问路径中 sever_name 后面的文件地址。
+    # 使用 alias 声明的是别名目录，经过 location 匹配后，去别名目录下找访问路径中 sever_name 后面除去 location 匹配的地址的剩余地址。这就好像给 location 匹配的地址取了个别名一样。
+    #静态文件夹配置：http://host/static/**.txt
+    # 已废弃
+    # location /static/ {
+    #     root /web;
+    #     # autoindex on;
+    # }
+    # #静态文件夹配置
+    # location /static {
+    #     alias /web/static/;
+    #     # autoindex on;
+    # }
+
+    access_log  /var/log/nginx/${BACKEND_HOST}.log;
+    error_log  /var/log/nginx/${BACKEND_HOST}.error.log;
+}

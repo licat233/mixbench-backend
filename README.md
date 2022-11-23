@@ -1,0 +1,141 @@
+# mixbench-backend
+
+## 系统结构组成
+
+| 类别     | 服务名称      | 暴露端口 | 映射端口 | 说明                                 |
+| -------- | ------------- | -------- | -------- | ------------------------------------ |
+| http代理 | nginx         | 80       | 80       | http协议端口                         |
+| http代理 | nginx         | 443      | 443      | https协议端口                        |
+| 数据库   | mysql         | 3306     | -        | mysql数据库                          |
+| 数据库   | phpmyadmin    | 80       | -        | mysql管理面板 (ui)                   |
+| 缓存库   | redis         | 6379     | -        | redis缓存库                          |
+| 缓存库   | phpredisadmin | 80       | -        | redis管理面板(ui)                    |
+| 数据中心 | datacenter    | -        | -        | 数据卷容器，存储各个服务生产的数据   |
+| 链路追踪 | jaeger        | 6831     | -        | 接受jaeger.thriftThrift-compact 协议 |
+| 链路追踪 | jaeger        | 6832     | -        | 接受jaeger.thriftThrift-binary 协议  |
+| 链路追踪 | jaeger        | 5778     | -        | 服务配置（采样等）                   |
+| 链路追踪 | jaeger        | 16686    | -        | 服务前端 (ui)                        |
+| 链路追踪 | jaeger        | 14268    | -        | 直接接受jaeger.thrift客户            |
+| 链路追踪 | jaeger        | 9411     | -        | Zipkin 兼容端点（可选）              |
+| 服务监控 | prometheus    | 9090     | -        | 服务监控系统                         |
+| 服务监控 | grafana       | 3000     | -        | prometheus服务监控系统 (ui)          |
+| 数据收集 | elasticsearch | 9200     | -        | http协议连接es使用的端口             |
+| 数据收集 | elasticsearch | 9300     | -        | tcp客户端连接使用的端口              |
+| 数据收集 | kibana        | 5601     | -        | 查看es数据 (ui)                      |
+| 日志收集 | filebeat      | -        | -        | 收集日志并上报到kafka                |
+| 日志处理 | go-stash      | -        | -        | 处理kafka中的日志并发送到es          |
+| 消息队列 | zookeeper     | 2181     | -        | kafka的依赖服务                      |
+| 消息队列 | kafka         | 9092     | -        | kafka消息队列                        |
+| 消息队列 | asynqmon      | 8080     | -        | go基于redis实现的消息队列及面板 (ui) |
+| 核心服务 | mixbench      | -        | -        | modd热编译环境                       |
+| 核心业务 | admin-api     | 7011     | -        | 管理员API服务                        |
+| 核心业务 | admin-rpc     | 7012     | -        | 管理员RPC服务                        |
+| 核心业务 | captcha-api   | 7021     | -        | 验证码API服务                        |
+| 核心业务 | captcha-rpc   | 7022     | -        | 验证码RPC服务                        |
+| 核心业务 | luckdraw-api  | 7031     | -        | 抽奖API服务                          |
+| 核心业务 | luckdraw-rpc  | 7032     | -        | 抽奖RPC服务                          |
+| 核心业务 | luckdraw-mq   | 7033     | -        | 抽奖mq服务(kafka或asynq)             |
+
+> #### 外部访问所有的服务均通过nginx反向代理: dev.mixbench.net/NAME
+> #### 所有数据存储在datacenter数据卷容器中
+
+## 使用示例
+
+① 生成 user.api 文件
+
+>```shell
+>goctl api -o user.api
+>```
+
+② 根据 user.api 文件生成 api 服务  
+
+>```shell
+>goctl api go -api user.api -dir . -style goZero
+>```
+
+③ 启动 api 服务
+
+>```shell
+>go run user.go -f etc/user-api.yaml
+>```
+
+④ 根据 user.api 文件生成 swagger 文件  
+
+>确保已经安装了【 goctl-swagger 】插件:
+>
+>```shell
+>GOPROXY=https://goproxy.cn/,direct go install github.com/zeromicro/goctl-swagger@latest
+>```
+>
+>生成 user.json 文件:  
+>
+>```shell
+>goctl api plugin -plugin goctl-swagger="swagger -filename user.json" -api user.api -dir .
+>```
+>
+>更多关于【 goctl-swagger 】的使用：<https://github.com/zeromicro/goctl-swagger>
+
+## .gitignore的编写  
+
+忽略二进制文件  
+
+```bash
+# 忽略掉所有文件
+*
+# 取消忽略所有带有后缀名的文件
+!*.*
+# 取消忽略所有目录
+!*/
+```
+
+## 强制重置仓库
+
+ .gitignore文件目录下CMD输入
+
+```bash
+git rm -r --cached .
+```
+
+ 重置  
+
+```bash
+git checkout --orphan latest_branch
+git add -A
+git commit -am newest
+git branch -D main
+git branch -m main
+```
+
+ 提交
+
+```bash
+git push -f origin main
+```
+
+一键提交
+
+```bash
+git add .
+git commit -m update --no-verify
+git push origin main
+git push origin-t main
+```
+
+## 放弃本地更改，强制覆盖本地
+
+```bash
+git fetch --all
+git reset --hard origin/main
+git pull origin main
+```
+
+注意：
+1、 .gitignore只能忽略那些原来没有被track的文件，如果某些文件已经被纳入了版本管理中，则修改.gitignore是无效的。
+
+2、 想要.gitignore起作用，必须要在这些文件不在暂存区中才可以，.gitignore文件只是忽略没有被staged(cached)文件， 对于已经被staged文件，加入ignore文件时一定要先从staged移除，才可以忽略。
+
+## 生成客户端调用代码(go,javascript,php)
+
+```bash
+goctl api ts -api captcha.api -dir .
+```

@@ -1,0 +1,43 @@
+Name: luckdraw.rpc
+ListenOn: 127.0.0.1:${LUCKDRAW_RPC_PORT}
+Mode: ${SERVICE_MODE}
+Debug: ${SERVICE_DEBUG}
+
+# Etcd:
+#   Hosts:
+#     - 127.0.0.1:2379
+#   Key: luckdraw.rpc
+
+Mysql:
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_DATABASE}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
+
+JwtAuth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400
+
+Log:
+  Level: error
+  Mode: file
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 7106
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: luckdarw-rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+KqGoodluckConf:
+  Brokers:
+    - kafka:1
+  Topic: goodluck-topic

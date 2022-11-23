@@ -1,0 +1,72 @@
+syntax = "v1"
+
+type PrizeGrade {
+    Id        int64     `json:"id"`         // 表主键
+    Name      string    `json:"name"`       // 级别名称
+    IsWin     int64     `json:"is_win"`     // 是否中奖
+    CreateAt  int64     `json:"create_at"`  // 创建时间
+    UpdateAt  int64     `json:"update_at"`  // 更新时间
+    IsDeleted int64     `json:"is_deleted"` // 是否已被删除
+    DeleteAt  int64     `json:"delete_at"`  // 删除时间
+}
+
+type PrizeGradeGetReq {
+    Id int64 `form:"id"`
+}
+
+type PrizeGradeAddReq {
+    Name      string    `json:"name"`       // 级别名称
+    IsWin     int64     `json:"is_win"`     // 是否中奖
+}
+
+type PrizeGradePutReq {
+    Id        int64     `json:"id"`         // 表主键
+    Name      string    `json:"name"`       // 级别名称
+    IsWin     int64     `json:"is_win"`     // 是否中奖
+}
+
+type PrizeGradeDelReq {
+	Id int64 `json:"id"`
+}
+
+//通用页面数据请求
+type PrizeGradeListReq {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	//字段搜索
+    Name      string    `form:"name,optional"`       // 级别名称
+    IsWin     int64     `form:"is_win,optional,default=-1"`     // 是否中奖
+}
+
+@server(
+	jwt: JwtAuth
+	group: prizeGrade
+	middleware: JwtMiddleware
+    prefix: /v1/api/admin/prizeGrade
+)
+service admin-api {
+	@doc "获取奖品级别列表"
+	@handler List
+	get /list(PrizeGradeListReq) returns(BaseResp)
+
+	@doc "获取奖品级别信息"
+	@handler info 
+	get /(PrizeGradeGetReq) returns(BaseResp)
+
+    @doc "添加奖品级别"
+	@handler add 
+	post /(PrizeGradeAddReq) returns(BaseResp)
+
+    @doc "编辑奖品级别"
+	@handler put 
+	put /(PrizeGradePutReq) returns(BaseResp)
+
+    @doc "删除奖品级别"
+	@handler del 
+	delete /(PrizeGradeDelReq) returns(BaseResp)
+
+    @doc "枚举列表"
+	@handler enumList
+	get /enumList returns([]Enum)
+}

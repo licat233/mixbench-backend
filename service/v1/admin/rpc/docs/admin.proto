@@ -1,0 +1,694 @@
+syntax = "proto3";
+
+package admin_proto;
+
+option go_package = "./admin_pb";
+
+message Activity {
+  int64   id = 1;
+  string uuid = 2;
+  string name = 3;
+  int64 project_id = 4;
+  int64 status = 5; //活动状态，是否在举办，默认关闭，需手动开启
+  int64 pattern = 6; //方案: 0私密的，1公开的
+  int64 max_count = 7; //单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+  int64 max_prizes = 8; //单人最大获奖数:  -1表示无限制，0表示不可领奖
+  int64 start_time = 9; //活动开始时间
+  int64 end_time = 10; //活动结束时间
+}
+
+message Adminer {
+  int64   id = 1;
+  string uuid = 2;
+  string name = 3;
+  string avatar = 4;
+  string passport = 5;
+  string password = 6;
+  string email = 7;
+  int64 status = 8;
+  int64 is_super_admin = 9;
+  int64 login_count = 10;
+  int64 last_login = 11;
+}
+
+message Lucker {
+  int64   id = 1;
+  string uuid = 2;
+  int64 user_id = 3;
+  int64 prizes_pool_id = 4;
+  int64 status = 5;  //状态: 0未领奖，1已领奖，2放弃领奖
+  int64 luck_date = 6;
+  string ip = 7;
+}
+
+message Prize {
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  string image = 4;
+  double price = 5;
+  int64 status = 6;
+}
+
+message PrizesPool {
+  int64   id = 1;
+  string uuid = 2;
+  int64 activity_id = 3;
+  int64 prize_id = 4;
+  int64 grade_id = 7;
+  int64 luck_value = 5;
+  int64 status = 6;
+  int64 total = 8;
+  int64 remainder = 9;
+}
+
+message PrizeGrade {
+  int64   id = 1;
+  string name = 2;
+  int64 is_win = 3;
+}
+
+message Project {
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  int64 status = 4;
+}
+
+message User {
+  int64 id = 1;
+  string uuid = 2;
+  string passport = 3;
+  string email = 4;
+  string phone = 5;
+  string name = 6;
+  string address = 7;
+  int64 score = 8;
+  int64 status = 9;  // 状态:0未授权，1正常，2已冻结
+}
+
+message UsersPool {
+  int64   id = 1;
+  string uuid = 2;
+  int64 activity_id = 3;
+  int64 user_id = 4;
+  int64 status = 5;  //状态:0未授权，1正常，2已冻结
+  int64 score = 6;
+}
+
+message Policy {
+  string sub = 1;
+  string dom = 2;
+  string obj = 3;
+  string act = 4;
+}
+
+
+message LuckerDetail {
+  //中奖信息
+  Lucker lucker = 1;
+
+  //中奖用户信息
+  User user = 2;
+
+  //奖品池信息
+  PrizesPool prizes_pool = 3;
+
+  //活动信息
+  Activity activity = 4;
+
+  //奖品信息
+  Prize prize = 5;
+
+  //奖品级别
+  PrizeGrade prize_grade = 6;
+
+  //项目信息
+  Project project = 7;
+}
+
+message JwtData {
+  int64 user_id = 1;
+  string ip = 2;
+  string platform = 3;
+}
+
+message JwtToken {
+  string access_token = 1;
+  int64 access_expire = 2;
+  int64 refresh_after = 3;
+}
+
+
+//枚举基本类型
+message Enum {
+  string label = 1;
+  int64  value = 2;
+}
+
+message TreeOptions {
+  string title = 1;
+  int64  value = 2;
+  repeated TreeOptions children = 3;
+}
+
+message EnumListReq{
+}
+
+message GetActivityEnumListReq{
+  int64 project_id = 1;
+}
+
+//枚举列表
+message EnumListResp{
+  repeated Enum data = 1;
+}
+
+message GetProjectDetailReq {
+  int64 project_id = 1;
+}
+
+message ProjectDetails {
+  Project project = 1;
+  repeated Activity activities = 2;
+}
+
+message GetProjectDetailResp {
+  ProjectDetails data = 1;
+}
+
+message ProjectTreeOptionsResp {
+  repeated TreeOptions data = 1;
+}
+
+message ActivityDetails {
+  Activity activity = 1;
+  repeated ActivityPrize activity_prizes = 2;
+}
+
+//每个用户的信息，包含参与的活动信息
+message UserDetails {
+  User user = 1;
+  repeated UserActivity user_activities = 2;
+}
+
+//基本数据结构 end
+
+//请求结构体
+
+message GenerateTokenReq {
+  JwtData jwt_data = 1; //jwt数据
+  bool auto_login = 2; //自动登录，1天或者7天免登录
+}
+
+message GenerateTokenResp {
+  JwtToken jwt_token = 1;
+}
+
+message LoginReq {
+  string passport = 1;
+  string password = 2;
+  bool auto_login = 3; //自动登录，1天或者7天免登录
+  JwtData jwt_data = 4; //登录需要提供jwt数据
+}
+
+message LoginResp {
+  JwtToken jwt_token = 2;
+}
+
+message LoginByEmailReq {
+  string email = 1;
+  bool auto_login = 2; //自动登录，1天或者7天免登录
+  JwtData jwt_data = 3; //登录需要提供jwt数据
+}
+
+message ExsitEmailReq {
+  string email = 1;
+}
+
+message ExsitEmailResp {
+  bool exsit = 1;
+}
+
+message FindByEmailReq {
+  string email = 1;
+}
+
+message FindByEmailResp {
+  Adminer adminer = 1;
+}
+
+message LogoutReq {
+  string jwt_token = 1;
+  string platform = 2;
+  string ip = 3;
+}
+
+message LogoutResp {
+}
+
+message IsLogoutReq {
+  string jwt_token = 1;
+}
+
+message IsLogoutResp {
+  bool status = 1;
+}
+
+message ParseJwtTokenReq {
+  string jwt_token = 1;
+  string secret = 2;
+}
+
+message ParseJwtTokenResp {
+  map<string, string> claims = 1;
+}
+
+message GetActivityDetailReq{
+  int64 activity_id = 1;
+}
+
+message GetUserDetailReq {
+  int64 user_id = 1;
+}
+
+//-----------
+
+//列表数据请求
+message ListReq {
+  int64 page_size = 1;
+  int64 page = 2;
+  string keyword = 3;
+}
+
+//单个数据请求
+message ItemReq{
+  int64 id = 1;
+}
+
+//状态响应
+message StatusResp {
+}
+
+//添加单条数据响应
+message AddActivityResp{
+  Activity activity = 1;
+}
+
+message AddAdminerResp{
+  Adminer adminer = 1;
+}
+
+message AddLuckerResp{
+  Lucker lucker = 1;
+}
+
+message AddPrizeResp{
+  Prize prize = 1;
+}
+
+message AddPrizeGradeResp {
+  PrizeGrade prize_grade = 1;
+}
+
+message AddPrizesPoolResp{
+  PrizesPool prizes_pool = 1;
+}
+
+message AddProjectResp{
+  Project project = 1;
+}
+
+message AddUserResp{
+  User user = 1;
+}
+
+message AddUsersPoolResp{
+  UsersPool users_pool = 1;
+}
+
+//获取单条数据响应
+message GetActivityResp{
+  Activity activity = 1;
+}
+
+message GetAdminerResp{
+  Adminer adminer = 1;
+}
+
+message GetLuckerResp{
+  Lucker lucker = 1;
+}
+
+message GetPrizeResp{
+  Prize prize = 1;
+}
+
+message GetPrizeGradeResp{
+  PrizeGrade prize_grade = 1;
+}
+
+message GetPrizesPoolResp{
+  PrizesPool prizes_pool = 1;
+}
+
+message GetProjectResp{
+  Project project = 1;
+}
+
+message GetUserResp{
+  User user = 1;
+}
+
+message GetUsersPoolResp{
+  UsersPool users_pool = 1;
+}
+
+message GetActivityDetailResp{
+  ActivityDetails data = 1;
+}
+
+message GetUserDetailResp{
+  UserDetails data = 1;
+}
+
+//多条数据响应
+message GetActivityListResp {
+  repeated Activity data = 1;
+  int64 total = 2;
+}
+
+message GetAdminerListResp {
+  repeated Adminer data = 1;
+  int64 total = 2;
+}
+
+message GetLuckerListResp {
+  repeated Lucker data = 1;
+  int64 total = 2;
+}
+
+message GetLuckerDetailsResp {
+  repeated LuckerDetail data = 1;
+  int64 total = 2;
+}
+
+message GetPrizeListResp {
+  repeated Prize data = 1;
+  int64 total = 2;
+}
+
+message GetPrizeGradeListResp {
+  repeated PrizeGrade data = 1;
+  int64 total = 2;
+}
+
+message GetPrizesPoolListResp {
+  repeated PrizesPool data = 1;
+  int64 total = 2;
+}
+
+message GetProjectListResp {
+  repeated Project data = 1;
+  int64 total = 2;
+}
+
+message GetUserListResp {
+  repeated User data = 1;
+  int64 total = 2;
+}
+
+//多条详细数据响应
+message GetProjectDetailsListResp {
+  repeated ProjectDetails data = 1;
+  int64 total = 2;
+}
+
+message GetActivityDetailsListResp {
+  repeated ActivityDetails data = 1;
+  int64 total = 2;
+}
+
+message GetUserDetailsListResp {
+  repeated UserDetails data = 1;
+  int64 total = 2;
+}
+
+//用户池列表响应
+message GetUsersPoolListResp {
+  repeated UsersPool data = 1;
+  int64 total = 2;
+}
+
+//搜索请求
+message SearchPrizesPoolReq{
+  int64 activity_id = 1;
+}
+
+message SearchPrizesPoolResp {
+  repeated PrizesPool data = 1;
+}
+
+//用户活动
+message UserActivity {
+  Activity activity = 1;
+  UsersPool users_pool = 2;
+}
+
+message UserActivityReq {
+  int64 user_id = 1;
+}
+
+message UserActivityResp {
+  repeated UserActivity data = 1;
+}
+
+//活动奖品
+message ActivityPrize {
+  Prize prize = 1;
+  PrizesPool prizes_pool = 2;
+  PrizeGrade prize_grade = 3;
+}
+
+message ActivityPrizesReq {
+  int64 activity_id = 1;
+}
+
+message ActivityPrizesResp {
+  repeated ActivityPrize data = 1;
+}
+
+message ProjectActivityReq {
+  int64 project_id = 1;
+}
+
+message ProjectActivityResp {
+  repeated Activity data = 1;
+}
+
+message LuckerDetailsReq {
+  ListReq list_req = 1;
+  //lucker表字段
+  Lucker lucker = 2;
+  //other表字段
+  string user_name = 3;
+  int64 project_id = 4;
+  int64 activity_id = 5;
+  string activity_name = 6;
+  int64 prize_id = 7;
+  string prize_name = 8;
+  int64 prize_grade_id = 9;
+}
+
+message LuckerPutByPrizeReq {
+  int64   id = 1;
+  string uuid = 2;
+  int64 user_id = 3;
+  int64 prize_id = 4;
+  int64 activity_id = 5;
+  int64 status = 6;  //状态: 0未领奖，1已领奖，2放弃领奖
+  int64 luck_date = 7;
+  string ip = 8;
+}
+
+message LuckerPutReq {
+  int64   id = 1;
+  string uuid = 2;
+  int64 user_id = 3;
+  int64 prizes_pool_id = 4;
+  int64 status = 5;  //状态: 0未领奖，1已领奖，2放弃领奖
+  int64 luck_date = 6;
+  string ip = 7;
+}
+
+//list搜索
+message AdminerListReq {
+  ListReq list_req = 1;
+  Adminer adminer = 2;
+}
+
+message UserListReq {
+  ListReq list_req = 1;
+  User user = 2;
+}
+
+message UsersPoolListReq {
+  ListReq list_req = 1;
+  UsersPool users_pool = 2;
+}
+
+message ProjectListReq {
+  ListReq list_req = 1;
+  Project project = 2;
+}
+
+message ActivityListReq {
+  ListReq list_req = 1;
+  Activity activity = 2;
+}
+
+message PrizeListReq {
+  ListReq list_req = 1;
+  Prize prize = 2;
+}
+
+message PrizesPoolListReq {
+  ListReq list_req = 1;
+  PrizesPool prizes_pool = 2;
+}
+
+message PrizeGradeListReq {
+  ListReq list_req = 1;
+  PrizeGrade prize_grade = 2;
+}
+
+message LuckerListReq {
+  ListReq list_req = 1;
+  Lucker lucker = 2;
+}
+
+message NilReq{
+}
+
+message VerifyPasswordReq {
+  int64 adminer_id = 1;
+  string password = 2;
+}
+
+message VerifyPasswordResp {
+  bool ok = 1;
+}
+
+message PutPasswordReq {
+  int64  adminer_id = 1;
+  string old_password = 2; // 旧密码
+  string new_password = 3; // 新密码
+  string captcha_id = 4; //验证码ID
+  string solution = 5; //验证码答案
+}
+
+message ResetLuckValueReq {
+  int64 activity_id = 1;
+  string activity_uuid = 2;
+}
+
+service Admin {
+  //生产token
+  rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
+  //账号登录
+  rpc Login (LoginReq) returns (LoginResp);
+  //邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
+  rpc LoginByEmail (LoginByEmailReq) returns (LoginResp);
+  //邮箱是否存在
+  rpc ExsitEmail (ExsitEmailReq) returns (ExsitEmailResp);
+  //通过邮箱查找用户
+  rpc FindByEmail (FindByEmailReq) returns (FindByEmailResp);
+  //注销登录
+  rpc Logout (LogoutReq) returns (LogoutResp);
+  //是否已经注销
+  rpc IsLogout (IsLogoutReq) returns (IsLogoutResp);
+  //解析 jwtToken, 返回原生error
+  rpc ParseJwtToken (ParseJwtTokenReq) returns (ParseJwtTokenResp);
+  //验证管理员密码
+  rpc VerifyPassword (VerifyPasswordReq) returns (VerifyPasswordResp);
+
+  rpc GetActivityList (ActivityListReq) returns (GetActivityListResp);
+  rpc GetActivityDetail (GetActivityDetailReq) returns (GetActivityDetailResp);
+  rpc GetActivityDetails (ActivityListReq) returns (GetActivityDetailsListResp);
+  rpc GetActivity (ItemReq) returns (GetActivityResp);
+  rpc AddActivity (Activity) returns (AddActivityResp);
+  rpc PutActivity (Activity) returns (StatusResp);
+  rpc DelActivity (ItemReq) returns (StatusResp);
+  rpc ProjectActivity (ProjectActivityReq) returns (ProjectActivityResp);
+  
+
+  rpc GetAdminerList (AdminerListReq) returns (GetAdminerListResp);
+  rpc GetAdminer (ItemReq) returns (GetAdminerResp);
+  rpc AddAdminer (Adminer) returns (AddAdminerResp);
+  rpc PutAdminer (Adminer) returns (StatusResp);
+  rpc DelAdminer (ItemReq) returns (StatusResp);
+  rpc PutPassword (PutPasswordReq) returns (StatusResp);
+
+  rpc GetLuckerList (LuckerListReq) returns (GetLuckerListResp);
+  rpc GetLuckerDetailsList (LuckerDetailsReq) returns (GetLuckerDetailsResp);
+  rpc GetLucker (ItemReq) returns (GetLuckerResp);
+  rpc AddLucker (Lucker) returns (AddLuckerResp);
+  rpc PutLucker (LuckerPutReq) returns (StatusResp);
+  rpc PutLuckerByPrize (LuckerPutByPrizeReq) returns (StatusResp);
+  rpc DelLucker (ItemReq) returns (StatusResp);
+
+  rpc GetPrizeList (PrizeListReq) returns (GetPrizeListResp);
+  rpc GetPrize (ItemReq) returns (GetPrizeResp);
+  rpc AddPrize (Prize) returns (AddPrizeResp);
+  rpc PutPrize (Prize) returns (StatusResp);
+  rpc DelPrize (ItemReq) returns (StatusResp);
+  rpc ActivityPrizes (ActivityPrizesReq) returns (ActivityPrizesResp);
+
+  rpc GetPrizeGradeList (PrizeGradeListReq) returns (GetPrizeGradeListResp);
+  rpc GetPrizeGrade (ItemReq) returns (GetPrizeGradeResp);
+  rpc AddPrizeGrade (PrizeGrade) returns (AddPrizeGradeResp);
+  rpc PutPrizeGrade (PrizeGrade) returns (StatusResp);
+  rpc DelPrizeGrade (ItemReq) returns (StatusResp);
+
+  rpc GetPrizesPoolList (PrizesPoolListReq) returns (GetPrizesPoolListResp);
+  rpc GetPrizesPool (ItemReq) returns (GetPrizesPoolResp);
+  rpc AddPrizesPool (PrizesPool) returns (AddPrizesPoolResp);
+  rpc PutPrizesPool (PrizesPool) returns (StatusResp);
+  rpc DelPrizesPool (ItemReq) returns (StatusResp);
+  rpc SearchPrizesPool (SearchPrizesPoolReq) returns (SearchPrizesPoolResp);
+  rpc ResetLuckValue (ResetLuckValueReq) returns (StatusResp);
+
+  rpc GetProjectList (ProjectListReq) returns (GetProjectListResp);
+  rpc GetProject (ItemReq) returns (GetProjectResp);
+  rpc AddProject (Project) returns (AddProjectResp);
+  rpc PutProject (Project) returns (StatusResp);
+  rpc DelProject (ItemReq) returns (StatusResp);
+  rpc GetProjectDetail (GetProjectDetailReq) returns (GetProjectDetailResp);
+  rpc GetProjectDetails (ProjectListReq) returns (GetProjectDetailsListResp);
+
+  rpc GetUserList (UserListReq) returns (GetUserListResp);
+  rpc GetUserDetail (GetUserDetailReq) returns (GetUserDetailResp);
+  rpc GetUserDetails (UserListReq) returns (GetUserDetailsListResp);
+  rpc GetUser (ItemReq) returns (GetUserResp);
+  rpc AddUser (User) returns (AddUserResp);
+  rpc PutUser (User) returns (StatusResp);
+  rpc DelUser (ItemReq) returns (StatusResp);
+  rpc UserActivity (UserActivityReq) returns (UserActivityResp);
+
+  rpc GetUsersPoolList (UsersPoolListReq) returns (GetUsersPoolListResp);
+  rpc GetUsersPool (ItemReq) returns (GetUsersPoolResp);
+  rpc AddUsersPool (UsersPool) returns (AddUsersPoolResp);
+  rpc PutUsersPool (UsersPool) returns (StatusResp);
+  rpc DelUsersPool (ItemReq) returns (StatusResp);
+
+  rpc GetAdminerEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetProjectEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetActivityEnumList (GetActivityEnumListReq) returns (EnumListResp);
+  rpc GetPrizeEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetPrizeGradeEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetLuckerEnumList (EnumListReq) returns (EnumListResp);
+  rpc GetUserEnumList (EnumListReq) returns (EnumListResp);
+  rpc ActivityPatternEnumList (NilReq) returns (EnumListResp);
+  rpc GetProjectTreeOptions (EnumListReq) returns (ProjectTreeOptionsResp);
+}
+
