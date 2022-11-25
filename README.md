@@ -36,7 +36,7 @@
 | 核心业务 | luckdraw-rpc  | 7032     | -        | 抽奖RPC服务                          |
 | 核心业务 | luckdraw-mq   | 7033     | -        | 抽奖mq服务(kafka或asynq)             |
 
-> #### 外部访问所有的服务均通过nginx反向代理: dev.mixbench.net/NAME
+> #### 外部访问所有的服务均通过nginx反向代理: SEVER_NAME.mixbench.net
 > #### 所有数据存储在datacenter数据卷容器中
 
 ## 使用示例

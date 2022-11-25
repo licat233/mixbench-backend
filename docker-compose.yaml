@@ -5,6 +5,7 @@ networks:
     driver: ${NETWORKS_DRIVER}
 # 数据卷
 volumes:
+  data_volume: {}
   build_volume: {}
   mysql_volume: {}
   redis_volume: {}
@@ -15,6 +16,8 @@ volumes:
   grafana_volume: {}
   prometheus_volume: {}
   jaeger_volume: {}
+  static_volume: {}
+  www_volume: {}
 
 # 服务容器配置
 services:
@@ -52,23 +55,26 @@ services:
     volumes:
       - .:/go/mixbench
       - build_volume:/go/mixbench/build
+      - static_volume:/go/mixbench/static
     working_dir: /go/mixbench
-    restart: on-failure:3
+    restart: on-failure
     privileged: true
     stdin_open: true # 打开标准输入，可以接受外部输入
     tty: true
     networks:
       - backend_net
+
   # 数据卷容器，数据中心
   datacenter:
     image: ubuntu:latest
     hostname: datacenter
-    container_name: datacenter
-    restart: on-failure:3
+    container_name: mixbench_data
+    restart: on-failure
     privileged: true
     stdin_open: true
     volumes:
-      - build_volume:/data/build
+      - data_volume:/data_v
+      - build_volume:/data_v/build
       - mysql_volume:/data_v/mysql
       - redis_volume:/data_v/redis
       - nginx_volume:/data_v/nginx
@@ -78,14 +84,43 @@ services:
       - grafana_volume:/data_v/grafana
       - prometheus_volume:/data_v/prometheus
       - jaeger_volume:/data_v/jaeger
+      - static_volume:/data_v/static
+      - www_volume:/data_v/www
     networks:
       - backend_net
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: mixbench_filebrowser
+    hostname: filebrowser
+    restart: on-failure
+    expose:
+      - 80
+    volumes:
+      - data_volume:/srv
+      - build_volume:/srv/build
+      - mysql_volume:/srv/mysql
+      - redis_volume:/srv/redis
+      - nginx_volume:/srv/nginx
+      - zookeeper_volume:/srv/zookeeper
+      - kafka_volume:/srv/kafka
+      - elasticsearch_volume:/srv/elasticsearch
+      - grafana_volume:/srv/grafana
+      - prometheus_volume:/srv/prometheus
+      - jaeger_volume:/srv/jaeger
+      - static_volume:/srv/static
+      - ./deploy/nginx/www:/srv/www
+    networks:
+      - backend_net
+    depends_on:
+      - datacenter
+
   # Nginx服务
   nginx:
     image: nginx:latest
     hostname: nginx
     container_name: mixbench_nginx
-    restart: on-failure:3
+    restart: on-failure
     privileged: true
     environment:
       - TZ=${TZ}
@@ -100,26 +135,25 @@ services:
       - LUCKDRAW_RPC_PORT=${LUCKDRAW_RPC_PORT}
       - LUCKDRAW_MQ_PORT=${LUCKDRAW_MQ_PORT}
     ports:
-      - ${HTTP_PORT}:80
-      - ${HTTPS_PORT}:443
+      - ${NGINX_PORT}:80 #只需提供80端口，SSL/STL 由公网 nginx 负责
     volumes:
       - ./deploy/nginx/templates:/etc/nginx/templates
       - ./deploy/nginx/conf.d:/etc/nginx/conf.d
       - ./deploy/nginx/ssl:/etc/nginx/ssl
       - ./deploy/nginx/www:/www
-      # - ${DATA_DIR}/nginx/log:/var/log/nginx
-      - nginx_volume:/nginx/logs:/var/log/nginx
-      - ./static:/static
+      - nginx_volume:/var/log/nginx
+      - static_volume:/static
     networks:
       - backend_net
     depends_on:
       - mixbench
+
   #jaeger链路追踪 — Jaeger for tracing
   jaeger:
     image: jaegertracing/all-in-one:latest
     hostname: jaeger
     container_name: mixbench_jaeger
-    restart: on-failure:3
+    restart: on-failure
     # ports:
     #   # - "5775:5775/udp" #新版本已弃用
     #   - "6831:6831/udp"
@@ -160,7 +194,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
       - "--storage.tsdb.path=/prometheus"
-    restart: on-failure:3
+    restart: on-failure
     user: root
     # ports:
     #   - 9090:9090
@@ -177,7 +211,7 @@ services:
     user: root
     environment:
       - TZ=${TZ}
-    restart: on-failure:3
+    restart: on-failure
     volumes:
       # - ${DATA_DIR}/grafana/data:/var/lib/grafana
       - grafana_volume:/var/lib/grafana
@@ -199,7 +233,7 @@ services:
     volumes:
       # - ${DATA_DIR}/elasticsearch/data:/usr/share/elasticsearch/data
       - elasticsearch_volume:/usr/share/elasticsearch/data
-    restart: on-failure:3
+    restart: on-failure
     expose:
       - 9200
       - 9300
@@ -214,7 +248,7 @@ services:
     environment:
       - TZ=${TZ}
       - elasticsearch.hosts=http://elasticsearch:9200
-    restart: on-failure:3
+    restart: on-failure
     networks:
       - backend_net
     expose:
@@ -231,7 +265,7 @@ services:
     environment:
       - TZ=${TZ}
     user: root
-    restart: on-failure:3
+    restart: on-failure
     volumes:
       - ./deploy/go-stash/etc:/app/etc
     networks:
@@ -248,7 +282,7 @@ services:
     environment:
       - TZ=${TZ}
     user: root
-    restart: on-failure:3
+    restart: on-failure
     entrypoint: "filebeat -e -strict.perms=false" #解决配置文件权限问题 - Solving the configuration file permissions
     volumes:
       - ./deploy/filebeat/conf/filebeat.yaml:/usr/share/filebeat/filebeat.yaml
@@ -269,7 +303,7 @@ services:
     hostname: zookeeper
     environment:
       - TZ=${TZ}
-    restart: on-failure:3
+    restart: on-failure
     expose:
       - 2181
     volumes:
@@ -290,7 +324,7 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
       - KAFKA_CREATE_TOPICS=goodluck-topic:1:1
-    restart: on-failure:3
+    restart: on-failure
     privileged: true
     volumes:
       # - ${DATA_DIR}/kafka/data:/kafka
@@ -313,7 +347,7 @@ services:
     command:
       - "--redis-addr=redis:6379"
       # - "--redis-password=qC3/bZ4~hP9!"
-    restart: on-failure:3
+    restart: on-failure
     networks:
       - backend_net
     depends_on:
@@ -350,7 +384,7 @@ services:
       --explicit_defaults_for_timestamp=true
       --lower_case_table_names=1
     privileged: true
-    restart: on-failure:3
+    restart: on-failure
     networks:
       - backend_net
 
@@ -368,7 +402,7 @@ services:
       # - ${DATA_DIR}/redis:/data
       - redis_volume:/data:rw
     privileged: true
-    restart: on-failure:3
+    restart: on-failure
     networks:
       - backend_net
 
@@ -377,7 +411,7 @@ services:
     image: phpmyadmin:latest
     container_name: mixbench_mysql_manage
     hostname: mysql_manage
-    restart: on-failure:3
+    restart: on-failure
     expose:
       - 80
     environment:
@@ -397,7 +431,7 @@ services:
     image: licat/phpredisadmin:arm
     container_name: mixbench_redis_manage
     hostname: redis_manage
-    restart: on-failure:3
+    restart: on-failure
     expose:
       - 80
     environment:
