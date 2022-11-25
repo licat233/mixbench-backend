@@ -340,8 +340,6 @@ services:
     image: tantobocah/asynqmon:latest
     container_name: mixbench_asynqmon
     hostname: asynqmon
-    # ports:
-    #   - 8980:8080
     expose:
       - 8080
     command:
@@ -364,9 +362,7 @@ services:
       - MYSQL_USER=${MYSQL_USERNAME}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-    # ports:
-    #   - 3406:3306
+      # - MYSQL_ALLOW_EMPTY_PASSWORD=true
     expose:
       - 3306
     volumes:
@@ -414,6 +410,7 @@ services:
     restart: on-failure
     expose:
       - 80
+      - 8080
     environment:
       - TZ=${TZ}
       - PMA_ARBITRARY=1 #当设置为 1 连接到任意服务器将被允许
@@ -422,6 +419,8 @@ services:
       - PMA_VERBOSE=mixbench_mysql #MySQL 服务器的详细名称
       - PMA_USER=root
       - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - PMA_CONTROLUSER=root
+      - PMA_CONTROLPASS=${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mysql
     networks:
@@ -440,5 +439,7 @@ services:
       - REDIS_1_PORT=6379
       - ADMIN_USER=${REDIS_MANAGE_USERNAME} # Redis 可视化管理用户名称
       - ADMIN_PASS=${REDIS_MANAGE_PASSWORD} # Redis 可视化管理用户密码
+    depends_on:
+      - redis
     networks:
       - backend_net

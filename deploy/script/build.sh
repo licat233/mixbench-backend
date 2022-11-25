@@ -8,103 +8,11 @@ current_path=$(
     pwd
 )
 
-project_root="${current_path%%mixbench*}mixbench"
-script_path="${project_root}/deploy/script"
-if [ ! -d $script_path ]; then
-    #如果目录不存在，则退出
-    echo "目录: ${script_path} 不存在"
-    return
-fi
+project_root="${current_path%%deploy*}"
+
+script_path=$current_path
+
 cd $script_path
-
-gen_api() {
-    name=$1
-    micro=$2
-    if [ "$micro" != "api" ]; then
-        return
-    fi
-    service_path="${project_root}/service/v1/${name}/api/docs"
-    if [ ! -d $service_path ]; then
-        #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
-        return
-    fi
-    cd $service_path
-    filename="${name}.api"
-    if [ ! -f $filename ]; then
-        #如果文件不存在，则退出
-        echo "文件: ${filename} 不存在"
-        return
-    fi
-    echo -e "\n开始生成${name}-${micro}服务..."
-    nohup=$(goctl api go -api $filename -dir=../ -style goZero)
-    echo "${name}-${micro}服务生成完成!"
-    #生成接口文档swagger.json
-    echo "生成接口文档swagger.json ...... "
-    goctl api plugin -plugin goctl-swagger="swagger -filename ../static/swagger.json" -api "${name}.api" -dir .
-    #生成typescript调用文件
-    echo "生成typescript调用文件 ...... "
-    goctl api ts -api "${name}.api" -dir ../static
-}
-
-gen_rpc() {
-    name=$1
-    micro=$2
-    if [ "$micro" != "rpc" ]; then
-        return
-    fi
-    service_path="${project_root}/service/v1/${name}/rpc/docs"
-    if [ ! -d $service_path ]; then
-        #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
-        return
-    fi
-    cd $service_path
-    filename="${name}.proto"
-    if [ ! -f $filename ]; then
-        #如果文件不存在，则退出
-        echo "文件: ${filename} 不存在"
-        return
-    fi
-    echo -e "\n开始生成${name}-${micro}服务..."
-    nohup=$(goctl rpc protoc $filename --go_out=../ --go-grpc_out=../ --zrpc_out=../ -style goZero)
-    pb_path="${project_root}/service/v1/${name}/rpc/${name}_pb"
-    if [ ! -d $pb_path ]; then
-        #如果目录不存在，则退出
-        echo "目录: ${pb_path} 不存在!!!"
-        return
-    fi
-    cd $pb_path
-    sed -i "" 's/,omitempty//g' "${name}.pb.go"
-    echo "${name}-${micro}服务生成完成!"
-}
-
-run() {
-    filename=$1
-    service_path=$2
-    if [ ! -d $service_path ]; then
-        #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
-        return
-    fi
-    cd $service_path
-    if [ ! -f $filename ]; then
-        #如果文件不存在，则退出
-        echo "文件: ${filename} 不存在"
-        return
-    fi
-    echo "后台启动 ${filename} 服务"
-    rm -f "${service_path}/nohup.out"
-    nohup "${service_path}/${filename}" &
-    return
-    nohup=$("./${filename}" &)
-    index=$(echo $(awk -v a="$nohup" -v b="Starting" 'BEGIN{print index(a,b)}'))
-    if (($index == 1)); then
-        echo "启动 ${filename} 失败: $nohup"
-    else
-        echo "启动 ${filename} 成功: $nohup"
-    fi
-}
 
 build_go() {
     name=$1
@@ -136,13 +44,19 @@ build_go() {
     fi
 
     echo -e "\n开始编译${filename} ...... "
-    rm -f $filename
     go build -o $filename "${name}.go"
+    dirpath="${project_root}build/${filename}"
+    mkdir -p $dirpath/etc/
+    cp -rf ./etc/ $dirpath/etc/
+    if [ -d ./static/ ]; then
+        #如果目录存在，则复制
+        mkdir -p $dirpath/static/
+        cp -rf ./static/ $dirpath/static/
+    fi
+    mv -f $filename $dirpath/$filename
     echo "${filename} 编译完成"
-    run $filename $service_path
+    # run $filename $service_path
 }
-
-
 
 #选择要构建的服务
 service_name=$1
@@ -171,10 +85,8 @@ fi
 #开始遍历编译
 for name in ${all_services[*]}; do
     for micro in ${all_micros[*]}; do
-        gen_rpc $name $micro
-        gen_api $name $micro
         build_go $name $micro
     done
 done
 
-echo "----------- Initialize successful -----------"
+echo "----------- build successful -----------"

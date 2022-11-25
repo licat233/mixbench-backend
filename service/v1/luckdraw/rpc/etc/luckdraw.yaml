@@ -9,7 +9,7 @@ Debug: ${SERVICE_DEBUG}
 #   Key: luckdraw.rpc
 
 Mysql:
-  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_DATABASE}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
 
 JwtAuth:
   AccessSecret: ${JWT_SECRET}

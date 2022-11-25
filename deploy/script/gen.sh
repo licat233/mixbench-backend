@@ -1,17 +1,17 @@
 #!/bin/bash
 
+#进入monitor mode
+set -m
+
 current_path=$(
     cd $(dirname $0)
     pwd
 )
 
-project_root="${current_path%%mixbench*}mixbench"
-script_path="${project_root}/deploy/script/linux"
-if [ ! -d $script_path ]; then
-    #如果目录不存在，则退出
-    echo "目录: ${script_path} 不存在"
-    return
-fi
+project_root="${current_path%%deploy*}"
+
+script_path=$current_path
+
 cd $script_path
 
 gen_api() {
@@ -45,7 +45,7 @@ gen_api() {
     # cd ../
     # rm -f Dockerfile
     # goctl docker -go "${name}.go"
-    # echo "生成${name} RPC服务的Dockerfile"
+    # echo "生成${name} API服务的Dockerfile"
 }
 
 gen_rpc() {
@@ -76,7 +76,13 @@ gen_rpc() {
         return
     fi
     cd $pb_path
-    sed -i 's/,omitempty//g' "${name}.pb.go"
+
+    # macOS环境中需要传入一个文件做备份
+    sed -i "" 's/,omitempty//g' "${name}.pb.go"
+    if [ $? -ne 0 ]; then
+        sed -i 's/,omitempty//g' "${name}.pb.go"
+    fi
+
     echo "${name}-${micro}服务生成完成!"
     # cd ../
     # rm -f Dockerfile

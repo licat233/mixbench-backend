@@ -31,7 +31,7 @@ JwtAuth:
   AccessExpire: 86400
 
 Mysql:
-  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_DATABASE}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
 
 CacheRedis:
   - Host: ${REDIS_HOST}:${REDIS_PORT}

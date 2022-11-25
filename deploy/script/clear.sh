@@ -8,13 +8,10 @@ current_path=$(
     pwd
 )
 
-project_root="${current_path%%mixbench*}mixbench"
-script_path="${project_root}/deploy/script"
-if [ ! -d $script_path ]; then
-    #如果目录不存在，则退出
-    echo "目录: ${script_path} 不存在"
-    return
-fi
+project_root="${current_path%%deploy*}"
+
+script_path=$current_path
+
 cd $script_path
 
 clear_build(){

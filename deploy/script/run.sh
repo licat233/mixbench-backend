@@ -1,17 +1,17 @@
 #!/bin/bash
 
+#进入monitor mode
+set -m
+
 current_path=$(
     cd $(dirname $0)
     pwd
 )
 
-project_root="${current_path%%mixbench*}mixbench"
-script_path="${project_root}/deploy/script/linux"
-if [ ! -d $script_path ]; then
-    #如果目录不存在，则退出
-    echo "目录: ${script_path} 不存在"
-    return
-fi
+project_root="${current_path%%deploy*}" # xxxx./mixbench-backend/
+
+script_path=$current_path
+
 cd $script_path
 
 run() {
@@ -23,7 +23,7 @@ run() {
         return
     fi
     cd $service_path
-    cd ../../../../build/$filename
+    cd "${project_root}build/${filename}"
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
         echo "文件: ${filename} 不存在"

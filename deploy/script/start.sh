@@ -21,9 +21,11 @@ current_path=$(
     pwd
 )
 
-project_root="${current_path%%mixbench*}mixbench"
+# 从 string 字符串最后一次出现 *chars 的位置开始，截取 *chars 左边的所有字符
+# project_root="${current_path%%mixbench-backend*}mixbench-backend" 
+# script_path="${project_root}/deploy/script/mac"
 
-script_path="${project_root}/deploy/script/mac"
+script_path=$current_path
 
 if [ ! -d $script_path ]; then
     #如果目录不存在，则退出
@@ -38,11 +40,14 @@ elif [[ "$1" = "build" ]];then
 ./build.sh $2 $3
 elif [[ "$1" = "run" ]];then
 ./run.sh $2 $3
+elif [[ "$1" = "clear" ]];then
+./run.sh $2 $3
 elif [[ "$1" = "-h" ]];then
 echo "command: "
 echo "gen [service-name] [micro-name]"
 echo "build [service-name] [micro-name]"
 echo "run [service-name] [micro-name]"
+echo "clear [service-name] [micro-name]"
 echo "[service-name] [micro-name]"
 else
 ./gen.sh $1 $2 && ./build.sh $1 $2 && ./run.sh $1 $2

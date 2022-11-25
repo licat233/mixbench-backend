@@ -2,42 +2,63 @@
 
 ## 系统结构组成
 
-| 类别     | 服务名称      | 暴露端口 | 映射端口 | 说明                                 |
-| -------- | ------------- | -------- | -------- | ------------------------------------ |
-| http代理 | nginx         | 80       | 80       | http协议端口                         |
-| http代理 | nginx         | 443      | 443      | https协议端口                        |
-| 数据库   | mysql         | 3306     | -        | mysql数据库                          |
-| 数据库   | phpmyadmin    | 80       | -        | mysql管理面板 (ui)                   |
-| 缓存库   | redis         | 6379     | -        | redis缓存库                          |
-| 缓存库   | phpredisadmin | 80       | -        | redis管理面板(ui)                    |
-| 数据中心 | datacenter    | -        | -        | 数据卷容器，存储各个服务生产的数据   |
-| 链路追踪 | jaeger        | 6831     | -        | 接受jaeger.thriftThrift-compact 协议 |
-| 链路追踪 | jaeger        | 6832     | -        | 接受jaeger.thriftThrift-binary 协议  |
-| 链路追踪 | jaeger        | 5778     | -        | 服务配置（采样等）                   |
-| 链路追踪 | jaeger        | 16686    | -        | 服务前端 (ui)                        |
-| 链路追踪 | jaeger        | 14268    | -        | 直接接受jaeger.thrift客户            |
-| 链路追踪 | jaeger        | 9411     | -        | Zipkin 兼容端点（可选）              |
-| 服务监控 | prometheus    | 9090     | -        | 服务监控系统                         |
-| 服务监控 | grafana       | 3000     | -        | prometheus服务监控系统 (ui)          |
-| 数据收集 | elasticsearch | 9200     | -        | http协议连接es使用的端口             |
-| 数据收集 | elasticsearch | 9300     | -        | tcp客户端连接使用的端口              |
-| 数据收集 | kibana        | 5601     | -        | 查看es数据 (ui)                      |
-| 日志收集 | filebeat      | -        | -        | 收集日志并上报到kafka                |
-| 日志处理 | go-stash      | -        | -        | 处理kafka中的日志并发送到es          |
-| 消息队列 | zookeeper     | 2181     | -        | kafka的依赖服务                      |
-| 消息队列 | kafka         | 9092     | -        | kafka消息队列                        |
-| 消息队列 | asynqmon      | 8080     | -        | go基于redis实现的消息队列及面板 (ui) |
-| 核心服务 | mixbench      | -        | -        | modd热编译环境                       |
-| 核心业务 | admin-api     | 7011     | -        | 管理员API服务                        |
-| 核心业务 | admin-rpc     | 7012     | -        | 管理员RPC服务                        |
-| 核心业务 | captcha-api   | 7021     | -        | 验证码API服务                        |
-| 核心业务 | captcha-rpc   | 7022     | -        | 验证码RPC服务                        |
-| 核心业务 | luckdraw-api  | 7031     | -        | 抽奖API服务                          |
-| 核心业务 | luckdraw-rpc  | 7032     | -        | 抽奖RPC服务                          |
-| 核心业务 | luckdraw-mq   | 7033     | -        | 抽奖mq服务(kafka或asynq)             |
+| 类别     | 服务名称      | 暴露端口 | 映射端口 | 说明                                   |
+| -------- | ------------- | -------- | -------- | -------------------------------------- |
+| 数据库   | mysql         | 3306     | -        | mysql数据库                            |
+| 数据库   | phpmyadmin    | 80       | -        | mysql管理面板 (ui)                     |
+| 缓存库   | redis         | 6379     | -        | redis缓存库                            |
+| 缓存库   | phpredisadmin | 80       | -        | redis管理面板(ui)                      |
+| 公网网关 | nginx         | 80       | 80       | nginx正向代理服务                      |
+| 内网网关 | nginx         | 80       | 11001    | nginx反向代理服务                      |
+| 数据中心 | datacenter    | -        | -        | 数据卷容器，存储各个服务生产的数据     |
+| 文件管理 | filebrowser   | 80       | -        | 文件管理服务，用于浏览数据中心文件(ui) |
+| 链路追踪 | jaeger        | 6831     | -        | 接受jaeger.thriftThrift-compact 协议   |
+| 链路追踪 | jaeger        | 6832     | -        | 接受jaeger.thriftThrift-binary 协议    |
+| 链路追踪 | jaeger        | 5778     | -        | 服务配置（采样等）                     |
+| 链路追踪 | jaeger        | 16686    | -        | 服务前端 (ui)                          |
+| 链路追踪 | jaeger        | 14268    | -        | 直接接受jaeger.thrift客户              |
+| 链路追踪 | jaeger        | 9411     | -        | Zipkin 兼容端点（可选）                |
+| 服务监控 | prometheus    | 9090     | -        | 服务监控系统                           |
+| 服务监控 | grafana       | 3000     | -        | prometheus服务监控系统 (ui)            |
+| 数据收集 | elasticsearch | 9200     | -        | http协议连接es使用的端口               |
+| 数据收集 | elasticsearch | 9300     | -        | tcp客户端连接使用的端口                |
+| 数据收集 | kibana        | 5601     | -        | 查看es数据 (ui)                        |
+| 日志收集 | filebeat      | -        | -        | 收集日志并上报到kafka                  |
+| 日志处理 | go-stash      | -        | -        | 处理kafka中的日志并发送到es            |
+| 消息队列 | zookeeper     | 2181     | -        | kafka的依赖服务                        |
+| 消息队列 | kafka         | 9092     | -        | kafka消息队列                          |
+| 消息队列 | asynqmon      | 8080     | -        | go基于redis实现的消息队列及面板 (ui)   |
+| 核心服务 | mixbench      | -        | -        | modd热编译环境                         |
+| 核心业务 | admin-api     | 7011     | -        | 管理员API服务                          |
+| 核心业务 | admin-rpc     | 7012     | -        | 管理员RPC服务                          |
+| 核心业务 | captcha-api   | 7021     | -        | 验证码API服务                          |
+| 核心业务 | captcha-rpc   | 7022     | -        | 验证码RPC服务                          |
+| 核心业务 | luckdraw-api  | 7031     | -        | 抽奖API服务                            |
+| 核心业务 | luckdraw-rpc  | 7032     | -        | 抽奖RPC服务                            |
+| 核心业务 | luckdraw-mq   | 7033     | -        | 抽奖mq服务(kafka或asynq)               |
 
 > #### 外部访问所有的服务均通过nginx反向代理: SEVER_NAME.mixbench.net
 > #### 所有数据存储在datacenter数据卷容器中
+
+
+## shell脚本管理服务使用说明  
+
+主要分为：生成(gen)、构建(build)、运行(run)、清理(clear)  
+
+入口文件: cmd.sh  
+
+使用说明:   
+```shell
+./cmd.sh -h
+```
+
+command:  
+
+> gen [service-name] [micro-name]   
+> build [service-name] [micro-name]  
+> run [service-name] [micro-name]  
+> clear [service-name] [micro-name]  
+> [service-name] [micro-name]  
 
 ## 使用示例
 
