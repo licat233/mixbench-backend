@@ -2,7 +2,7 @@ server {
     listen 80;
     server_name ${DEV_HOST};
     index index.php index.html index.htm default.php default.htm default.html;
-    root /www/${DEV_HOST};
+    root /www/${DEV_HOST}/flexbox-card;
 
     #ERROR-PAGE-START  404配置，可以注释、删除或修改
     error_page 404 /www/common/404.html;

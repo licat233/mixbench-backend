@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dev panel</title>
+    <link rel="shortcut icon" href="./img/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div id="app">
+    </div>
+    <!-- partial -->
+    <script type="text/html" id="template">
+      <li class="cards__item">
+        <div class="card">
+          <div
+            class="card__image"
+            style="background-image: url(__picture__)"
+          ></div>
+          <div class="card__content">
+            <div class="card__title">__name__</div>
+            <p class="card__text">__description__</p>
+            <button class="btn btn--block card__btn" data-link="__link__">
+              open
+            </button>
+          </div>
+        </div>
+      </li>
+    </script>
+    <script src="./js/build.js"></script>
+  </body>
+</html>

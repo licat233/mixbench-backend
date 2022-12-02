@@ -22,7 +22,7 @@
 | 服务监控 | grafana       | 3000     | -        | prometheus服务监控系统 (ui)            |
 | 数据收集 | elasticsearch | 9200     | -        | http协议连接es使用的端口               |
 | 数据收集 | elasticsearch | 9300     | -        | tcp客户端连接使用的端口                |
-| 数据收集 | kibana        | 5601     | -        | 查看es数据 (ui)                        |
+| 数据收集 | kibana        | 5601     | -        | 查看elasticsearch数据 (ui)                        |
 | 日志收集 | filebeat      | -        | -        | 收集日志并上报到kafka                  |
 | 日志处理 | go-stash      | -        | -        | 处理kafka中的日志并发送到es            |
 | 消息队列 | zookeeper     | 2181     | -        | kafka的依赖服务                        |

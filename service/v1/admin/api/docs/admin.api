@@ -1,4 +1,9 @@
-syntax = "v1"
+info(
+	title: "管理服务"
+	author: "licat"
+	email: "1697470538@qq.com"
+	version: "v1"
+)
 
 import "types.api"
 import "activity.api"

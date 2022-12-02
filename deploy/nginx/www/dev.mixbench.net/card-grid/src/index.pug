@@ -1,0 +1,45 @@
+- var cardText = [{name:"Don Joel",position:"Web Developer",email:"donjoel@example.com",phone:"216-362-0665",address:"2699 Glenwood Avenue",city:"Brook Park, OH 44142"},{name:"Joe Schmoe",position:"Graphic Designer",email:"joeschmoe@example.com",phone:"407-712-8549",address:"469 Grand Avenue",city:"Winter Park, FL 32789"},{name:"Clint Westwood",position:"Customer Support",email:"clintwestwood@example.com",phone:"865-217-3165",address:"2212 Brown Avenue",city:"Hartford, TN 37753"},{name:"Ann Thrax",position:"Project Manager",email:"annthrax@example.com",phone:"808-293-4613",address:"3801 Stratford Drive",city:"Laie, HI 96762"}];
+// Note: No real addresses and phone numbers were used here. They all came from fakenamegenerator.com.
+
+mixin cardText(name,position,email,phone,address,city)
+	.contents
+		h2
+			strong="ABC"
+			="Design"
+		h3=name
+		=position
+		br
+		br
+		span="✉️"
+		=email
+		br
+		span="📞"
+		=phone
+		br
+		br
+		=address
+		br
+		=city
+		
+mixin cityOnly(city)
+	.contents
+		.city=city
+	
+main
+	.cards
+		- var cards = 12;
+		- while (cards--) {
+			//- choose card contents
+			- var c = cards % cardText.length;
+
+			a(href="#").stack
+				.card.top
+					+cardText(cardText[c].name,cardText[c].position,cardText[c].email,cardText[c].phone,cardText[c].address,cardText[c].city)
+				.card.mid-top
+					+cityOnly(cardText[c].city)
+				.card.mid-bottom
+					+cityOnly(cardText[c].city)
+				.card.bottom
+					+cityOnly(cardText[c].city)
+				.card.shadow
+		- }

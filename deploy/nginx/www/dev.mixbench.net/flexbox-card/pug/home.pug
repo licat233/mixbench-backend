@@ -1,0 +1,26 @@
+//- - var cardText = ["micro","static","dev","filebrowser","Redis","Mysql","jaeger","grafana","kibana","asynqmon"]
+- var list = [{name:"Redis",desc:"redis manage admin",img_url: "https://unsplash.it/800/600?image=59",link_url: "about:blank"}]
+mixin cardElem(name,desc,img_url,link_url)
+    li.cards__item  
+        .card  
+            .card__image 
+                img.card__image__img(src=img_url)
+            .card__content 
+                .card__title
+                =name
+                p.card__text 
+                =desc
+                button(class="btn btn--block card__btn",(click)='()=>{window.open(' + link_url + ')}') Button
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Dev Panel
+        link(rel="stylesheet" href="style.css")
+    body
+        ul.cards 
+            - echo item in list
+                cardElem(item.name,item.desc,item.img_url,item.link_url)

@@ -1,4 +1,9 @@
-syntax = "v1"
+info(
+	title: "抽奖服务"
+	author: "licat"
+	email: "1697470538@qq.com"
+	version: "v1"
+)
 
 //规范返回格式
 type BaseResp {
@@ -53,9 +58,9 @@ type selectPrizesReq {
 	prefix: /v1/api/luckdraw
 )
 service luckdraw-api {
-	@doc "展现抽奖页面"
-	@handler luckView
-	get /:shortlink
+	// @doc "展现抽奖页面"
+	// @handler luckView
+	// get /:shortlink
 	
 	@doc "抽奖者身份验证"
 	@handler identify

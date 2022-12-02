@@ -28,7 +28,8 @@ func NewRbacMiddleware(db *sql.DB, c config.Config) *RbacMiddleware {
 
 func (m *RbacMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO generate middleware implement function, delete after code implementation
+		// 1.获取用户id
+		// 2.查询用户权限
 
 		// Passthrough to next handler if need
 		next(w, r)

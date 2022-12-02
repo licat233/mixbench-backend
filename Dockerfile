@@ -1,6 +1,6 @@
 FROM golang:1.19.3-alpine AS builder
 
-#主要搭建modd环境
+#搭建开发环境
 LABEL stage=gobuilder
 
 ENV CGO_ENABLED 0
@@ -12,6 +12,11 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /go
 
+RUN go install github.com/zeromicro/go-zero/tools/goctl@latest
+RUN go install github.com/zeromicro/goctl-swagger@latest
+# goctl一键检查安装所需插件
+RUN goctl env check -i -f --verbose
+# modd热编译工具
 RUN go install github.com/cortesi/modd/cmd/modd@latest
 
 CMD [ "modd" ]

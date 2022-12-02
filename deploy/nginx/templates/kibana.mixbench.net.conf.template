@@ -1,8 +1,9 @@
+# generator time: 2022-12-01
 server {
     listen 80;
     server_name kibana.mixbench.net;
     index index.php index.html index.htm default.php default.htm default.html;
-    root /www/${DEV_HOST};
+    root /www/common;
 
     #ERROR-PAGE-START  404配置，可以注释、删除或修改
     error_page 404 /www/common/404.html;
@@ -17,13 +18,13 @@ server {
     }
 
     location ~ .*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
-        proxy_pass http://kibana:5601;
+        proxy_pass http://kafka_manage:9000;
         expires 30d;
         add_header Cache-Control public;
     }
 
     location / {
-        proxy_pass http://kibana:5601;
+        proxy_pass http://kafka_manage:9000;
     }
 
     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
@@ -37,7 +38,7 @@ server {
         error_log /dev/null;
         access_log /dev/null;
     }
-
+    
     access_log  /var/log/nginx/kibana.mixbench.net.log;
     error_log  /var/log/nginx/kibana.mixbench.net.error.log;
 }

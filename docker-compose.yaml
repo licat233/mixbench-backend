@@ -10,9 +10,14 @@ volumes:
   mysql_volume: {}
   redis_volume: {}
   nginx_volume: {}
-  zookeeper_volume: {}
+  zookeeper_data_volume: {}
+  zookeeper_log_volume: {}
+  zookeeper_logs_volume: {}
+  zookeeper_datalog_volume: {}
   kafka_volume: {}
-  elasticsearch_volume: {}
+  elasticsearch_data_volume: {}
+  elasticsearch_logs_volume: {}
+  elasticsearch_plugins_volume: {}
   grafana_volume: {}
   prometheus_volume: {}
   jaeger_volume: {}
@@ -78,9 +83,14 @@ services:
       - mysql_volume:/data_v/mysql
       - redis_volume:/data_v/redis
       - nginx_volume:/data_v/nginx
-      - zookeeper_volume:/data_v/zookeeper
+      - zookeeper_data_volume:/data_v/zookeeper/data
+      - zookeeper_log_volume:/data_v/zookeeper/log
+      - zookeeper_logs_volume:/data_v/zookeeper/logs
+      - zookeeper_datalog_volume:/data_v/zookeeper/datalog
       - kafka_volume:/data_v/kafka
-      - elasticsearch_volume:/data_v/elasticsearch
+      - elasticsearch_data_volume:/data_v/elasticsearch/data
+      - elasticsearch_logs_volume:/data_v/elasticsearch/logs
+      - elasticsearch_plugins_volume:/data_v/elasticsearch/plugins
       - grafana_volume:/data_v/grafana
       - prometheus_volume:/data_v/prometheus
       - jaeger_volume:/data_v/jaeger
@@ -102,9 +112,14 @@ services:
       - mysql_volume:/srv/mysql
       - redis_volume:/srv/redis
       - nginx_volume:/srv/nginx
-      - zookeeper_volume:/srv/zookeeper
+      - zookeeper_data_volume:/srv/zookeeper/data
+      - zookeeper_log_volume:/srv/zookeeper/log
+      - zookeeper_logs_volume:/srv/zookeeper/logs
+      - zookeeper_datalog_volume:/srv/zookeeper/datalog
       - kafka_volume:/srv/kafka
-      - elasticsearch_volume:/srv/elasticsearch
+      - elasticsearch_data_volume:/srv/elasticsearch/data
+      - elasticsearch_logs_volume:/srv/elasticsearch/logs
+      - elasticsearch_plugins_volume:/srv/elasticsearch/plugins
       - grafana_volume:/srv/grafana
       - prometheus_volume:/srv/prometheus
       - jaeger_volume:/srv/jaeger
@@ -222,18 +237,23 @@ services:
 
   #搜集kafka业务日志、存储prometheus监控数据 - Kafka for collecting business logs and storing Prometheus monitoring data
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     container_name: mixbench_elasticsearch
     hostname: elasticsearch
-    user: root
+    user: root #必须以root用户启动
     environment:
       - TZ=${TZ}
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.name=mixbench_elasticsearch #设置集群名称为 mixbench_elasticsearch
+      - discovery.type=single-node #以单一节点模式启动
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
     volumes:
       # - ${DATA_DIR}/elasticsearch/data:/usr/share/elasticsearch/data
-      - elasticsearch_volume:/usr/share/elasticsearch/data
+      # - ./deploy/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - elasticsearch_data_volume:/usr/share/elasticsearch/data #数据文件挂载
+      - elasticsearch_logs_volume:/usr/share/elasticsearch/logs #日志文件挂载
+      - elasticsearch_plugins_volume:/usr/share/elasticsearch/plugins #插件文件挂载
     restart: on-failure
+    privileged: true
     expose:
       - 9200
       - 9300
@@ -242,13 +262,16 @@ services:
 
   #查看elasticsearch数据 - Kibana to view Elasticsearch data
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.13.4
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     container_name: mixbench_kibana
     hostname: kibana
     environment:
       - TZ=${TZ}
       - elasticsearch.hosts=http://elasticsearch:9200
+      - I18N_LOCALE=zh-CN
     restart: on-failure
+    volumes:
+      - ./deploy/kibana/config:/usr/share/kibana/config
     networks:
       - backend_net
     expose:
@@ -256,7 +279,29 @@ services:
     depends_on:
       - elasticsearch
 
-  #消费kafka中filebeat收集的数据输出到es - The data output collected by FileBeat in Kafka is output to ES
+  #收集业务数据到kafka中 - Collect business data
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    container_name: mixbench_filebeat
+    hostname: filebeat
+    environment:
+      - TZ=${TZ}
+    user: root
+    restart: on-failure
+    entrypoint: "filebeat -e -strict.perms=false" #解决配置文件权限问题 - Solving the configuration file permissions
+    volumes:
+      - ./deploy/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      # 此处需指定docker的containers目录，取决于你docker的配置 - The containers directory of docker needs to be specified here, depending on your docker configuration
+      # 如snap安装的docker，则为/var/snap/docker/common/var-lib-docker/containers - Example if docker is installed by Snap /var/snap/docker/common/var-lib-docker/containers
+      # - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers
+      # - /var/lib/docker/containers:/var/lib/docker/containers
+      - /Users/licat/Library/Containers:/var/lib/docker/containers
+    networks:
+      - backend_net
+    depends_on:
+      - kafka
+
+  #将kafka中filebeat收集的日志数据输出到elasticsearch - The data output collected by FileBeat in Kafka is output to ES
   go-stash:
     # image: kevinwan/go-stash:latest # if you "macOs intel" or "linux amd"
     image: kevinwan/go-stash:1.0.5-arm64 #  if you "macOs m1" or "linux arm"
@@ -274,28 +319,6 @@ services:
       - elasticsearch
       - kafka
 
-  #收集业务数据 - Collect business data
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:7.13.4
-    container_name: mixbench_filebeat
-    hostname: filebeat
-    environment:
-      - TZ=${TZ}
-    user: root
-    restart: on-failure
-    entrypoint: "filebeat -e -strict.perms=false" #解决配置文件权限问题 - Solving the configuration file permissions
-    volumes:
-      - ./deploy/filebeat/conf/filebeat.yaml:/usr/share/filebeat/filebeat.yaml
-      # 此处需指定docker的containers目录，取决于你docker的配置 - The containers directory of docker needs to be specified here, depending on your docker configuration
-      # 如snap安装的docker，则为/var/snap/docker/common/var-lib-docker/containers - Example if docker is installed by Snap /var/snap/docker/common/var-lib-docker/containers
-      # - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers
-      # - /var/lib/docker/containers:/var/lib/docker/containers
-      - /Users/licat/Library/Containers:/var/lib/docker/containers
-    networks:
-      - backend_net
-    depends_on:
-      - kafka
-
   #zookeeper是kafka的依赖 - Zookeeper is the dependencies of Kafka
   zookeeper:
     image: zookeeper:latest
@@ -307,7 +330,10 @@ services:
     expose:
       - 2181
     volumes:
-      - zookeeper_volume:/data
+      - zookeeper_data_volume:/data
+      - zookeeper_log_volume:/log
+      - zookeeper_logs_volume:/logs
+      - zookeeper_datalog_volume:/datalog
     networks:
       - backend_net
 
@@ -318,18 +344,21 @@ services:
     hostname: kafka
     expose:
       - 9092
+    # ports:
+    #   - 9092:9092
     environment:
       - TZ=${TZ}
-      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_BROKER_ID=0
+      - KAFKA_ADVERTISED_HOST_NAME=kafka #Do not use localhost or 127.0.0.1 as the host IP
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
-      - KAFKA_CREATE_TOPICS=goodluck-topic:1:1
+      - KAFKA_CREATE_TOPICS=goodluck-topic:1:1,mixbench-log:1:1
     restart: on-failure
     privileged: true
     volumes:
       # - ${DATA_DIR}/kafka/data:/kafka
       - kafka_volume:/kafka
-      # - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/run/docker.sock:/var/run/docker.sock  # 使用docker.sock反而无法通信
     networks:
       - backend_net
     depends_on:
@@ -405,7 +434,7 @@ services:
   #phpmyadmin
   mysql_manage:
     image: phpmyadmin:latest
-    container_name: mixbench_mysql_manage
+    container_name: mixbench_mysqlmanage
     hostname: mysql_manage
     restart: on-failure
     expose:
@@ -426,9 +455,11 @@ services:
     networks:
       - backend_net
 
+  #phpredisadmin
   redis_manage:
+    # image: erikdubbelboer/phpredisadmin:latest # 此镜像为amd64平台，不支持arm
     image: licat/phpredisadmin:arm
-    container_name: mixbench_redis_manage
+    container_name: mixbench_redismanage
     hostname: redis_manage
     restart: on-failure
     expose:
@@ -441,5 +472,24 @@ services:
       - ADMIN_PASS=${REDIS_MANAGE_PASSWORD} # Redis 可视化管理用户密码
     depends_on:
       - redis
+    networks:
+      - backend_net
+
+  #kafkamanage
+  kafkamanage:
+    image: scjtqs/kafka-manager:latest
+    container_name: mixbench_kafkamanage
+    hostname: kafka_manage
+    restart: on-failure
+    expose:
+      - 9000
+    environment:
+      - TZ=${TZ}
+      - ZK_HOSTS=zookeeper:2181
+      - APPLICATION_SECRET=${KAFKA_MANAGE_PASSWORD}
+      - KM_VERSION=3.0.0.5
+    depends_on:
+      - zookeeper
+      # - kafka
     networks:
       - backend_net

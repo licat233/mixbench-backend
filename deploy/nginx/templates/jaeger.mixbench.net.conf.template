@@ -1,8 +1,9 @@
+# generator time: 2022-12-01
 server {
     listen 80;
     server_name jaeger.mixbench.net;
     index index.php index.html index.htm default.php default.htm default.html;
-    root /www/${DEV_HOST};
+    root /www/common;
 
     #ERROR-PAGE-START  404配置，可以注释、删除或修改
     error_page 404 /www/common/404.html;
@@ -37,7 +38,7 @@ server {
         error_log /dev/null;
         access_log /dev/null;
     }
-
+    
     access_log  /var/log/nginx/jaeger.mixbench.net.log;
     error_log  /var/log/nginx/jaeger.mixbench.net.error.log;
 }

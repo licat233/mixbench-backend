@@ -1,9 +1,10 @@
 info(
-	title: "验证码"
+	title: "验证码服务"
 	author: "licat"
 	email: "1697470538@qq.com"
 	version: "v1"
 )
+
 //规范返回格式
 type BaseResp {
 	//响应成功的基本格式
