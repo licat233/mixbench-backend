@@ -58,7 +58,7 @@ type ProjectDetailReq {
 )
 service admin-api {	
 	@doc "获取项目列表"
-	@handler List
+	@handler ProjectList
 	get /list(ProjectListReq) returns(BaseResp)
 
 	@doc "获取项目详细列表"
@@ -66,31 +66,31 @@ service admin-api {
 	get /projectDetails(ProjectListReq) returns(BaseResp)
 
 	@doc "获取项目信息"
-	@handler info 
+	@handler ProjectInfo 
 	get /(ProjectGetReq) returns(BaseResp)
 
     @doc "添加项目"
-	@handler add 
+	@handler ProjectAdd 
 	post /(ProjectAddReq) returns(BaseResp)
 
     @doc "编辑项目"
-	@handler put 
+	@handler ProjectPut 
 	put /(ProjectPutReq) returns(BaseResp)
 
     @doc "删除项目"
-	@handler del 
+	@handler ProjectDel 
 	delete /(ProjectDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler enumList
-	get /enumList returns([]Enum)
+	@handler ProjectEnumList
+	get /enumList returns(BaseResp)
 
 	@doc "获取项目详细"
 	@handler ProjectDetail
 	get /projectDetail(ProjectDetailReq) returns(BaseResp)
 
-	@doc "获取项目树形枚举数据"
+	@doc "获取项目树形枚举数据 []TreeOptions"
 	@handler projectTreeOptions
-	get /projectTreeOptions returns([]TreeOptions)
+	get /projectTreeOptions returns(BaseResp)
 }
 

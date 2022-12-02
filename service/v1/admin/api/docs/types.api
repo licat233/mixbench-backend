@@ -83,8 +83,12 @@ type Enum {
 	Value interface{} `json:"value"`
 }
 
+type EnumList {
+	Enums []Enum `json:"enums"`
+}
+
 type TreeOptions {
-	Title    string  `json:"title"`
-	Value    int64   `json:"value"`
+	Title    string        `json:"title"`
+	Value    int64         `json:"value"`
 	Children []TreeOptions `json:"children,optional"`
 }

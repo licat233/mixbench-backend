@@ -1,0 +1,98 @@
+info(
+	title: "权限管理"
+	author: "licat"
+	email: "1697470538@qq.com"
+	version: "v1"
+)
+
+//策略请求
+type PolicyReq {
+	Sub string `json:"sub"`
+	Dom string `json:"dom"`
+	Obj string `json:"obj"`
+	Act string `json:"act"`
+}
+
+//策略批量请求
+type PoliciesReq {
+	Rules []PolicyReq `json:"rules"`
+}
+
+type DomainReq {
+	Domain string `json:"domain"`
+}
+
+type RoleAndDomainReq {
+	Sub string `json:"sub"`
+	Dom string `json:"dom"`
+}
+
+@server(
+	jwt: JwtAuth
+	middleware: JwtMiddleware,RbacMiddleware
+	group: rbac
+    prefix: /v1/api/admin/rbac
+)
+service admin-api {
+	@doc "获取授权策略"
+	@handler getPolicy
+	get /policy(PolicyReq) returns(BaseResp)
+	
+	@doc "添加授权策略"
+	@handler addPolicy
+	post /policy(PolicyReq) returns(BaseResp)
+
+	@doc "修改授权规则"
+	@handler putPolicy
+	put /policy(PolicyReq) returns(BaseResp)
+
+	@doc "删除授权规则"
+	@handler delPolicy
+	delete /policy(PolicyReq) returns(BaseResp)
+
+	@doc "批量获取授权策略"
+	@handler getPolicies
+	get /policies(PoliciesReq) returns(BaseResp)
+	
+	@doc "批量添加授权策略"
+	@handler addPolicies
+	post /policies(PoliciesReq) returns(BaseResp)
+
+	@doc "批量修改授权规则"
+	@handler putPolicies
+	put /policies(PoliciesReq) returns(BaseResp)
+
+	@doc "批量删除授权规则"
+	@handler delPolicies
+	delete /policies(PoliciesReq) returns(BaseResp)
+	
+	@doc(
+		summary: "获取当前策略中显示的操作列表"
+	)
+	@handler getAllActions
+	get /all-actions returns(BaseResp)
+	
+	@doc(
+		summary: "获取策略中的所有授权规则"
+	)
+	@handler getAllPolicy
+	get /all-policies returns(BaseResp)
+	
+	@doc(
+		summary: "获取当前策略中显示的 object 列表"
+	)
+	@handler getAllObjects
+	get /all-objects returns(BaseResp)
+	
+	@doc(
+		summary: "将获得所有与该域相关联的用户"
+	)
+	@handler getAllUsersByDomain
+	get /domain-users(DomainReq) returns(BaseResp)
+	
+	@doc(
+		summary: "获取用户在某域内的权限"
+	)
+	@handler GetPermissionsForUserInDomain
+	get /permissions(RoleAndDomainReq) returns(BaseResp)
+}

@@ -1,0 +1,22 @@
+syntax = "v1"
+
+
+@server(
+	jwt: JwtAuth
+	middleware: JwtMiddleware
+	prefix: /v1/api/admin/upload
+    group: upload
+)
+service admin-api {
+	@doc "上传头像"
+	@handler uploadAvatar
+	post /avatar returns(BaseResp)
+	
+	@doc "上传logo"
+	@handler uploadLogo
+	post /logo returns(BaseResp)
+	
+	@doc "上传图片"
+	@handler uploadImg
+	post /image returns(BaseResp)
+}

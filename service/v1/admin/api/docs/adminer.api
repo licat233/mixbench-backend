@@ -73,26 +73,26 @@ type AdminerListReq {
 )
 service admin-api {
 	@doc "获取管理员列表"
-	@handler List
+	@handler AdminerList
 	get /list(AdminerListReq) returns(BaseResp)
 
 	@doc "获取管理员信息"
-	@handler info 
+	@handler AdminerInfo 
 	get /(AdminerGetReq) returns(BaseResp)
 
     @doc "添加管理员"
-	@handler add 
+	@handler AdminerAdd 
 	post /(AdminerAddReq) returns(BaseResp)
 
     @doc "编辑管理员"
-	@handler put 
+	@handler AdminerPut 
 	put /(AdminerPutReq) returns(BaseResp)
 
     @doc "删除管理员"
-	@handler del 
+	@handler AdminerDel 
 	delete /(AdminerDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler enumList
-	get /enumList returns([]Enum)
+	@handler AdminerEnumList
+	get /enumList returns(BaseResp)
 }

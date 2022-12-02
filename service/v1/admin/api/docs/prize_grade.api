@@ -47,26 +47,26 @@ type PrizeGradeListReq {
 )
 service admin-api {
 	@doc "获取奖品级别列表"
-	@handler List
+	@handler PrizeGradeList
 	get /list(PrizeGradeListReq) returns(BaseResp)
 
 	@doc "获取奖品级别信息"
-	@handler info 
+	@handler PrizeGradeInfo 
 	get /(PrizeGradeGetReq) returns(BaseResp)
 
     @doc "添加奖品级别"
-	@handler add 
+	@handler PrizeGradeAdd 
 	post /(PrizeGradeAddReq) returns(BaseResp)
 
     @doc "编辑奖品级别"
-	@handler put 
+	@handler PrizeGradePut 
 	put /(PrizeGradePutReq) returns(BaseResp)
 
     @doc "删除奖品级别"
-	@handler del 
+	@handler PrizeGradeDel 
 	delete /(PrizeGradeDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler enumList
-	get /enumList returns([]Enum)
+	@handler PrizeGradeEnumList
+	get /enumList returns(BaseResp)
 }

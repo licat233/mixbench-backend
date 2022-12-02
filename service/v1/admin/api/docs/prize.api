@@ -70,28 +70,28 @@ type PrizeListReq {
 )
 service admin-api {
 	@doc "获取奖品列表"
-	@handler List
+	@handler PrizeList
 	get /list(PrizeListReq) returns(BaseResp)
 
 	@doc "获取奖品信息"
-	@handler info 
+	@handler PrizeInfo 
 	get /(PrizeGetReq) returns(BaseResp)
 
     @doc "添加奖品"
-	@handler add 
+	@handler PrizeAdd 
 	post /(PrizeAddReq) returns(BaseResp)
 
     @doc "编辑奖品"
-	@handler put 
+	@handler PrizePut 
 	put /(PrizePutReq) returns(BaseResp)
 
     @doc "删除奖品"
-	@handler del 
+	@handler PrizeDel 
 	delete /(PrizeDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler enumList
-	get /enumList returns([]Enum)
+	@handler PrizeEnumList
+	get /enumList returns(BaseResp)
 
 	@doc "获取某活动奖品池的奖品"
 	@handler ActivityPrizes

@@ -101,6 +101,10 @@ type Enum struct {
 	Value interface{} `json:"value"`
 }
 
+type EnumList struct {
+	Enums []Enum `json:"enums"`
+}
+
 type TreeOptions struct {
 	Title    string        `json:"title"`
 	Value    int64         `json:"value"`

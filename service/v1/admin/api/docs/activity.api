@@ -99,7 +99,7 @@ type EnumListReq {
 )
 service admin-api {
   @doc "获取活动列表，因为设计数组传参，post方式会比较合适"
-  @handler List
+  @handler ActivityList
   post /list(ActivityListReq) returns(BaseResp)
 
   @handler ActivityDetail
@@ -109,24 +109,24 @@ service admin-api {
   post /details(ActivityListReq) returns(BaseResp)
 
   @doc "获取活动信息"
-  @handler info 
+  @handler ActivityInfo 
   get /(ActivityGetReq) returns(BaseResp)
 
   @doc "添加活动"
-  @handler add 
+  @handler ActivityAdd 
   post /(ActivityAddReq) returns(BaseResp)
 
   @doc "编辑活动"
-  @handler put 
+  @handler ActivityPut 
   put /(ActivityPutReq) returns(BaseResp)
 
   @doc "删除活动"
-  @handler del 
+  @handler ActivityDel 
   delete /(ActivityDelReq) returns(BaseResp)
 
   @doc "枚举列表"
-	@handler enumList
-	get /enumList(EnumListReq) returns([]Enum)
+	@handler ActivityEnumList
+	get /enumList(EnumListReq) returns(BaseResp)
 
   @doc "指定项目的活动"
   @handler projectActivity
@@ -140,6 +140,6 @@ service admin-api {
       summary: 获取活动模式枚举列表
   )
   @handler ActivityPatternEnumList
-  get /patternEnumList returns([]Enum)
+  get /patternEnumList returns(BaseResp)
 }
 

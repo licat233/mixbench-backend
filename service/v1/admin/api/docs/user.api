@@ -82,7 +82,7 @@ type UserDetails {
 )
 service admin-api {	
 	@doc "获取用户列表"
-	@handler List
+	@handler UserList
 	get /list(UserListReq) returns(BaseResp)
 
     @doc "获取用户详情列表"
@@ -94,23 +94,23 @@ service admin-api {
 	get /details(UserListReq) returns(BaseResp)
 
 	@doc "获取用户信息"
-	@handler info 
+	@handler UserInfo 
 	get /(UserGetReq) returns(BaseResp)
 
     @doc "添加用户"
-	@handler add 
+	@handler UserAdd 
 	post /(UserAddReq) returns(BaseResp)
 
     @doc "编辑用户"
-	@handler put 
+	@handler UserPut 
 	put /(UserPutReq) returns(BaseResp)
 
     @doc "删除用户"
-	@handler del 
+	@handler UserDel 
 	delete /(UserDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler enumList
-	get /enumList returns([]Enum)
+	@handler UserEnumList
+	get /enumList returns(BaseResp)
 }
 

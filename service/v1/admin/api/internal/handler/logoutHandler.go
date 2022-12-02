@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"mixbench/service/v1/admin/api/internal/logic"
 	"mixbench/service/v1/admin/api/internal/svc"
-	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )

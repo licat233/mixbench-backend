@@ -74,23 +74,23 @@ type ResetLuckValueReq {
 )
 service admin-api {
 	@doc "获取奖品池列表"
-	@handler List
+	@handler PrizesPoolList
 	get /list(PrizesPoolListReq) returns(BaseResp)
 
 	@doc "获取奖品池信息"
-	@handler info 
+	@handler PrizesPoolInfo 
 	get /(PrizesPoolGetReq) returns(BaseResp)
 
     @doc "添加奖品池"
-	@handler add 
+	@handler PrizesPoolAdd 
 	post /(PrizesPoolAddReq) returns(BaseResp)
 
     @doc "编辑奖品池"
-	@handler put 
+	@handler PrizesPoolPut 
 	put /(PrizesPoolPutReq) returns(BaseResp)
 
     @doc "删除奖品池"
-	@handler del 
+	@handler PrizesPoolDel 
 	delete /(PrizesPoolDelReq) returns(BaseResp)
 
 	@doc(

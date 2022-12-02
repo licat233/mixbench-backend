@@ -1,0 +1,145 @@
+syntax = "v1"
+
+type Activity {
+  	Id        int64     `json:"id"`         // 表主键
+		Uuid      string    `json:"uuid"`       // 唯一识别码
+		Name      string    `json:"name"`       // 活动名称
+		ProjectId int64     `json:"project_id"` // 项目id
+		Status    int64     `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
+		Pattern   int64     `json:"pattern"`    // 方案: 0私密的，1公开的
+		MaxCount  int64     `json:"max_count"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+		MaxPrizes int64     `json:"max_prizes"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
+		StartTime int64     `json:"start_time"` // 活动开始时间
+		EndTime   int64     `json:"end_time"`   // 活动结束时间
+		CreateAt  int64     `json:"create_at"`  // 创建时间
+		UpdateAt  int64     `json:"update_at"`  // 更新时间
+		IsDeleted int64     `json:"is_deleted"` // 是否已被删除
+		DeleteAt  int64     `json:"delete_at"`  // 删除时间
+}
+
+type ActivityGetReq {
+  Id int64 `form:"id"`
+}
+
+type ActivityAddReq {  
+  Name      string    `json:"name"`       // 活动名称
+  ProjectId int64     `json:"project_id"` // 项目id
+  Status    int64     `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
+  Pattern   int64     `json:"pattern"`    // 方案: 0私密的，1公开的
+  MaxCount  int64     `json:"max_count"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+  MaxPrizes int64     `json:"max_prizes"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
+  StartTime int64     `json:"start_time"` // 活动开始时间
+  EndTime   int64     `json:"end_time"`   // 活动结束时间
+}
+
+type ActivityPutReq {  
+  Id        int64     `json:"id"`         // 表主键
+  Uuid      string    `json:"uuid"`       // 唯一识别码
+  Name      string    `json:"name"`       // 活动名称
+  ProjectId int64     `json:"project_id"` // 项目id
+  Status    int64     `json:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
+  Pattern   int64     `json:"pattern"`    // 方案: 0私密的，1公开的
+  MaxCount  int64     `json:"max_count"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+  MaxPrizes int64     `json:"max_prizes"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
+  StartTime int64     `json:"start_time"` // 活动开始时间
+  EndTime   int64     `json:"end_time"`   // 活动结束时间
+}
+
+type ActivityDelReq {
+  Id int64 `json:"id"`
+}
+
+type projectActivityReq {
+  ProjectId int64 `form:"project_id,optional,default=-1"`  //所属项目id，-1表示无限制
+}
+
+type ActivityListReq {
+	PageSize int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `json:"keyword,optional"`                            //关键词，可选
+	//字段搜索
+  Name      string    `json:"name,optional"`       // 活动名称
+  ProjectId int64     `json:"project_id,optional,default=-1"` // 项目id
+  Status    int64     `json:"status,optional,default=-1"`     // 活动状态，是否在举办，默认关闭，需手动开启
+  Pattern   int64     `json:"pattern,optional,default=-1"`    // 方案: 0私密的，1公开的
+  MaxCount  int64     `json:"max_count,optional,default=-2"`  // 单人最大抽奖次数：-1表示无限制，0表示不可抽奖
+  MaxPrizes int64     `json:"max_prizes,optional,default=-2"` // 单人最大获奖数：-1表示无限制，0表示不可抽奖
+  StartTime int64     `json:"start_time,optional,default=0"` // 活动开始时间
+  EndTime   int64     `json:"end_time,optional,default=0"`   // 活动结束时间
+  RangeTime []string  `json:"range_time,optional"`   // 活动结束时间
+}
+
+type ActivityDetail {
+  Activity           Activity       `json:"activity"`  //活动信息
+  ActivityPrizes  []ActivityPrize  `json:"activity_prizes"` //活动奖品列表
+}
+
+type ActivityDetailReq {
+  Id int64 `form:"id"`  //活动id
+}
+
+type UserActivity {
+	Activity       Activity       `json:"activity"`    //活动信息
+  UsersPool      UsersPool       `json:"users_pool"`  //活动用户池信息
+}
+
+type UserActivitiesReq {
+  UserId int64  `form:"user_id,optional,default=-1"`  //所属用户id，-1表示无限制
+}
+
+type EnumListReq {
+  ProjectId int64  `form:"project_id,optional,default=-1"`  //所属项目id，-1表示无限制
+}
+
+@server(
+  jwt: JwtAuth
+  group: activity
+  middleware: JwtMiddleware
+  prefix: /v1/api/admin/activity
+)
+service admin-api {
+  @doc "获取活动列表，因为设计数组传参，post方式会比较合适"
+  @handler List
+  post /list(ActivityListReq) returns(BaseResp)
+
+  @handler ActivityDetail
+  get /detail(ActivityDetailReq) returns(BaseResp)
+
+  @handler ActivityDetails
+  post /details(ActivityListReq) returns(BaseResp)
+
+  @doc "获取活动信息"
+  @handler info 
+  get /(ActivityGetReq) returns(BaseResp)
+
+  @doc "添加活动"
+  @handler add 
+  post /(ActivityAddReq) returns(BaseResp)
+
+  @doc "编辑活动"
+  @handler put 
+  put /(ActivityPutReq) returns(BaseResp)
+
+  @doc "删除活动"
+  @handler del 
+  delete /(ActivityDelReq) returns(BaseResp)
+
+  @doc "枚举列表"
+	@handler enumList
+	get /enumList(EnumListReq) returns([]Enum)
+
+  @doc "指定项目的活动"
+  @handler projectActivity
+  get /projectActivity (projectActivityReq) returns(BaseResp)
+  
+  @doc "获取某用户参与的活动"
+	@handler UserActivities
+	get /userActivities(UserActivitiesReq) returns(BaseResp)
+
+  @doc(
+      summary: 获取活动模式枚举列表
+  )
+  @handler ActivityPatternEnumList
+  get /patternEnumList returns([]Enum)
+}
+

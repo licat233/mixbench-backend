@@ -57,23 +57,23 @@ type UsersPoolListReq {
 )
 service admin-api {	
 	@doc "获取用户池列表"
-	@handler List
+	@handler UsersPoolList
 	get /list(UsersPoolListReq) returns(BaseResp)
 
 	@doc "获取用户池信息"
-	@handler info 
+	@handler UsersPoolInfo 
 	get /(UsersPoolGetReq) returns(BaseResp)
 
     @doc "添加用户池"
-	@handler add 
+	@handler UsersPoolAdd 
 	post /(UsersPoolAddReq) returns(BaseResp)
 
     @doc "编辑用户池"
-	@handler put 
+	@handler UsersPoolPut 
 	put /(UsersPoolPutReq) returns(BaseResp)
 
     @doc "删除用户池"
-	@handler del 
+	@handler UsersPoolDel 
 	delete /(UsersPoolDelReq) returns(BaseResp)
 }
 

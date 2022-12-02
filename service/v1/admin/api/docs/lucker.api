@@ -101,7 +101,7 @@ type LuckerListReq {
 )
 service admin-api {
 	@doc "获取抽奖单列表"
-	@handler List
+	@handler LuckerList
 	get /list(LuckerListReq) returns(BaseResp)
 
 	@doc "获取抽奖单详细列表"
@@ -109,15 +109,15 @@ service admin-api {
 	post /details(LuckerDetailsReq) returns(BaseResp)
 
 	@doc "获取抽奖单信息"
-	@handler info 
+	@handler LuckerInfo 
 	get /(LuckerGetReq) returns(BaseResp)
 
     @doc "添加抽奖单"
-	@handler add 
+	@handler LuckerAdd 
 	post /(LuckerAddReq) returns(BaseResp)
 
     @doc "编辑抽奖单"
-	@handler put
+	@handler LuckerPut
 	put /(LuckerPutReq) returns(BaseResp)
 
 	@doc "编辑抽奖单by prize"
@@ -125,10 +125,10 @@ service admin-api {
 	put /putByPrize(LuckerPutByPrizeReq) returns(BaseResp)
 
     @doc "删除抽奖单"
-	@handler del 
+	@handler LuckerDel 
 	delete /(LuckerDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler enumList
-	get /enumList returns([]Enum)
+	@handler LuckerEnumList
+	get /enumList returns(BaseResp)
 }

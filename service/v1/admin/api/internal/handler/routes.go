@@ -80,7 +80,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPost,
 					Path:    "/list",
-					Handler: activity.ListHandler(serverCtx),
+					Handler: activity.ActivityListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -95,27 +95,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: activity.InfoHandler(serverCtx),
+					Handler: activity.ActivityInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: activity.AddHandler(serverCtx),
+					Handler: activity.ActivityAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: activity.PutHandler(serverCtx),
+					Handler: activity.ActivityPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: activity.DelHandler(serverCtx),
+					Handler: activity.ActivityDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: activity.EnumListHandler(serverCtx),
+					Handler: activity.ActivityEnumListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -145,32 +145,32 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: adminer.ListHandler(serverCtx),
+					Handler: adminer.AdminerListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: adminer.InfoHandler(serverCtx),
+					Handler: adminer.AdminerInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: adminer.AddHandler(serverCtx),
+					Handler: adminer.AdminerAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: adminer.PutHandler(serverCtx),
+					Handler: adminer.AdminerPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: adminer.DelHandler(serverCtx),
+					Handler: adminer.AdminerDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: adminer.EnumListHandler(serverCtx),
+					Handler: adminer.AdminerEnumListHandler(serverCtx),
 				},
 			}...,
 		),
@@ -185,7 +185,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: lucker.ListHandler(serverCtx),
+					Handler: lucker.LuckerListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
@@ -195,17 +195,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: lucker.InfoHandler(serverCtx),
+					Handler: lucker.LuckerInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: lucker.AddHandler(serverCtx),
+					Handler: lucker.LuckerAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: lucker.PutHandler(serverCtx),
+					Handler: lucker.LuckerPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
@@ -215,12 +215,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: lucker.DelHandler(serverCtx),
+					Handler: lucker.LuckerDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: lucker.EnumListHandler(serverCtx),
+					Handler: lucker.LuckerEnumListHandler(serverCtx),
 				},
 			}...,
 		),
@@ -235,32 +235,32 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: prize.ListHandler(serverCtx),
+					Handler: prize.PrizeListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: prize.InfoHandler(serverCtx),
+					Handler: prize.PrizeInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: prize.AddHandler(serverCtx),
+					Handler: prize.PrizeAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: prize.PutHandler(serverCtx),
+					Handler: prize.PrizePutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: prize.DelHandler(serverCtx),
+					Handler: prize.PrizeDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: prize.EnumListHandler(serverCtx),
+					Handler: prize.PrizeEnumListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -280,32 +280,32 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: prizeGrade.ListHandler(serverCtx),
+					Handler: prizeGrade.PrizeGradeListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: prizeGrade.InfoHandler(serverCtx),
+					Handler: prizeGrade.PrizeGradeInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: prizeGrade.AddHandler(serverCtx),
+					Handler: prizeGrade.PrizeGradeAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: prizeGrade.PutHandler(serverCtx),
+					Handler: prizeGrade.PrizeGradePutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: prizeGrade.DelHandler(serverCtx),
+					Handler: prizeGrade.PrizeGradeDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: prizeGrade.EnumListHandler(serverCtx),
+					Handler: prizeGrade.PrizeGradeEnumListHandler(serverCtx),
 				},
 			}...,
 		),
@@ -320,27 +320,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: prizesPool.ListHandler(serverCtx),
+					Handler: prizesPool.PrizesPoolListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: prizesPool.InfoHandler(serverCtx),
+					Handler: prizesPool.PrizesPoolInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: prizesPool.AddHandler(serverCtx),
+					Handler: prizesPool.PrizesPoolAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: prizesPool.PutHandler(serverCtx),
+					Handler: prizesPool.PrizesPoolPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: prizesPool.DelHandler(serverCtx),
+					Handler: prizesPool.PrizesPoolDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
@@ -360,7 +360,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: project.ListHandler(serverCtx),
+					Handler: project.ProjectListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -370,27 +370,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: project.InfoHandler(serverCtx),
+					Handler: project.ProjectInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: project.AddHandler(serverCtx),
+					Handler: project.ProjectAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: project.PutHandler(serverCtx),
+					Handler: project.ProjectPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: project.DelHandler(serverCtx),
+					Handler: project.ProjectDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: project.EnumListHandler(serverCtx),
+					Handler: project.ProjectEnumListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -490,7 +490,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: user.ListHandler(serverCtx),
+					Handler: user.UserListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
@@ -505,27 +505,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: user.InfoHandler(serverCtx),
+					Handler: user.UserInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: user.AddHandler(serverCtx),
+					Handler: user.UserAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: user.PutHandler(serverCtx),
+					Handler: user.UserPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: user.DelHandler(serverCtx),
+					Handler: user.UserDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: user.EnumListHandler(serverCtx),
+					Handler: user.UserEnumListHandler(serverCtx),
 				},
 			}...,
 		),
@@ -540,27 +540,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: usersPool.ListHandler(serverCtx),
+					Handler: usersPool.UsersPoolListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: usersPool.InfoHandler(serverCtx),
+					Handler: usersPool.UsersPoolInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: usersPool.AddHandler(serverCtx),
+					Handler: usersPool.UsersPoolAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: usersPool.PutHandler(serverCtx),
+					Handler: usersPool.UsersPoolPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: usersPool.DelHandler(serverCtx),
+					Handler: usersPool.UsersPoolDelHandler(serverCtx),
 				},
 			}...,
 		),

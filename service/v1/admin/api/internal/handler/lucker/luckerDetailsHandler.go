@@ -3,11 +3,10 @@ package lucker
 import (
 	"net/http"
 
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"mixbench/service/v1/admin/api/internal/logic/lucker"
 	"mixbench/service/v1/admin/api/internal/svc"
 	"mixbench/service/v1/admin/api/internal/types"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func LuckerDetailsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
