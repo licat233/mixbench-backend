@@ -53,6 +53,11 @@ type bindEmailCaptchaReq {
 	Solution  string `json:"solution"`            //验证码答案
 }
 
+//预留的调试端口
+type testReq {
+	Data string `form:"data,optional"` //数据
+}
+
 @server(
 	prefix: /v1/api/admin
 )
@@ -79,6 +84,12 @@ service admin-api {
 	@doc "给绑定邮箱发送验证码"
 	@handler bindEmailCaptcha
 	post /bindEmailCaptcha(bindEmailCaptchaReq) returns(BaseResp)
+	
+	@doc(
+		summary: '预留的调试端口'
+	)
+	@handler test
+	get /test(testReq) returns(BaseResp)
 }
 
 @server(

@@ -12,7 +12,7 @@ project_root="${current_path%%deploy*}"
 
 # 创建build目录
 if [ ! -d "${project_root}/build" ]; then
-   mkdir "${project_root}/build"
+    mkdir "${project_root}/build"
 fi
 
 script_path=$current_path
@@ -95,26 +95,20 @@ gen_rpc() {
     # echo "生成${name} RPC服务的Dockerfile"
 }
 
+source ./data.sh
+
 #选择要构建的服务
 service_name=$1
-all_services=()
-if [ -z $service_name ]; then
-    all_services=("captcha" "admin" "luckdraw")
-elif [[ "$service_name" = "captcha" ]] || [[ "$service_name" = "admin" ]] || [[ "$service_name" = "luckdraw" ]]; then
-    all_services=($service_name)
-else
+all_services=($(filter_service $service_name))
+if [ -z $all_services ]; then
     echo "unknown service_name: ${service_name}"
     exit
 fi
 
 #选择要构建的子服务
 micro_name=$2
-all_micros=()
-if [ -z $micro_name ]; then
-    all_micros=("rpc" "mq" "api")
-elif [[ "$micro_name" = "rpc" ]] || [[ "$micro_name" = "mq" ]] || [[ "$micro_name" = "api" ]]; then
-    all_micros=($micro_name)
-else
+all_micros=($(filter_micro $micro_name))
+if [ -z $all_micros ]; then
     echo "unknown micro_name: ${micro_name}"
     exit
 fi

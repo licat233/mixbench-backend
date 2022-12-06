@@ -106,6 +106,8 @@ type (
 	SearchPrizesPoolReq        = admin_pb.SearchPrizesPoolReq
 	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
 	StatusResp                 = admin_pb.StatusResp
+	TestReq                    = admin_pb.TestReq
+	TestResp                   = admin_pb.TestResp
 	TreeOptions                = admin_pb.TreeOptions
 	User                       = admin_pb.User
 	UserActivity               = admin_pb.UserActivity
@@ -119,6 +121,8 @@ type (
 	VerifyPasswordResp         = admin_pb.VerifyPasswordResp
 
 	Admin interface {
+		// 预留的调试端口
+		Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error)
 		// 生产token
 		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
 		// 账号登录
@@ -216,6 +220,12 @@ func NewAdmin(cli zrpc.Client) Admin {
 	return &defaultAdmin{
 		cli: cli,
 	}
+}
+
+// 预留的调试端口
+func (m *defaultAdmin) Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.Test(ctx, in, opts...)
 }
 
 // 生产token

@@ -22,6 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminClient interface {
+	// 预留的调试端口
+	Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error)
 	// 生产token
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
 	// 账号登录
@@ -116,6 +118,15 @@ type adminClient struct {
 
 func NewAdminClient(cc grpc.ClientConnInterface) AdminClient {
 	return &adminClient{cc}
+}
+
+func (c *adminClient) Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error) {
+	out := new(TestResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/Test", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *adminClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
@@ -815,6 +826,8 @@ func (c *adminClient) GetProjectTreeOptions(ctx context.Context, in *EnumListReq
 // All implementations must embed UnimplementedAdminServer
 // for forward compatibility
 type AdminServer interface {
+	// 预留的调试端口
+	Test(context.Context, *TestReq) (*TestResp, error)
 	// 生产token
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
 	// 账号登录
@@ -908,6 +921,9 @@ type AdminServer interface {
 type UnimplementedAdminServer struct {
 }
 
+func (UnimplementedAdminServer) Test(context.Context, *TestReq) (*TestResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Test not implemented")
+}
 func (UnimplementedAdminServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
 }
@@ -1150,6 +1166,24 @@ type UnsafeAdminServer interface {
 
 func RegisterAdminServer(s grpc.ServiceRegistrar, srv AdminServer) {
 	s.RegisterService(&Admin_ServiceDesc, srv)
+}
+
+func _Admin_Test_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TestReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).Test(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/Test",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).Test(ctx, req.(*TestReq))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Admin_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -2545,6 +2579,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "admin_proto.Admin",
 	HandlerType: (*AdminServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Test",
+			Handler:    _Admin_Test_Handler,
+		},
 		{
 			MethodName: "GenerateToken",
 			Handler:    _Admin_GenerateToken_Handler,

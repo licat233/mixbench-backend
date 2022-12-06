@@ -34,6 +34,10 @@ type BindEmailCaptchaReq struct {
 	Solution  string `json:"solution"`            //验证码答案
 }
 
+type TestReq struct {
+	Data string `form:"data,optional"` //数据
+}
+
 type BaseResp struct {
 	Status       bool        `json:"success"`               //【响应状态】
 	Message      string      `json:"message,optional"`      //【给予的提示信息】

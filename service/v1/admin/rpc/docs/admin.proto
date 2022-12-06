@@ -4,6 +4,14 @@ package admin_proto;
 
 option go_package = "./admin_pb";
 
+message TestReq {
+  string data = 1;
+}
+
+message TestResp {
+  string data = 1;
+}
+
 message Activity {
   int64   id = 1;
   string uuid = 2;
@@ -593,6 +601,8 @@ message ResetLuckValueReq {
 }
 
 service Admin {
+  //预留的调试端口
+  rpc Test (TestReq) returns (TestResp);
   //生产token
   rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
   //账号登录

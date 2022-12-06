@@ -22,6 +22,12 @@ func NewAdminServer(svcCtx *svc.ServiceContext) *AdminServer {
 	}
 }
 
+// 预留的调试端口
+func (s *AdminServer) Test(ctx context.Context, in *admin_pb.TestReq) (*admin_pb.TestResp, error) {
+	l := logic.NewTestLogic(ctx, s.svcCtx)
+	return l.Test(in)
+}
+
 // 生产token
 func (s *AdminServer) GenerateToken(ctx context.Context, in *admin_pb.GenerateTokenReq) (*admin_pb.GenerateTokenResp, error) {
 	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
