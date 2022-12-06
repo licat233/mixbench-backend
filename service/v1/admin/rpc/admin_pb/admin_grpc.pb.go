@@ -30,7 +30,7 @@ type AdminClient interface {
 	LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
 	// 邮箱是否存在
 	ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts ...grpc.CallOption) (*ExsitEmailResp, error)
-	// 通过邮箱查找用户
+	// 通过邮箱查找管理员
 	FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error)
 	// 注销登录
 	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
@@ -823,7 +823,7 @@ type AdminServer interface {
 	LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error)
 	// 邮箱是否存在
 	ExsitEmail(context.Context, *ExsitEmailReq) (*ExsitEmailResp, error)
-	// 通过邮箱查找用户
+	// 通过邮箱查找管理员
 	FindByEmail(context.Context, *FindByEmailReq) (*FindByEmailResp, error)
 	// 注销登录
 	Logout(context.Context, *LogoutReq) (*LogoutResp, error)

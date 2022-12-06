@@ -127,7 +127,7 @@ type (
 		LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
 		// 邮箱是否存在
 		ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts ...grpc.CallOption) (*ExsitEmailResp, error)
-		// 通过邮箱查找用户
+		// 通过邮箱查找管理员
 		FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error)
 		// 注销登录
 		Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
@@ -242,7 +242,7 @@ func (m *defaultAdmin) ExsitEmail(ctx context.Context, in *ExsitEmailReq, opts .
 	return client.ExsitEmail(ctx, in, opts...)
 }
 
-// 通过邮箱查找用户
+// 通过邮箱查找管理员
 func (m *defaultAdmin) FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.FindByEmail(ctx, in, opts...)

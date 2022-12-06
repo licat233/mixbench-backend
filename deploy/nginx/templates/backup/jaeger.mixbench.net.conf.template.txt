@@ -1,4 +1,9 @@
-# generator time: 2022-12-01
+# generator time: 2022-12-05
+
+upstream jaeger-servers{
+    server jaeger:16686;
+}
+
 server {
     listen 80;
     server_name jaeger.mixbench.net;
@@ -18,13 +23,13 @@ server {
     }
 
     location ~ .*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
-        proxy_pass http://jaeger:16686;
+        proxy_pass http://jaeger-servers;
         expires 30d;
         add_header Cache-Control public;
     }
 
     location / {
-        proxy_pass http://jaeger:16686;
+        proxy_pass http://jaeger-servers;
     }
 
     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {

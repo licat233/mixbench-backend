@@ -44,8 +44,7 @@ const (
 	SHOW_TYPE                   = 2    //信息错误
 )
 
-// var TRACE_MODEL = isTraceModel() //调试模式
-var Debug = false
+var Debug = false //debug默认关闭
 var ServerError = InternalError
 var RequestError = ExternalError
 
@@ -151,8 +150,7 @@ func Alert(msg string) error {
 	}
 }
 
-//----------实现--------
-
+// ----------实现--------
 func internalError(alertMsg string, traceErr error) *Errorx {
 	errorx := newErrorx(alertMsg, traceErr)
 	if len(errorx.ErrorMessage) == 0 {
@@ -164,10 +162,6 @@ func internalError(alertMsg string, traceErr error) *Errorx {
 		errorx.ErrorMessage = ServerErrorMsg
 		errorx.TraceMessage = "There is an error in the server, please contact the administrator licat233@gmail.com"
 	}
-	//内部错误要做日志处理
-	// if traceErr != nil {
-	// 	logx.Error(fmt.Sprintf("%s:%v", ServerErrorMsg, traceErr.Error()))
-	// }
 	return errorx
 }
 
@@ -234,14 +228,22 @@ func Convert(err error) (errorx *Errorx) {
 		return errx
 	}
 	//类型断言看是否为status.Error 类型
+	if se, ok := err.(interface {
+		GRPCStatus() *status.Status
+	}); ok {
+		//如果是statusErr错误，则需要转化为Errorx错误
+		return StatusErrToErrorx(se.GRPCStatus())
+	}
 
-	errorx = New(err.Error())
+	//原生错误和其它错误，统一做转化处理，归类于内部错误
+	errorx = internalError("", err)
+	// errorx = New(err.Error())
 	return
 }
 
 /** New 新建基本的errorx错误 400
- * alertErr string 调试信息
- * traceErr string 提示信息
+ * alertErr string 提示信息
+ * traceErr string 调试信息
  */
 func New(errs ...string) (errorx *Errorx) {
 	alertErr := RequestErrorMsg

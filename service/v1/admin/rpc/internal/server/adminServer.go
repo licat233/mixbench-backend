@@ -46,7 +46,7 @@ func (s *AdminServer) ExsitEmail(ctx context.Context, in *admin_pb.ExsitEmailReq
 	return l.ExsitEmail(in)
 }
 
-// 通过邮箱查找用户
+// 通过邮箱查找管理员
 func (s *AdminServer) FindByEmail(ctx context.Context, in *admin_pb.FindByEmailReq) (*admin_pb.FindByEmailResp, error) {
 	l := logic.NewFindByEmailLogic(ctx, s.svcCtx)
 	return l.FindByEmail(in)

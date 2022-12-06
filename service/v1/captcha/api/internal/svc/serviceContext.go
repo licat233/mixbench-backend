@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"mixbench/service/v1/admin/rpc/admin"
 	"mixbench/service/v1/captcha/api/internal/config"
 	"mixbench/service/v1/captcha/rpc/captcha"
 
@@ -11,6 +12,7 @@ import (
 type ServiceContext struct {
 	Config      config.Config
 	CaptchaRpc  captcha.Captcha
+	AdminRpc    admin.Admin
 	RedisClient *redis.Redis
 }
 
@@ -24,6 +26,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:      c,
 		CaptchaRpc:  captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
+		AdminRpc:    admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
 		RedisClient: redisConn,
 	}
 }

@@ -1,37 +1,13 @@
 version: "3.9"
-# 网络配置
-networks:
-  backend_net:
-    driver: ${NETWORKS_DRIVER}
-# 数据卷
-volumes:
-  data_volume: {}
-  build_volume: {}
-  mysql_volume: {}
-  redis_volume: {}
-  nginx_volume: {}
-  zookeeper_data_volume: {}
-  zookeeper_log_volume: {}
-  zookeeper_logs_volume: {}
-  zookeeper_datalog_volume: {}
-  kafka_volume: {}
-  elasticsearch_data_volume: {}
-  elasticsearch_logs_volume: {}
-  elasticsearch_plugins_volume: {}
-  grafana_volume: {}
-  prometheus_volume: {}
-  jaeger_volume: {}
-  static_volume: {}
-  www_volume: {}
 
 # 服务容器配置
 services:
-  # mixbench服务
-  mixbench:
+  # app服务
+  app:
     build:
       context: .
-    hostname: mixbench
-    container_name: mixbench
+    hostname: app
+    container_name: ${COMPOSE_PROJECT_NAME}_app
     environment:
       - TZ=${TZ}
       - GOPROXY=https://goproxy.cn,direct
@@ -58,10 +34,10 @@ services:
       - LUCKDRAW_RPC_PORT=${LUCKDRAW_RPC_PORT}
       - LUCKDRAW_MQ_PORT=${LUCKDRAW_MQ_PORT}
     volumes:
-      - .:/go/mixbench
-      - build_volume:/go/mixbench/build
-      - static_volume:/go/mixbench/static
-    working_dir: /go/mixbench
+      - .:/go/app
+      - build_volume:/go/app/build
+      - static_volume:/go/app/static
+    working_dir: /go/app
     restart: on-failure
     privileged: true
     stdin_open: true # 打开标准输入，可以接受外部输入
@@ -70,43 +46,45 @@ services:
       - backend_net
 
   # 数据卷容器，数据中心
-  datacenter:
-    image: ubuntu:latest
-    hostname: datacenter
-    container_name: mixbench_data
-    restart: on-failure
-    privileged: true
-    stdin_open: true
-    volumes:
-      - data_volume:/data_v
-      - build_volume:/data_v/build
-      - mysql_volume:/data_v/mysql
-      - redis_volume:/data_v/redis
-      - nginx_volume:/data_v/nginx
-      - zookeeper_data_volume:/data_v/zookeeper/data
-      - zookeeper_log_volume:/data_v/zookeeper/log
-      - zookeeper_logs_volume:/data_v/zookeeper/logs
-      - zookeeper_datalog_volume:/data_v/zookeeper/datalog
-      - kafka_volume:/data_v/kafka
-      - elasticsearch_data_volume:/data_v/elasticsearch/data
-      - elasticsearch_logs_volume:/data_v/elasticsearch/logs
-      - elasticsearch_plugins_volume:/data_v/elasticsearch/plugins
-      - grafana_volume:/data_v/grafana
-      - prometheus_volume:/data_v/prometheus
-      - jaeger_volume:/data_v/jaeger
-      - static_volume:/data_v/static
-      - www_volume:/data_v/www
-    networks:
-      - backend_net
+  # datacenter:
+  #   image: ubuntu:latest
+  #   hostname: datacenter
+  #   container_name: ${COMPOSE_PROJECT_NAME}_data
+  #   restart: on-failure
+  #   privileged: true
+  #   stdin_open: true
+  #   volumes:
+  #     - data_volume:/data_v
+  #     - build_volume:/data_v/build
+  #     - mysql_volume:/data_v/mysql
+  #     - redis_volume:/data_v/redis
+  #     - nginx_volume:/data_v/nginx
+  #     - zookeeper_data_volume:/data_v/zookeeper/data
+  #     - zookeeper_log_volume:/data_v/zookeeper/log
+  #     - zookeeper_logs_volume:/data_v/zookeeper/logs
+  #     - zookeeper_datalog_volume:/data_v/zookeeper/datalog
+  #     - kafka_volume:/data_v/kafka
+  #     - elasticsearch_data_volume:/data_v/elasticsearch/data
+  #     - elasticsearch_logs_volume:/data_v/elasticsearch/logs
+  #     - elasticsearch_plugins_volume:/data_v/elasticsearch/plugins
+  #     - grafana_volume:/data_v/grafana
+  #     - prometheus_volume:/data_v/prometheus
+  #     - jaeger_volume:/data_v/jaeger
+  #     - static_volume:/data_v/static
+  #     - www_volume:/data_v/www
+  #   networks:
+  #     - backend_net
 
+  #文件管理器
   filebrowser:
     image: filebrowser/filebrowser:latest
-    container_name: mixbench_filebrowser
+    container_name: ${COMPOSE_PROJECT_NAME}_filebrowser
     hostname: filebrowser
     restart: on-failure
     expose:
       - 80
     volumes:
+      - ./deploy/filebrowser/.filebrowser.json:/.filebrowser.json
       - data_volume:/srv
       - build_volume:/srv/build
       - mysql_volume:/srv/mysql
@@ -117,9 +95,11 @@ services:
       - zookeeper_logs_volume:/srv/zookeeper/logs
       - zookeeper_datalog_volume:/srv/zookeeper/datalog
       - kafka_volume:/srv/kafka
+      - elasticsearch_certs_volume:/srv/elasticsearch/certs
       - elasticsearch_data_volume:/srv/elasticsearch/data
       - elasticsearch_logs_volume:/srv/elasticsearch/logs
       - elasticsearch_plugins_volume:/srv/elasticsearch/plugins
+      - kibana_data_volume:/srv/kibana/data
       - grafana_volume:/srv/grafana
       - prometheus_volume:/srv/prometheus
       - jaeger_volume:/srv/jaeger
@@ -127,14 +107,12 @@ services:
       - ./deploy/nginx/www:/srv/www
     networks:
       - backend_net
-    depends_on:
-      - datacenter
 
   # Nginx服务
   nginx:
     image: nginx:latest
     hostname: nginx
-    container_name: mixbench_nginx
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
     restart: on-failure
     privileged: true
     environment:
@@ -160,37 +138,37 @@ services:
       - static_volume:/static
     networks:
       - backend_net
-    depends_on:
-      - mixbench
+    # depends_on:
+    #   - app
 
   #jaeger链路追踪 — Jaeger for tracing
   jaeger:
     image: jaegertracing/all-in-one:latest
     hostname: jaeger
-    container_name: mixbench_jaeger
+    container_name: ${COMPOSE_PROJECT_NAME}_jaeger
     restart: on-failure
-    # ports:
-    #   # - "5775:5775/udp" #新版本已弃用
-    #   - "6831:6831/udp"
-    #   - "6832:6832/udp"
-    #   - "5778:5778"
-    #   - "16686:16686"
-    #   - "14268:14268"
-    #   - "9411:9411"
     expose:
-      - 5775
-      - 6831
-      - 6832
+      - 5775/udp  
+      - 6831/udp
+      - 6832/udp
       - 5778
       - 16686
+      - 4317
+      - 4318
+      - 14250
       - 14268
+      - 14269
       - 9411
     volumes:
       - jaeger_volume:/tmp
     environment:
       - TZ=${TZ}
       - SPAN_STORAGE_TYPE=elasticsearch
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
       - ES_SERVER_URLS=http://elasticsearch:9200
+      - ES_VERSION=7   # 强制es版本为7，解决jaeger错误Failed to create span writer，原因是jaeger不支持es8+
+      - ES_CREATE_INDEX_TEMPLATES=false  # 禁用 Jaeger 索引模板创建，解决jaeger错误Failed to create span writer，原因是jaeger不支持es8+
       - LOG_LEVEL=debug
     networks:
       - backend_net
@@ -199,7 +177,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     hostname: prometheus
-    container_name: mixbench_prometheus
+    container_name: ${COMPOSE_PROJECT_NAME}_prometheus
     environment:
       - TZ=${TZ}
     volumes:
@@ -211,8 +189,6 @@ services:
       - "--storage.tsdb.path=/prometheus"
     restart: on-failure
     user: root
-    # ports:
-    #   - 9090:9090
     expose:
       - 9090
     networks:
@@ -221,91 +197,24 @@ services:
   #查看prometheus监控数据 - Grafana to view Prometheus monitoring data
   grafana:
     image: grafana/grafana:latest
-    container_name: mixbench_grafana
+    container_name: ${COMPOSE_PROJECT_NAME}_grafana
     hostname: grafana
     user: root
     environment:
       - TZ=${TZ}
     restart: on-failure
     volumes:
-      # - ${DATA_DIR}/grafana/data:/var/lib/grafana
       - grafana_volume:/var/lib/grafana
     expose:
       - 3000
     networks:
       - backend_net
 
-  #搜集kafka业务日志、存储prometheus监控数据 - Kafka for collecting business logs and storing Prometheus monitoring data
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-    container_name: mixbench_elasticsearch
-    hostname: elasticsearch
-    user: root #必须以root用户启动
-    environment:
-      - TZ=${TZ}
-      - cluster.name=mixbench_elasticsearch #设置集群名称为 mixbench_elasticsearch
-      - discovery.type=single-node #以单一节点模式启动
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
-    volumes:
-      # - ${DATA_DIR}/elasticsearch/data:/usr/share/elasticsearch/data
-      # - ./deploy/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - elasticsearch_data_volume:/usr/share/elasticsearch/data #数据文件挂载
-      - elasticsearch_logs_volume:/usr/share/elasticsearch/logs #日志文件挂载
-      - elasticsearch_plugins_volume:/usr/share/elasticsearch/plugins #插件文件挂载
-    restart: on-failure
-    privileged: true
-    expose:
-      - 9200
-      - 9300
-    networks:
-      - backend_net
-
-  #查看elasticsearch数据 - Kibana to view Elasticsearch data
-  kibana:
-    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-    container_name: mixbench_kibana
-    hostname: kibana
-    environment:
-      - TZ=${TZ}
-      - elasticsearch.hosts=http://elasticsearch:9200
-      - I18N_LOCALE=zh-CN
-    restart: on-failure
-    volumes:
-      - ./deploy/kibana/config:/usr/share/kibana/config
-    networks:
-      - backend_net
-    expose:
-      - 5601
-    depends_on:
-      - elasticsearch
-
-  #收集业务数据到kafka中 - Collect business data
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
-    container_name: mixbench_filebeat
-    hostname: filebeat
-    environment:
-      - TZ=${TZ}
-    user: root
-    restart: on-failure
-    entrypoint: "filebeat -e -strict.perms=false" #解决配置文件权限问题 - Solving the configuration file permissions
-    volumes:
-      - ./deploy/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      # 此处需指定docker的containers目录，取决于你docker的配置 - The containers directory of docker needs to be specified here, depending on your docker configuration
-      # 如snap安装的docker，则为/var/snap/docker/common/var-lib-docker/containers - Example if docker is installed by Snap /var/snap/docker/common/var-lib-docker/containers
-      # - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers
-      # - /var/lib/docker/containers:/var/lib/docker/containers
-      - /Users/licat/Library/Containers:/var/lib/docker/containers
-    networks:
-      - backend_net
-    depends_on:
-      - kafka
-
   #将kafka中filebeat收集的日志数据输出到elasticsearch - The data output collected by FileBeat in Kafka is output to ES
   go-stash:
     # image: kevinwan/go-stash:latest # if you "macOs intel" or "linux amd"
     image: kevinwan/go-stash:1.0.5-arm64 #  if you "macOs m1" or "linux arm"
-    container_name: mixbench_go-stash
+    container_name: ${COMPOSE_PROJECT_NAME}_go-stash
     hostname: go-stash
     environment:
       - TZ=${TZ}
@@ -322,7 +231,7 @@ services:
   #zookeeper是kafka的依赖 - Zookeeper is the dependencies of Kafka
   zookeeper:
     image: zookeeper:latest
-    container_name: mixbench_zookeeper
+    container_name: ${COMPOSE_PROJECT_NAME}_zookeeper
     hostname: zookeeper
     environment:
       - TZ=${TZ}
@@ -340,19 +249,17 @@ services:
   #消息队列 - Message queue
   kafka:
     image: wurstmeister/kafka:latest
-    container_name: mixbench_kafka
+    container_name: ${COMPOSE_PROJECT_NAME}_kafka
     hostname: kafka
     expose:
       - 9092
-    # ports:
-    #   - 9092:9092
     environment:
       - TZ=${TZ}
       - KAFKA_BROKER_ID=0
       - KAFKA_ADVERTISED_HOST_NAME=kafka #Do not use localhost or 127.0.0.1 as the host IP
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
-      - KAFKA_CREATE_TOPICS=goodluck-topic:1:1,mixbench-log:1:1
+      - KAFKA_CREATE_TOPICS=goodluck-topic:1:1,${COMPOSE_PROJECT_NAME}-log:1:1
     restart: on-failure
     privileged: true
     volumes:
@@ -367,7 +274,7 @@ services:
   #asynqmon asynq延迟队列、定时队列的webui - Asynqmon asynq delay queue, timing queue's webUI
   asynqmon:
     image: tantobocah/asynqmon:latest
-    container_name: mixbench_asynqmon
+    container_name: ${COMPOSE_PROJECT_NAME}_asynqmon
     hostname: asynqmon
     expose:
       - 8080
@@ -383,7 +290,7 @@ services:
   #mysql数据库容器
   mysql:
     image: mysql:latest
-    container_name: mixbench_mysql
+    container_name: ${COMPOSE_PROJECT_NAME}_mysql
     hostname: mysql
     environment:
       - TZ=${TZ}
@@ -416,7 +323,7 @@ services:
   #redis容器 - Redis container
   redis:
     image: redis:latest
-    container_name: mixbench_redis
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
     hostname: redis
     expose:
       - 6379
@@ -434,7 +341,7 @@ services:
   #phpmyadmin
   mysql_manage:
     image: phpmyadmin:latest
-    container_name: mixbench_mysqlmanage
+    container_name: ${COMPOSE_PROJECT_NAME}_mysqlmanage
     hostname: mysql_manage
     restart: on-failure
     expose:
@@ -445,7 +352,7 @@ services:
       - PMA_ARBITRARY=1 #当设置为 1 连接到任意服务器将被允许
       - PMA_HOST=mysql #定义 MySQL 服务器的地址/主机名
       - PMA_PORT=3306 # 定义 MySQL 服务器的端口
-      - PMA_VERBOSE=mixbench_mysql #MySQL 服务器的详细名称
+      - PMA_VERBOSE=${COMPOSE_PROJECT_NAME}_mysql #MySQL 服务器的详细名称
       - PMA_USER=root
       - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - PMA_CONTROLUSER=root
@@ -459,7 +366,7 @@ services:
   redis_manage:
     # image: erikdubbelboer/phpredisadmin:latest # 此镜像为amd64平台，不支持arm
     image: licat/phpredisadmin:arm
-    container_name: mixbench_redismanage
+    container_name: ${COMPOSE_PROJECT_NAME}_redismanage
     hostname: redis_manage
     restart: on-failure
     expose:
@@ -478,7 +385,7 @@ services:
   #kafkamanage
   kafkamanage:
     image: scjtqs/kafka-manager:latest
-    container_name: mixbench_kafkamanage
+    container_name: ${COMPOSE_PROJECT_NAME}_kafkamanage
     hostname: kafka_manage
     restart: on-failure
     expose:
@@ -490,6 +397,211 @@ services:
       - KM_VERSION=3.0.0.5
     depends_on:
       - zookeeper
-      # - kafka
     networks:
       - backend_net
+
+  #收集业务数据到kafka中 - Collect business data
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_filebeat
+    hostname: filebeat
+    environment:
+      - TZ=${TZ}
+    user: root
+    restart: on-failure
+    entrypoint: "filebeat -e -strict.perms=false" #解决配置文件权限问题 - Solving the configuration file permissions
+    volumes:
+      - ./deploy/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      # 此处需指定docker的containers目录，取决于你docker的配置 - The containers directory of docker needs to be specified here, depending on your docker configuration
+      # 如snap安装的docker，则为/var/snap/docker/common/var-lib-docker/containers - Example if docker is installed by Snap /var/snap/docker/common/var-lib-docker/containers
+      # - /var/snap/docker/common/var-lib-docker/containers:/var/lib/docker/containers
+      # - /var/lib/docker/containers:/var/lib/docker/containers
+      - /Users/licat/Library/Containers:/var/lib/docker/containers
+    networks:
+      - backend_net
+    depends_on:
+      - kafka
+
+  # elasticsearch_setup:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+  #   container_name: ${COMPOSE_PROJECT_NAME}_elasticsearch_setup
+  #   volumes:
+  #     - elasticsearch_certs_volume:/usr/share/elasticsearch/config/certs
+  #   user: "0"
+  #   command: >
+  #     bash -c '
+  #       if [ x${ELASTIC_PASSWORD} == x ]; then
+  #         echo "Set the ELASTIC_PASSWORD environment variable in the .env file";
+  #         exit 1;
+  #       elif [ x${KIBANA_PASSWORD} == x ]; then
+  #         echo "Set the KIBANA_PASSWORD environment variable in the .env file";
+  #         exit 1;
+  #       fi;
+  #       if [ ! -f certs/ca.zip ]; then
+  #         echo "Creating CA";
+  #         bin/elasticsearch-certutil ca --silent --pem -out config/certs/ca.zip;
+  #         unzip config/certs/ca.zip -d config/certs;
+  #       fi;
+  #       if [ ! -f certs/certs.zip ]; then
+  #         echo "Creating certs";
+  #         echo -ne \
+  #         "instances:\n"\
+  #         "  - name: elasticsearch\n"\
+  #         "    dns:\n"\
+  #         "      - elasticsearch\n"\
+  #         "      - localhost\n"\
+  #         "    ip:\n"\
+  #         "      - 127.0.0.1\n"\
+  #         > config/certs/instances.yml;
+  #         bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key;
+  #         unzip config/certs/certs.zip -d config/certs;
+  #       fi;
+  #       echo "Setting file permissions"
+  #       chown -R root:root config/certs;
+  #       find . -type d -exec chmod 750 \{\} \;;
+  #       find . -type f -exec chmod 640 \{\} \;;
+  #       echo "Waiting for Elasticsearch availability";
+  #       until curl -s --cacert config/certs/ca/ca.crt https://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+  #       echo "Setting kibana_system password";
+  #       until curl -s -X POST --cacert config/certs/ca/ca.crt -u elastic:${ELASTIC_PASSWORD} -H "Content-Type: application/json" https://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+  #       echo "All done!";
+  #     '
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "[ -f config/certs/elasticsearch/elasticsearch.crt ]"]
+  #     interval: 1s
+  #     timeout: 5s
+  #     retries: 120
+  #   networks:
+  #     - backend_net
+
+  #搜集kafka业务日志、存储prometheus监控数据 - Kafka for collecting business logs and storing Prometheus monitoring data
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_elasticsearch
+    hostname: elasticsearch
+    volumes:
+      - ./deploy/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./deploy/elasticsearch/config/default.policy:/usr/share/elasticsearch/jdk/lib/security/default.policy
+      - ./deploy/elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+      - elasticsearch_data_volume:/usr/share/elasticsearch/data #数据文件挂载
+      - elasticsearch_logs_volume:/usr/share/elasticsearch/logs #日志文件挂载
+      - elasticsearch_plugins_volume:/usr/share/elasticsearch/plugins #插件文件挂载
+      - elasticsearch_certs_volume:/usr/share/elasticsearch/config/certs #stl证书挂载
+    expose:
+      - 9200
+      - 9300
+    # ports:
+    #   - 9200:9200
+    environment:
+      - TZ=${TZ}
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置使用jvm内存大小
+      - "ES_JAVA_OPTS=--enable-preview"  #启用预览 API ，以兼容Java 19
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    mem_limit: ${MEM_LIMIT}
+    restart: on-failure
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD-SHELL",
+    #       # "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+    #       "curl -s -I http://localhost:9200 | grep -q 'HTTP/1.1 302 Found'",
+    #     ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 120
+    networks:
+      - backend_net
+    # depends_on:
+    #   elasticsearch_setup:
+    #     condition: service_healthy
+
+  #查看elasticsearch数据 - Kibana to view Elasticsearch data
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_kibana
+    hostname: kibana
+    environment:
+      - TZ=${TZ}
+      - I18N_LOCALE=zh-CN
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_USERNAME=kibana_admin
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      # - SERVER_PUBLICBASEURL=http://kibana.${DOMAIN}
+      # - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+    restart: on-failure
+    mem_limit: ${MEM_LIMIT}
+    volumes:
+      - ./deploy/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - elasticsearch_certs_volume:/usr/share/kibana/config/certs
+      - kibana_data_volume:/usr/share/kibana/data
+    expose:
+      - 5601
+    depends_on:
+      - elasticsearch
+    # depends_on:
+    #   elasticsearch:
+    #     condition: service_healthy
+    networks:
+      - backend_net
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD-SHELL",
+    #       "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+    #     ]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 120
+
+# 网络配置
+networks:
+  backend_net:
+    driver: ${NETWORKS_DRIVER}
+
+# 数据卷
+volumes:
+  data_volume:
+    driver: local
+  build_volume:
+    driver: local
+  mysql_volume:
+    driver: local
+  redis_volume:
+    driver: local
+  nginx_volume:
+    driver: local
+  zookeeper_data_volume:
+    driver: local
+  zookeeper_log_volume:
+    driver: local
+  zookeeper_logs_volume:
+    driver: local
+  zookeeper_datalog_volume:
+    driver: local
+  kafka_volume:
+    driver: local
+  elasticsearch_certs_volume:
+    driver: local
+  elasticsearch_data_volume:
+    driver: local
+  elasticsearch_logs_volume:
+    driver: local
+  elasticsearch_plugins_volume:
+    driver: local
+  kibana_data_volume:
+    driver: local
+  grafana_volume:
+    driver: local
+  prometheus_volume:
+    driver: local
+  jaeger_volume:
+    driver: local
+  static_volume:
+    driver: local
+  www_volume:
+    driver: local

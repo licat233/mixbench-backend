@@ -33,6 +33,10 @@ message VerifyCaptchaResp {
 
 message GetEmailCaptchaReq {
   string email = 1;
+  string account = 2;
+  string datetime = 3;
+  string address = 4;
+  string ip = 5;
 }
 
 message GetEmailCaptchaResp {

@@ -601,7 +601,7 @@ service Admin {
   rpc LoginByEmail (LoginByEmailReq) returns (LoginResp);
   //邮箱是否存在
   rpc ExsitEmail (ExsitEmailReq) returns (ExsitEmailResp);
-  //通过邮箱查找用户
+  //通过邮箱查找管理员
   rpc FindByEmail (FindByEmailReq) returns (FindByEmailResp);
   //注销登录
   rpc Logout (LogoutReq) returns (LogoutResp);

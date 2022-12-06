@@ -1,0 +1,14 @@
+#
+# ** THIS IS AN AUTO-GENERATED FILE **
+#
+
+# Default Kibana configuration for docker target
+server.host: "0.0.0.0"
+server.shutdownTimeout: "5s"
+monitoring.ui.container.elasticsearch.enabled: true
+#32位安全密钥
+xpack.security.encryptionKey: vG6zW7lO7vM6jX5xN5rE2tX8nA0bA4lX
+xpack.reporting.encryptionKey: vG6zW7lO7vM6jX5xN5rE2tX8nA0bA4lX
+xpack.reporting.roles.enabled: false
+xpack.encryptedSavedObjects.encryptionKey: oL8xW5gD7mX4eY3lC8iX8wN9yZ2jF0lP
+xpack.reporting.kibanaServer.hostname: localhost

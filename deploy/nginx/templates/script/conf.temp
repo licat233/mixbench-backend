@@ -1,6 +1,12 @@
 # generator time: __TIME__
+
+upstream __NAME__-servers{
+    server __ADDR__;
+}
+
 server {
     listen 80;
+    listen 443;
     server_name __NAME__.__DOMAIN__;
     index index.php index.html index.htm default.php default.htm default.html;
     root /www/common;
@@ -18,13 +24,13 @@ server {
     }
 
     location ~ .*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
-        proxy_pass http://__ADDR__;
+        proxy_pass http://__NAME__-servers;
         expires 30d;
         add_header Cache-Control public;
     }
 
     location / {
-        proxy_pass http://__ADDR__;
+        proxy_pass http://__NAME__-servers;
     }
 
     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {

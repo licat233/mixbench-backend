@@ -27,7 +27,7 @@ func NewFindByEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindB
 	}
 }
 
-// 邮箱是否存在
+// 通过邮箱查找管理员
 func (l *FindByEmailLogic) FindByEmail(in *admin_pb.FindByEmailReq) (*admin_pb.FindByEmailResp, error) {
 	//校验邮箱
 	if !govalidator.IsEmail(in.Email) {

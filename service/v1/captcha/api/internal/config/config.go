@@ -10,6 +10,7 @@ type Config struct {
 	Mode       string
 	Debug      bool
 	CaptchaRpc zrpc.RpcClientConf
+	AdminRpc   zrpc.RpcClientConf
 	Redis      struct {
 		Addr string
 		Type string

@@ -10,15 +10,16 @@ import (
 	"strings"
 )
 
-//获取当前项目地址
+// 获取当前项目地址, 使用这个获取项目根目录
 func CurrentProjectRootPath() string {
 	fullPath := getCurrentAbPath()
-	reg := regexp.MustCompile("^.*mixbench")
+	reg := regexp.MustCompile("^.*common")
 	matched := reg.FindString(fullPath)
-	return matched
+	res := strings.TrimSuffix(matched, "common")
+	return res
 }
 
-//获取当前项目地址
+// 获取当前项目地址
 func CurrentPath() string {
 	return getCurrentAbPath()
 }

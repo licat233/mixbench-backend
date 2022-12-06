@@ -5,12 +5,15 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"mixbench/service/v1/captcha/rpc/captcha_pb"
 	"mixbench/service/v1/captcha/rpc/internal/svc"
+	"path"
 	"strings"
 	"time"
 
 	"mixbench/common/errorx"
+	"mixbench/common/utils"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -65,8 +68,16 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 		return nil, errorx.IntRpcErr(err)
 	}
 
+	message := &emailMessage{
+		Captcha:  answer,
+		Account:  in.Account,
+		Datetime: in.Datetime,
+		Address:  in.Address,
+		IP:       in.Ip,
+	}
+
 	//发送邮件到邮箱
-	err = l.SendCaptcha(l.ctx, answer, email)
+	err = l.SendCaptcha(l.ctx, message, email)
 	if err != nil {
 		// 如果发送失败了，就要删除刚刚存入redis的数据
 		if _, e := l.svcCtx.RedisClient.DelCtx(l.ctx, key); e != nil {
@@ -91,15 +102,15 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	}, nil
 }
 
-func (l *GetEmailCaptchaLogic) SendCaptcha(ctx context.Context, chaptcha string, receiver string) (err error) {
+func (l *GetEmailCaptchaLogic) SendCaptcha(ctx context.Context, message *emailMessage, receiver string) (err error) {
 	defer func() {
 		e := recover()
 		if e != nil {
 			err = fmt.Errorf("SendCaptcha has panic: %+v", e)
 		}
 	}()
-	if len(chaptcha) == 0 {
-		return errors.New("captcha is nil")
+	if message == nil {
+		return errors.New("message is nil")
 	}
 	if len(receiver) == 0 {
 		return errors.New("receiver is nil")
@@ -123,42 +134,45 @@ func (l *GetEmailCaptchaLogic) SendCaptcha(ctx context.Context, chaptcha string,
 	dialer := gomail.NewDialer(l.svcCtx.Config.Email.Host, l.svcCtx.Config.Email.Port, l.svcCtx.Config.Email.Username, l.svcCtx.Config.Email.Secret)
 	// 关闭SSL协议认证
 	dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
-	msg.SetBody("text/html", emailCaptchaBody(chaptcha))
+
+	body, err := emailCaptchaBody(message)
+	if err != nil {
+		e := fmt.Errorf("get emailCaptchaBody error: %s", err.Error())
+		logx.Error(e)
+		return e
+	}
+	msg.SetBody("text/html", body)
 	if err := dialer.DialAndSend(msg); err != nil {
 		logx.Error(fmt.Sprintf("邮件发送失败:%#+v", err))
 		return ErrEmailSendFailed
 	}
-	if err := l.svcCtx.RedisClient.SetexCtx(ctx, key, chaptcha, 60); err != nil {
+	if err := l.svcCtx.RedisClient.SetexCtx(ctx, key, message.Captcha, 60); err != nil {
 		return err
 	}
 	return nil
 }
 
-func emailCaptchaBody(captcha string) string {
-	return fmt.Sprintf(`<div style="max-width:600px;min-width:300px;margin:0 auto;background:#fff;border-collapse:collapse;font-size:18px;overflow:hidden">
-	<div style=width:100vw>
-		<div style=background:#000;padding:30px;color:#fff>
-          系统通知-验证码
-		</div>
-	</div>
-	<div style=width:100vw>
-		<div style="padding:20px 15px">
-			<h1 style="color:#000;border-bottom:1px solid;text-align:center;margin-bottom:30px">验证码</h1>
-			<div>
-        <div>
-            尊敬的用户，您好！
-        </div>
-        <div style="padding: 8px 36px">
-            <p>你本次的验证码为：%s <br/>为了保证账号安全，验证码有效期为5分钟。请确认为本人操作，切勿向他人泄露，感谢您的理解与使用。</p>
-        </div>
-        <div>
-            <p>此邮箱为系统邮箱，请勿回复。</p>
-        </div>
-    </div>
-		</div>
-	</div>
-	<div style=position:fixed;left:0;bottom:0;width:100vw>
-		<div style=background:#eee;padding:10px;font-size:10px;text-align:center>系统邮件</div>
-	</div>
-</div>`, captcha)
+type emailMessage struct {
+	Captcha  string
+	Account  string
+	Datetime string
+	Address  string
+	IP       string
+}
+
+func emailCaptchaBody(message *emailMessage) (string, error) {
+	root := utils.CurrentProjectRootPath()
+	filename := path.Join(root, "deploy/email/template/captcha.html")
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		logx.Error("File reading error", err)
+		return "", err
+	}
+	body := string(data)
+	body = strings.Replace(body, "__CAPTCHA__", message.Captcha, -1)
+	body = strings.Replace(body, "__ACCOUNT__", message.Account, -1)
+	body = strings.Replace(body, "__DATETIME__", message.Datetime, -1)
+	body = strings.Replace(body, "__ADDRESS__", message.Address, -1)
+	body = strings.Replace(body, "__IP__", message.IP, -1)
+	return body, nil
 }

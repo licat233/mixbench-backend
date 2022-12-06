@@ -28,10 +28,11 @@ CaptchaRpc:
   Endpoints:
     - 127.0.0.1:${CAPTCHA_RPC_PORT}
   NonBlock: true
-  # Etcd:
-  #   Hosts:
-  #     - 127.0.0.1:2379
-  #   Key: captcha.rpc
+
+AdminRpc:
+  Endpoints:
+    - 127.0.0.1:${ADMIN_RPC_PORT}
+  NonBlock: true
 
 Redis:
   Addr: ${REDIS_HOST}:${REDIS_PORT}

@@ -24,7 +24,7 @@ weblist=(
     "kibana,kibana:5601"
     "asynqmon,asynqmon:8080"
     "filebrowser,filebrowser:80"
-    "kibana,kafka_manage:9000"
+    "kafka,kafka_manage:9000"
     "elasticsearch,elasticsearch:9200"
 )
 

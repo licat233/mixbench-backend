@@ -2,14 +2,18 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"mixbench/service/v1/admin/rpc/admin_pb"
 	"mixbench/service/v1/captcha/api/internal/svc"
 	"mixbench/service/v1/captcha/api/internal/types"
 	"mixbench/service/v1/captcha/rpc/captcha_pb"
 	"net/http"
 	"strings"
+	"time"
 
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
+	"mixbench/common/utils"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -63,8 +67,27 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 		return nil, errorx.Alert("Captcha verification failed")
 	}
 
-	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
+	// 检查邮箱是否已注册
+	adminerResp, err := l.svcCtx.AdminRpc.FindByEmail(l.ctx, &admin_pb.FindByEmailReq{
 		Email: email,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	adminer := adminerResp.Adminer
+	datetime := time.Now().Local().Format("2006-01-02 15:04:05")
+	ip := l.r.RemoteAddr
+
+	addrDetail := utils.QueryAddress(ip)
+	address := fmt.Sprintf("%s-%s-%s", addrDetail.Continent, addrDetail.Country, addrDetail.City)
+
+	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
+		Email:    email,
+		Account:  adminer.Passport,
+		Datetime: datetime,
+		Address:  address,
+		Ip:       ip,
 	})
 	if err != nil {
 		return nil, err
