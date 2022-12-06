@@ -5,9 +5,9 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"mixbench/service/v1/captcha/rpc/captcha_pb"
 	"mixbench/service/v1/captcha/rpc/internal/svc"
+	"os"
 	"path"
 	"strings"
 	"time"
@@ -163,7 +163,7 @@ type emailMessage struct {
 func emailCaptchaBody(message *emailMessage) (string, error) {
 	root := utils.CurrentProjectRootPath()
 	filename := path.Join(root, "deploy/email/template/captcha.html")
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		logx.Error("File reading error", err)
 		return "", err

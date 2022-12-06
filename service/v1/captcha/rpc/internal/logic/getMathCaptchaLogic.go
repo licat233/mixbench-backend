@@ -33,8 +33,8 @@ func (l *GetMathCaptchaLogic) GetMathCaptcha(in *captcha_pb.GetCaptchaReq) (*cap
 		DriverMath: &base64Captcha.DriverMath{
 			Height:          int(in.Height),
 			Width:           int(in.Width),
-			NoiseCount:      0,
-			ShowLineOptions: 2,
+			NoiseCount:      10,
+			ShowLineOptions: base64Captcha.OptionShowSlimeLine,
 			BgColor:         &color.RGBA{R: uint8(in.BgColor.R), G: uint8(in.BgColor.G), B: uint8(in.BgColor.B), A: uint8(in.BgColor.A)},
 			Fonts:           []string{"actionj.ttf", "wqy-microhei.ttc", "chromohv.ttf"},
 		},

@@ -80,7 +80,7 @@ else
     exit
 fi
 
-#开始遍历编译
+#开始遍历运行
 for name in ${all_services[*]}; do
     for micro in ${all_micros[*]}; do
         filename="${name}-${micro}"

@@ -49,7 +49,7 @@ type EmailCaptchaVerifyReq struct {
 
 type CaptchaInfo struct {
 	CaptchaId   string `json:"captcha_id"`   //验证码Key
-	Base64Image string `json:"base64_image"` //base46图片
+	Base64Image string `json:"base64_image"` //base46图片数据
 }
 
 type ProcessCaptchaReq struct {

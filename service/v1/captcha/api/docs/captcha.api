@@ -26,12 +26,16 @@ type BaseResp {
 }
 
 //--------captcha----------
+
+//图片验证码背景颜色
 type CaptchaBgColor {
 	R uint8 `json:"R,optional,default=254,range=[0:254]"`
 	G uint8 `json:"G,optional,default=254,range=[0:254]"`
 	B uint8 `json:"B,optional,default=254,range=[0:254]"`
 	A uint8 `json:"A,optional,default=254,range=[0:254]"`
 }
+
+//图片验证码请求
 type CaptchaReq {
 	//Height png height in pixel.
 	Height int `json:"height,optional,default=60"`
@@ -42,28 +46,34 @@ type CaptchaReq {
 	//BgColor captcha image background color (optional)
 	BgColor CaptchaBgColor `json:"BgColor"`
 }
+
+//获取邮箱验证码请求
 type EmailCaptchaReq {
 	CaptchaId string `json:"captcha_id"`
 	Solution  string `json:"solution"`
 	Email     string `json:"email"` //接收验证码的邮箱地址
 }
 
+//获取邮箱验证码响应
 type EmailCaptchaResp {
 	CaptchaId string `json:"captcha_id"`
 	ExpiresAt int64  `json:"expires_at"`
 }
 
+//邮箱验证码校验请求
 type EmailCaptchaVerifyReq {
 	Email     string `json:"email"`
 	CaptchaId string `json:"captcha_id"`
 	Solution  string `json:"solution"`
 }
 
+//图片验证码信息
 type CaptchaInfo {
 	CaptchaId   string `json:"captcha_id"`   //验证码Key
-	Base64Image string `json:"base64_image"` //base46图片
+	Base64Image string `json:"base64_image"` //base46图片数据
 }
 
+//校验验证码请求
 type ProcessCaptchaReq {
 	CaptchaId string `json:"captcha_id"`
 	Solution  string `json:"solution"`

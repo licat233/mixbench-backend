@@ -10,6 +10,11 @@ current_path=$(
 
 project_root="${current_path%%deploy*}"
 
+# 创建build目录
+if [ ! -d "${project_root}/build" ]; then
+   mkdir "${project_root}/build"
+fi
+
 script_path=$current_path
 
 cd $script_path

@@ -50,5 +50,10 @@ echo "run [service-name] [micro-name]"
 echo "clear [service-name] [micro-name]"
 echo "[service-name] [micro-name]"
 else
-./gen.sh $1 $2 && ./build.sh $1 $2 && ./run.sh $1 $2
+#开始 gen
+nohup=$(./gen.sh $1 $2) 
+#开始 编译
+# nohup=$(./build.sh $1 $2) # 交由modd来编译
+#开始 运行
+# nohup=$(./run.sh $1 $2)  # 交由modd来运行
 fi
