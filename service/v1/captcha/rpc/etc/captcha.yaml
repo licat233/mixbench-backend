@@ -1,4 +1,4 @@
-Name: captcha.rpc
+Name: captcha-rpc
 ListenOn: 127.0.0.1:${CAPTCHA_RPC_PORT}
 
 Mode: ${SERVICE_MODE}
@@ -9,14 +9,19 @@ Debug: ${SERVICE_DEBUG}
 #     - 127.0.0.1:2379
 #   Key: captcha.rpc
 
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+
 Log:
+  ServiceName: captcha-rpc
   Level: error
-  Mode: file
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 7104
+  Port: ${PROMETHEUS_CAPTCHA_RPC_PORT}
   Path: /metrics
 
 #链路追踪
@@ -34,3 +39,4 @@ Email:
   Subject: 系统邮件
   Receiver: 
     - "1697470538@qq.com"
+

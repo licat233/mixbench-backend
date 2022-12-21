@@ -1,0 +1,90 @@
+
+location ~ /mysql/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://mysql_manage:80;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /mysql {
+   proxy_pass http://mysql_manage:80;
+}
+
+location ~ /redis/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://redis_manage:80;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /redis {
+   proxy_pass http://redis_manage:80;
+}
+
+location ~ /jaeger/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://jaeger:16686;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /jaeger {
+   proxy_pass http://jaeger:16686;
+}
+
+location ~ /grafana/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://grafana:3000;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /grafana {
+   proxy_pass http://grafana:3000;
+}
+
+location ~ /kibana/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://kibana:5601;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /kibana {
+   proxy_pass http://kibana:5601;
+}
+
+location ~ /asynqmon/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://asynqmon:8080;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /asynqmon {
+   proxy_pass http://asynqmon:8080;
+}
+
+location ~ /filebrowser/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://filebrowser:80;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /filebrowser {
+   proxy_pass http://filebrowser:80;
+}
+
+location ~ /kafka/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://kafka_manage:9000;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /kafka {
+   proxy_pass http://kafka_manage:9000;
+}
+
+location ~ /elasticsearch/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://elasticsearch:9200;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /elasticsearch {
+   proxy_pass http://elasticsearch:9200;
+}
+
+location ~ /prometheus/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://prometheus:9090;
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /prometheus {
+   proxy_pass http://prometheus:9090;
+}

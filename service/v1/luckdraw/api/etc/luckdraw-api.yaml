@@ -5,15 +5,15 @@ Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
 Log:
+  ServiceName: luckdraw-api
   Level: error
-  Mode: file
 
 RootDir: ./
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 7105
+  Port: ${PROMETHEUS_LUCKDRAW_API_PORT}
   Path: /metrics
 
 #链路追踪

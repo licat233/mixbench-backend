@@ -7,8 +7,18 @@ server.host: "0.0.0.0"
 server.shutdownTimeout: "5s"
 monitoring.ui.container.elasticsearch.enabled: true
 #32位安全密钥
+xpack.encryptedSavedObjects.encryptionKey: oL8xW5gD7mX4eY3lC8iX8wN9yZ2jF0lP
 xpack.security.encryptionKey: vG6zW7lO7vM6jX5xN5rE2tX8nA0bA4lX
 xpack.reporting.encryptionKey: vG6zW7lO7vM6jX5xN5rE2tX8nA0bA4lX
-xpack.reporting.roles.enabled: false
-xpack.encryptedSavedObjects.encryptionKey: oL8xW5gD7mX4eY3lC8iX8wN9yZ2jF0lP
-xpack.reporting.kibanaServer.hostname: localhost
+# xpack.reporting.roles.enabled: false
+# xpack.reporting.kibanaServer.hostname: localhost
+
+
+xpack.fleet.agents.enabled: false # 默认为 true
+
+# xpack.fleet.registryUrl: "" # 用于访问 Elastic Package Manager 注册表的地址。
+# xpack.fleet.registryProxyUrl: "" # 如果 Internet 连接不直接可用，用于访问 Elastic Package Manager 注册表的代理地址
+# xpack.fleet.packageVerification.gpgKeyPath: "" # 用于验证 Elastic Package Manager 包的 GPG 密钥在磁盘上的路径
+# xpack.fleet.agents.fleet_server.hosts: "" # Elastic Agent 用于访问 Fleet Server 的主机名。
+# xpack.fleet.agents.elasticsearch.hosts: "" # Elastic Agent 用于访问 Elasticsearch 的主机名。
+# xpack.fleet.agents.elasticsearch.ca_sha256: "" # 用于证书验证的散列 pin。pin 是 SHA-256 指纹的 base64 编码字符串.

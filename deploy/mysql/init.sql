@@ -2,7 +2,7 @@
 ----------------
 -- Mysql创建mixbench用户
 ----------------
-create user 'mixbench'@'%' identified by 'mixbench,./,./';
+create user 'mixbench'@'%' identified by 'yI2~qF3#wY3$';
 
 ---------------------
 -- 将mixbench用户绑定到mixbench数据库上

@@ -6,15 +6,15 @@ Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
 Log:
+  ServiceName: captcha-api
   Level: error
-  Mode: file
 
 RootDir: ./
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 7103
+  Port: ${PROMETHEUS_CAPTCHA_API_PORT}
   Path: /metrics
 
 #链路追踪

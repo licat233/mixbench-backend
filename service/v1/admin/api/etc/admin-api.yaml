@@ -13,15 +13,15 @@ JwtAuth:
   AccessExpire: 86400
 
 Log:
+  ServiceName: admin-api
   Level: error
-  Mode: file
 
 RootDir: ./
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 7101
+  Port: ${PROMETHEUS_ADMIN_API_PORT}
   Path: /metrics
 
 #链路追踪
@@ -46,16 +46,8 @@ CaptchaRpc:
   Endpoints:
     - 127.0.0.1:${CAPTCHA_RPC_PORT}
   NonBlock: true
-  # Etcd:
-  #   Hosts:
-  #     - 127.0.0.1:2379
-  #   Key: captcha.rpc
 
 AdminRpc:
   Endpoints:
     - 127.0.0.1:${ADMIN_RPC_PORT}
   NonBlock: true
-  # Etcd:
-  #   Hosts:
-  #     - 127.0.0.1:2379
-  #   Key: admin.rpc

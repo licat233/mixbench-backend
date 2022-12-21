@@ -1,0 +1,2 @@
+GF_SECURITY_ADMIN_PASSWORD=password  #grafana管理界面的登录用户密码，用户名是admin
+GF_USERS_ALLOW_SIGN_UP=false  #grafana管理界面是否允许注册，默认不允许

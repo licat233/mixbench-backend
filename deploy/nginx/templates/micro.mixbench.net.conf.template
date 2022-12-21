@@ -10,7 +10,6 @@ server {
     listen 80;
     server_name ${BACKEND_HOST};
     index index.php index.html index.htm default.php default.htm default.html;
-    root /www/${BACKEND_HOST};
 
     # CORS_CONFIG
     add_header 'Access-Control-Allow-Origin' *; # 允许跨域请求的域，*代表所有
@@ -36,11 +35,17 @@ server {
     proxy_http_version 1.1; # nginx在代理是默认http版本为1.0，由于文件的下载涉及到使用分块传递，但http1.0是不支持这个特性的，所以需要设置为 1.1。
     proxy_set_header Connection "upgrade"; # 升级为长连接 websocket
     proxy_set_header Upgrade $http_upgrade; # 升级http协议
+    proxy_set_header permissions-policy interest-cohort=(); # 不希望加入谷歌的 FLoC
 
-    #ERROR-PAGE-START  404配置，可以注释、删除或修改
-    error_page 404 /www/common/404.html;
-    #error_page 502 /502.html;
-    #ERROR-PAGE-END
+    error_page 404 /404.html;
+    location = /404.html {
+        root /www/common;
+    }
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /www/common;
+    }
 
     #禁止访问的文件或目录
     location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md) {
@@ -48,14 +53,16 @@ server {
     }
 
     #代理端口
-    location /v1/api/admin/ {
+    location ~ /v1/api/admin(/)?.*(\.jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)?$ {
         proxy_pass http://admin_server; # 负载均衡
+        add_header Cache-Control public;
     }
 
-    location /v1/api/captcha/ {
+    location ~ /v1/api/captcha(/)?.*(\.jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)?$ {
         proxy_pass http://app:${CAPTCHA_API_PORT};
     }
-    location /v1/api/luckdraw/ {
+
+    location ~ /v1/api/luckdraw(/)?.*(\.jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)?$ {
         proxy_pass http://app:${LUCKDRAW_API_PORT};
     }
 
@@ -64,15 +71,21 @@ server {
     #静态文件夹配置：http://host/static/**.txt
     # 已废弃
     # location /static/ {
-    #     root /web;
+    #     root /www/${BACKEND_HOST};
     #     # autoindex on;
     # }
     # #静态文件夹配置
-    # location /static {
-    #     alias /web/static/;
-    #     # autoindex on;
-    # }
+    #location /static/ {  # 这里的 "/static" 是别名，并非路径，匹配时不带入
+    #    alias /www/${BACKEND_HOST}/static/; 
+    #    # autoindex on;
+    #}
+
+    location / {
+        root /www/${BACKEND_HOST};
+    }
+    
 
     access_log  /var/log/nginx/${BACKEND_HOST}.log;
     error_log  /var/log/nginx/${BACKEND_HOST}.error.log;
 }
+

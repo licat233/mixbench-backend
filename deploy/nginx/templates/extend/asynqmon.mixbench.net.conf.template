@@ -1,0 +1,46 @@
+# generator time: 2022-12-19
+
+server {
+    listen 80;
+    listen 443;
+    server_name asynqmon.mixbench.net;
+    index index.php index.html index.htm default.php default.htm default.html;
+    root /www/common;
+
+    proxy_set_header Host $host; #设置真实客户端地址，默认值是 $proxy_host;
+    proxy_set_header permissions-policy interest-cohort=(); # 不希望加入谷歌的 FLoC
+
+    error_page 404 /404.html;
+    location = /404.html {
+        root /www/common;
+    }
+
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /www/common;
+    }
+
+    #禁止访问的文件或目录
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md) {
+        return 404;
+    }
+
+    location ~ .*(\.jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)?$ {
+        proxy_pass http://asynqmon:8080;
+    }
+
+    location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
+        expires 30d;
+        error_log /dev/null;
+        access_log /dev/null;
+    }
+
+    location ~ .*\.(js|css)?$ {
+        expires 12h;
+        error_log /dev/null;
+        access_log /dev/null;
+    }
+    
+    access_log  /var/log/nginx/asynqmon.mixbench.net.log;
+    error_log  /var/log/nginx/asynqmon.mixbench.net.error.log;
+}

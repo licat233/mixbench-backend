@@ -1,0 +1,50 @@
+
+location /mysql {
+   proxy_pass http://mysql_manage:80;
+}
+    
+
+location /redis {
+   proxy_pass http://redis_manage:80;
+}
+    
+
+location /jaeger {
+   proxy_pass http://jaeger:16686;
+}
+    
+
+location /grafana {
+   proxy_pass http://grafana:3000;
+}
+    
+
+location /kibana {
+   proxy_pass http://kibana:5601;
+}
+    
+
+location /asynqmon {
+   proxy_pass http://asynqmon:8080;
+}
+    
+
+location /filebrowser {
+   proxy_pass http://filebrowser:80;
+}
+    
+
+location /kafka {
+   proxy_pass http://kafka_manage:9000;
+}
+    
+
+location /elasticsearch {
+   proxy_pass http://elasticsearch:9200;
+}
+    
+
+location /prometheus {
+   proxy_pass http://prometheus:9090;
+}
+    

@@ -1,22 +1,22 @@
-Name: admin.rpc
+Name: admin-rpc
 ListenOn: 127.0.0.1:${ADMIN_RPC_PORT}
 
 Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
-# Etcd:
-#   Hosts:
-#     - 127.0.0.1:2379
-#   Key: admin.rpc
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
 
 Log:
+  ServiceName: admin-rpc
   Level: error
-  Mode: file
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 7102
+  Port: ${PROMETHEUS_ADMIN_RPC_PORT}
   Path: /metrics
 
 #链路追踪

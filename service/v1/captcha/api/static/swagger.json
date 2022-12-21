@@ -1,0 +1,380 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "验证码服务",
+    "version": "v1"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/api/captcha/email": {
+      "post": {
+        "summary": "向邮箱发送验证码",
+        "operationId": "emailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "获取邮箱验证码请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "captcha-api"
+        ]
+      }
+    },
+    "/v1/api/captcha/email/process": {
+      "post": {
+        "summary": "邮箱验证码校验",
+        "operationId": "emailCaptchaVerify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/EmailCaptchaResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "邮箱验证码校验请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailCaptchaVerifyReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "captcha-api"
+        ]
+      }
+    },
+    "/v1/api/captcha/math": {
+      "post": {
+        "summary": "获取数学验证码",
+        "operationId": "mathCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "图片验证码请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "captcha-api"
+        ]
+      }
+    },
+    "/v1/api/captcha/process": {
+      "post": {
+        "summary": "验证码校验",
+        "operationId": "processCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "校验验证码请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "captcha-api"
+        ]
+      }
+    },
+    "/v1/api/captcha/show": {
+      "get": {
+        "summary": "验证码图片",
+        "operationId": "showCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "captcha-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BaseResp": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "【响应状态】"
+        },
+        "message": {
+          "type": "string",
+          "description": "【给予的提示信息】"
+        },
+        "data": {
+          "type": "object",
+          "description": "【选填】响应的业务数据"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 【选填】数据总个数"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 【选填】单页数量"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 【选填】当前页码，current与antd前端对接"
+        },
+        "totalPage": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 【自己加上去的】总共有多少页，根据前端的pageSize来计算"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功"
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": " 【选填】向用户显示消息"
+        },
+        "traceMessage": {
+          "type": "string",
+          "description": " 【选填】调试错误信息，请勿在生产环境下使用，可有可无"
+        },
+        "showType": {
+          "type": "integer",
+          "format": "int32",
+          "default": "2",
+          "description": " 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转"
+        },
+        "traceId": {
+          "type": "string",
+          "description": " 【选填】方便后端故障排除：唯一的请求ID"
+        },
+        "host": {
+          "type": "string",
+          "description": " 【选填】方便后端故障排除：当前访问服务器的主机"
+        }
+      },
+      "title": "BaseResp",
+      "required": [
+        "success",
+        "showType"
+      ]
+    },
+    "CaptchaBgColor": {
+      "type": "object",
+      "properties": {
+        "R": {
+          "$ref": "#/definitions/uint8",
+          "default": "254"
+        },
+        "G": {
+          "$ref": "#/definitions/uint8",
+          "default": "254"
+        },
+        "B": {
+          "$ref": "#/definitions/uint8",
+          "default": "254"
+        },
+        "A": {
+          "$ref": "#/definitions/uint8",
+          "default": "254"
+        }
+      },
+      "title": "CaptchaBgColor",
+      "required": [
+        "R",
+        "G",
+        "B",
+        "A"
+      ]
+    },
+    "CaptchaInfo": {
+      "type": "object",
+      "properties": {
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码Key"
+        },
+        "base64_image": {
+          "type": "string",
+          "description": "base46图片数据"
+        }
+      },
+      "title": "CaptchaInfo",
+      "required": [
+        "captcha_id",
+        "base64_image"
+      ]
+    },
+    "CaptchaReq": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "default": "60"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "default": "200"
+        },
+        "BgColor": {
+          "$ref": "#/definitions/CaptchaBgColor"
+        }
+      },
+      "title": "CaptchaReq",
+      "required": [
+        "height",
+        "width",
+        "BgColor"
+      ]
+    },
+    "EmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "captcha_id": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "接收验证码的邮箱地址"
+        }
+      },
+      "title": "EmailCaptchaReq",
+      "required": [
+        "captcha_id",
+        "solution",
+        "email"
+      ]
+    },
+    "EmailCaptchaResp": {
+      "type": "object",
+      "properties": {
+        "captcha_id": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "EmailCaptchaResp",
+      "required": [
+        "captcha_id",
+        "expires_at"
+      ]
+    },
+    "EmailCaptchaVerifyReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "captcha_id": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        }
+      },
+      "title": "EmailCaptchaVerifyReq",
+      "required": [
+        "email",
+        "captcha_id",
+        "solution"
+      ]
+    },
+    "ProcessCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "captcha_id": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        }
+      },
+      "title": "ProcessCaptchaReq",
+      "required": [
+        "captcha_id",
+        "solution"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

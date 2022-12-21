@@ -1,62 +1,94 @@
+# my global config
+# 全局配置 （如果有内部单独设定，会覆盖这个参数）
 global:
-  scrape_interval:
+  scrape_interval: 15s # 表示Prometheus多久抓取一次数据. Default is every 1 minute.
+  evaluation_interval: 15s # 表示多久检测一次告警规则. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+  scrape_timeout: 10s
+  # 该服务端在与其他系统对接所携带的标签
   external_labels:
     monitor: 'codelab-monitor'
 
-scrape_configs:
-  - job_name: 'prometheus'
-    scrape_interval: 5s  #global catch time
-    static_configs:
-      - targets: ['127.0.0.1:9090']
+# Alertmanager configuration
+# 告警插件定义。这里会设定alertmanager这个报警插件
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
 
-  - job_name: 'admin-api'
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# 告警规则。 按照设定参数进行扫描加载，用于自定义报警规则，其报警媒介和route路由由alertmanager插件实现。
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# 用于远程存储写配置
+remote_write:
+
+# 用于远程读配置
+remote_read:
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+# 控制Prometheus监视哪些资源
+# 默认配置中，有一个名为prometheus的作业，它会收集Prometheus服务器公开的时间序列数据。
+scrape_configs:  
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus' #Prometheus自己监控自己，在真正使用Prometheus时没啥用处，在这里只是示例
+    # scrape_interval: 5s  #global catch time
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
     static_configs:
-      - targets: [ 'luckdraw:7101' ]
+      - targets: ["127.0.0.1:9090"]
+  - job_name: "admin-api"
+    static_configs:
+      - targets: ["app:4011"]
         labels:
           job: admin-api
           app: admin-api
           env: dev
-  - job_name: 'admin-rpc'
+          # port: ${PROMETHEUS_ADMIN_API_PORT}
+          # time_zone: $TZ
+  - job_name: "admin-rpc"
     static_configs:
-      - targets: [ 'luckdarw:7102' ]
+      - targets: ["app:4012"]
         labels:
           job: admin-rpc
           app: admin-rpc
           env: dev
-  - job_name: 'captcha-api'
+  - job_name: "captcha-api"
     static_configs:
-      - targets: [ 'captcha:7103' ]
+      - targets: ["app:4021"]
         labels:
           job: captcha-api
           app: captcha-api
           env: dev
-  - job_name: 'captcha-rpc'
+  - job_name: "captcha-rpc"
     static_configs:
-      - targets: [ 'luckdarw:7104' ]
+      - targets: ["app:4022"]
         labels:
           job: captcha-rpc
           app: captcha-rpc
           env: dev
-  - job_name: 'luckdarw-api'
+  - job_name: "luckdarw-api"
     static_configs:
-      - targets: [ 'luckdarw:7105' ]
+      - targets: ["app:4031"]
         labels:
           job: luckdarw-api
           app: luckdarw-api
           env: dev
-  - job_name: 'luckdarw-rpc'
+  - job_name: "luckdarw-rpc"
     static_configs:
-      - targets: [ 'luckdarw:7106' ]
+      - targets: ["app:4032"]
         labels:
           job: luckdarw-rpc
           app: luckdarw-rpc
           env: dev
-  - job_name: 'luckdarw-mq'
+  - job_name: "luckdarw-mq"
     static_configs:
-      - targets: [ 'luckdarw:7107' ]
+      - targets: ["app:4033"]
         labels:
           job: luckdarw-mq
           app: luckdarw-mq
           env: dev
-
-

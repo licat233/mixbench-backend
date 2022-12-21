@@ -38,15 +38,30 @@ gen_api() {
         echo "文件: ${filename} 不存在"
         return
     fi
-    echo -e "\n开始生成${name}-${micro}服务..."
     nohup=$(goctl api go -api $filename -dir=../ -style goZero)
-    echo "${name}-${micro}服务生成完成!"
+    echo "已生成${name}-${micro}服务相关文件!"
     #生成接口文档swagger.json
-    echo "生成接口文档swagger.json ...... "
-    goctl api plugin -plugin goctl-swagger="swagger -filename ../static/swagger.json" -api "${name}.api" -dir .
+    nohup=$(goctl api plugin -plugin goctl-swagger="swagger -filename ../static/swagger.json" -api "${name}.api" -dir .)
+    echo "已生成${name}-${micro}服务swagger.json文件"
     #生成typescript调用文件
-    echo "生成typescript调用文件 ...... "
-    goctl api ts -api "${name}.api" -dir ../static
+    nohup=$(goctl api ts -api "${name}.api" -dir ../static)
+    cd ../static
+    mdfile="${name}.ts"
+    if [ ! -f $mdfile ]; then
+        echo "文件 $mdfile 不存在!"
+        return
+    fi
+    oldstr="* as components"
+    newstr="type * as components"
+    # macOS环境中需要传入一个文件做备份
+    sed -i "" "s/${oldstr}/${newstr}/g" $mdfile
+    if [ $? -ne 0 ]; then
+        sed -i "s/${oldstr}/${newstr}/g" $mdfile
+    fi
+    if [ $? -ne 0 ]; then
+        exit
+    fi
+    echo "已生成${name}-${micro}服务typescript接口文件"
     # cd ../
     # rm -f Dockerfile
     # goctl docker -go "${name}.go"
@@ -72,7 +87,6 @@ gen_rpc() {
         echo "文件: ${filename} 不存在"
         return
     fi
-    echo -e "\n开始生成${name}-${micro}服务..."
     nohup=$(goctl rpc protoc $filename --go_out=../ --go-grpc_out=../ --zrpc_out=../ -style goZero)
     pb_path="${project_root}/service/v1/${name}/rpc/${name}_pb"
     if [ ! -d $pb_path ]; then
@@ -88,7 +102,7 @@ gen_rpc() {
         sed -i 's/,omitempty//g' "${name}.pb.go"
     fi
 
-    echo "${name}-${micro}服务生成完成!"
+    echo -e "\n已生成${name}-${micro}服务相关文件!"
     # cd ../
     # rm -f Dockerfile
     # goctl docker -go "${name}.go"
@@ -113,6 +127,8 @@ if [ -z $all_micros ]; then
     exit
 fi
 
+echo "开始生成各个服务的相关文件"
+echo "↓"
 #开始遍历编译
 for name in ${all_services[*]}; do
     for micro in ${all_micros[*]}; do

@@ -22,7 +22,6 @@
 */logs/
 build/
 data/
-static/
 logs/
 ui/admin/node_modules
 ui/luckdraw/node_modules

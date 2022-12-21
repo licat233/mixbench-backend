@@ -1,12 +1,12 @@
-Name: luckdraw.rpc
+Name: luckdraw-rpc
 ListenOn: 127.0.0.1:${LUCKDRAW_RPC_PORT}
 Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
-# Etcd:
-#   Hosts:
-#     - 127.0.0.1:2379
-#   Key: luckdraw.rpc
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
 
 Mysql:
   DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
@@ -16,13 +16,13 @@ JwtAuth:
   AccessExpire: 86400
 
 Log:
+  ServiceName: luckdraw-rpc
   Level: error
-  Mode: file
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 7106
+  Port: ${PROMETHEUS_LUCKDRAW_RPC_PORT}
   Path: /metrics
 
 #链路追踪

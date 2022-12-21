@@ -66,7 +66,10 @@ command:
 > clear [service-name] [micro-name]  
 > [service-name] [micro-name]  
 
-## 使用示例
+## prometheus生态架构
+![alt prometheus生态架构图](./deploy/docs/img/prometheus-struct.png)
+
+## goctl使用示例
 
 ① 生成 user.api 文件
 

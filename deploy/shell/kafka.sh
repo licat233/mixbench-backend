@@ -8,6 +8,8 @@ cd /opt/kafka/bin
 
 #查看topic列表
 kafka-topics --list --bootstrap-server localhost:9092
+# on docker
+kafka-topics.sh --list --bootstrap-server localhost:9092
 
 #删除topic
 kafka-topics --delete --topic goodluck-topic --bootstrap-server localhost:9092
@@ -24,6 +26,8 @@ kafka-topics --describe --topic goodluck-topic --bootstrap-server localhost:9092
 
 #查看consumer-group列表
 kafka-consumer-groups --bootstrap-server localhost:9092 --list
+# on docker 
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
 
 #删除consumer-group
 kafka-consumer-groups --bootstrap-server localhost:9092 --delete --group luckdraw-group

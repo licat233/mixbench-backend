@@ -12,6 +12,7 @@ cd $current_path
 cd ..
 
 domain="mixbench.net"
+rewrite_file="vhost/dev.conf.template"
 
 # 注意：macOS中 bash3.2不支持关联数组，需要升级到bash4+，但不建议这样做，因为Apple仍将版本3作为系统外壳提供
 # 故采取此方案
@@ -26,19 +27,23 @@ weblist=(
     "filebrowser,filebrowser:80"
     "kafka,kafka_manage:9000"
     "elasticsearch,elasticsearch:9200"
+    "prometheus,prometheus:9090"
 )
 
+# split 方法的实现
 splitstr() {
     web=$1
-    arr=($(echo $web | tr ',' ' '))
+    mark=$2
+    arr=($(echo $web | tr $mark ' '))
     num=${#arr[@]}
     if [ $num -ne 2 ]; then
-        echo "error: ${web}"
+        echo "split error: ${web}"
         exit
     fi
     echo ${arr[@]}
 }
 
+#备份当前文件，备份后，当前文件就不存在了
 backup() {
     file=$1
     cpfile="backup/${file}.txt"
@@ -50,6 +55,7 @@ backup() {
     fi
 }
 
+#失败以后得恢复文件
 recover() {
     file=$1
     if [ -f $file ]; then
@@ -60,6 +66,7 @@ recover() {
     fi
 }
 
+#替换文件中的字符串
 replace() {
     file=$1
     oldstr=$2
@@ -77,25 +84,72 @@ replace() {
 }
 
 current_time=$(date "+%Y-%m-%d %H:%M:%S")
+# 核心生产文件
 generator() {
     server_name=$1
     server_addr=$2
     filename="${server_name}.${domain}.conf.template"
     backup $filename
-    cp ./script/conf.temp $filename
+    if [ -f $filename ]; then
+        rm -f $filename
+    fi
+    filename="extend/${filename}"
+    cp ./script/extend.temp $filename
     replace $filename "__DOMAIN__" $domain
     replace $filename "__NAME__" $server_name
     replace $filename "__ADDR__" $server_addr
     replace $filename "__TIME__" $current_time
 }
 
+# 兼容性有问题，不可用
+insert() {
+    line=$1
+    text=$2
+    file=$3
+    sed -i "" "${line}a\ $tex3" $file # macos下 sed 命令有问题
+    if [ $? -ne 0 ]; then
+        sed -i "${line}a\ $text" $file
+    fi
+}
+
+gen_dev_conf() {
+    server_name=$1
+    server_addr=$2
+    echo "
+location ~ /${server_name}/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
+    proxy_pass http://${server_addr};
+    expires 30d;
+    add_header Cache-Control public;
+}
+location /${server_name} {
+   proxy_pass http://${server_addr};
+}" >>$rewrite_file
+
+}
+
 if [ ! -d "backup" ]; then
     mkdir "backup"
 fi
 
+if [ ! -d "extend" ]; then
+    mkdir "extend"
+fi
+
+if [ ! -d "vhost" ]; then
+    mkdir "vhost"
+fi
+
+if [ ! -d "backup/vhost" ]; then
+    mkdir "backup/vhost"
+fi
+
+backup $rewrite_file
+touch $rewrite_file
+
 for web in ${weblist[@]}; do
-    arr=($(splitstr $web))
-    generator ${arr[0]} ${arr[1]}
+    arr=($(splitstr $web ','))
+    $(generator ${arr[0]} ${arr[1]})
+    $(gen_dev_conf ${arr[0]} ${arr[1]})
 done
 
 echo "----------- generator success -----------"
