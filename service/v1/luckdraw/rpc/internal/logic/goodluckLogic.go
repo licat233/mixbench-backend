@@ -193,7 +193,7 @@ func (l *GoodluckLogic) asynqUpdateUserScore(userId int64, isWin bool) error {
 	return l.svcCtx.AsynqClient.AddTask(msg)
 }
 
-func (l *GoodluckLogic) kqUpdateUserScore(userId int64, isWin bool) error {
+func (l *GoodluckLogic) KqUpdateUserScore(userId int64, isWin bool) error {
 	if l.svcCtx.KqueueGoodluckStatusHandlerClient == nil {
 		err := errors.New("kafka client 未初始化")
 		return err
