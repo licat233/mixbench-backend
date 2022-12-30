@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:49:03
+ * @Description: licat233@gmail.com
+ */
 package rbac
 
 import (
@@ -34,7 +41,7 @@ func (l *DelPoliciesLogic) DelPolicies(req *types.PoliciesReq) (any, error) {
 	}
 	ok, err := l.svcCtx.CasbinEnforcer.RemovePolicies(rules)
 	if logState && err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
 	}
 	return respx.DefaultBoolResp(ok, errors.New("rule not exists"))

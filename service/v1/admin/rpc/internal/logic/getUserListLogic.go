@@ -28,7 +28,7 @@ func (l *GetUserListLogic) GetUserList(in *admin_pb.UserListReq) (*admin_pb.GetU
 	in.ListReq = newListReq(in.ListReq)
 	list, total, err := l.svcCtx.UserModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbUserToMdUser(in.User))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

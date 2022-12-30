@@ -33,7 +33,7 @@ func (l *UserActivityLogic) UserActivity(in *admin_pb.UserActivityReq) (*admin_p
 	//usersPool里面包含多种pattern的活动
 	usersPoolList, err := l.svcCtx.UsersPoolModel.FindsByUserId(l.ctx, in.UserId)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -44,7 +44,7 @@ func (l *UserActivityLogic) UserActivity(in *admin_pb.UserActivityReq) (*admin_p
 
 	activityList, err := l.svcCtx.ActivityModel.FindsByIds(l.ctx, activityIds)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -52,7 +52,7 @@ func (l *UserActivityLogic) UserActivity(in *admin_pb.UserActivityReq) (*admin_p
 	//pattern = 1 表示为公开的活动
 	activities, err := l.svcCtx.ActivityModel.FindsByPattern(l.ctx, 1)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

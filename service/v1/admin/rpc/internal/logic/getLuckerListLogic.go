@@ -34,7 +34,7 @@ func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.LuckerListReq) (*admin_p
 
 	list, total, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbLuckerToMdLucker(in.Lucker))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

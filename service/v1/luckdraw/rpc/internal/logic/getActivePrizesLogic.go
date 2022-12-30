@@ -29,7 +29,7 @@ func NewGetActivePrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 func (l *GetActivePrizesLogic) GetActivePrizes(in *luckdraw_pb.ActivePrizesReq) (*luckdraw_pb.ActivePrizesResp, error) {
 	list, err := l.svcCtx.PrizeModel.FindPrizesByActivityUuid(l.ctx, in.ActivityUuid)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return &luckdraw_pb.ActivePrizesResp{

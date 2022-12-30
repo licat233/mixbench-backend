@@ -17,7 +17,7 @@ import (
 func SearchUser(ctx context.Context, UserModel model.UserModel, passport string) (*model.User, error) {
 	mdUser, err := UserModel.FindByPasspord(ctx, passport)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		logx.WithContext(ctx).Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == nil {
@@ -26,7 +26,7 @@ func SearchUser(ctx context.Context, UserModel model.UserModel, passport string)
 
 	mdUser, err = UserModel.FindByEmail(ctx, passport)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		logx.WithContext(ctx).Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == nil {
@@ -35,7 +35,7 @@ func SearchUser(ctx context.Context, UserModel model.UserModel, passport string)
 
 	mdUser, err = UserModel.FindByPhone(ctx, passport)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		logx.WithContext(ctx).Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == nil {

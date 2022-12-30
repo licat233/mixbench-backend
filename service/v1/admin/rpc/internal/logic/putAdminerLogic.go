@@ -36,7 +36,7 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp
 	if strings.TrimSpace(in.Password) == "" {
 		adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
 		if err != nil && err != model.ErrNotFound {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 		if err == model.ErrNotFound {
@@ -60,7 +60,7 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.Adminer) (*admin_pb.StatusResp
 	}
 
 	if err := l.svcCtx.AdminerModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

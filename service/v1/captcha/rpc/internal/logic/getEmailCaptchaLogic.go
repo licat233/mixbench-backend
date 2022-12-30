@@ -41,7 +41,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 		e := recover()
 		if e != nil {
 			resp = nil
-			logx.Error(fmt.Errorf("has panic: %+v", e))
+			l.Logger.Error(fmt.Errorf("has panic: %+v", e))
 			err = errorx.IntRpcErr(fmt.Errorf("has panic: %+v", e))
 		}
 	}()
@@ -54,7 +54,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	//生成captcha_id
 	captchaId, err := generateDigitCaptcha(l.svcCtx.CaptchaStore)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	//获取captcha_id的answer
@@ -64,7 +64,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 
 	//先存入redis中，key为邮箱，value为验证码，过期时间为 expireTime
 	if err := l.svcCtx.RedisClient.SetexCtx(l.ctx, key, email, int(l.svcCtx.CaptchaExpire.Seconds())); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -81,7 +81,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 	if err != nil {
 		// 如果发送失败了，就要删除刚刚存入redis的数据
 		if _, e := l.svcCtx.RedisClient.DelCtx(l.ctx, key); e != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 		if err == ErrEmailTimed {
@@ -90,7 +90,7 @@ func (l *GetEmailCaptchaLogic) GetEmailCaptcha(in *captcha_pb.GetEmailCaptchaReq
 		if err == ErrEmailSendFailed {
 			return nil, errorx.ExtRpcErr(err)
 		}
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -135,15 +135,15 @@ func (l *GetEmailCaptchaLogic) SendCaptcha(ctx context.Context, message *emailMe
 	// 关闭SSL协议认证
 	dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
-	body, err := emailCaptchaBody(message)
+	body, err := emailCaptchaBody(ctx, message)
 	if err != nil {
 		e := fmt.Errorf("get emailCaptchaBody error: %s", err.Error())
-		logx.Error(e)
+		l.Logger.Error(e)
 		return e
 	}
 	msg.SetBody("text/html", body)
 	if err := dialer.DialAndSend(msg); err != nil {
-		logx.Error(fmt.Sprintf("邮件发送失败:%#+v", err))
+		l.Logger.Error(fmt.Sprintf("邮件发送失败:%#+v", err))
 		return ErrEmailSendFailed
 	}
 	if err := l.svcCtx.RedisClient.SetexCtx(ctx, key, message.Captcha, 60); err != nil {
@@ -160,12 +160,12 @@ type emailMessage struct {
 	IP       string
 }
 
-func emailCaptchaBody(message *emailMessage) (string, error) {
+func emailCaptchaBody(ctx context.Context, message *emailMessage) (string, error) {
 	root := utils.CurrentProjectRootPath()
 	filename := path.Join(root, "deploy/email/template/captcha.html")
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		logx.Error("File reading error", err)
+		logx.WithContext(ctx).Error("File reading error", err)
 		return "", err
 	}
 	body := string(data)

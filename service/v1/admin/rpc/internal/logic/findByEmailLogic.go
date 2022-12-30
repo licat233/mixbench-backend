@@ -36,7 +36,7 @@ func (l *FindByEmailLogic) FindByEmail(in *admin_pb.FindByEmailReq) (*admin_pb.F
 	//查找是否有绑定该邮箱的用户
 	adminer, err := l.svcCtx.AdminerModel.FindOneByEmail(l.ctx, in.Email)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在

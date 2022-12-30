@@ -43,22 +43,22 @@ func (l *AddUserLogic) AddUser(in *admin_pb.User) (*admin_pb.AddUserResp, error)
 	}
 	result, err := l.svcCtx.UserModel.Insert(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	user, err := l.svcCtx.UserModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

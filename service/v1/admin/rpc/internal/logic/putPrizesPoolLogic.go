@@ -43,7 +43,7 @@ func (l *PutPrizesPoolLogic) PutPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.S
 	}
 
 	if err := l.svcCtx.PrizesPoolModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

@@ -30,7 +30,7 @@ func (l *ResetLuckValueLogic) ResetLuckValue(in *admin_pb.ResetLuckValueReq) (*a
 	//先验证活动信息是否正确
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -41,13 +41,13 @@ func (l *ResetLuckValueLogic) ResetLuckValue(in *admin_pb.ResetLuckValueReq) (*a
 	}
 	prizesPools, err := l.svcCtx.PrizesPoolModel.FindsByActivityId(l.ctx, in.ActivityId)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	for _, prizesPool := range prizesPools {
 		prizesPool.LuckValue = 100
 		if err = l.svcCtx.PrizesPoolModel.Update(l.ctx, prizesPool); err != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 	}

@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:48:46
+ * @Description: licat233@gmail.com
+ */
 package rbac
 
 import (
@@ -29,7 +36,7 @@ func NewAddPolicyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPoli
 func (l *AddPolicyLogic) AddPolicy(req *types.PolicyReq) (any, error) {
 	ok, err := l.svcCtx.CasbinEnforcer.AddPolicy(req.Sub, req.Dom, req.Obj, req.Act)
 	if logState && err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
 	}
 	return respx.DefaultBoolResp(ok, errors.New("rule already exists"))

@@ -39,7 +39,7 @@ func (l *PutLuckerByPrizeLogic) PutLuckerByPrize(in *admin_pb.LuckerPutByPrizeRe
 	//先查询出prizes_pool_id
 	pplist, err := l.svcCtx.PrizesPoolModel.FindsByActivityAndPrize(l.ctx, in.ActivityId, in.PrizeId)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	n := len(pplist)
@@ -47,7 +47,7 @@ func (l *PutLuckerByPrizeLogic) PutLuckerByPrize(in *admin_pb.LuckerPutByPrizeRe
 		return nil, errorx.ExtRpcErr(errors.New("not found prizesPool"))
 	} else if n > 1 {
 		e := fmt.Errorf("prizesPool is not unique when activityId=%d,prizeId=%d", in.ActivityId, in.PrizeId)
-		logx.Error(e)
+		l.Logger.Error(e)
 		return nil, errorx.IntRpcErr(e)
 	}
 
@@ -63,7 +63,7 @@ func (l *PutLuckerByPrizeLogic) PutLuckerByPrize(in *admin_pb.LuckerPutByPrizeRe
 	}
 
 	if err := l.svcCtx.LuckerModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

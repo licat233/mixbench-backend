@@ -34,7 +34,7 @@ func (l *ExsitEmailLogic) ExsitEmail(in *admin_pb.ExsitEmailReq) (*admin_pb.Exsi
 	//查找是否有绑定该邮箱的用户
 	exist, err := l.svcCtx.AdminerModel.ExsitByEmail(l.ctx, in.Email)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return &admin_pb.ExsitEmailResp{

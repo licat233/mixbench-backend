@@ -31,7 +31,7 @@ func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, erro
 	uid := ctxdata.GetUidFromCtx(l.ctx)
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, uid)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -47,7 +47,7 @@ func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, erro
 
 	_, err = l.svcCtx.JwtBlacklistsModel.Insert(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

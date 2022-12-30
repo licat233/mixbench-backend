@@ -28,7 +28,7 @@ func NewGetActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAc
 func (l *GetActivityLogic) GetActivity(in *admin_pb.ItemReq) (*admin_pb.GetActivityResp, error) {
 	res, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {

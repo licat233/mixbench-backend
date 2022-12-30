@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:49:36
+ * @Description: licat233@gmail.com
+ */
 package upload
 
 import (
@@ -6,7 +13,6 @@ import (
 	"net/http"
 	"path"
 
-	"mixbench/common/errorx"
 	"mixbench/common/filex"
 	"mixbench/common/respx"
 	"mixbench/service/v1/admin/api/internal/svc"
@@ -32,10 +38,9 @@ func NewUploadImgLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.
 
 func (l *UploadImgLogic) UploadImg() (resp any, err error) {
 	saveDir := path.Join(l.svcCtx.Config.StaticConfig.Root, "img")
-	err = filex.SaveHttpImg(l.r, saveDir, "img")
+	err = filex.SaveHttpImg(l.ctx, l.r, saveDir, "img")
 	if err != nil {
-		logx.Error(err)
-		return nil, errorx.InternalError(err)
+		return nil, err
 	}
 	url := fmt.Sprint("//", l.svcCtx.Config.StaticConfig.Domain, saveDir)
 	return respx.DefaultSingleResp(url, nil)

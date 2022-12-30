@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/rand"
 	"mixbench/service/v1/luckdraw/rpc/internal/svc"
 	"mixbench/service/v1/luckdraw/rpc/luckdraw"
 	"mixbench/service/v1/luckdraw/rpc/luckdraw_pb"
 	"mixbench/service/v1/model"
-	"math/rand"
 	"sort"
 	"time"
 
@@ -53,7 +53,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//获取用户信息
 	user, err := l.svcCtx.UserModel.FindOne(l.ctx, in.UserId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -67,7 +67,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//获取活动信息
 	mdActivity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -84,7 +84,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//检查该用户在该活动的抽奖次数
 	luckCount, err := l.svcCtx.LuckerModel.FindCountByUserAndActivity(l.ctx, in.UserId, mdActivity.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if luckCount >= mdActivity.MaxCount {
@@ -94,7 +94,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//获取活动奖品列表
 	mdPrizesPoolList, err := l.svcCtx.PrizesPoolModel.FindByActivityUuid(l.ctx, in.ActivityUuid)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -105,7 +105,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//抽取奖品
 	PrizesPool, err := randomPrize(pbPrizesPoolList)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -120,7 +120,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	}
 	_, err = l.svcCtx.LuckerModel.Insert(l.ctx, mdLucker)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -130,7 +130,7 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	// if PrizesPool.IsWin == false {
 	// 	user.Score += 10
 	// 	if err = l.svcCtx.UserModel.Update(l.ctx, user); err != nil {
-	// logx.Error(err)
+	// l.Logger.Error(err)
 	// return nil, errorx.IntRpcErr(err)
 	// 	}
 	// }
@@ -139,32 +139,32 @@ func (l *GoodluckLogic) Goodluck(in *luckdraw_pb.GoodluckReq) (*luckdraw_pb.Good
 	//查询是否是否中奖
 	grade, err := l.svcCtx.PrizeGradeModel.FindOne(l.ctx, PrizesPool.GradeId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	isWin := utils.Int64ToBool(grade.IsWin)
 
 	//交给kafka，mq去处理。已经弃用了kafka，使用asynq代替
 	// if err := l.kqUpdateUserScore(user.Id, isWin); err != nil {
-	// 	logx.Errorf("l.kqUpdateUserScore(user.Id, isWin) error: %v", err)
+	// 	l.Logger.Errorf("l.kqUpdateUserScore(user.Id, isWin) error: %v", err)
 	// }
 
 	if err := l.asynqUpdateUserScore(user.Id, isWin); err != nil {
-		logx.Errorf("消息队列任务处理错误：l.asynqUpdateUserScore(user.Id, isWin) error: %v", err)
+		l.Logger.Errorf("消息队列任务处理错误：l.asynqUpdateUserScore(user.Id, isWin) error: %v", err)
 	}
 
 	//获取奖品信息
 	mdPrize, err := l.svcCtx.PrizeModel.FindOne(l.ctx, PrizesPool.PrizeId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

@@ -29,7 +29,7 @@ func NewDelAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAdm
 func (l *DelAdminerLogic) DelAdminer(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -43,7 +43,7 @@ func (l *DelAdminerLogic) DelAdminer(in *admin_pb.ItemReq) (*admin_pb.StatusResp
 
 	err = l.svcCtx.AdminerModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil

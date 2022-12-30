@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:55:29
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -45,22 +52,22 @@ func (l *AddActivityLogic) AddActivity(in *admin_pb.Activity) (*admin_pb.AddActi
 	}
 	result, err := l.svcCtx.ActivityModel.Insert(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

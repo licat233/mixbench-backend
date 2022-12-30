@@ -45,7 +45,7 @@ func (l *PutUserLogic) PutUser(in *admin_pb.User) (*admin_pb.StatusResp, error) 
 	// muser := model.User(in)
 
 	if err := l.svcCtx.UserModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil

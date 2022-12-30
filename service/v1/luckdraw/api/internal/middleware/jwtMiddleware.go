@@ -1,6 +1,14 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:58:01
+ * @Description: licat233@gmail.com
+ */
 package middleware
 
 import (
+	"context"
 	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
@@ -13,11 +21,13 @@ import (
 )
 
 type JwtMiddleware struct {
+	ctx    context.Context
 	Config config.Config
 }
 
 func NewJwtMiddleware(c config.Config) *JwtMiddleware {
 	return &JwtMiddleware{
+		ctx:    context.Background(),
 		Config: c,
 	}
 }
@@ -33,7 +43,7 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		//解析 token
 		claims, err := jwtx.ParseToken(jwtToken, m.Config.JwtAuth.AccessSecret)
 		if err != nil {
-			logx.Error(err)
+			logx.WithContext(m.ctx).Error(err)
 			httpx.Error(w, errorx.InternalError(err))
 			return
 		}

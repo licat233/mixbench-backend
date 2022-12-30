@@ -28,7 +28,7 @@ func NewGetPrizeGradeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 func (l *GetPrizeGradeLogic) GetPrizeGrade(in *admin_pb.ItemReq) (*admin_pb.GetPrizeGradeResp, error) {
 	res, err := l.svcCtx.PrizeGradeModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {

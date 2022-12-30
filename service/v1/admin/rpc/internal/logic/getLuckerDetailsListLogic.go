@@ -49,7 +49,7 @@ func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.LuckerDeta
 	})
 
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return &admin_pb.GetLuckerDetailsResp{

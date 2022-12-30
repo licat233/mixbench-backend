@@ -44,7 +44,7 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 	key := formatEmailCaptchaKey(CaptchaId)
 	exists, err := l.svcCtx.RedisClient.ExistsCtx(l.ctx, key)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	//如果不存在，说明该captcha_id可能是假的
@@ -57,7 +57,7 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 	//存在，则取出
 	emailV, err := l.svcCtx.RedisClient.GetCtx(l.ctx, key)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

@@ -29,7 +29,7 @@ func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutRe
 	//优先从redis中查找
 	exist, err := l.svcCtx.RedisCli.ExistsCtx(l.ctx, in.JwtToken)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -42,7 +42,7 @@ func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutRe
 	//再从mysql中查找
 	exist, err = l.svcCtx.JwtBlacklistsModel.ExistByToken(l.ctx, in.JwtToken)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

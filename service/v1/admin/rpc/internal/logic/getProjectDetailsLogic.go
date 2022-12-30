@@ -28,7 +28,7 @@ func (l *GetProjectDetailsLogic) GetProjectDetails(in *admin_pb.ProjectListReq) 
 	in.ListReq = newListReq(in.ListReq)
 	list, total, err := l.svcCtx.ProjectModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbProjectToMdProject(in.Project))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -36,7 +36,7 @@ func (l *GetProjectDetailsLogic) GetProjectDetails(in *admin_pb.ProjectListReq) 
 	for _, project := range list {
 		activities, err := l.svcCtx.ActivityModel.FindsByProjectId(l.ctx, project.Id)
 		if err != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 		data = append(data, &admin_pb.ProjectDetails{

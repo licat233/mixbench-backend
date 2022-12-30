@@ -47,7 +47,7 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	//进行账号登录
 	adminer, err := l.svcCtx.AdminerModel.FindOneByPassport(l.ctx, in.Passport)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在
@@ -83,7 +83,7 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	adminer.LoginCount++
 	adminer.LastLogin = time.Now()
 	if err = l.svcCtx.AdminerModel.Update(l.ctx, adminer); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

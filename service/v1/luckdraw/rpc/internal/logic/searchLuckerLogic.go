@@ -43,7 +43,7 @@ func (l *SearchLuckerLogic) SearchLucker(in *luckdraw_pb.SearchLuckerReq) (*luck
 	//查询该用户的中奖名单
 	mdLuckerDetails, _, err := l.svcCtx.CommonModel.FindsLuckerDetails(l.ctx, options)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	pbLuckerDetails := convertLuckerDetailsList(mdLuckerDetails)

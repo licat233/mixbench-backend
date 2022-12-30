@@ -31,7 +31,7 @@ func NewMathCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *htt
 func (l *MathCaptchaLogic) MathCaptcha(req *types.CaptchaReq) (any, error) {
 	ok, err := RequestCountValid(l.ctx, l.svcCtx.RedisClient, l.r)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
 	}
 	if !ok {

@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:59:24
+ * @Description: licat233@gmail.com
+ */
 package kq
 
 import (
@@ -12,12 +19,14 @@ import (
 )
 
 type GoodluckStatusMq struct {
+	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
 func NewGoodluckStatusMq(ctx context.Context, svcCtx *svc.ServiceContext) *GoodluckStatusMq {
 	return &GoodluckStatusMq{
+		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
@@ -26,12 +35,12 @@ func NewGoodluckStatusMq(ctx context.Context, svcCtx *svc.ServiceContext) *Goodl
 func (l *GoodluckStatusMq) Consume(_, val string) error {
 	var msg types.LuckdrawResultMsg
 	if err := json.Unmarshal([]byte(val), &msg); err != nil {
-		logx.Errorf("Consume unmarshal error, err: %+v", err)
+		l.Logger.Errorf("Consume unmarshal error, err: %+v", err)
 		return err
 	}
 
 	if err := l.execService(msg); err != nil {
-		logx.Errorf("GoodluckStatus consume execService error: %v", err)
+		l.Logger.Errorf("GoodluckStatus consume execService error: %v", err)
 		return err
 	}
 

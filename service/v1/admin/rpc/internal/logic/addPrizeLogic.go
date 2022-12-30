@@ -40,22 +40,22 @@ func (l *AddPrizeLogic) AddPrize(in *admin_pb.Prize) (*admin_pb.AddPrizeResp, er
 	}
 	result, err := l.svcCtx.PrizeModel.Insert(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	prize, err := l.svcCtx.PrizeModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

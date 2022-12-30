@@ -31,13 +31,13 @@ func (l *GetActivityEnumListLogic) GetActivityEnumList(in *admin_pb.GetActivityE
 	if in.ProjectId == -1 {
 		list, _, err = l.svcCtx.ActivityModel.FindList(l.ctx, -1, -1, "", nil)
 		if err != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 	} else {
 		list, err = l.svcCtx.ActivityModel.FindsByProjectId(l.ctx, in.ProjectId)
 		if err != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 	}

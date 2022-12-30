@@ -36,7 +36,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	//查询是否存在该活动
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -49,7 +49,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	//取出中奖名单
 	luckerList, err := l.svcCtx.LuckerModel.FindByUserAndActivity(l.ctx, in.UserId, activity.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -106,7 +106,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	//更新领取状态
 	err = l.svcCtx.LuckerModel.UpdateSomeStatusByUuid(l.ctx, uuidList, 1)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -114,7 +114,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	//取出中奖名单
 	newestLuckerList, err := l.svcCtx.LuckerModel.FindByUserAndActivity(l.ctx, in.UserId, activity.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -134,7 +134,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	if selectNum >= activity.MaxPrizes {
 		err = l.svcCtx.LuckerModel.UpdateSomeStatusById(l.ctx, noIds, -1)
 		if err != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 	}
@@ -142,7 +142,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckdraw_pb.SelectPrizesReq) (*luck
 	//查询用户已领取的中奖产品
 	mdPrizeList, err := l.svcCtx.PrizeModel.FindsByUserAndActivityAndStatus(l.ctx, in.UserId, activity.Id, 1)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

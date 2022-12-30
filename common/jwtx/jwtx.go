@@ -71,7 +71,7 @@ func GetClaims(r *http.Request, secret string) (*jwt.MapClaims, error) {
 	claims, err := ParseToken(token, secret)
 	if err != nil {
 		err = fmt.Errorf("从request中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构,error:%s", err.Error())
-		logx.Error(err)
+		logx.WithContext(r.Context()).Error(err)
 		return nil, errorx.InternalError(err)
 	}
 	return claims, nil

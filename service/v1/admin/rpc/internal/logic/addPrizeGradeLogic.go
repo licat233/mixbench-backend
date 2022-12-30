@@ -36,23 +36,23 @@ func (l *AddPrizeGradeLogic) AddPrizeGrade(in *admin_pb.PrizeGrade) (*admin_pb.A
 	}
 	result, err := l.svcCtx.PrizeGradeModel.Insert(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	id, err := result.LastInsertId()
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	prizeGrade, err := l.svcCtx.PrizeGradeModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

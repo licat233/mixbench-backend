@@ -29,7 +29,7 @@ func NewPutPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPa
 func (l *PutPasswordLogic) PutPassword(in *admin_pb.PutPasswordReq) (*admin_pb.StatusResp, error) {
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.AdminerId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -41,7 +41,7 @@ func (l *PutPasswordLogic) PutPassword(in *admin_pb.PutPasswordReq) (*admin_pb.S
 	adminer.Password = in.NewPassword
 	err = l.svcCtx.AdminerModel.Update(l.ctx, adminer)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return &admin_pb.StatusResp{}, nil

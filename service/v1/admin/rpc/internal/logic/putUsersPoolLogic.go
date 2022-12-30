@@ -33,7 +33,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 		//防止重复添加
 		_, err := l.svcCtx.UsersPoolModel.FindByUidAndAid(l.ctx, in.UserId, in.ActivityId)
 		if err != nil && err != model.ErrNotFound {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 		//没有这样的用户池
@@ -46,7 +46,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 				Status:     in.Status,
 				Score:      in.Score,
 			}); e != nil {
-				logx.Error(e)
+				l.Logger.Error(e)
 				return nil, errorx.InternalError(e)
 			}
 			return newStatusResponse(), nil
@@ -66,7 +66,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 	}
 
 	if err := l.svcCtx.UsersPoolModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

@@ -28,7 +28,7 @@ func NewGetLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuck
 func (l *GetLuckerLogic) GetLucker(in *admin_pb.ItemReq) (*admin_pb.GetLuckerResp, error) {
 	res, err := l.svcCtx.LuckerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {

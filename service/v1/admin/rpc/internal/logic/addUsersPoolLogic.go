@@ -41,22 +41,22 @@ func (l *AddUsersPoolLogic) AddUsersPool(in *admin_pb.UsersPool) (*admin_pb.AddU
 
 	result, err := l.svcCtx.UsersPoolModel.Insert(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	usersPool, err := l.svcCtx.UsersPoolModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

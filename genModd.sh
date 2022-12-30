@@ -1,4 +1,11 @@
 #!/bin/bash
+###
+ # @Author: licat
+ # @Date: 2022-12-06 14:38:15
+ # @LastEditors: licat
+ # @LastEditTime: 2022-12-30 10:01:21
+ # @Description: licat233@gmail.com
+### 
 
 #进入monitor mode
 set -m
@@ -55,7 +62,7 @@ for service in ${service_list[*]}; do
             yaml_name="${service}-${micro}"
         fi
         yaml_path="${micro_path}/etc/${yaml_name}.yaml"
-        monitor_file="${micro_path}/**/*.go"
+        monitor_file="${micro_path}/**/*.go common/**/*.go"
         prep="    prep: go build -o ${build_path} -v ${go_path}"
         daemon="    daemon +sigkill: ${build_path} -f ${yaml_path}"
         if [[ "$micro" = "api" ]]; then

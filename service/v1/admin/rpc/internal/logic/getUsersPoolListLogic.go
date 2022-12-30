@@ -28,7 +28,7 @@ func (l *GetUsersPoolListLogic) GetUsersPoolList(in *admin_pb.UsersPoolListReq) 
 	in.ListReq = newListReq(in.ListReq)
 	list, total, err := l.svcCtx.UsersPoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbUsersPoolToMdUsersPool(in.UsersPool))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

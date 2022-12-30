@@ -47,7 +47,7 @@ func (l *PutLuckerLogic) PutLucker(in *admin_pb.LuckerPutReq) (*admin_pb.StatusR
 	}
 
 	if err := l.svcCtx.LuckerModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

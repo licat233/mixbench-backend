@@ -1,4 +1,11 @@
 #!/bin/bash
+###
+ # @Author: licat
+ # @Date: 2022-11-17 14:52:05
+ # @LastEditors: licat
+ # @LastEditTime: 2022-12-30 11:05:41
+ # @Description: licat233@gmail.com
+### 
 
 # on mac
 cd /opt/homebrew/opt/kafka/bin
@@ -40,9 +47,9 @@ kafka-consumer-groups.sh --group luckdraw-group --bootstrap-server localhost:909
 #运行producer
 kafka-console-producer --topic goodluck-topic --bootstrap-server localhost:9092
 # on docker
-kafka-console-producer.sh --topic test-topic --bootstrap-server localhost:9092
+kafka-console-producer.sh --topic mixbench-log --bootstrap-server localhost:9092
 
 #运行consumer
 kafka-console-consumer --topic goodluck-topic --from-beginning --bootstrap-server localhost:9092
 # on docker
-kafka-console-consumer.sh --topic test-topic --from-beginning --bootstrap-server localhost:9092
+kafka-console-consumer.sh --topic mixbench-log --from-beginning --bootstrap-server localhost:9092

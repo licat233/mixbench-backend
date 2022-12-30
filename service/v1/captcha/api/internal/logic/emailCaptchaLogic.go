@@ -47,7 +47,7 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 
 	ok, err := RequestCountValid(l.ctx, l.svcCtx.RedisClient, l.r)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
 	}
 	if !ok {

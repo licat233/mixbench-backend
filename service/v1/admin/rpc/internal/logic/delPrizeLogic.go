@@ -29,7 +29,7 @@ func NewDelPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPrize
 func (l *DelPrizeLogic) DelPrize(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.PrizeModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -38,7 +38,7 @@ func (l *DelPrizeLogic) DelPrize(in *admin_pb.ItemReq) (*admin_pb.StatusResp, er
 
 	err = l.svcCtx.PrizeModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil

@@ -49,4 +49,4 @@ service/v1/luckdraw/mq/**/*.go {
 
 # ======================== luckdraw end ========================
 
-# backup time: 2022-12-06 23:31:26
+# backup time: 2022-12-30 10:01:25

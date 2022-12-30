@@ -40,7 +40,7 @@ func (l *PutPrizeLogic) PutPrize(in *admin_pb.Prize) (*admin_pb.StatusResp, erro
 	}
 
 	if err := l.svcCtx.PrizeModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

@@ -29,7 +29,7 @@ func (l *GetActivityListLogic) GetActivityList(in *admin_pb.ActivityListReq) (*a
 	list, total, err := l.svcCtx.ActivityModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbActivityToMdActivity(in.Activity))
 
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

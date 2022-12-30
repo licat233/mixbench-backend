@@ -32,7 +32,7 @@ func (l *DelUsersPoolLogic) DelUsersPool(in *admin_pb.ItemReq) (*admin_pb.Status
 	}
 	data, err := l.svcCtx.UsersPoolModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -41,7 +41,7 @@ func (l *DelUsersPoolLogic) DelUsersPool(in *admin_pb.ItemReq) (*admin_pb.Status
 
 	err = l.svcCtx.UsersPoolModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil

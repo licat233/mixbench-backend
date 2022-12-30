@@ -48,7 +48,7 @@ func (l *PutActivityLogic) PutActivity(in *admin_pb.Activity) (*admin_pb.StatusR
 
 	//更新数据
 	if err := l.svcCtx.ActivityModel.Update(l.ctx, activity); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

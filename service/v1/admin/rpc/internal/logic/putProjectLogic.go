@@ -38,7 +38,7 @@ func (l *PutProjectLogic) PutProject(in *admin_pb.Project) (*admin_pb.StatusResp
 	}
 
 	if err := l.svcCtx.ProjectModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

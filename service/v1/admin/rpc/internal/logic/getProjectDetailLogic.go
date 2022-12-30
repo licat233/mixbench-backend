@@ -28,12 +28,12 @@ func NewGetProjectDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 func (l *GetProjectDetailLogic) GetProjectDetail(in *admin_pb.GetProjectDetailReq) (*admin_pb.GetProjectDetailResp, error) {
 	project, err := l.svcCtx.ProjectModel.FindOne(l.ctx, in.ProjectId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	activities, err := l.svcCtx.ActivityModel.FindsByProjectId(l.ctx, in.ProjectId)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

@@ -27,7 +27,7 @@ func NewGetProjectTreeOptionsLogic(ctx context.Context, svcCtx *svc.ServiceConte
 func (l *GetProjectTreeOptionsLogic) GetProjectTreeOptions(in *admin_pb.EnumListReq) (*admin_pb.ProjectTreeOptionsResp, error) {
 	list, _, err := l.svcCtx.ProjectModel.FindList(l.ctx, -1, -1, "", nil)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
@@ -35,7 +35,7 @@ func (l *GetProjectTreeOptionsLogic) GetProjectTreeOptions(in *admin_pb.EnumList
 	for _, project := range list {
 		activities, err := l.svcCtx.ActivityModel.FindsByProjectId(l.ctx, project.Id)
 		if err != nil {
-			logx.Error(err)
+			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}
 		activityOptions := []*admin_pb.TreeOptions{}

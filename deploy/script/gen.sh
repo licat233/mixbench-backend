@@ -127,7 +127,7 @@ if [ -z $all_micros ]; then
     exit
 fi
 
-echo "开始生成各个服务的相关文件"
+echo "开始生成各服务文件"
 echo "↓"
 #开始遍历编译
 for name in ${all_services[*]}; do

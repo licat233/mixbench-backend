@@ -40,7 +40,7 @@ func (l *GenerateTokenLogic) GenerateToken(in *admin_pb.GenerateTokenReq) (*admi
 	}
 	accessToken, err := l.getJwtToken(l.svcCtx.Config.JwtAuth.AccessSecret, now, accessExpire, in.JwtData)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

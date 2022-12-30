@@ -37,7 +37,7 @@ func (l *PutPrizeGradeLogic) PutPrizeGrade(in *admin_pb.PrizeGrade) (*admin_pb.S
 	}
 
 	if err := l.svcCtx.PrizeGradeModel.Update(l.ctx, data); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

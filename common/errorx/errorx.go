@@ -1,6 +1,7 @@
 package errorx
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -198,6 +199,12 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 	//调试模式下，展现错误调试信息
 	if Debug && traceErr != nil {
 		traceMsg = traceErr.Error()
+		// v, ok := traceErr.(*Errorx)
+		// if ok {
+		// 	traceMsg = v.TraceMessage
+		// } else {
+		// 	traceMsg = traceErr.Error()
+		// }
 	}
 	errorx := &Errorx{
 		Status:       false,
@@ -338,7 +345,7 @@ func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
 		//未知错误，可能是panic引起的，内部错误，不抛给前端
 		//记录一下
 		err := fmt.Errorf("未知错误，可能是panic引起的: %+v", statusErr.Message())
-		logx.Error(err)
+		logx.WithContext(context.Background()).Error(err)
 		errorx = internalError(ServerErrorMsg, err)
 	}
 	return

@@ -37,7 +37,7 @@ func (l *LoginByEmailLogic) LoginByEmail(in *admin_pb.LoginByEmailReq) (*admin_p
 	//查找是否有绑定该邮箱的用户
 	adminer, err := l.svcCtx.AdminerModel.FindOneByEmail(l.ctx, in.Email)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在
@@ -68,7 +68,7 @@ func (l *LoginByEmailLogic) LoginByEmail(in *admin_pb.LoginByEmailReq) (*admin_p
 	adminer.LoginCount++
 	adminer.LastLogin = time.Now()
 	if err = l.svcCtx.AdminerModel.Update(l.ctx, adminer); err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

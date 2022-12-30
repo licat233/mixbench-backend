@@ -29,7 +29,7 @@ func NewGetActivityDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 func (l *GetActivityDetailLogic) GetActivityDetail(in *admin_pb.GetActivityDetailReq) (*admin_pb.GetActivityDetailResp, error) {
 	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {

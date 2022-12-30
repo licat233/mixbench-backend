@@ -29,7 +29,7 @@ func NewDelLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelLuck
 func (l *DelLuckerLogic) DelLucker(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
 	data, err := l.svcCtx.LuckerModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	if err == model.ErrNotFound {
@@ -38,7 +38,7 @@ func (l *DelLuckerLogic) DelLucker(in *admin_pb.ItemReq) (*admin_pb.StatusResp, 
 
 	err = l.svcCtx.LuckerModel.DeleteSoft(l.ctx, data)
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	return newStatusResponse(), nil

@@ -1,6 +1,14 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:03
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 11:47:02
+ * @Description: licat233@gmail.com
+ */
 package filex
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -18,12 +26,14 @@ import (
 
 const MaxFileSize = 10 << 20 // 10 MB
 
-/** SaveHttpImg 保存http上传图片，返回图片url
- * r *http.Request http请求
- * saveDir string 保存目录
- * prefix string 文件名前缀
+/**
+ * @description: 保存http上传的图片，返回图片url
+ * @param {*http.Request} r http请求
+ * @param {string} saveDir 保存目录名
+ * @param {string} prefix 文件名前缀
+ * @return {error} 注意:此处的错误为errorx错误
  */
-func SaveHttpImg(r *http.Request, saveDir, prefix string) error {
+func SaveHttpImg(ctx context.Context, r *http.Request, saveDir, prefix string) error {
 	r.ParseMultipartForm(MaxFileSize)
 	file, header, err := r.FormFile("file")
 	if err != nil {
@@ -34,11 +44,10 @@ func SaveHttpImg(r *http.Request, saveDir, prefix string) error {
 	if err != nil {
 		return err
 	}
-	ok, err := ImgTypeVerify(filetype)
+	ok, err := ImgTypeVerify(ctx, filetype)
 	if !ok {
 		return err
 	}
-	ctx := r.Context()
 	uid := ctxdata.GetUidFromCtx(ctx)
 	filename := GenerateImgName(fmt.Sprintf("%s_%d_", prefix, uid))
 	name := fmt.Sprint(filename, ".", filetype)
@@ -48,19 +57,23 @@ func SaveHttpImg(r *http.Request, saveDir, prefix string) error {
 	}
 	tempFile, err := os.Create(filepath)
 	if err != nil {
-		logx.Errorf("文件保存失敗:%v", err)
+		logx.WithContext(ctx).Errorf("文件保存失敗:%v", err)
 		return errorx.InternalError(err)
 	}
 	defer tempFile.Close()
 	_, err = io.Copy(tempFile, file)
-	return err
+	if err != nil {
+		logx.WithContext(ctx).Errorf("文件保存失敗:%v", err)
+		return errorx.InternalError(err)
+	}
+	return nil
 }
 
 // ImgTypeVerify 图片类型检查，返回errorx错误
-func ImgTypeVerify(fileType string) (bool, error) {
+func ImgTypeVerify(ctx context.Context, fileType string) (bool, error) {
 	ok, err := regexp.MatchString("^(jpg|png|jpeg|gif|ico|svg|webp|bmp)?$", fileType)
 	if err != nil {
-		logx.Errorf("regexp.MatchString出错%+v", err)
+		logx.WithContext(ctx).Errorf("regexp.MatchString出错%+v", err)
 		return false, errorx.InternalError(err, nil)
 	}
 	if !ok {

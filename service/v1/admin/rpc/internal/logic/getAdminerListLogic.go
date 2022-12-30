@@ -28,7 +28,7 @@ func (l *GetAdminerListLogic) GetAdminerList(in *admin_pb.AdminerListReq) (*admi
 	in.ListReq = newListReq(in.ListReq)
 	list, total, err := l.svcCtx.AdminerModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbAdminerToMdAdminer(in.Adminer))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	// for _, adminer := range list {

@@ -28,7 +28,7 @@ func (l *GetPrizesPoolListLogic) GetPrizesPoolList(in *admin_pb.PrizesPoolListRe
 	in.ListReq = newListReq(in.ListReq)
 	list, total, err := l.svcCtx.PrizesPoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbPrizesPoolToMdPrizesPool(in.PrizesPool))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

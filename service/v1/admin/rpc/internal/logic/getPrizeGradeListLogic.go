@@ -28,7 +28,7 @@ func (l *GetPrizeGradeListLogic) GetPrizeGradeList(in *admin_pb.PrizeGradeListRe
 	in.ListReq = newListReq(in.ListReq)
 	list, total, err := l.svcCtx.PrizeGradeModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbPrizeGradeToMdPrizeGrade(in.PrizeGrade))
 	if err != nil {
-		logx.Error(err)
+		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 

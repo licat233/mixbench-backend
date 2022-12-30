@@ -79,14 +79,14 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		}
 		uid, err := strconv.Atoi(uidValue)
 		if err != nil {
-			logx.Error(err)
+			logx.WithContext(m.ctx).Error(err)
 			httpx.Error(w, errorx.ErrAuth)
 			return
 		}
 
 		adminer, err := m.AdminerModel.FindOne(m.ctx, int64(uid))
 		if err != nil && err != model.ErrNotFound {
-			logx.Error(err)
+			logx.WithContext(m.ctx).Error(err)
 			httpx.Error(w, errorx.InternalError(err))
 			return
 		}
@@ -102,7 +102,7 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		// 校验token是否已被加入黑名单
 		exist, err := m.JwtBlacklistsModel.ExistByToken(m.ctx, jwtToken)
 		if err != nil {
-			logx.Error(err)
+			logx.WithContext(m.ctx).Error(err)
 			httpx.Error(w, errorx.InternalError(err))
 			return
 		}
