@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -45,7 +46,8 @@ const (
 	SHOW_TYPE                   = 2    //信息错误
 )
 
-var Debug = false //debug默认关闭
+var Debug = os.Getenv("SERVICE_DEBUG") == "true"
+var Mode = os.Getenv("SERVICE_MODE")
 var ServerError = InternalError
 var RequestError = ExternalError
 

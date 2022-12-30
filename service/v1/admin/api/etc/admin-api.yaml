@@ -16,6 +16,7 @@ Log:
   ServiceName: admin-api
   Level: error
 
+# 单服务根目录
 RootDir: ./
 
 #监控

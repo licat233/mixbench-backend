@@ -12,7 +12,9 @@ services:
       - TZ=${TZ}
       - GOPROXY=https://goproxy.cn,direct
       - BACKEND_HOST=${BACKEND_HOST}
+      - PROJECT_ROOT=${PROJECT_ROOT}
       - STATIC_HOST=${STATIC_HOST}
+      - STATIC_ROOT=${STATIC_ROOT}
       - SERVICE_MODE=${SERVICE_MODE}
       - SERVICE_DEBUG=${SERVICE_DEBUG}
       - MYSQL_HOST=${MYSQL_HOST}
@@ -41,12 +43,12 @@ services:
       - PROMETHEUS_LUCKDRAW_RPC_PORT=${PROMETHEUS_LUCKDRAW_RPC_PORT}
       - PROMETHEUS_LUCKDRAW_MQ_PORT=${PROMETHEUS_LUCKDRAW_MQ_PORT}
     volumes:
-      - .:/go/app
-      - build_volume:/go/app/build
-      - static_volume:/go/app/static
+      - .:${PROJECT_ROOT}
+      - build_volume:${PROJECT_ROOT}/build
+      - static_volume:${STATIC_ROOT}
     expose:
       - 6000-10000
-    working_dir: /go/app
+    working_dir: ${PROJECT_ROOT}
     restart: on-failure
     privileged: true
     stdin_open: true # 打开标准输入，可以接受外部输入
@@ -115,7 +117,7 @@ services:
       - ./deploy/nginx/ssl:/etc/nginx/ssl
       - ./deploy/nginx/www:/www
       - nginx_volume:/var/log/nginx
-      - static_volume:/static
+      - static_volume:/www/${STATIC_HOST}
     networks:
       - backend_net
 
@@ -219,6 +221,7 @@ services:
       # - /var/lib/docker/containers:/var/lib/docker/containers
       - /var/lib/docker/containers:/var/lib/docker/containers:ro  #screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx_volume:/var/log/nginx:ro
     networks:
       - backend_net
     depends_on:

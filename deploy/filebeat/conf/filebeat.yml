@@ -3,6 +3,7 @@ filebeat.inputs:
     enabled: true
     paths:
       - /var/lib/docker/containers/*/*-json.log
+      - /var/log/nginx/*.log
 
 filebeat.config:
   modules:

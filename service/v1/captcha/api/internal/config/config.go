@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2022-12-30 16:04:57
+ * @Description: licat233@gmail.com
+ */
 package config
 
 import (
@@ -17,5 +24,9 @@ type Config struct {
 		Pass string
 		DB   int
 	}
-	RootDir string
+	RootDir      string
+	StaticConfig struct {
+		Domain string
+		Root   string
+	}
 }

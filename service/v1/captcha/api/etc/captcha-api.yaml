@@ -11,6 +11,11 @@ Log:
 
 RootDir: ./
 
+#静态资源服务配置
+StaticConfig:
+  Domain: ${STATIC_HOST}
+  Root: ${STATIC_ROOT}
+
 #监控
 Prometheus:
   Host: 0.0.0.0
