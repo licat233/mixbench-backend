@@ -152,7 +152,7 @@ func convertPrizes(mPrizes []*model.Prize) (pbPrizes []*luckdraw_pb.Prize) {
 	return
 }
 
-func convertLuckerList(mdLuckerList []*model.Lucker) (pbLuckerlist []*luckdraw_pb.Lucker) {
+func ConvertLuckerList(mdLuckerList []*model.Lucker) (pbLuckerlist []*luckdraw_pb.Lucker) {
 	pbLuckerlist = make([]*luckdraw_pb.Lucker, len(mdLuckerList))
 	for index, mdLucker := range mdLuckerList {
 		pbLucker := convertLucker(mdLucker)
