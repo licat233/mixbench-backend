@@ -8,7 +8,8 @@ current_path=$(
     pwd
 )
 
-project_root="${current_path%%deploy*}"
+# project_root="${current_path%%deploy*}"
+project_root="${current_path%%mixbench-backend*}mixbench-backend"
 
 # 创建build目录
 if [ ! -d "${project_root}/build" ]; then

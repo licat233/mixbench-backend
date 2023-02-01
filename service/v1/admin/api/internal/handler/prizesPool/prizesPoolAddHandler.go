@@ -10,16 +10,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func PrizesPoolAddHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func PrizePoolAddHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.PrizesPoolAddReq
+		var req types.PrizePoolAddReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := prizesPool.NewPrizesPoolAddLogic(r.Context(), svcCtx)
-		resp, err := l.PrizesPoolAdd(&req)
+		l := prizesPool.NewPrizePoolAddLogic(r.Context(), svcCtx)
+		resp, err := l.PrizePoolAdd(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

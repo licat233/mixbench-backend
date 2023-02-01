@@ -31,7 +31,7 @@ func (l *UserActivityLogic) UserActivity(in *admin_pb.UserActivityReq) (*admin_p
 	//策略：先全部查出来，用go语言筛选处理，性能会比mysql语言强一些
 
 	//usersPool里面包含多种pattern的活动
-	usersPoolList, err := l.svcCtx.UsersPoolModel.FindsByUserId(l.ctx, in.UserId)
+	usersPoolList, err := l.svcCtx.UserPoolModel.FindsByUserId(l.ctx, in.UserId)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -77,15 +77,15 @@ func (l *UserActivityLogic) UserActivity(in *admin_pb.UserActivityReq) (*admin_p
 		for _, activity := range activityList {
 			if usersPool.ActivityId == activity.Id {
 				data = append(data, &admin_pb.UserActivity{
-					Activity:  mdActivityToPbActivity(activity),
-					UsersPool: mdUsersPoolToPbUsersPool(usersPool),
+					Activity: mdActivityToPbActivity(activity),
+					UserPool: mdUserPoolToPbUserPool(usersPool),
 				})
 			}
 		}
 	}
 
-	var newDefaultUsersPool = func(activityId, userId int64) *admin_pb.UsersPool {
-		return &admin_pb.UsersPool{
+	var newDefaultUserPool = func(activityId, userId int64) *admin_pb.UserPool {
+		return &admin_pb.UserPool{
 			Id:         -1,
 			Uuid:       uniqueid.NewUUID(),
 			ActivityId: activityId,
@@ -101,8 +101,8 @@ func (l *UserActivityLogic) UserActivity(in *admin_pb.UserActivityReq) (*admin_p
 		}
 		//不存在usersPool中的活动，赋予默认的usersPool，如果产生修改操作，需在修改端口主动入库
 		data = append(data, &admin_pb.UserActivity{
-			Activity:  mdActivityToPbActivity(activity),
-			UsersPool: newDefaultUsersPool(activity.Id, in.UserId),
+			Activity: mdActivityToPbActivity(activity),
+			UserPool: newDefaultUserPool(activity.Id, in.UserId),
 		})
 	}
 

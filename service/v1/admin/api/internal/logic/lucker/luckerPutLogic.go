@@ -1,4 +1,4 @@
-package lucker
+package lucky
 
 import (
 	"context"
@@ -13,32 +13,32 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type LuckerPutLogic struct {
+type LuckyPutLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewLuckerPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckerPutLogic {
-	return &LuckerPutLogic{
+func NewLuckyPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckyPutLogic {
+	return &LuckyPutLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *LuckerPutLogic) LuckerPut(req *types.LuckerPutReq) (any, error) {
+func (l *LuckyPutLogic) LuckyPut(req *types.LuckyPutReq) (any, error) {
 	if req.Ip != "" && !govalidator.IsIP(req.Ip) {
 		return nil, errorx.ErrInvalidParam
 	}
-	_, err := l.svcCtx.AdminRpc.PutLucker(l.ctx, &admin_pb.LuckerPutReq{
-		Id:           req.Id,
-		Uuid:         req.Uuid,
-		UserId:       req.Id,
-		PrizesPoolId: req.PrizesPoolId,
-		Status:       req.Status,
-		LuckDate:     req.LuckDate,
-		Ip:           req.Ip,
+	_, err := l.svcCtx.AdminRpc.PutLucky(l.ctx, &admin_pb.LuckyPutReq{
+		Id:          req.Id,
+		Uuid:        req.Uuid,
+		UserId:      req.Id,
+		PrizePoolId: req.PrizePoolId,
+		Status:      req.Status,
+		LuckDate:    req.LuckDate,
+		Ip:          req.Ip,
 	})
 	if err != nil {
 		return nil, err

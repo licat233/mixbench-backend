@@ -1,4 +1,4 @@
-package lucker
+package lucky
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type LuckerDelLogic struct {
+type LuckyDelLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewLuckerDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckerDelLogic {
-	return &LuckerDelLogic{
+func NewLuckyDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckyDelLogic {
+	return &LuckyDelLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *LuckerDelLogic) LuckerDel(req *types.LuckerDelReq) (any, error) {
-	_, err := l.svcCtx.AdminRpc.DelLucker(l.ctx, &admin_pb.ItemReq{
+func (l *LuckyDelLogic) LuckyDel(req *types.LuckyDelReq) (any, error) {
+	_, err := l.svcCtx.AdminRpc.DelLucky(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {

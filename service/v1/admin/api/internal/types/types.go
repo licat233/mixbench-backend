@@ -194,7 +194,7 @@ type ActivityDetailReq struct {
 
 type UserActivity struct {
 	Activity  Activity  `json:"activity"`   //活动信息
-	UsersPool UsersPool `json:"users_pool"` //活动用户池信息
+	UserPool UserPool `json:"user_pool"` //活动用户池信息
 }
 
 type UserActivitiesReq struct {
@@ -269,11 +269,11 @@ type AdminerListReq struct {
 	LastLogin    int64  `form:"last_login,optional,default=-1"`              // 最后一次登录时间
 }
 
-type Lucker struct {
+type Lucky struct {
 	Id           int64  `json:"id"`             // 表主键
 	Uuid         string `json:"uuid"`           // 唯一识别码
 	UserId       int64  `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
+	PrizePoolId int64  `json:"prize_pool_id"` // 抽中的奖品池id
 	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
 	Ip           string `json:"ip"`             // ip地址
@@ -283,19 +283,19 @@ type Lucker struct {
 	DeleteAt     int64  `json:"delete_at"`      // 删除时间
 }
 
-type LuckerGetReq struct {
+type LuckyGetReq struct {
 	Id int64 `form:"id"`
 }
 
-type LuckerAddReq struct {
+type LuckyAddReq struct {
 	UserId       int64  `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
+	PrizePoolId int64  `json:"prize_pool_id"` // 抽中的奖品池id
 	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
 	Ip           string `json:"ip,optional"`    // IP地址
 }
 
-type LuckerPutByPrizeReq struct {
+type LuckyPutByPrizeReq struct {
 	Id         int64  `json:"id"`          // 表主键
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	UserId     int64  `json:"user_id"`     // 中奖用户id
@@ -306,31 +306,31 @@ type LuckerPutByPrizeReq struct {
 	Ip         string `json:"ip,optional"` // IP地址
 }
 
-type LuckerPutReq struct {
+type LuckyPutReq struct {
 	Id           int64  `json:"id"`             // 表主键
 	Uuid         string `json:"uuid"`           // 唯一识别码
 	UserId       int64  `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64  `json:"prizes_pool_id"` // 抽中的奖品池id
+	PrizePoolId int64  `json:"prize_pool_id"` // 抽中的奖品池id
 	Status       int64  `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `json:"luck_date"`      // 抽奖时间
 	Ip           string `json:"ip,optional"`    // IP地址
 }
 
-type LuckerDelReq struct {
+type LuckyDelReq struct {
 	Id int64 `json:"id"`
 }
 
-type LuckerDetails struct {
-	Lucker     Lucker     `json:"lucker"`      //中奖信息
+type LuckyDetails struct {
+	Lucky     Lucky     `json:"lucky"`      //中奖信息
 	User       User       `json:"user"`        //中奖用户信息
-	PrizesPool PrizesPool `json:"prizes_pool"` //奖品池信息，奖品池信息
+	PrizePool PrizePool `json:"prize_pool"` //奖品池信息，奖品池信息
 	Prize      Prize      `json:"prize"`       //奖品信息，中奖产品
 	PrizeGrade PrizeGrade `json:"prize_grade"` //奖品级别，中奖级别
 	Activity   Activity   `json:"activity"`    //活动信息，中奖活动，
 	Project    Project    `json:"project"`     //项目信息，中奖项目，
 }
 
-type LuckerDetailsReq struct {
+type LuckyDetailsReq struct {
 	PageSize     int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page         int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword      string `json:"keyword,optional"`                            //关键词，可选
@@ -339,7 +339,7 @@ type LuckerDetailsReq struct {
 	ProjectId    int64  `json:"project_id,optional,default=-1"`              //项目id
 	ActivityId   int64  `json:"activity_id,optional,default=-1"`             //活动id
 	ActivityName string `json:"activity_name,optional"`                      //活动id
-	PrizesPoolId int64  `json:"prizes_pool_id,optional,default=-1"`          //奖品池id
+	PrizePoolId int64  `json:"prize_pool_id,optional,default=-1"`          //奖品池id
 	PeizeId      int64  `json:"prize_id,optional,default=-1"`                //奖品id
 	PrizeName    string `json:"prize_name,optional"`                         //奖品名
 	PeizeGradeId int64  `json:"prize_grade_id,optional,default=-1"`          //奖品等级id
@@ -348,12 +348,12 @@ type LuckerDetailsReq struct {
 	Ip           string `json:"ip,optional"`                                 //IP地址
 }
 
-type LuckerListReq struct {
+type LuckyListReq struct {
 	PageSize     int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page         int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword      string `form:"keyword,optional"`                            //关键词，可选
 	UserId       int64  `form:"user_id,optional,default=-1"`                 // 中奖用户id
-	PrizesPoolId int64  `form:"prizes_pool_id,optional,default=-1"`          // 抽中的奖品池id
+	PrizePoolId int64  `form:"prize_pool_id,optional,default=-1"`          // 抽中的奖品池id
 	Status       int64  `form:"status,optional,default=-1"`                  // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `form:"luck_date,optional,default=-1"`               // 抽奖时间
 	Ip           string `form:"ip,optional"`                                 // ip地址
@@ -398,7 +398,7 @@ type PrizeDelReq struct {
 
 type ActivityPrize struct {
 	Prize      Prize      `json:"prize"`       //奖品信息
-	PrizesPool PrizesPool `json:"prizes_pool"` //奖品池信息
+	PrizePool PrizePool `json:"prize_pool"` //奖品池信息
 	PrizeGrade PrizeGrade `json:"prize_grade"` //奖品池信息
 }
 
@@ -456,7 +456,7 @@ type PrizeGradeListReq struct {
 	IsWin    int64  `form:"is_win,optional,default=-1"`                  // 是否中奖
 }
 
-type PrizesPool struct {
+type PrizePool struct {
 	Id         int64  `json:"id"`          // 表主键
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	ActivityId int64  `json:"activity_id"` // 活动id
@@ -472,11 +472,11 @@ type PrizesPool struct {
 	DeleteAt   int64  `json:"delete_at"`   // 删除时间
 }
 
-type PrizesPoolGetReq struct {
+type PrizePoolGetReq struct {
 	Id int64 `form:"id"`
 }
 
-type PrizesPoolAddReq struct {
+type PrizePoolAddReq struct {
 	ActivityId int64 `json:"activity_id"` // 活动id
 	PrizeId    int64 `json:"prize_id"`    // 奖品id
 	LuckValue  int64 `json:"luck_value"`  // 幸运值
@@ -486,7 +486,7 @@ type PrizesPoolAddReq struct {
 	Remainder  int64 `json:"remainder"`   // 奖品剩余数量
 }
 
-type PrizesPoolPutReq struct {
+type PrizePoolPutReq struct {
 	Id         int64  `json:"id"`          // 表主键
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	ActivityId int64  `json:"activity_id"` // 活动id
@@ -498,11 +498,11 @@ type PrizesPoolPutReq struct {
 	Remainder  int64  `json:"remainder"`   // 奖品剩余数量
 }
 
-type PrizesPoolDelReq struct {
+type PrizePoolDelReq struct {
 	Id int64 `json:"id"`
 }
 
-type PrizesPoolListReq struct {
+type PrizePoolListReq struct {
 	PageSize   int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page       int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword    string `form:"keyword,optional"`                            //关键词，可选
@@ -660,7 +660,7 @@ type UserDetails struct {
 	UserDetails []UserDetail `json:"user_details"`
 }
 
-type UsersPool struct {
+type UserPool struct {
 	Id         int64  `json:"id"`          // 表主键
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	ActivityId int64  `json:"activity_id"` // 活动id
@@ -673,18 +673,18 @@ type UsersPool struct {
 	DeleteAt   int64  `json:"delete_at"`   // 删除时间
 }
 
-type UsersPoolGetReq struct {
+type UserPoolGetReq struct {
 	Id int64 `form:"id"`
 }
 
-type UsersPoolAddReq struct {
+type UserPoolAddReq struct {
 	ActivityId int64 `json:"activity_id"` // 活动id
 	UserId     int64 `json:"user_id"`     // 奖品id
 	Status     int64 `json:"status"`      // 状态:0未授权，1正常，2已冻结
 	Score      int64 `json:"score"`       // 用户在当前活动的积分
 }
 
-type UsersPoolPutReq struct {
+type UserPoolPutReq struct {
 	Id         int64  `json:"id"`          // 表主键
 	Uuid       string `json:"uuid"`        // 唯一识别码
 	ActivityId int64  `json:"activity_id"` // 活动id
@@ -693,11 +693,11 @@ type UsersPoolPutReq struct {
 	Score      int64  `json:"score"`       // 用户在当前活动的积分
 }
 
-type UsersPoolDelReq struct {
+type UserPoolDelReq struct {
 	Id int64 `json:"id"`
 }
 
-type UsersPoolListReq struct {
+type UserPoolListReq struct {
 	PageSize   int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page       int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword    string `form:"keyword,optional"`                            //关键词，可选
@@ -723,4 +723,199 @@ type PutPasswordReq struct {
 	NewPassword string `json:"new_password"` // 新密码
 	CaptchaId   string `json:"captcha_id"`   //验证码ID
 	Solution    string `json:"solution"`     //验证码答案
+}
+
+type Goods struct {
+	Id              int64   `json:"id"`                // 表主键
+	Uuid            string  `json:"uuid"`              // 唯一识别码
+	CategoryId      int64   `json:"category_id"`       // 分类id
+	GoodsSn         string  `json:"goods_sn"`          // 商品的唯一货号
+	Name            string  `json:"name"`              // 商品名
+	Keywords        string  `json:"keywords"`          // 关键词
+	GoodsDesc       string  `json:"goods_desc"`        // 商品描述
+	GoodsThumb      string  `json:"goods_thumb"`       // 商品缩略图，用于在列表或搜索结果中预览显示
+	GoodsBannerImgs string  `json:"goods_banner_imgs"` // 商品轮播图地址
+	GoodsTip        string  `json:"goods_tip"`         // 商品提示
+	GoodsPrice      float64 `json:"goods_price"`       // 商品价格
+	GoodsScore      int64   `json:"goods_score"`       // 商品积分
+	RemainCount     int64   `json:"remain_count"`      // 剩余数量
+	MonthSellCount  int64   `json:"month_sell_count"`  // 月销量
+	TotalSellCount  int64   `json:"total_sell_count"`  // 总销量
+	CommentCount    int64   `json:"comment_count"`     // 累计评论数
+	IsReal          int64   `json:"is_real"`           // 真实商品？
+	IsOnSale        int64   `json:"is_on_sale"`        // 正在打折？
+	IsAloneSale     int64   `json:"is_alone_sale"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	IsBest          int64   `json:"is_best"`           // 最精品？
+	IsNew           int64   `json:"is_new"`            // 最新的？
+	IsHot           int64   `json:"is_hot"`            // 热门的？
+	SellerNote      string  `json:"seller_note"`       // 卖方发票抬头
+	ShopName        string  `json:"shop_name"`         // 店铺名称
+	Tag             string  `json:"tag"`               // 标签
+	Status          int64   `json:"status"`            // 状态:0下架，1上架，2预售
+	CreateAt        int64   `json:"create_at"`         // 创建时间
+	UpdateAt        int64   `json:"update_at"`         // 更新时间
+	IsDeleted       int64   `json:"is_deleted"`        // 是否已被删除
+	DeleteAt        int64   `json:"delete_at"`         // 删除时间
+}
+
+type GoodsGetReq struct {
+	Id int64 `form:"id"`
+}
+
+type GoodsAddReq struct {
+	CategoryId      int64   `json:"category_id"`       // 分类id
+	GoodsSn         string  `json:"goods_sn"`          // 商品的唯一货号
+	Name            string  `json:"name"`              // 商品名
+	Keywords        string  `json:"keywords"`          // 关键词
+	GoodsDesc       string  `json:"goods_desc"`        // 商品描述
+	GoodsThumb      string  `json:"goods_thumb"`       // 商品缩略图，用于在列表或搜索结果中预览显示
+	GoodsBannerImgs string  `json:"goods_banner_imgs"` // 商品轮播图地址
+	GoodsTip        string  `json:"goods_tip"`         // 商品提示
+	GoodsPrice      float64 `json:"goods_price"`       // 商品价格
+	GoodsScore      int64   `json:"goods_score"`       // 商品积分
+	RemainCount     int64   `json:"remain_count"`      // 剩余数量
+	MonthSellCount  int64   `json:"month_sell_count"`  // 月销量
+	TotalSellCount  int64   `json:"total_sell_count"`  // 总销量
+	CommentCount    int64   `json:"comment_count"`     // 累计评论数
+	IsReal          int64   `json:"is_real"`           // 真实商品？
+	IsOnSale        int64   `json:"is_on_sale"`        // 正在打折？
+	IsAloneSale     int64   `json:"is_alone_sale"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	IsBest          int64   `json:"is_best"`           // 最精品？
+	IsNew           int64   `json:"is_new"`            // 最新的？
+	IsHot           int64   `json:"is_hot"`            // 热门的？
+	SellerNote      string  `json:"seller_note"`       // 卖方发票抬头
+	ShopName        string  `json:"shop_name"`         // 店铺名称
+	Tag             string  `json:"tag"`               // 标签
+	Status          int64   `json:"status"`            // 状态:0下架，1上架，2预售
+}
+
+type GoodsPutReq struct {
+	Id              int64   `json:"id"`                // 表主键
+	Uuid            string  `json:"uuid"`              // 唯一识别码
+	CategoryId      int64   `json:"category_id"`       // 分类id
+	GoodsSn         string  `json:"goods_sn"`          // 商品的唯一货号
+	Name            string  `json:"name"`              // 商品名
+	Keywords        string  `json:"keywords"`          // 关键词
+	GoodsDesc       string  `json:"goods_desc"`        // 商品描述
+	GoodsThumb      string  `json:"goods_thumb"`       // 商品缩略图，用于在列表或搜索结果中预览显示
+	GoodsBannerImgs string  `json:"goods_banner_imgs"` // 商品轮播图地址
+	GoodsTip        string  `json:"goods_tip"`         // 商品提示
+	GoodsPrice      float64 `json:"goods_price"`       // 商品价格
+	GoodsScore      int64   `json:"goods_score"`       // 商品积分
+	RemainCount     int64   `json:"remain_count"`      // 剩余数量
+	MonthSellCount  int64   `json:"month_sell_count"`  // 月销量
+	TotalSellCount  int64   `json:"total_sell_count"`  // 总销量
+	CommentCount    int64   `json:"comment_count"`     // 累计评论数
+	IsReal          int64   `json:"is_real"`           // 真实商品？
+	IsOnSale        int64   `json:"is_on_sale"`        // 正在打折？
+	IsAloneSale     int64   `json:"is_alone_sale"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	IsBest          int64   `json:"is_best"`           // 最精品？
+	IsNew           int64   `json:"is_new"`            // 最新的？
+	IsHot           int64   `json:"is_hot"`            // 热门的？
+	SellerNote      string  `json:"seller_note"`       // 卖方发票抬头
+	ShopName        string  `json:"shop_name"`         // 店铺名称
+	Tag             string  `json:"tag"`               // 标签
+	Status          int64   `json:"status"`            // 状态:0下架，1上架，2预售
+}
+
+type GoodsDelReq struct {
+	Id int64 `json:"id"`
+}
+
+type GoodsListReq struct {
+	PageSize       int64   `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page           int64   `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword        string  `form:"keyword,optional"`                            //关键词，可选
+	Name           string  `form:"name,optional"`                               // 商品名称
+	Status         int64   `form:"status,optional,default=-1"`                  // 状态:0下架，1上架，2预售
+	IsReal         int64   `form:"is_real,optional,default=-1"`                 // 真实商品？
+	IsOnSale       int64   `form:"is_on_sale,optional,default=-1"`              // 正在打折？
+	IsAloneSale    int64   `form:"is_alone_sale,optional,default=-1"`           // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	IsBest         int64   `form:"is_best,optional,default=-1"`                 // 最精品？
+	IsNew          int64   `form:"is_new,optional,default=-1"`                  // 最新的？
+	IsHot          int64   `form:"is_hot,optional,default=-1"`                  // 热门的？
+	Tag            string  `form:"tag,optional"`                                // 标签
+	Keywords       string  `form:"keywords,optional"`                           // 关键词
+	GoodsPrice     float64 `form:"goods_price,optional,default=-1"`             // 商品价格
+	RemainCount    int64   `form:"remain_count,optional,default=-1"`            // 剩余数量
+	MonthSellCount int64   `form:"month_sell_count,optional,default=-1"`        // 月销量
+	TotalSellCount int64   `form:"total_sell_count,optional,default=-1"`        // 总销量
+}
+
+type GoodsCategory struct {
+	Id        int64  `json:"id"`         // 表主键
+	Uuid      string `json:"uuid"`       // 唯一识别码
+	Name      string `json:"name"`       // 名称
+	Status    int64  `json:"status"`     // 状态:0下架，1上架，2预售
+	CreateAt  int64  `json:"create_at"`  // 创建时间
+	UpdateAt  int64  `json:"update_at"`  // 更新时间
+	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64  `json:"delete_at"`  // 删除时间
+}
+
+type GoodsCategoryGetReq struct {
+	Id int64 `form:"id"` // 表主键
+}
+
+type GoodsCategoryAddReq struct {
+	Name   string `json:"name"`   // 名称
+	Status int64  `json:"status"` // 状态:0下架，1上架，2预售
+}
+
+type GoodsCategoryPutReq struct {
+	Id     int64  `json:"id"`     // 表主键
+	Uuid   string `json:"uuid"`   // 唯一识别码
+	Name   string `json:"name"`   // 名称
+	Status int64  `json:"status"` // 状态:0下架，1上架，2预售
+}
+
+type GoodsCategoryDelReq struct {
+	Id int64 `json:"id"`
+}
+
+type GoodsCategoryListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	Name     string `form:"name,optional"`                               // 名称
+	Status   int64  `form:"status,optional,default=-1"`                  // 状态:0下架，1上架，2预售
+}
+
+type GoodsTag struct {
+	Id        int64  `json:"id"`         // 表主键
+	Uuid      string `json:"uuid"`       // 唯一识别码
+	Name      string `json:"name"`       // 名称
+	Status    int64  `json:"status"`     // 状态:0不可用，1可用
+	CreateAt  int64  `json:"create_at"`  // 创建时间
+	UpdateAt  int64  `json:"update_at"`  // 更新时间
+	IsDeleted int64  `json:"is_deleted"` // 是否已被删除
+	DeleteAt  int64  `json:"delete_at"`  // 删除时间
+}
+
+type GoodsTagGetReq struct {
+	Id int64 `form:"id"` // 表主键
+}
+
+type GoodsTagAddReq struct {
+	Name   string `json:"name"`   // 名称
+	Status int64  `json:"status"` // 状态:0不可用，1可用
+}
+
+type GoodsTagPutReq struct {
+	Id     int64  `json:"id"`     // 表主键
+	Uuid   string `json:"uuid"`   // 唯一识别码
+	Name   string `json:"name"`   // 名称
+	Status int64  `json:"status"` // 状态:0不可用，1可用
+}
+
+type GoodsTagDelReq struct {
+	Id int64 `json:"id"`
+}
+
+type GoodsTagListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	Name     string `form:"name,optional"`                               // 名称
+	Status   int64  `form:"status,optional,default=-1"`                  // 是否可用
 }

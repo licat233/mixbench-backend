@@ -1,0 +1,150 @@
+syntax = "v1"
+
+type Goods {
+    Id              int64     `json:"id"`                // 表主键
+    Uuid            string    `json:"uuid"`              // 唯一识别码
+    CategoryId      int64     `json:"category_id"`       // 分类id
+    GoodsSn         string    `json:"goods_sn"`          // 商品的唯一货号
+    Name            string    `json:"name"`              // 商品名
+    Keywords        string    `json:"keywords"`          // 关键词
+    GoodsDesc       string    `json:"goods_desc"`        // 商品描述
+    GoodsThumb      string    `json:"goods_thumb"`       // 商品缩略图，用于在列表或搜索结果中预览显示
+    GoodsBannerImgs string    `json:"goods_banner_imgs"` // 商品轮播图地址
+    GoodsTip        string    `json:"goods_tip"`         // 商品提示
+    GoodsPrice      float64   `json:"goods_price"`       // 商品价格
+    GoodsScore      int64     `json:"goods_score"`       // 商品积分
+    RemainCount     int64     `json:"remain_count"`      // 剩余数量
+    MonthSellCount  int64     `json:"month_sell_count"`  // 月销量
+    TotalSellCount  int64     `json:"total_sell_count"`  // 总销量
+    CommentCount    int64     `json:"comment_count"`     // 累计评论数
+    IsReal          int64     `json:"is_real"`           // 真实商品？
+    IsOnSale        int64     `json:"is_on_sale"`        // 正在打折？
+    IsAloneSale     int64     `json:"is_alone_sale"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+    IsBest          int64     `json:"is_best"`           // 最精品？
+    IsNew           int64     `json:"is_new"`            // 最新的？
+    IsHot           int64     `json:"is_hot"`            // 热门的？
+    SellerNote      string    `json:"seller_note"`       // 卖方发票抬头
+    ShopName        string    `json:"shop_name"`         // 店铺名称
+    Tag             string    `json:"tag"`               // 标签
+    Status          int64     `json:"status"`            // 状态:0下架，1上架，2预售
+    CreateAt        int64     `json:"create_at"`         // 创建时间
+    UpdateAt        int64     `json:"update_at"`         // 更新时间
+    IsDeleted       int64     `json:"is_deleted"`        // 是否已被删除
+	DeleteAt        int64     `json:"delete_at"`         // 删除时间
+}
+
+type GoodsGetReq {
+    Id int64 `form:"id"`
+}
+
+type GoodsAddReq {
+    CategoryId      int64     `json:"category_id"`       // 分类id
+    GoodsSn         string    `json:"goods_sn"`          // 商品的唯一货号
+    Name            string    `json:"name"`              // 商品名
+    Keywords        string    `json:"keywords"`          // 关键词
+    GoodsDesc       string    `json:"goods_desc"`        // 商品描述
+    GoodsThumb      string    `json:"goods_thumb"`       // 商品缩略图，用于在列表或搜索结果中预览显示
+    GoodsBannerImgs string    `json:"goods_banner_imgs"` // 商品轮播图地址
+    GoodsTip        string    `json:"goods_tip"`         // 商品提示
+    GoodsPrice      float64   `json:"goods_price"`       // 商品价格
+    GoodsScore      int64     `json:"goods_score"`       // 商品积分
+    RemainCount     int64     `json:"remain_count"`      // 剩余数量
+    MonthSellCount  int64     `json:"month_sell_count"`  // 月销量
+    TotalSellCount  int64     `json:"total_sell_count"`  // 总销量
+    CommentCount    int64     `json:"comment_count"`     // 累计评论数
+    IsReal          int64     `json:"is_real"`           // 真实商品？
+    IsOnSale        int64     `json:"is_on_sale"`        // 正在打折？
+    IsAloneSale     int64     `json:"is_alone_sale"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+    IsBest          int64     `json:"is_best"`           // 最精品？
+    IsNew           int64     `json:"is_new"`            // 最新的？
+    IsHot           int64     `json:"is_hot"`            // 热门的？
+    SellerNote      string    `json:"seller_note"`       // 卖方发票抬头
+    ShopName        string    `json:"shop_name"`         // 店铺名称
+    Tag             string    `json:"tag"`               // 标签
+    Status          int64     `json:"status"`            // 状态:0下架，1上架，2预售
+}
+
+type GoodsPutReq {
+    Id              int64     `json:"id"`                // 表主键
+    Uuid            string    `json:"uuid"`              // 唯一识别码
+    CategoryId      int64     `json:"category_id"`       // 分类id
+    GoodsSn         string    `json:"goods_sn"`          // 商品的唯一货号
+    Name            string    `json:"name"`              // 商品名
+    Keywords        string    `json:"keywords"`          // 关键词
+    GoodsDesc       string    `json:"goods_desc"`        // 商品描述
+    GoodsThumb      string    `json:"goods_thumb"`       // 商品缩略图，用于在列表或搜索结果中预览显示
+    GoodsBannerImgs string    `json:"goods_banner_imgs"` // 商品轮播图地址
+    GoodsTip        string    `json:"goods_tip"`         // 商品提示
+    GoodsPrice      float64   `json:"goods_price"`       // 商品价格
+    GoodsScore      int64     `json:"goods_score"`       // 商品积分
+    RemainCount     int64     `json:"remain_count"`      // 剩余数量
+    MonthSellCount  int64     `json:"month_sell_count"`  // 月销量
+    TotalSellCount  int64     `json:"total_sell_count"`  // 总销量
+    CommentCount    int64     `json:"comment_count"`     // 累计评论数
+    IsReal          int64     `json:"is_real"`           // 真实商品？
+    IsOnSale        int64     `json:"is_on_sale"`        // 正在打折？
+    IsAloneSale     int64     `json:"is_alone_sale"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+    IsBest          int64     `json:"is_best"`           // 最精品？
+    IsNew           int64     `json:"is_new"`            // 最新的？
+    IsHot           int64     `json:"is_hot"`            // 热门的？
+    SellerNote      string    `json:"seller_note"`       // 卖方发票抬头
+    ShopName        string    `json:"shop_name"`         // 店铺名称
+    Tag             string    `json:"tag"`               // 标签
+    Status          int64     `json:"status"`            // 状态:0下架，1上架，2预售
+}
+
+type GoodsDelReq {
+    Id int64 `json:"id"`
+}
+
+type GoodsListReq {
+	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword  string `form:"keyword,optional"`                            //关键词，可选
+	//字段搜索
+	Name      string    `form:"name,optional"`       // 商品名称
+	Status    int64     `form:"status,optional,default=-1"`     // 状态:0下架，1上架，2预售
+    IsReal          int64     `form:"is_real,optional,default=-1"`           // 真实商品？
+    IsOnSale        int64     `form:"is_on_sale,optional,default=-1"`        // 正在打折？
+    IsAloneSale     int64     `form:"is_alone_sale,optional,default=-1"`     // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+    IsBest          int64     `form:"is_best,optional,default=-1"`           // 最精品？
+    IsNew           int64     `form:"is_new,optional,default=-1"`            // 最新的？
+    IsHot           int64     `form:"is_hot,optional,default=-1"`            // 热门的？
+    Tag             string    `form:"tag,optional"`               // 标签
+    Keywords        string    `form:"keywords,optional"`          // 关键词
+    GoodsPrice     float64    `form:"goods_price,optional,default=-1"`      // 商品价格
+    RemainCount     int64     `form:"remain_count,optional,default=-1"`      // 剩余数量
+    MonthSellCount  int64     `form:"month_sell_count,optional,default=-1"`  // 月销量
+    TotalSellCount  int64     `form:"total_sell_count,optional,default=-1"`  // 总销量
+}
+
+@server(
+	jwt: JwtAuth
+	group: goods
+	middleware: JwtMiddleware
+    prefix: /v1/api/admin/goods
+)
+
+service admin-api {
+	@doc "获取商品列表"
+	@handler GoodsList
+	get /list(GoodsListReq) returns(BaseResp)
+
+	@doc "获取商品信息"
+	@handler GoodsInfo 
+	get /(GoodsGetReq) returns(BaseResp)
+
+    @doc "添加商品"
+	@handler GoodsAdd 
+	post /(GoodsAddReq) returns(BaseResp)
+
+    @doc "编辑商品"
+	@handler GoodsPut 
+	put /(GoodsPutReq) returns(BaseResp)
+
+    @doc "删除商品"
+	@handler GoodsDel 
+	delete /(GoodsDelReq) returns(BaseResp)
+}
+
+

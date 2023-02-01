@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UsersPoolDelLogic struct {
+type UserPoolDelLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUsersPoolDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UsersPoolDelLogic {
-	return &UsersPoolDelLogic{
+func NewUserPoolDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserPoolDelLogic {
+	return &UserPoolDelLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UsersPoolDelLogic) UsersPoolDel(req *types.UsersPoolDelReq) (any, error) {
-	_, err := l.svcCtx.AdminRpc.DelUsersPool(l.ctx, &admin_pb.ItemReq{
+func (l *UserPoolDelLogic) UserPoolDel(req *types.UserPoolDelReq) (any, error) {
+	_, err := l.svcCtx.AdminRpc.DelUserPool(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {

@@ -201,63 +201,63 @@ export function adminerEnumList() {
  * @description "获取抽奖单列表"
  * @param params
  */
-export function luckerList(params: components.LuckerListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/lucker/list`, params)
+export function luckyList(params: components.LuckyListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/lucky/list`, params)
 }
 
 /**
  * @description "获取抽奖单详细列表"
  * @param req
  */
-export function luckerDetails(req: components.LuckerDetailsReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/lucker/details`, req)
+export function luckyDetails(req: components.LuckyDetailsReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/lucky/details`, req)
 }
 
 /**
  * @description "获取抽奖单信息"
  * @param params
  */
-export function luckerInfo(params: components.LuckerGetReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/lucker`, params)
+export function luckyInfo(params: components.LuckyGetReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/lucky`, params)
 }
 
 /**
  * @description "添加抽奖单"
  * @param req
  */
-export function luckerAdd(req: components.LuckerAddReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/lucker`, req)
+export function luckyAdd(req: components.LuckyAddReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/lucky`, req)
 }
 
 /**
  * @description "编辑抽奖单"
  * @param req
  */
-export function luckerPut(req: components.LuckerPutReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/admin/lucker`, req)
+export function luckyPut(req: components.LuckyPutReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/lucky`, req)
 }
 
 /**
  * @description "编辑抽奖单by prize"
  * @param req
  */
-export function putByPrize(req: components.LuckerPutByPrizeReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/admin/lucker/putByPrize`, req)
+export function putByPrize(req: components.LuckyPutByPrizeReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/lucky/putByPrize`, req)
 }
 
 /**
  * @description "删除抽奖单"
  * @param req
  */
-export function luckerDel(req: components.LuckerDelReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/admin/lucker`, req)
+export function luckyDel(req: components.LuckyDelReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/lucky`, req)
 }
 
 /**
  * @description "枚举列表"
  */
-export function luckerEnumList() {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/lucker/enumList`)
+export function luckyEnumList() {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/lucky/enumList`)
 }
 
 /**
@@ -366,7 +366,7 @@ export function prizeGradeEnumList() {
  * @description "获取奖品池列表"
  * @param params
  */
-export function prizesPoolList(params: components.PrizesPoolListReqParams) {
+export function prizesPoolList(params: components.PrizePoolListReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/prizesPool/list`, params)
 }
 
@@ -374,7 +374,7 @@ export function prizesPoolList(params: components.PrizesPoolListReqParams) {
  * @description "获取奖品池信息"
  * @param params
  */
-export function prizesPoolInfo(params: components.PrizesPoolGetReqParams) {
+export function prizesPoolInfo(params: components.PrizePoolGetReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/prizesPool`, params)
 }
 
@@ -382,7 +382,7 @@ export function prizesPoolInfo(params: components.PrizesPoolGetReqParams) {
  * @description "添加奖品池"
  * @param req
  */
-export function prizesPoolAdd(req: components.PrizesPoolAddReq) {
+export function prizesPoolAdd(req: components.PrizePoolAddReq) {
 	return webapi.post<components.BaseResp>(`/v1/api/admin/prizesPool`, req)
 }
 
@@ -390,7 +390,7 @@ export function prizesPoolAdd(req: components.PrizesPoolAddReq) {
  * @description "编辑奖品池"
  * @param req
  */
-export function prizesPoolPut(req: components.PrizesPoolPutReq) {
+export function prizesPoolPut(req: components.PrizePoolPutReq) {
 	return webapi.put<components.BaseResp>(`/v1/api/admin/prizesPool`, req)
 }
 
@@ -398,7 +398,7 @@ export function prizesPoolPut(req: components.PrizesPoolPutReq) {
  * @description "删除奖品池"
  * @param req
  */
-export function prizesPoolDel(req: components.PrizesPoolDelReq) {
+export function prizesPoolDel(req: components.PrizePoolDelReq) {
 	return webapi.delete<components.BaseResp>(`/v1/api/admin/prizesPool`, req)
 }
 
@@ -648,7 +648,7 @@ export function userEnumList() {
  * @description "获取用户池列表"
  * @param params
  */
-export function usersPoolList(params: components.UsersPoolListReqParams) {
+export function usersPoolList(params: components.UserPoolListReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/usersPool/list`, params)
 }
 
@@ -656,7 +656,7 @@ export function usersPoolList(params: components.UsersPoolListReqParams) {
  * @description "获取用户池信息"
  * @param params
  */
-export function usersPoolInfo(params: components.UsersPoolGetReqParams) {
+export function usersPoolInfo(params: components.UserPoolGetReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/usersPool`, params)
 }
 
@@ -664,7 +664,7 @@ export function usersPoolInfo(params: components.UsersPoolGetReqParams) {
  * @description "添加用户池"
  * @param req
  */
-export function usersPoolAdd(req: components.UsersPoolAddReq) {
+export function usersPoolAdd(req: components.UserPoolAddReq) {
 	return webapi.post<components.BaseResp>(`/v1/api/admin/usersPool`, req)
 }
 
@@ -672,7 +672,7 @@ export function usersPoolAdd(req: components.UsersPoolAddReq) {
  * @description "编辑用户池"
  * @param req
  */
-export function usersPoolPut(req: components.UsersPoolPutReq) {
+export function usersPoolPut(req: components.UserPoolPutReq) {
 	return webapi.put<components.BaseResp>(`/v1/api/admin/usersPool`, req)
 }
 
@@ -680,7 +680,7 @@ export function usersPoolPut(req: components.UsersPoolPutReq) {
  * @description "删除用户池"
  * @param req
  */
-export function usersPoolDel(req: components.UsersPoolDelReq) {
+export function usersPoolDel(req: components.UserPoolDelReq) {
 	return webapi.delete<components.BaseResp>(`/v1/api/admin/usersPool`, req)
 }
 
@@ -734,4 +734,124 @@ export function uploadLogo() {
  */
 export function uploadImg() {
 	return webapi.post<components.BaseResp>(`/v1/api/admin/upload/image`)
+}
+
+/**
+ * @description "获取商品列表"
+ * @param params
+ */
+export function goodsList(params: components.GoodsListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/goods/list`, params)
+}
+
+/**
+ * @description "获取商品信息"
+ * @param params
+ */
+export function goodsInfo(params: components.GoodsGetReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/goods`, params)
+}
+
+/**
+ * @description "添加商品"
+ * @param req
+ */
+export function goodsAdd(req: components.GoodsAddReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/goods`, req)
+}
+
+/**
+ * @description "编辑商品"
+ * @param req
+ */
+export function goodsPut(req: components.GoodsPutReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/goods`, req)
+}
+
+/**
+ * @description "删除商品"
+ * @param req
+ */
+export function goodsDel(req: components.GoodsDelReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/goods`, req)
+}
+
+/**
+ * @description "获取商品分类列表"
+ * @param params
+ */
+export function goodsCategoryList(params: components.GoodsCategoryListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/goodsCategory/list`, params)
+}
+
+/**
+ * @description "获取商品分类信息"
+ * @param params
+ */
+export function goodsCategoryInfo(params: components.GoodsCategoryGetReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/goodsCategory`, params)
+}
+
+/**
+ * @description "添加商品分类"
+ * @param req
+ */
+export function goodsCategoryAdd(req: components.GoodsCategoryAddReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/goodsCategory`, req)
+}
+
+/**
+ * @description "编辑商品分类"
+ * @param req
+ */
+export function goodsCategoryPut(req: components.GoodsCategoryPutReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/goodsCategory`, req)
+}
+
+/**
+ * @description "删除商品分类"
+ * @param req
+ */
+export function goodsCategoryDel(req: components.GoodsCategoryDelReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/goodsCategory`, req)
+}
+
+/**
+ * @description "获取商品标签列表"
+ * @param params
+ */
+export function goodsTagList(params: components.GoodsTagListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/goodsTag/list`, params)
+}
+
+/**
+ * @description "获取商品标签信息"
+ * @param params
+ */
+export function goodsTagInfo(params: components.GoodsTagGetReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/goodsTag`, params)
+}
+
+/**
+ * @description "添加商品标签"
+ * @param req
+ */
+export function goodsTagAdd(req: components.GoodsTagAddReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/goodsTag`, req)
+}
+
+/**
+ * @description "编辑商品标签"
+ * @param req
+ */
+export function goodsTagPut(req: components.GoodsTagPutReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/goodsTag`, req)
+}
+
+/**
+ * @description "删除商品标签"
+ * @param req
+ */
+export function goodsTagDel(req: components.GoodsTagDelReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/goodsTag`, req)
 }

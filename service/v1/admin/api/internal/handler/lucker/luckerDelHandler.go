@@ -1,24 +1,25 @@
-package lucker
+package lucky
 
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
-	"mixbench/service/v1/admin/api/internal/logic/lucker"
+	"mixbench/service/v1/admin/api/internal/logic/lucky"
 	"mixbench/service/v1/admin/api/internal/svc"
 	"mixbench/service/v1/admin/api/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func LuckerDelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func LuckyDelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LuckerDelReq
+		var req types.LuckyDelReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := lucker.NewLuckerDelLogic(r.Context(), svcCtx)
-		resp, err := l.LuckerDel(&req)
+		l := lucky.NewLuckyDelLogic(r.Context(), svcCtx)
+		resp, err := l.LuckyDel(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

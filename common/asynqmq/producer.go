@@ -3,7 +3,7 @@ package asynqmq
 import (
 	"context"
 	"encoding/json"
-	"mixbench/service/v1/luckdraw/mq/types"
+	"mixbench/service/v1/luckydraw/mq/types"
 
 	"github.com/hibiken/asynq"
 )

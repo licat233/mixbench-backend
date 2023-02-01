@@ -12,34 +12,34 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetLuckerListLogic struct {
+type GetLuckyListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetLuckerListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuckerListLogic {
-	return &GetLuckerListLogic{
+func NewGetLuckyListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuckyListLogic {
+	return &GetLuckyListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetLuckerListLogic) GetLuckerList(in *admin_pb.LuckerListReq) (*admin_pb.GetLuckerListResp, error) {
+func (l *GetLuckyListLogic) GetLuckyList(in *admin_pb.LuckyListReq) (*admin_pb.GetLuckyListResp, error) {
 	in.ListReq = newListReq(in.ListReq)
-	if in.Lucker != nil && in.Lucker.Ip != "" && !govalidator.IsIP(in.Lucker.Ip) {
+	if in.Lucky != nil && in.Lucky.Ip != "" && !govalidator.IsIP(in.Lucky.Ip) {
 		return nil, errorx.ExtRpcErr(errors.New("ip field invalid"))
 	}
 
-	list, total, err := l.svcCtx.LuckerModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbLuckerToMdLucker(in.Lucker))
+	list, total, err := l.svcCtx.LuckyModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, in.ListReq.Keyword, pbLuckyToMdLucky(in.Lucky))
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	return &admin_pb.GetLuckerListResp{
-		Data:  mdLuckerListToPbLuckerList(list),
+	return &admin_pb.GetLuckyListResp{
+		Data:  mdLuckyListToPbLuckyList(list),
 		Total: total,
 	}, nil
 }

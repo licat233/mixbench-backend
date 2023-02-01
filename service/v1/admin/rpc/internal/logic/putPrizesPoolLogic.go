@@ -11,26 +11,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PutPrizesPoolLogic struct {
+type PutPrizePoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewPutPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPrizesPoolLogic {
-	return &PutPrizesPoolLogic{
+func NewPutPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPrizePoolLogic {
+	return &PutPrizePoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *PutPrizesPoolLogic) PutPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.StatusResp, error) {
+func (l *PutPrizePoolLogic) PutPrizePool(in *admin_pb.PrizePool) (*admin_pb.StatusResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
-	data := &model.PrizesPool{
+	data := &model.PrizePool{
 		Id:         in.Id,
 		Uuid:       in.Uuid,
 		ActivityId: in.ActivityId,
@@ -42,7 +42,7 @@ func (l *PutPrizesPoolLogic) PutPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.S
 		Remainder:  in.Remainder,
 	}
 
-	if err := l.svcCtx.PrizesPoolModel.Update(l.ctx, data); err != nil {
+	if err := l.svcCtx.PrizePoolModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

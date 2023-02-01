@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-01 16:08:11
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -26,8 +33,8 @@ func NewActivityPrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ac
 }
 
 func (l *ActivityPrizesLogic) ActivityPrizes(in *admin_pb.ActivityPrizesReq) (*admin_pb.ActivityPrizesResp, error) {
-	prizesPoolLogic := NewSearchPrizesPoolLogic(l.ctx, l.svcCtx)
-	prizesPoolListResp, err := prizesPoolLogic.SearchPrizesPool(&admin_pb.SearchPrizesPoolReq{
+	prizesPoolLogic := NewGetActivityPrizePool(l.ctx, l.svcCtx)
+	prizesPoolListResp, err := prizesPoolLogic.SearchPrizePool(&admin_pb.SearchPrizePoolReq{
 		ActivityId: in.ActivityId,
 	})
 	if err != nil {
@@ -60,7 +67,7 @@ func (l *ActivityPrizesLogic) ActivityPrizes(in *admin_pb.ActivityPrizesReq) (*a
 					if prizesPool.GradeId == prizeGrade.Id {
 						activityPrizes = append(activityPrizes, &admin_pb.ActivityPrize{
 							Prize:      mdPrizeToPbPrize(prize),
-							PrizesPool: prizesPool,
+							PrizePool:  prizesPool,
 							PrizeGrade: prizeGrade,
 						})
 					}

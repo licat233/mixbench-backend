@@ -1,10 +1,10 @@
 syntax = "v1"
 
-type Lucker {
+type Lucky {
 	Id           int64     `json:"id"`             // 表主键
 	Uuid         string    `json:"uuid"`           // 唯一识别码
 	UserId       int64     `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
+	PrizePoolId int64     `json:"prize_pool_id"` // 抽中的奖品池id
 	Status       int64     `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64     `json:"luck_date"`      // 抽奖时间
 	Ip           string    `json:"ip"`             // ip地址
@@ -14,19 +14,19 @@ type Lucker {
 	DeleteAt     int64     `json:"delete_at"`      // 删除时间
 }
 
-type LuckerGetReq {
+type LuckyGetReq {
 	Id int64 `form:"id"`
 }
 
-type LuckerAddReq {
+type LuckyAddReq {
 	UserId       int64     `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
+	PrizePoolId int64     `json:"prize_pool_id"` // 抽中的奖品池id
 	Status       int64     `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64     `json:"luck_date"`      // 抽奖时间
 	Ip           string    `json:"ip,optional"`    // IP地址
 }
 
-type LuckerPutByPrizeReq {
+type LuckyPutByPrizeReq {
 	Id           int64     `json:"id"`             // 表主键
 	Uuid         string    `json:"uuid"`           // 唯一识别码
 	UserId       int64     `json:"user_id"`        // 中奖用户id
@@ -37,24 +37,24 @@ type LuckerPutByPrizeReq {
 	Ip           string    `json:"ip,optional"`    // IP地址
 }
 
-type LuckerPutReq {
+type LuckyPutReq {
 	Id           int64     `json:"id"`             // 表主键
 	Uuid         string    `json:"uuid"`           // 唯一识别码
 	UserId       int64     `json:"user_id"`        // 中奖用户id
-	PrizesPoolId int64     `json:"prizes_pool_id"` // 抽中的奖品池id
+	PrizePoolId int64     `json:"prize_pool_id"` // 抽中的奖品池id
 	Status       int64     `json:"status"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64     `json:"luck_date"`      // 抽奖时间
 	Ip           string    `json:"ip,optional"`    // IP地址
 }
 
-type LuckerDelReq {
+type LuckyDelReq {
 	Id int64 `json:"id"`
 }
 
-type LuckerDetails {
-	Lucker     Lucker       `json:"lucker"`      //中奖信息
+type LuckyDetails {
+	Lucky     Lucky       `json:"lucky"`      //中奖信息
 	User       User        `json:"user"`         //中奖用户信息
-	PrizesPool PrizesPool  `json:"prizes_pool"`  //奖品池信息，奖品池信息
+	PrizePool PrizePool  `json:"prize_pool"`  //奖品池信息，奖品池信息
 	Prize      Prize        `json:"prize"`       //奖品信息，中奖产品
 	PrizeGrade PrizeGrade  `json:"prize_grade"`  //奖品级别，中奖级别
 	Activity   Activity     `json:"activity"`    //活动信息，中奖活动，
@@ -62,7 +62,7 @@ type LuckerDetails {
 }
 
 //通用页面数据请求
-type LuckerDetailsReq {
+type LuckyDetailsReq {
 	PageSize int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page     int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword  string `json:"keyword,optional"`                            //关键词，可选
@@ -72,7 +72,7 @@ type LuckerDetailsReq {
 	ProjectId int64         `json:"project_id,optional,default=-1"`      //项目id
 	ActivityId int64        `json:"activity_id,optional,default=-1"`     //活动id
 	ActivityName string      `json:"activity_name,optional"`              //活动id
-	PrizesPoolId int64      `json:"prizes_pool_id,optional,default=-1"`  //奖品池id
+	PrizePoolId int64      `json:"prize_pool_id,optional,default=-1"`  //奖品池id
 	PeizeId  int64          `json:"prize_id,optional,default=-1"`        //奖品id
 	PrizeName string        `json:"prize_name,optional"`                  //奖品名
 	PeizeGradeId  int64     `json:"prize_grade_id,optional,default=-1"`  //奖品等级id
@@ -81,13 +81,13 @@ type LuckerDetailsReq {
 	Ip       string         `json:"ip,optional"`                         //IP地址
 }
 
-type LuckerListReq {
+type LuckyListReq {
 	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword  string `form:"keyword,optional"`                            //关键词，可选
 	//字段搜索
 	UserId       int64     `form:"user_id,optional,default=-1"`        // 中奖用户id
-	PrizesPoolId int64     `form:"prizes_pool_id,optional,default=-1"` // 抽中的奖品池id
+	PrizePoolId int64     `form:"prize_pool_id,optional,default=-1"` // 抽中的奖品池id
 	Status       int64     `form:"status,optional,default=-1"`         // 状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64     `form:"luck_date,optional,default=-1"`      // 抽奖时间
 	Ip           string    `form:"ip,optional"`                        // ip地址
@@ -95,40 +95,40 @@ type LuckerListReq {
 
 @server(
 	jwt: JwtAuth
-	group: lucker
+	group: lucky
 	middleware: JwtMiddleware
-    prefix: /v1/api/admin/lucker
+    prefix: /v1/api/admin/lucky
 )
 service admin-api {
 	@doc "获取抽奖单列表"
-	@handler LuckerList
-	get /list(LuckerListReq) returns(BaseResp)
+	@handler LuckyList
+	get /list(LuckyListReq) returns(BaseResp)
 
 	@doc "获取抽奖单详细列表"
-	@handler LuckerDetails
-	post /details(LuckerDetailsReq) returns(BaseResp)
+	@handler LuckyDetails
+	post /details(LuckyDetailsReq) returns(BaseResp)
 
 	@doc "获取抽奖单信息"
-	@handler LuckerInfo 
-	get /(LuckerGetReq) returns(BaseResp)
+	@handler LuckyInfo 
+	get /(LuckyGetReq) returns(BaseResp)
 
     @doc "添加抽奖单"
-	@handler LuckerAdd 
-	post /(LuckerAddReq) returns(BaseResp)
+	@handler LuckyAdd 
+	post /(LuckyAddReq) returns(BaseResp)
 
     @doc "编辑抽奖单"
-	@handler LuckerPut
-	put /(LuckerPutReq) returns(BaseResp)
+	@handler LuckyPut
+	put /(LuckyPutReq) returns(BaseResp)
 
 	@doc "编辑抽奖单by prize"
 	@handler PutByPrize
-	put /putByPrize(LuckerPutByPrizeReq) returns(BaseResp)
+	put /putByPrize(LuckyPutByPrizeReq) returns(BaseResp)
 
     @doc "删除抽奖单"
-	@handler LuckerDel 
-	delete /(LuckerDelReq) returns(BaseResp)
+	@handler LuckyDel 
+	delete /(LuckyDelReq) returns(BaseResp)
 
     @doc "枚举列表"
-	@handler LuckerEnumList
+	@handler LuckyEnumList
 	get /enumList returns(BaseResp)
 }

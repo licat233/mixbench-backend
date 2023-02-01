@@ -21,13 +21,13 @@ type (
 	ActivityPrizesResp         = admin_pb.ActivityPrizesResp
 	AddActivityResp            = admin_pb.AddActivityResp
 	AddAdminerResp             = admin_pb.AddAdminerResp
-	AddLuckerResp              = admin_pb.AddLuckerResp
+	AddLuckyResp              = admin_pb.AddLuckyResp
 	AddPrizeGradeResp          = admin_pb.AddPrizeGradeResp
 	AddPrizeResp               = admin_pb.AddPrizeResp
-	AddPrizesPoolResp          = admin_pb.AddPrizesPoolResp
+	AddPrizePoolResp          = admin_pb.AddPrizePoolResp
 	AddProjectResp             = admin_pb.AddProjectResp
 	AddUserResp                = admin_pb.AddUserResp
-	AddUsersPoolResp           = admin_pb.AddUsersPoolResp
+	AddUserPoolResp           = admin_pb.AddUserPoolResp
 	Adminer                    = admin_pb.Adminer
 	AdminerListReq             = admin_pb.AdminerListReq
 	Enum                       = admin_pb.Enum
@@ -47,15 +47,15 @@ type (
 	GetActivityResp            = admin_pb.GetActivityResp
 	GetAdminerListResp         = admin_pb.GetAdminerListResp
 	GetAdminerResp             = admin_pb.GetAdminerResp
-	GetLuckerDetailsResp       = admin_pb.GetLuckerDetailsResp
-	GetLuckerListResp          = admin_pb.GetLuckerListResp
-	GetLuckerResp              = admin_pb.GetLuckerResp
+	GetLuckyDetailsResp       = admin_pb.GetLuckyDetailsResp
+	GetLuckyListResp          = admin_pb.GetLuckyListResp
+	GetLuckyResp              = admin_pb.GetLuckyResp
 	GetPrizeGradeListResp      = admin_pb.GetPrizeGradeListResp
 	GetPrizeGradeResp          = admin_pb.GetPrizeGradeResp
 	GetPrizeListResp           = admin_pb.GetPrizeListResp
 	GetPrizeResp               = admin_pb.GetPrizeResp
-	GetPrizesPoolListResp      = admin_pb.GetPrizesPoolListResp
-	GetPrizesPoolResp          = admin_pb.GetPrizesPoolResp
+	GetPrizePoolListResp      = admin_pb.GetPrizePoolListResp
+	GetPrizePoolResp          = admin_pb.GetPrizePoolResp
 	GetProjectDetailReq        = admin_pb.GetProjectDetailReq
 	GetProjectDetailResp       = admin_pb.GetProjectDetailResp
 	GetProjectDetailsListResp  = admin_pb.GetProjectDetailsListResp
@@ -66,8 +66,8 @@ type (
 	GetUserDetailsListResp     = admin_pb.GetUserDetailsListResp
 	GetUserListResp            = admin_pb.GetUserListResp
 	GetUserResp                = admin_pb.GetUserResp
-	GetUsersPoolListResp       = admin_pb.GetUsersPoolListResp
-	GetUsersPoolResp           = admin_pb.GetUsersPoolResp
+	GetUserPoolListResp       = admin_pb.GetUserPoolListResp
+	GetUserPoolResp           = admin_pb.GetUserPoolResp
 	IsLogoutReq                = admin_pb.IsLogoutReq
 	IsLogoutResp               = admin_pb.IsLogoutResp
 	ItemReq                    = admin_pb.ItemReq
@@ -79,12 +79,12 @@ type (
 	LoginResp                  = admin_pb.LoginResp
 	LogoutReq                  = admin_pb.LogoutReq
 	LogoutResp                 = admin_pb.LogoutResp
-	Lucker                     = admin_pb.Lucker
-	LuckerDetail               = admin_pb.LuckerDetail
-	LuckerDetailsReq           = admin_pb.LuckerDetailsReq
-	LuckerListReq              = admin_pb.LuckerListReq
-	LuckerPutByPrizeReq        = admin_pb.LuckerPutByPrizeReq
-	LuckerPutReq               = admin_pb.LuckerPutReq
+	Lucky                     = admin_pb.Lucky
+	LuckyDetail               = admin_pb.LuckyDetail
+	LuckyDetailsReq           = admin_pb.LuckyDetailsReq
+	LuckyListReq              = admin_pb.LuckyListReq
+	LuckyPutByPrizeReq        = admin_pb.LuckyPutByPrizeReq
+	LuckyPutReq               = admin_pb.LuckyPutReq
 	NilReq                     = admin_pb.NilReq
 	ParseJwtTokenReq           = admin_pb.ParseJwtTokenReq
 	ParseJwtTokenResp          = admin_pb.ParseJwtTokenResp
@@ -93,8 +93,8 @@ type (
 	PrizeGrade                 = admin_pb.PrizeGrade
 	PrizeGradeListReq          = admin_pb.PrizeGradeListReq
 	PrizeListReq               = admin_pb.PrizeListReq
-	PrizesPool                 = admin_pb.PrizesPool
-	PrizesPoolListReq          = admin_pb.PrizesPoolListReq
+	PrizePool                 = admin_pb.PrizePool
+	PrizePoolListReq          = admin_pb.PrizePoolListReq
 	Project                    = admin_pb.Project
 	ProjectActivityReq         = admin_pb.ProjectActivityReq
 	ProjectActivityResp        = admin_pb.ProjectActivityResp
@@ -103,8 +103,8 @@ type (
 	ProjectTreeOptionsResp     = admin_pb.ProjectTreeOptionsResp
 	PutPasswordReq             = admin_pb.PutPasswordReq
 	ResetLuckValueReq          = admin_pb.ResetLuckValueReq
-	SearchPrizesPoolReq        = admin_pb.SearchPrizesPoolReq
-	SearchPrizesPoolResp       = admin_pb.SearchPrizesPoolResp
+	SearchPrizePoolReq        = admin_pb.SearchPrizePoolReq
+	SearchPrizePoolResp       = admin_pb.SearchPrizePoolResp
 	StatusResp                 = admin_pb.StatusResp
 	TestReq                    = admin_pb.TestReq
 	TestResp                   = admin_pb.TestResp
@@ -115,8 +115,8 @@ type (
 	UserActivityResp           = admin_pb.UserActivityResp
 	UserDetails                = admin_pb.UserDetails
 	UserListReq                = admin_pb.UserListReq
-	UsersPool                  = admin_pb.UsersPool
-	UsersPoolListReq           = admin_pb.UsersPoolListReq
+	UserPool                  = admin_pb.UserPool
+	UserPoolListReq           = admin_pb.UserPoolListReq
 	VerifyPasswordReq          = admin_pb.VerifyPasswordReq
 	VerifyPasswordResp         = admin_pb.VerifyPasswordResp
 
@@ -155,13 +155,13 @@ type (
 		PutAdminer(ctx context.Context, in *Adminer, opts ...grpc.CallOption) (*StatusResp, error)
 		DelAdminer(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
-		GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error)
-		GetLuckerDetailsList(ctx context.Context, in *LuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error)
-		GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error)
-		AddLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*AddLuckerResp, error)
-		PutLucker(ctx context.Context, in *LuckerPutReq, opts ...grpc.CallOption) (*StatusResp, error)
-		PutLuckerByPrize(ctx context.Context, in *LuckerPutByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
-		DelLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		GetLuckyList(ctx context.Context, in *LuckyListReq, opts ...grpc.CallOption) (*GetLuckyListResp, error)
+		GetLuckyDetailsList(ctx context.Context, in *LuckyDetailsReq, opts ...grpc.CallOption) (*GetLuckyDetailsResp, error)
+		GetLucky(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckyResp, error)
+		AddLucky(ctx context.Context, in *Lucky, opts ...grpc.CallOption) (*AddLuckyResp, error)
+		PutLucky(ctx context.Context, in *LuckyPutReq, opts ...grpc.CallOption) (*StatusResp, error)
+		PutLuckyByPrize(ctx context.Context, in *LuckyPutByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
+		DelLucky(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetPrizeList(ctx context.Context, in *PrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error)
 		GetPrize(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizeResp, error)
 		AddPrize(ctx context.Context, in *Prize, opts ...grpc.CallOption) (*AddPrizeResp, error)
@@ -173,12 +173,12 @@ type (
 		AddPrizeGrade(ctx context.Context, in *PrizeGrade, opts ...grpc.CallOption) (*AddPrizeGradeResp, error)
 		PutPrizeGrade(ctx context.Context, in *PrizeGrade, opts ...grpc.CallOption) (*StatusResp, error)
 		DelPrizeGrade(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-		GetPrizesPoolList(ctx context.Context, in *PrizesPoolListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error)
-		GetPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizesPoolResp, error)
-		AddPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*AddPrizesPoolResp, error)
-		PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error)
-		DelPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
-		SearchPrizesPool(ctx context.Context, in *SearchPrizesPoolReq, opts ...grpc.CallOption) (*SearchPrizesPoolResp, error)
+		GetPrizePoolList(ctx context.Context, in *PrizePoolListReq, opts ...grpc.CallOption) (*GetPrizePoolListResp, error)
+		GetPrizePool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizePoolResp, error)
+		AddPrizePool(ctx context.Context, in *PrizePool, opts ...grpc.CallOption) (*AddPrizePoolResp, error)
+		PutPrizePool(ctx context.Context, in *PrizePool, opts ...grpc.CallOption) (*StatusResp, error)
+		DelPrizePool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		SearchPrizePool(ctx context.Context, in *SearchPrizePoolReq, opts ...grpc.CallOption) (*SearchPrizePoolResp, error)
 		ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetProjectList(ctx context.Context, in *ProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
 		GetProject(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetProjectResp, error)
@@ -195,17 +195,17 @@ type (
 		PutUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*StatusResp, error)
 		DelUser(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		UserActivity(ctx context.Context, in *UserActivityReq, opts ...grpc.CallOption) (*UserActivityResp, error)
-		GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error)
-		GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error)
-		AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error)
-		PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error)
-		DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
+		GetUserPoolList(ctx context.Context, in *UserPoolListReq, opts ...grpc.CallOption) (*GetUserPoolListResp, error)
+		GetUserPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserPoolResp, error)
+		AddUserPool(ctx context.Context, in *UserPool, opts ...grpc.CallOption) (*AddUserPoolResp, error)
+		PutUserPool(ctx context.Context, in *UserPool, opts ...grpc.CallOption) (*StatusResp, error)
+		DelUserPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error)
 		GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetProjectEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetActivityEnumList(ctx context.Context, in *GetActivityEnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetPrizeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetPrizeGradeEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
-		GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
+		GetLuckyEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		ActivityPatternEnumList(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*EnumListResp, error)
 		GetProjectTreeOptions(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*ProjectTreeOptionsResp, error)
@@ -352,39 +352,39 @@ func (m *defaultAdmin) PutPassword(ctx context.Context, in *PutPasswordReq, opts
 	return client.PutPassword(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetLuckerList(ctx context.Context, in *LuckerListReq, opts ...grpc.CallOption) (*GetLuckerListResp, error) {
+func (m *defaultAdmin) GetLuckyList(ctx context.Context, in *LuckyListReq, opts ...grpc.CallOption) (*GetLuckyListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetLuckerList(ctx, in, opts...)
+	return client.GetLuckyList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetLuckerDetailsList(ctx context.Context, in *LuckerDetailsReq, opts ...grpc.CallOption) (*GetLuckerDetailsResp, error) {
+func (m *defaultAdmin) GetLuckyDetailsList(ctx context.Context, in *LuckyDetailsReq, opts ...grpc.CallOption) (*GetLuckyDetailsResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetLuckerDetailsList(ctx, in, opts...)
+	return client.GetLuckyDetailsList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckerResp, error) {
+func (m *defaultAdmin) GetLucky(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetLuckyResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetLucker(ctx, in, opts...)
+	return client.GetLucky(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) AddLucker(ctx context.Context, in *Lucker, opts ...grpc.CallOption) (*AddLuckerResp, error) {
+func (m *defaultAdmin) AddLucky(ctx context.Context, in *Lucky, opts ...grpc.CallOption) (*AddLuckyResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.AddLucker(ctx, in, opts...)
+	return client.AddLucky(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) PutLucker(ctx context.Context, in *LuckerPutReq, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) PutLucky(ctx context.Context, in *LuckyPutReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.PutLucker(ctx, in, opts...)
+	return client.PutLucky(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) PutLuckerByPrize(ctx context.Context, in *LuckerPutByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) PutLuckyByPrize(ctx context.Context, in *LuckyPutByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.PutLuckerByPrize(ctx, in, opts...)
+	return client.PutLuckyByPrize(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) DelLucker(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) DelLucky(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.DelLucker(ctx, in, opts...)
+	return client.DelLucky(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetPrizeList(ctx context.Context, in *PrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error) {
@@ -442,34 +442,34 @@ func (m *defaultAdmin) DelPrizeGrade(ctx context.Context, in *ItemReq, opts ...g
 	return client.DelPrizeGrade(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetPrizesPoolList(ctx context.Context, in *PrizesPoolListReq, opts ...grpc.CallOption) (*GetPrizesPoolListResp, error) {
+func (m *defaultAdmin) GetPrizePoolList(ctx context.Context, in *PrizePoolListReq, opts ...grpc.CallOption) (*GetPrizePoolListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetPrizesPoolList(ctx, in, opts...)
+	return client.GetPrizePoolList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizesPoolResp, error) {
+func (m *defaultAdmin) GetPrizePool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetPrizePoolResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetPrizesPool(ctx, in, opts...)
+	return client.GetPrizePool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) AddPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*AddPrizesPoolResp, error) {
+func (m *defaultAdmin) AddPrizePool(ctx context.Context, in *PrizePool, opts ...grpc.CallOption) (*AddPrizePoolResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.AddPrizesPool(ctx, in, opts...)
+	return client.AddPrizePool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) PutPrizesPool(ctx context.Context, in *PrizesPool, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) PutPrizePool(ctx context.Context, in *PrizePool, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.PutPrizesPool(ctx, in, opts...)
+	return client.PutPrizePool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) DelPrizesPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) DelPrizePool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.DelPrizesPool(ctx, in, opts...)
+	return client.DelPrizePool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) SearchPrizesPool(ctx context.Context, in *SearchPrizesPoolReq, opts ...grpc.CallOption) (*SearchPrizesPoolResp, error) {
+func (m *defaultAdmin) SearchPrizePool(ctx context.Context, in *SearchPrizePoolReq, opts ...grpc.CallOption) (*SearchPrizePoolResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.SearchPrizesPool(ctx, in, opts...)
+	return client.SearchPrizePool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
@@ -552,29 +552,29 @@ func (m *defaultAdmin) UserActivity(ctx context.Context, in *UserActivityReq, op
 	return client.UserActivity(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetUsersPoolList(ctx context.Context, in *UsersPoolListReq, opts ...grpc.CallOption) (*GetUsersPoolListResp, error) {
+func (m *defaultAdmin) GetUserPoolList(ctx context.Context, in *UserPoolListReq, opts ...grpc.CallOption) (*GetUserPoolListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetUsersPoolList(ctx, in, opts...)
+	return client.GetUserPoolList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUsersPoolResp, error) {
+func (m *defaultAdmin) GetUserPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*GetUserPoolResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetUsersPool(ctx, in, opts...)
+	return client.GetUserPool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) AddUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*AddUsersPoolResp, error) {
+func (m *defaultAdmin) AddUserPool(ctx context.Context, in *UserPool, opts ...grpc.CallOption) (*AddUserPoolResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.AddUsersPool(ctx, in, opts...)
+	return client.AddUserPool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) PutUsersPool(ctx context.Context, in *UsersPool, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) PutUserPool(ctx context.Context, in *UserPool, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.PutUsersPool(ctx, in, opts...)
+	return client.PutUserPool(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) DelUsersPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
+func (m *defaultAdmin) DelUserPool(ctx context.Context, in *ItemReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.DelUsersPool(ctx, in, opts...)
+	return client.DelUserPool(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetAdminerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
@@ -602,9 +602,9 @@ func (m *defaultAdmin) GetPrizeGradeEnumList(ctx context.Context, in *EnumListRe
 	return client.GetPrizeGradeEnumList(ctx, in, opts...)
 }
 
-func (m *defaultAdmin) GetLuckerEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
+func (m *defaultAdmin) GetLuckyEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GetLuckerEnumList(ctx, in, opts...)
+	return client.GetLuckyEnumList(ctx, in, opts...)
 }
 
 func (m *defaultAdmin) GetUserEnumList(ctx context.Context, in *EnumListReq, opts ...grpc.CallOption) (*EnumListResp, error) {

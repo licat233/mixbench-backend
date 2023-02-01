@@ -14,21 +14,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PutLuckerLogic struct {
+type PutLuckyLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewPutLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuckerLogic {
-	return &PutLuckerLogic{
+func NewPutLuckyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuckyLogic {
+	return &PutLuckyLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *PutLuckerLogic) PutLucker(in *admin_pb.LuckerPutReq) (*admin_pb.StatusResp, error) {
+func (l *PutLuckyLogic) PutLucky(in *admin_pb.LuckyPutReq) (*admin_pb.StatusResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
@@ -36,17 +36,17 @@ func (l *PutLuckerLogic) PutLucker(in *admin_pb.LuckerPutReq) (*admin_pb.StatusR
 		return nil, errorx.ExtRpcErr(errors.New("ip field invalid"))
 	}
 	lukeDate := utils.TimestampHandle(in.LuckDate)
-	data := &model.Lucker{
-		Id:           in.Id,
-		Uuid:         in.Uuid,
-		UserId:       in.UserId,
-		PrizesPoolId: in.PrizesPoolId,
-		Status:       in.Status,
-		LuckDate:     utils.Int64ToTime(lukeDate),
-		Ip:           in.Ip,
+	data := &model.Lucky{
+		Id:          in.Id,
+		Uuid:        in.Uuid,
+		UserId:      in.UserId,
+		PrizePoolId: in.PrizePoolId,
+		Status:      in.Status,
+		LuckDate:    utils.Int64ToTime(lukeDate),
+		Ip:          in.Ip,
 	}
 
-	if err := l.svcCtx.LuckerModel.Update(l.ctx, data); err != nil {
+	if err := l.svcCtx.LuckyModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

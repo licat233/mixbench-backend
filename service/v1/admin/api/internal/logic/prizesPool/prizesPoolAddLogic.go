@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PrizesPoolAddLogic struct {
+type PrizePoolAddLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewPrizesPoolAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PrizesPoolAddLogic {
-	return &PrizesPoolAddLogic{
+func NewPrizePoolAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PrizePoolAddLogic {
+	return &PrizePoolAddLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *PrizesPoolAddLogic) PrizesPoolAdd(req *types.PrizesPoolAddReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.AddPrizesPool(l.ctx, &admin_pb.PrizesPool{
+func (l *PrizePoolAddLogic) PrizePoolAdd(req *types.PrizePoolAddReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.AddPrizePool(l.ctx, &admin_pb.PrizePool{
 		ActivityId: req.ActivityId,
 		PrizeId:    req.PrizeId,
 		GradeId:    req.GradeId,
@@ -38,5 +38,5 @@ func (l *PrizesPoolAddLogic) PrizesPoolAdd(req *types.PrizesPoolAddReq) (any, er
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(resp.PrizesPool, err)
+	return respx.DefaultSingleResp(resp.PrizePool, err)
 }

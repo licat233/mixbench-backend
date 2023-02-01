@@ -1,0 +1,51 @@
+Name: luckydraw-api
+Host: 0.0.0.0
+Port: ${LUCKDRAW_API_PORT}
+Mode: ${SERVICE_MODE}
+Debug: ${SERVICE_DEBUG}
+
+Log:
+  ServiceName: luckydraw-api
+  Level: error
+
+RootDir: ./
+
+#静态资源服务配置
+StaticConfig:
+  Domain: ${STATIC_HOST}
+  Root: ${STATIC_ROOT}
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_LUCKDRAW_API_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: luckdarw-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+JwtAuth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400
+
+CaptchaRpc:
+  Endpoints:
+    - 127.0.0.1:${CAPTCHA_RPC_PORT}
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: captcha.rpc
+
+LuckdrawRpc:
+  Endpoints:
+    - 127.0.0.1:${LUCKDRAW_RPC_PORT}
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: luckydraw.rpc

@@ -1,4 +1,4 @@
-package lucker
+package lucky
 
 import (
 	"context"
@@ -12,27 +12,27 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type LuckerDetailsLogic struct {
+type LuckyDetailsLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewLuckerDetailsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckerDetailsLogic {
-	return &LuckerDetailsLogic{
+func NewLuckyDetailsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckyDetailsLogic {
+	return &LuckyDetailsLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *LuckerDetailsLogic) LuckerDetails(req *types.LuckerDetailsReq) (any, error) {
+func (l *LuckyDetailsLogic) LuckyDetails(req *types.LuckyDetailsReq) (any, error) {
 	if req.Ip != "" && !govalidator.IsIP(req.Ip) {
 		return respx.ListResp("", []any{}, 0, req.PageSize, req.Page), nil
 	}
-	in := &admin_pb.LuckerDetailsReq{
+	in := &admin_pb.LuckyDetailsReq{
 		ListReq:      &admin_pb.ListReq{PageSize: req.PageSize, Page: req.Page, Keyword: req.Keyword},
-		Lucker:       &admin_pb.Lucker{UserId: req.UserId, PrizesPoolId: req.PrizesPoolId, Status: req.Status, LuckDate: req.LuckDate, Ip: req.Ip},
+		Lucky:        &admin_pb.Lucky{UserId: req.UserId, PrizePoolId: req.PrizePoolId, Status: req.Status, LuckDate: req.LuckDate, Ip: req.Ip},
 		UserName:     req.UserName,
 		ProjectId:    req.ProjectId,
 		ActivityId:   req.ActivityId,
@@ -41,7 +41,7 @@ func (l *LuckerDetailsLogic) LuckerDetails(req *types.LuckerDetailsReq) (any, er
 		PrizeName:    req.PrizeName,
 		PrizeGradeId: req.PeizeGradeId,
 	}
-	resp, err := l.svcCtx.AdminRpc.GetLuckerDetailsList(l.ctx, in)
+	resp, err := l.svcCtx.AdminRpc.GetLuckyDetailsList(l.ctx, in)
 	if err != nil {
 		return nil, err
 	}

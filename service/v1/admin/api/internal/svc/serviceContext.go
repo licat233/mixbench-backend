@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2023-01-14 16:12:35
+ * @Description: licat233@gmail.com
+ */
 package svc
 
 import (
@@ -28,11 +35,11 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
 	db, _ := sqlConn.RawDB()
 	rbacMiddleware := middleware.NewRbacMiddleware(db, c)
-	JwtBlacklistsModel := model.NewJwtBlacklistsModel(sqlConn, c.CacheRedis)
+	jwtBlacklistModel := model.NewJwtBlacklistModel(sqlConn, c.CacheRedis)
 	AdminerModel := model.NewAdminerModel(sqlConn, c.CacheRedis)
 	return &ServiceContext{
 		Config:         c,
-		JwtMiddleware:  middleware.NewJwtMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
+		JwtMiddleware:  middleware.NewJwtMiddleware(c, jwtBlacklistModel, AdminerModel).Handle,
 		RbacMiddleware: rbacMiddleware.Handle,
 		CaptchaRpc:     captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
 		AdminRpc:       admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),

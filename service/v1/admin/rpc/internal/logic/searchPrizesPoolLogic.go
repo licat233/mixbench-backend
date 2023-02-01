@@ -11,26 +11,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type SearchPrizesPoolLogic struct {
+type SearchPrizePoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewSearchPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SearchPrizesPoolLogic {
-	return &SearchPrizesPoolLogic{
+func NewSearchPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SearchPrizePoolLogic {
+	return &SearchPrizePoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *SearchPrizesPoolLogic) SearchPrizesPool(in *admin_pb.SearchPrizesPoolReq) (*admin_pb.SearchPrizesPoolResp, error) {
-	list, err := l.svcCtx.PrizesPoolModel.FindsByActivityId(l.ctx, in.ActivityId)
+func (l *SearchPrizePoolLogic) SearchPrizePool(in *admin_pb.SearchPrizePoolReq) (*admin_pb.SearchPrizePoolResp, error) {
+	list, err := l.svcCtx.PrizePoolModel.FindsByActivityId(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
 		return nil, errorx.IntRpcErr(err)
 	}
-	return &admin_pb.SearchPrizesPoolResp{
-		Data: mdPrizesPoolListToPbPrizesPoolList(list),
+	return &admin_pb.SearchPrizePoolResp{
+		Data: mdPrizePoolListToPbPrizePoolList(list),
 	}, nil
 }

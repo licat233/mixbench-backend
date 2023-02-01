@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetPrizesPoolLogic struct {
+type GetPrizePoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPrizesPoolLogic {
-	return &GetPrizesPoolLogic{
+func NewGetPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPrizePoolLogic {
+	return &GetPrizePoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetPrizesPoolLogic) GetPrizesPool(in *admin_pb.ItemReq) (*admin_pb.GetPrizesPoolResp, error) {
-	res, err := l.svcCtx.PrizesPoolModel.FindOne(l.ctx, in.Id)
+func (l *GetPrizePoolLogic) GetPrizePool(in *admin_pb.ItemReq) (*admin_pb.GetPrizePoolResp, error) {
+	res, err := l.svcCtx.PrizePoolModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -35,7 +35,7 @@ func (l *GetPrizesPoolLogic) GetPrizesPool(in *admin_pb.ItemReq) (*admin_pb.GetP
 		return nil, nil
 	}
 
-	return &admin_pb.GetPrizesPoolResp{
-		PrizesPool: mdPrizesPoolToPbPrizesPool(res),
+	return &admin_pb.GetPrizePoolResp{
+		PrizePool: mdPrizePoolToPbPrizePool(res),
 	}, nil
 }

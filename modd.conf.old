@@ -28,25 +28,25 @@ service/v1/captcha/api/**/*.go {
 
 # ======================== captcha end ========================
 
-# ======================== luckdraw start ========================
+# ======================== luckydraw start ========================
 # rpc
-service/v1/luckdraw/rpc/**/*.go {
-    prep: go build -o build/luckdraw-rpc/luckdraw-rpc -v service/v1/luckdraw/rpc/luckdraw.go
-    daemon +sigkill: build/luckdraw-rpc/luckdraw-rpc -f service/v1/luckdraw/rpc/etc/luckdraw.yaml
+service/v1/luckydraw/rpc/**/*.go {
+    prep: go build -o build/luckydraw-rpc/luckydraw-rpc -v service/v1/luckydraw/rpc/luckydraw.go
+    daemon +sigkill: build/luckydraw-rpc/luckydraw-rpc -f service/v1/luckydraw/rpc/etc/luckydraw.yaml
 }
 
 # api
-service/v1/luckdraw/api/**/*.go {
-    prep: go build -o build/luckdraw-api/luckdraw-api -v service/v1/luckdraw/api/luckdraw.go
-    daemon +sigkill: build/luckdraw-api/luckdraw-api -f service/v1/luckdraw/api/etc/luckdraw-api.yaml -root=service/v1/luckdraw/api
+service/v1/luckydraw/api/**/*.go {
+    prep: go build -o build/luckydraw-api/luckydraw-api -v service/v1/luckydraw/api/luckydraw.go
+    daemon +sigkill: build/luckydraw-api/luckydraw-api -f service/v1/luckydraw/api/etc/luckydraw-api.yaml -root=service/v1/luckydraw/api
 }
 
 # mq
-service/v1/luckdraw/mq/**/*.go {
-    prep: go build -o build/luckdraw-mq/luckdraw-mq -v service/v1/luckdraw/mq/luckdraw.go
-    daemon +sigkill: build/luckdraw-mq/luckdraw-mq -f service/v1/luckdraw/mq/etc/luckdraw-mq.yaml
+service/v1/luckydraw/mq/**/*.go {
+    prep: go build -o build/luckydraw-mq/luckydraw-mq -v service/v1/luckydraw/mq/luckydraw.go
+    daemon +sigkill: build/luckydraw-mq/luckydraw-mq -f service/v1/luckydraw/mq/etc/luckydraw-mq.yaml
 }
 
-# ======================== luckdraw end ========================
+# ======================== luckydraw end ========================
 
 # backup time: 2022-12-30 10:01:25

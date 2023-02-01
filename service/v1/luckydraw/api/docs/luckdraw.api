@@ -1,0 +1,95 @@
+info(
+	title: "抽奖服务"
+	author: "licat"
+	email: "1697470538@qq.com"
+	version: "v1"
+)
+
+//规范返回格式
+type BaseResp {
+	//响应成功的基本格式
+	Status  bool        `json:"success"`          //【响应状态】
+	Message string      `json:"message,optional"` //【给予的提示信息】
+	Data    interface{} `json:"data,optional"`    //【选填】响应的业务数据
+	//涉及列表请求
+	Total     int64 `json:"total,optional"`     // 【选填】数据总个数
+	PageSize  int64 `json:"pageSize,optional"`  // 【选填】单页数量
+	Page      int64 `json:"current,optional"`   // 【选填】当前页码，current与antd前端对接
+	TotalPage int64 `json:"totalPage,optional"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
+	//如果是失败响应，附带debug信息
+	ErrorCode    int    `json:"errorCode,optional"`          // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
+	ErrorMessage string `json:"errorMessage,optional"`       // 【选填】向用户显示消息
+	TraceMessage string `json:"traceMessage,optional"`       // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
+	ShowType     int    `json:"showType,optional,default=2"` // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
+	TraceId      string `json:"traceId,optional"`            // 【选填】方便后端故障排除：唯一的请求ID
+	Host         string `json:"host,optional"`               // 【选填】方便后端故障排除：当前访问服务器的主机
+}
+
+type identifyReq {
+	Passport string `json:"passport"` //凭证
+}
+
+type prizesReq {
+	ActivityUUID string `json:"activity_uuid"` //活动uuid，用于校验，id是否正确
+}
+
+type luckyListReq {
+	ActivityUUID string `json:"activity_uuid"`                      //活动uuid
+	PageSize     int64  `json:"pageSize,default=20,range=[1:1000]"` //页面大小
+	Page         int64  `json:"current,default=1,range=[1:]"`       //当前页码
+}
+
+type goodluckReq {
+	ActivityId   int64  `json:"activity_id"`   // 活动id，需要传入活动id，用于查询redis缓存
+	ActivityUUID string `json:"activity_uuid"` //活动uuid
+}
+
+type searchReq {
+	Keyword string `json:"keyword"` //查询关键词
+}
+
+type selectPrizesReq {
+	ActivityId     int64    `json:"activity_id"`      // 活动id，需要传入活动id，用于查询redis缓存
+	ActivityUUID   string   `json:"activity_uuid"`    //活动uuid
+	LuckyUuidList []string `json:"lucky_uuid_list"` //中奖名单UUID
+}
+
+@server(
+	prefix: /v1/api/luckydraw
+)
+service luckydraw-api {
+	// @doc "展现抽奖页面"
+	// @handler luckView
+	// get /:shortlink
+	
+	@doc "抽奖者身份验证"
+	@handler identify
+	post /identify (identifyReq) returns(BaseResp)
+	
+	@doc "获取活动奖品列表"
+	@handler prizes
+	post /prizes (prizesReq) returns(BaseResp)
+}
+
+@server(
+	jwt: JwtAuth
+	middleware: JwtMiddleware
+	prefix: /v1/api/luckydraw
+)
+service luckydraw-api {
+	@doc "获取自己在某活动的中奖名单"
+	@handler luckyList
+	post /luckyList (luckyListReq) returns(BaseResp)
+	
+	@doc "抽取奖品"
+	@handler goodluck
+	post /goodluck (goodluckReq) returns(BaseResp)
+	
+	@doc "查询中奖信息"
+	@handler search
+	post /search (searchReq) returns(BaseResp)
+	
+	@doc "挑选奖品"
+	@handler selectPrizes
+	post /selectPrizes (selectPrizesReq) returns(BaseResp)
+}

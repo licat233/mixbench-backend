@@ -4,13 +4,13 @@
 
 ```sql
 SELECT
- l.uuid AS luckerUUID,
+ l.uuid AS luckyUUID,
  pp.uuid AS prizespoolUUID,
  a.uuid AS activityUUID,
  p.uuid AS prizeUUID 
 FROM
- `lucker` AS l
- LEFT JOIN `prizes_pool` AS pp ON l.prizes_pool_id = pp.id
+ `lucky` AS l
+ LEFT JOIN `prize_pool` AS pp ON l.prize_pool_id = pp.id
  LEFT JOIN `activity` AS a ON pp.activity_id = a.id
  LEFT JOIN `prize` AS p ON pp.prize_id = p.id
 WHERE

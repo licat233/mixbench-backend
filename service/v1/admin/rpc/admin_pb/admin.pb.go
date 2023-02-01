@@ -360,7 +360,7 @@ func (x *Adminer) GetLastLogin() int64 {
 	return 0
 }
 
-type Lucker struct {
+type Lucky struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -368,14 +368,14 @@ type Lucker struct {
 	Id           int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
 	Uuid         string `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid"`
 	UserId       int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	PrizesPoolId int64  `protobuf:"varint,4,opt,name=prizes_pool_id,json=prizesPoolId,proto3" json:"prizes_pool_id"`
+	PrizePoolId int64  `protobuf:"varint,4,opt,name=prize_pool_id,json=prizesPoolId,proto3" json:"prize_pool_id"`
 	Status       int64  `protobuf:"varint,5,opt,name=status,proto3" json:"status"` //状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `protobuf:"varint,6,opt,name=luck_date,json=luckDate,proto3" json:"luck_date"`
 	Ip           string `protobuf:"bytes,7,opt,name=ip,proto3" json:"ip"`
 }
 
-func (x *Lucker) Reset() {
-	*x = Lucker{}
+func (x *Lucky) Reset() {
+	*x = Lucky{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -383,13 +383,13 @@ func (x *Lucker) Reset() {
 	}
 }
 
-func (x *Lucker) String() string {
+func (x *Lucky) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Lucker) ProtoMessage() {}
+func (*Lucky) ProtoMessage() {}
 
-func (x *Lucker) ProtoReflect() protoreflect.Message {
+func (x *Lucky) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -401,54 +401,54 @@ func (x *Lucker) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Lucker.ProtoReflect.Descriptor instead.
-func (*Lucker) Descriptor() ([]byte, []int) {
+// Deprecated: Use Lucky.ProtoReflect.Descriptor instead.
+func (*Lucky) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *Lucker) GetId() int64 {
+func (x *Lucky) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *Lucker) GetUuid() string {
+func (x *Lucky) GetUuid() string {
 	if x != nil {
 		return x.Uuid
 	}
 	return ""
 }
 
-func (x *Lucker) GetUserId() int64 {
+func (x *Lucky) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
 	return 0
 }
 
-func (x *Lucker) GetPrizesPoolId() int64 {
+func (x *Lucky) GetPrizePoolId() int64 {
 	if x != nil {
-		return x.PrizesPoolId
+		return x.PrizePoolId
 	}
 	return 0
 }
 
-func (x *Lucker) GetStatus() int64 {
+func (x *Lucky) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *Lucker) GetLuckDate() int64 {
+func (x *Lucky) GetLuckDate() int64 {
 	if x != nil {
 		return x.LuckDate
 	}
 	return 0
 }
 
-func (x *Lucker) GetIp() string {
+func (x *Lucky) GetIp() string {
 	if x != nil {
 		return x.Ip
 	}
@@ -542,7 +542,7 @@ func (x *Prize) GetStatus() int64 {
 	return 0
 }
 
-type PrizesPool struct {
+type PrizePool struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -558,8 +558,8 @@ type PrizesPool struct {
 	Remainder  int64  `protobuf:"varint,9,opt,name=remainder,proto3" json:"remainder"`
 }
 
-func (x *PrizesPool) Reset() {
-	*x = PrizesPool{}
+func (x *PrizePool) Reset() {
+	*x = PrizePool{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -567,13 +567,13 @@ func (x *PrizesPool) Reset() {
 	}
 }
 
-func (x *PrizesPool) String() string {
+func (x *PrizePool) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PrizesPool) ProtoMessage() {}
+func (*PrizePool) ProtoMessage() {}
 
-func (x *PrizesPool) ProtoReflect() protoreflect.Message {
+func (x *PrizePool) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -585,68 +585,68 @@ func (x *PrizesPool) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PrizesPool.ProtoReflect.Descriptor instead.
-func (*PrizesPool) Descriptor() ([]byte, []int) {
+// Deprecated: Use PrizePool.ProtoReflect.Descriptor instead.
+func (*PrizePool) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *PrizesPool) GetId() int64 {
+func (x *PrizePool) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetUuid() string {
+func (x *PrizePool) GetUuid() string {
 	if x != nil {
 		return x.Uuid
 	}
 	return ""
 }
 
-func (x *PrizesPool) GetActivityId() int64 {
+func (x *PrizePool) GetActivityId() int64 {
 	if x != nil {
 		return x.ActivityId
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetPrizeId() int64 {
+func (x *PrizePool) GetPrizeId() int64 {
 	if x != nil {
 		return x.PrizeId
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetGradeId() int64 {
+func (x *PrizePool) GetGradeId() int64 {
 	if x != nil {
 		return x.GradeId
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetLuckValue() int64 {
+func (x *PrizePool) GetLuckValue() int64 {
 	if x != nil {
 		return x.LuckValue
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetStatus() int64 {
+func (x *PrizePool) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetTotal() int64 {
+func (x *PrizePool) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
 	return 0
 }
 
-func (x *PrizesPool) GetRemainder() int64 {
+func (x *PrizePool) GetRemainder() int64 {
 	if x != nil {
 		return x.Remainder
 	}
@@ -898,7 +898,7 @@ func (x *User) GetStatus() int64 {
 	return 0
 }
 
-type UsersPool struct {
+type UserPool struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -911,8 +911,8 @@ type UsersPool struct {
 	Score      int64  `protobuf:"varint,6,opt,name=score,proto3" json:"score"`
 }
 
-func (x *UsersPool) Reset() {
-	*x = UsersPool{}
+func (x *UserPool) Reset() {
+	*x = UserPool{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -920,13 +920,13 @@ func (x *UsersPool) Reset() {
 	}
 }
 
-func (x *UsersPool) String() string {
+func (x *UserPool) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UsersPool) ProtoMessage() {}
+func (*UserPool) ProtoMessage() {}
 
-func (x *UsersPool) ProtoReflect() protoreflect.Message {
+func (x *UserPool) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -938,47 +938,47 @@ func (x *UsersPool) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UsersPool.ProtoReflect.Descriptor instead.
-func (*UsersPool) Descriptor() ([]byte, []int) {
+// Deprecated: Use UserPool.ProtoReflect.Descriptor instead.
+func (*UserPool) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *UsersPool) GetId() int64 {
+func (x *UserPool) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *UsersPool) GetUuid() string {
+func (x *UserPool) GetUuid() string {
 	if x != nil {
 		return x.Uuid
 	}
 	return ""
 }
 
-func (x *UsersPool) GetActivityId() int64 {
+func (x *UserPool) GetActivityId() int64 {
 	if x != nil {
 		return x.ActivityId
 	}
 	return 0
 }
 
-func (x *UsersPool) GetUserId() int64 {
+func (x *UserPool) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
 	return 0
 }
 
-func (x *UsersPool) GetStatus() int64 {
+func (x *UserPool) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *UsersPool) GetScore() int64 {
+func (x *UserPool) GetScore() int64 {
 	if x != nil {
 		return x.Score
 	}
@@ -1056,17 +1056,17 @@ func (x *Policy) GetAct() string {
 	return ""
 }
 
-type LuckerDetail struct {
+type LuckyDetail struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// 中奖信息
-	Lucker *Lucker `protobuf:"bytes,1,opt,name=lucker,proto3" json:"lucker"`
+	Lucky *Lucky `protobuf:"bytes,1,opt,name=lucky,proto3" json:"lucky"`
 	// 中奖用户信息
 	User *User `protobuf:"bytes,2,opt,name=user,proto3" json:"user"`
 	// 奖品池信息
-	PrizesPool *PrizesPool `protobuf:"bytes,3,opt,name=prizes_pool,json=prizesPool,proto3" json:"prizes_pool"`
+	PrizePool *PrizePool `protobuf:"bytes,3,opt,name=prize_pool,json=prizesPool,proto3" json:"prize_pool"`
 	// 活动信息
 	Activity *Activity `protobuf:"bytes,4,opt,name=activity,proto3" json:"activity"`
 	// 奖品信息
@@ -1077,8 +1077,8 @@ type LuckerDetail struct {
 	Project *Project `protobuf:"bytes,7,opt,name=project,proto3" json:"project"`
 }
 
-func (x *LuckerDetail) Reset() {
-	*x = LuckerDetail{}
+func (x *LuckyDetail) Reset() {
+	*x = LuckyDetail{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1086,13 +1086,13 @@ func (x *LuckerDetail) Reset() {
 	}
 }
 
-func (x *LuckerDetail) String() string {
+func (x *LuckyDetail) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LuckerDetail) ProtoMessage() {}
+func (*LuckyDetail) ProtoMessage() {}
 
-func (x *LuckerDetail) ProtoReflect() protoreflect.Message {
+func (x *LuckyDetail) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1104,54 +1104,54 @@ func (x *LuckerDetail) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LuckerDetail.ProtoReflect.Descriptor instead.
-func (*LuckerDetail) Descriptor() ([]byte, []int) {
+// Deprecated: Use LuckyDetail.ProtoReflect.Descriptor instead.
+func (*LuckyDetail) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *LuckerDetail) GetLucker() *Lucker {
+func (x *LuckyDetail) GetLucky() *Lucky {
 	if x != nil {
-		return x.Lucker
+		return x.Lucky
 	}
 	return nil
 }
 
-func (x *LuckerDetail) GetUser() *User {
+func (x *LuckyDetail) GetUser() *User {
 	if x != nil {
 		return x.User
 	}
 	return nil
 }
 
-func (x *LuckerDetail) GetPrizesPool() *PrizesPool {
+func (x *LuckyDetail) GetPrizePool() *PrizePool {
 	if x != nil {
-		return x.PrizesPool
+		return x.PrizePool
 	}
 	return nil
 }
 
-func (x *LuckerDetail) GetActivity() *Activity {
+func (x *LuckyDetail) GetActivity() *Activity {
 	if x != nil {
 		return x.Activity
 	}
 	return nil
 }
 
-func (x *LuckerDetail) GetPrize() *Prize {
+func (x *LuckyDetail) GetPrize() *Prize {
 	if x != nil {
 		return x.Prize
 	}
 	return nil
 }
 
-func (x *LuckerDetail) GetPrizeGrade() *PrizeGrade {
+func (x *LuckyDetail) GetPrizeGrade() *PrizeGrade {
 	if x != nil {
 		return x.PrizeGrade
 	}
 	return nil
 }
 
-func (x *LuckerDetail) GetProject() *Project {
+func (x *LuckyDetail) GetProject() *Project {
 	if x != nil {
 		return x.Project
 	}
@@ -2951,16 +2951,16 @@ func (x *AddAdminerResp) GetAdminer() *Adminer {
 	return nil
 }
 
-type AddLuckerResp struct {
+type AddLuckyResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Lucker *Lucker `protobuf:"bytes,1,opt,name=lucker,proto3" json:"lucker"`
+	Lucky *Lucky `protobuf:"bytes,1,opt,name=lucky,proto3" json:"lucky"`
 }
 
-func (x *AddLuckerResp) Reset() {
-	*x = AddLuckerResp{}
+func (x *AddLuckyResp) Reset() {
+	*x = AddLuckyResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[48]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2968,13 +2968,13 @@ func (x *AddLuckerResp) Reset() {
 	}
 }
 
-func (x *AddLuckerResp) String() string {
+func (x *AddLuckyResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AddLuckerResp) ProtoMessage() {}
+func (*AddLuckyResp) ProtoMessage() {}
 
-func (x *AddLuckerResp) ProtoReflect() protoreflect.Message {
+func (x *AddLuckyResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[48]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2986,14 +2986,14 @@ func (x *AddLuckerResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AddLuckerResp.ProtoReflect.Descriptor instead.
-func (*AddLuckerResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use AddLuckyResp.ProtoReflect.Descriptor instead.
+func (*AddLuckyResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{48}
 }
 
-func (x *AddLuckerResp) GetLucker() *Lucker {
+func (x *AddLuckyResp) GetLucky() *Lucky {
 	if x != nil {
-		return x.Lucker
+		return x.Lucky
 	}
 	return nil
 }
@@ -3092,16 +3092,16 @@ func (x *AddPrizeGradeResp) GetPrizeGrade() *PrizeGrade {
 	return nil
 }
 
-type AddPrizesPoolResp struct {
+type AddPrizePoolResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PrizesPool *PrizesPool `protobuf:"bytes,1,opt,name=prizes_pool,json=prizesPool,proto3" json:"prizes_pool"`
+	PrizePool *PrizePool `protobuf:"bytes,1,opt,name=prize_pool,json=prizesPool,proto3" json:"prize_pool"`
 }
 
-func (x *AddPrizesPoolResp) Reset() {
-	*x = AddPrizesPoolResp{}
+func (x *AddPrizePoolResp) Reset() {
+	*x = AddPrizePoolResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[51]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3109,13 +3109,13 @@ func (x *AddPrizesPoolResp) Reset() {
 	}
 }
 
-func (x *AddPrizesPoolResp) String() string {
+func (x *AddPrizePoolResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AddPrizesPoolResp) ProtoMessage() {}
+func (*AddPrizePoolResp) ProtoMessage() {}
 
-func (x *AddPrizesPoolResp) ProtoReflect() protoreflect.Message {
+func (x *AddPrizePoolResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[51]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3127,14 +3127,14 @@ func (x *AddPrizesPoolResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AddPrizesPoolResp.ProtoReflect.Descriptor instead.
-func (*AddPrizesPoolResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use AddPrizePoolResp.ProtoReflect.Descriptor instead.
+func (*AddPrizePoolResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{51}
 }
 
-func (x *AddPrizesPoolResp) GetPrizesPool() *PrizesPool {
+func (x *AddPrizePoolResp) GetPrizePool() *PrizePool {
 	if x != nil {
-		return x.PrizesPool
+		return x.PrizePool
 	}
 	return nil
 }
@@ -3233,16 +3233,16 @@ func (x *AddUserResp) GetUser() *User {
 	return nil
 }
 
-type AddUsersPoolResp struct {
+type AddUserPoolResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UsersPool *UsersPool `protobuf:"bytes,1,opt,name=users_pool,json=usersPool,proto3" json:"users_pool"`
+	UserPool *UserPool `protobuf:"bytes,1,opt,name=user_pool,json=usersPool,proto3" json:"user_pool"`
 }
 
-func (x *AddUsersPoolResp) Reset() {
-	*x = AddUsersPoolResp{}
+func (x *AddUserPoolResp) Reset() {
+	*x = AddUserPoolResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[54]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3250,13 +3250,13 @@ func (x *AddUsersPoolResp) Reset() {
 	}
 }
 
-func (x *AddUsersPoolResp) String() string {
+func (x *AddUserPoolResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AddUsersPoolResp) ProtoMessage() {}
+func (*AddUserPoolResp) ProtoMessage() {}
 
-func (x *AddUsersPoolResp) ProtoReflect() protoreflect.Message {
+func (x *AddUserPoolResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[54]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3268,14 +3268,14 @@ func (x *AddUsersPoolResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AddUsersPoolResp.ProtoReflect.Descriptor instead.
-func (*AddUsersPoolResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use AddUserPoolResp.ProtoReflect.Descriptor instead.
+func (*AddUserPoolResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{54}
 }
 
-func (x *AddUsersPoolResp) GetUsersPool() *UsersPool {
+func (x *AddUserPoolResp) GetUserPool() *UserPool {
 	if x != nil {
-		return x.UsersPool
+		return x.UserPool
 	}
 	return nil
 }
@@ -3375,16 +3375,16 @@ func (x *GetAdminerResp) GetAdminer() *Adminer {
 	return nil
 }
 
-type GetLuckerResp struct {
+type GetLuckyResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Lucker *Lucker `protobuf:"bytes,1,opt,name=lucker,proto3" json:"lucker"`
+	Lucky *Lucky `protobuf:"bytes,1,opt,name=lucky,proto3" json:"lucky"`
 }
 
-func (x *GetLuckerResp) Reset() {
-	*x = GetLuckerResp{}
+func (x *GetLuckyResp) Reset() {
+	*x = GetLuckyResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[57]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3392,13 +3392,13 @@ func (x *GetLuckerResp) Reset() {
 	}
 }
 
-func (x *GetLuckerResp) String() string {
+func (x *GetLuckyResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetLuckerResp) ProtoMessage() {}
+func (*GetLuckyResp) ProtoMessage() {}
 
-func (x *GetLuckerResp) ProtoReflect() protoreflect.Message {
+func (x *GetLuckyResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[57]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3410,14 +3410,14 @@ func (x *GetLuckerResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetLuckerResp.ProtoReflect.Descriptor instead.
-func (*GetLuckerResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLuckyResp.ProtoReflect.Descriptor instead.
+func (*GetLuckyResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{57}
 }
 
-func (x *GetLuckerResp) GetLucker() *Lucker {
+func (x *GetLuckyResp) GetLucky() *Lucky {
 	if x != nil {
-		return x.Lucker
+		return x.Lucky
 	}
 	return nil
 }
@@ -3516,16 +3516,16 @@ func (x *GetPrizeGradeResp) GetPrizeGrade() *PrizeGrade {
 	return nil
 }
 
-type GetPrizesPoolResp struct {
+type GetPrizePoolResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PrizesPool *PrizesPool `protobuf:"bytes,1,opt,name=prizes_pool,json=prizesPool,proto3" json:"prizes_pool"`
+	PrizePool *PrizePool `protobuf:"bytes,1,opt,name=prize_pool,json=prizesPool,proto3" json:"prize_pool"`
 }
 
-func (x *GetPrizesPoolResp) Reset() {
-	*x = GetPrizesPoolResp{}
+func (x *GetPrizePoolResp) Reset() {
+	*x = GetPrizePoolResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[60]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3533,13 +3533,13 @@ func (x *GetPrizesPoolResp) Reset() {
 	}
 }
 
-func (x *GetPrizesPoolResp) String() string {
+func (x *GetPrizePoolResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPrizesPoolResp) ProtoMessage() {}
+func (*GetPrizePoolResp) ProtoMessage() {}
 
-func (x *GetPrizesPoolResp) ProtoReflect() protoreflect.Message {
+func (x *GetPrizePoolResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[60]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3551,14 +3551,14 @@ func (x *GetPrizesPoolResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPrizesPoolResp.ProtoReflect.Descriptor instead.
-func (*GetPrizesPoolResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetPrizePoolResp.ProtoReflect.Descriptor instead.
+func (*GetPrizePoolResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{60}
 }
 
-func (x *GetPrizesPoolResp) GetPrizesPool() *PrizesPool {
+func (x *GetPrizePoolResp) GetPrizePool() *PrizePool {
 	if x != nil {
-		return x.PrizesPool
+		return x.PrizePool
 	}
 	return nil
 }
@@ -3657,16 +3657,16 @@ func (x *GetUserResp) GetUser() *User {
 	return nil
 }
 
-type GetUsersPoolResp struct {
+type GetUserPoolResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UsersPool *UsersPool `protobuf:"bytes,1,opt,name=users_pool,json=usersPool,proto3" json:"users_pool"`
+	UserPool *UserPool `protobuf:"bytes,1,opt,name=user_pool,json=usersPool,proto3" json:"user_pool"`
 }
 
-func (x *GetUsersPoolResp) Reset() {
-	*x = GetUsersPoolResp{}
+func (x *GetUserPoolResp) Reset() {
+	*x = GetUserPoolResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[63]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3674,13 +3674,13 @@ func (x *GetUsersPoolResp) Reset() {
 	}
 }
 
-func (x *GetUsersPoolResp) String() string {
+func (x *GetUserPoolResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetUsersPoolResp) ProtoMessage() {}
+func (*GetUserPoolResp) ProtoMessage() {}
 
-func (x *GetUsersPoolResp) ProtoReflect() protoreflect.Message {
+func (x *GetUserPoolResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[63]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3692,14 +3692,14 @@ func (x *GetUsersPoolResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetUsersPoolResp.ProtoReflect.Descriptor instead.
-func (*GetUsersPoolResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetUserPoolResp.ProtoReflect.Descriptor instead.
+func (*GetUserPoolResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{63}
 }
 
-func (x *GetUsersPoolResp) GetUsersPool() *UsersPool {
+func (x *GetUserPoolResp) GetUserPool() *UserPool {
 	if x != nil {
-		return x.UsersPool
+		return x.UserPool
 	}
 	return nil
 }
@@ -3909,17 +3909,17 @@ func (x *GetAdminerListResp) GetTotal() int64 {
 	return 0
 }
 
-type GetLuckerListResp struct {
+type GetLuckyListResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data  []*Lucker `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+	Data  []*Lucky `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
 	Total int64     `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
-func (x *GetLuckerListResp) Reset() {
-	*x = GetLuckerListResp{}
+func (x *GetLuckyListResp) Reset() {
+	*x = GetLuckyListResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[68]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3927,13 +3927,13 @@ func (x *GetLuckerListResp) Reset() {
 	}
 }
 
-func (x *GetLuckerListResp) String() string {
+func (x *GetLuckyListResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetLuckerListResp) ProtoMessage() {}
+func (*GetLuckyListResp) ProtoMessage() {}
 
-func (x *GetLuckerListResp) ProtoReflect() protoreflect.Message {
+func (x *GetLuckyListResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[68]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3945,36 +3945,36 @@ func (x *GetLuckerListResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetLuckerListResp.ProtoReflect.Descriptor instead.
-func (*GetLuckerListResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLuckyListResp.ProtoReflect.Descriptor instead.
+func (*GetLuckyListResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{68}
 }
 
-func (x *GetLuckerListResp) GetData() []*Lucker {
+func (x *GetLuckyListResp) GetData() []*Lucky {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *GetLuckerListResp) GetTotal() int64 {
+func (x *GetLuckyListResp) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
 	return 0
 }
 
-type GetLuckerDetailsResp struct {
+type GetLuckyDetailsResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data  []*LuckerDetail `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+	Data  []*LuckyDetail `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
 	Total int64           `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
-func (x *GetLuckerDetailsResp) Reset() {
-	*x = GetLuckerDetailsResp{}
+func (x *GetLuckyDetailsResp) Reset() {
+	*x = GetLuckyDetailsResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[69]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3982,13 +3982,13 @@ func (x *GetLuckerDetailsResp) Reset() {
 	}
 }
 
-func (x *GetLuckerDetailsResp) String() string {
+func (x *GetLuckyDetailsResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetLuckerDetailsResp) ProtoMessage() {}
+func (*GetLuckyDetailsResp) ProtoMessage() {}
 
-func (x *GetLuckerDetailsResp) ProtoReflect() protoreflect.Message {
+func (x *GetLuckyDetailsResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[69]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4000,19 +4000,19 @@ func (x *GetLuckerDetailsResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetLuckerDetailsResp.ProtoReflect.Descriptor instead.
-func (*GetLuckerDetailsResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetLuckyDetailsResp.ProtoReflect.Descriptor instead.
+func (*GetLuckyDetailsResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{69}
 }
 
-func (x *GetLuckerDetailsResp) GetData() []*LuckerDetail {
+func (x *GetLuckyDetailsResp) GetData() []*LuckyDetail {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *GetLuckerDetailsResp) GetTotal() int64 {
+func (x *GetLuckyDetailsResp) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
@@ -4129,17 +4129,17 @@ func (x *GetPrizeGradeListResp) GetTotal() int64 {
 	return 0
 }
 
-type GetPrizesPoolListResp struct {
+type GetPrizePoolListResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data  []*PrizesPool `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+	Data  []*PrizePool `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
 	Total int64         `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
-func (x *GetPrizesPoolListResp) Reset() {
-	*x = GetPrizesPoolListResp{}
+func (x *GetPrizePoolListResp) Reset() {
+	*x = GetPrizePoolListResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[72]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4147,13 +4147,13 @@ func (x *GetPrizesPoolListResp) Reset() {
 	}
 }
 
-func (x *GetPrizesPoolListResp) String() string {
+func (x *GetPrizePoolListResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPrizesPoolListResp) ProtoMessage() {}
+func (*GetPrizePoolListResp) ProtoMessage() {}
 
-func (x *GetPrizesPoolListResp) ProtoReflect() protoreflect.Message {
+func (x *GetPrizePoolListResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[72]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4165,19 +4165,19 @@ func (x *GetPrizesPoolListResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPrizesPoolListResp.ProtoReflect.Descriptor instead.
-func (*GetPrizesPoolListResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetPrizePoolListResp.ProtoReflect.Descriptor instead.
+func (*GetPrizePoolListResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{72}
 }
 
-func (x *GetPrizesPoolListResp) GetData() []*PrizesPool {
+func (x *GetPrizePoolListResp) GetData() []*PrizePool {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *GetPrizesPoolListResp) GetTotal() int64 {
+func (x *GetPrizePoolListResp) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
@@ -4461,17 +4461,17 @@ func (x *GetUserDetailsListResp) GetTotal() int64 {
 }
 
 // 用户池列表响应
-type GetUsersPoolListResp struct {
+type GetUserPoolListResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data  []*UsersPool `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+	Data  []*UserPool `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
 	Total int64        `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
-func (x *GetUsersPoolListResp) Reset() {
-	*x = GetUsersPoolListResp{}
+func (x *GetUserPoolListResp) Reset() {
+	*x = GetUserPoolListResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[78]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4479,13 +4479,13 @@ func (x *GetUsersPoolListResp) Reset() {
 	}
 }
 
-func (x *GetUsersPoolListResp) String() string {
+func (x *GetUserPoolListResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetUsersPoolListResp) ProtoMessage() {}
+func (*GetUserPoolListResp) ProtoMessage() {}
 
-func (x *GetUsersPoolListResp) ProtoReflect() protoreflect.Message {
+func (x *GetUserPoolListResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[78]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4497,19 +4497,19 @@ func (x *GetUsersPoolListResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetUsersPoolListResp.ProtoReflect.Descriptor instead.
-func (*GetUsersPoolListResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetUserPoolListResp.ProtoReflect.Descriptor instead.
+func (*GetUserPoolListResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{78}
 }
 
-func (x *GetUsersPoolListResp) GetData() []*UsersPool {
+func (x *GetUserPoolListResp) GetData() []*UserPool {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *GetUsersPoolListResp) GetTotal() int64 {
+func (x *GetUserPoolListResp) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
@@ -4517,7 +4517,7 @@ func (x *GetUsersPoolListResp) GetTotal() int64 {
 }
 
 // 搜索请求
-type SearchPrizesPoolReq struct {
+type SearchPrizePoolReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -4525,8 +4525,8 @@ type SearchPrizesPoolReq struct {
 	ActivityId int64 `protobuf:"varint,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id"`
 }
 
-func (x *SearchPrizesPoolReq) Reset() {
-	*x = SearchPrizesPoolReq{}
+func (x *SearchPrizePoolReq) Reset() {
+	*x = SearchPrizePoolReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[79]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4534,13 +4534,13 @@ func (x *SearchPrizesPoolReq) Reset() {
 	}
 }
 
-func (x *SearchPrizesPoolReq) String() string {
+func (x *SearchPrizePoolReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SearchPrizesPoolReq) ProtoMessage() {}
+func (*SearchPrizePoolReq) ProtoMessage() {}
 
-func (x *SearchPrizesPoolReq) ProtoReflect() protoreflect.Message {
+func (x *SearchPrizePoolReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[79]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4552,28 +4552,28 @@ func (x *SearchPrizesPoolReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SearchPrizesPoolReq.ProtoReflect.Descriptor instead.
-func (*SearchPrizesPoolReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use SearchPrizePoolReq.ProtoReflect.Descriptor instead.
+func (*SearchPrizePoolReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{79}
 }
 
-func (x *SearchPrizesPoolReq) GetActivityId() int64 {
+func (x *SearchPrizePoolReq) GetActivityId() int64 {
 	if x != nil {
 		return x.ActivityId
 	}
 	return 0
 }
 
-type SearchPrizesPoolResp struct {
+type SearchPrizePoolResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data []*PrizesPool `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
+	Data []*PrizePool `protobuf:"bytes,1,rep,name=data,proto3" json:"data"`
 }
 
-func (x *SearchPrizesPoolResp) Reset() {
-	*x = SearchPrizesPoolResp{}
+func (x *SearchPrizePoolResp) Reset() {
+	*x = SearchPrizePoolResp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[80]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4581,13 +4581,13 @@ func (x *SearchPrizesPoolResp) Reset() {
 	}
 }
 
-func (x *SearchPrizesPoolResp) String() string {
+func (x *SearchPrizePoolResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SearchPrizesPoolResp) ProtoMessage() {}
+func (*SearchPrizePoolResp) ProtoMessage() {}
 
-func (x *SearchPrizesPoolResp) ProtoReflect() protoreflect.Message {
+func (x *SearchPrizePoolResp) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[80]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4599,12 +4599,12 @@ func (x *SearchPrizesPoolResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SearchPrizesPoolResp.ProtoReflect.Descriptor instead.
-func (*SearchPrizesPoolResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use SearchPrizePoolResp.ProtoReflect.Descriptor instead.
+func (*SearchPrizePoolResp) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{80}
 }
 
-func (x *SearchPrizesPoolResp) GetData() []*PrizesPool {
+func (x *SearchPrizePoolResp) GetData() []*PrizePool {
 	if x != nil {
 		return x.Data
 	}
@@ -4618,7 +4618,7 @@ type UserActivity struct {
 	unknownFields protoimpl.UnknownFields
 
 	Activity  *Activity  `protobuf:"bytes,1,opt,name=activity,proto3" json:"activity"`
-	UsersPool *UsersPool `protobuf:"bytes,2,opt,name=users_pool,json=usersPool,proto3" json:"users_pool"`
+	UserPool *UserPool `protobuf:"bytes,2,opt,name=user_pool,json=usersPool,proto3" json:"user_pool"`
 }
 
 func (x *UserActivity) Reset() {
@@ -4660,9 +4660,9 @@ func (x *UserActivity) GetActivity() *Activity {
 	return nil
 }
 
-func (x *UserActivity) GetUsersPool() *UsersPool {
+func (x *UserActivity) GetUserPool() *UserPool {
 	if x != nil {
-		return x.UsersPool
+		return x.UserPool
 	}
 	return nil
 }
@@ -4768,7 +4768,7 @@ type ActivityPrize struct {
 	unknownFields protoimpl.UnknownFields
 
 	Prize      *Prize      `protobuf:"bytes,1,opt,name=prize,proto3" json:"prize"`
-	PrizesPool *PrizesPool `protobuf:"bytes,2,opt,name=prizes_pool,json=prizesPool,proto3" json:"prizes_pool"`
+	PrizePool *PrizePool `protobuf:"bytes,2,opt,name=prize_pool,json=prizesPool,proto3" json:"prize_pool"`
 	PrizeGrade *PrizeGrade `protobuf:"bytes,3,opt,name=prize_grade,json=prizeGrade,proto3" json:"prize_grade"`
 }
 
@@ -4811,9 +4811,9 @@ func (x *ActivityPrize) GetPrize() *Prize {
 	return nil
 }
 
-func (x *ActivityPrize) GetPrizesPool() *PrizesPool {
+func (x *ActivityPrize) GetPrizePool() *PrizePool {
 	if x != nil {
-		return x.PrizesPool
+		return x.PrizePool
 	}
 	return nil
 }
@@ -5013,14 +5013,14 @@ func (x *ProjectActivityResp) GetData() []*Activity {
 	return nil
 }
 
-type LuckerDetailsReq struct {
+type LuckyDetailsReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	ListReq *ListReq `protobuf:"bytes,1,opt,name=list_req,json=listReq,proto3" json:"list_req"`
-	// lucker表字段
-	Lucker *Lucker `protobuf:"bytes,2,opt,name=lucker,proto3" json:"lucker"`
+	// lucky表字段
+	Lucky *Lucky `protobuf:"bytes,2,opt,name=lucky,proto3" json:"lucky"`
 	// other表字段
 	UserName     string `protobuf:"bytes,3,opt,name=user_name,json=userName,proto3" json:"user_name"`
 	ProjectId    int64  `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3" json:"project_id"`
@@ -5031,8 +5031,8 @@ type LuckerDetailsReq struct {
 	PrizeGradeId int64  `protobuf:"varint,9,opt,name=prize_grade_id,json=prizeGradeId,proto3" json:"prize_grade_id"`
 }
 
-func (x *LuckerDetailsReq) Reset() {
-	*x = LuckerDetailsReq{}
+func (x *LuckyDetailsReq) Reset() {
+	*x = LuckyDetailsReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[89]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5040,13 +5040,13 @@ func (x *LuckerDetailsReq) Reset() {
 	}
 }
 
-func (x *LuckerDetailsReq) String() string {
+func (x *LuckyDetailsReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LuckerDetailsReq) ProtoMessage() {}
+func (*LuckyDetailsReq) ProtoMessage() {}
 
-func (x *LuckerDetailsReq) ProtoReflect() protoreflect.Message {
+func (x *LuckyDetailsReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[89]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5058,75 +5058,75 @@ func (x *LuckerDetailsReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LuckerDetailsReq.ProtoReflect.Descriptor instead.
-func (*LuckerDetailsReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use LuckyDetailsReq.ProtoReflect.Descriptor instead.
+func (*LuckyDetailsReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{89}
 }
 
-func (x *LuckerDetailsReq) GetListReq() *ListReq {
+func (x *LuckyDetailsReq) GetListReq() *ListReq {
 	if x != nil {
 		return x.ListReq
 	}
 	return nil
 }
 
-func (x *LuckerDetailsReq) GetLucker() *Lucker {
+func (x *LuckyDetailsReq) GetLucky() *Lucky {
 	if x != nil {
-		return x.Lucker
+		return x.Lucky
 	}
 	return nil
 }
 
-func (x *LuckerDetailsReq) GetUserName() string {
+func (x *LuckyDetailsReq) GetUserName() string {
 	if x != nil {
 		return x.UserName
 	}
 	return ""
 }
 
-func (x *LuckerDetailsReq) GetProjectId() int64 {
+func (x *LuckyDetailsReq) GetProjectId() int64 {
 	if x != nil {
 		return x.ProjectId
 	}
 	return 0
 }
 
-func (x *LuckerDetailsReq) GetActivityId() int64 {
+func (x *LuckyDetailsReq) GetActivityId() int64 {
 	if x != nil {
 		return x.ActivityId
 	}
 	return 0
 }
 
-func (x *LuckerDetailsReq) GetActivityName() string {
+func (x *LuckyDetailsReq) GetActivityName() string {
 	if x != nil {
 		return x.ActivityName
 	}
 	return ""
 }
 
-func (x *LuckerDetailsReq) GetPrizeId() int64 {
+func (x *LuckyDetailsReq) GetPrizeId() int64 {
 	if x != nil {
 		return x.PrizeId
 	}
 	return 0
 }
 
-func (x *LuckerDetailsReq) GetPrizeName() string {
+func (x *LuckyDetailsReq) GetPrizeName() string {
 	if x != nil {
 		return x.PrizeName
 	}
 	return ""
 }
 
-func (x *LuckerDetailsReq) GetPrizeGradeId() int64 {
+func (x *LuckyDetailsReq) GetPrizeGradeId() int64 {
 	if x != nil {
 		return x.PrizeGradeId
 	}
 	return 0
 }
 
-type LuckerPutByPrizeReq struct {
+type LuckyPutByPrizeReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -5141,8 +5141,8 @@ type LuckerPutByPrizeReq struct {
 	Ip         string `protobuf:"bytes,8,opt,name=ip,proto3" json:"ip"`
 }
 
-func (x *LuckerPutByPrizeReq) Reset() {
-	*x = LuckerPutByPrizeReq{}
+func (x *LuckyPutByPrizeReq) Reset() {
+	*x = LuckyPutByPrizeReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[90]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5150,13 +5150,13 @@ func (x *LuckerPutByPrizeReq) Reset() {
 	}
 }
 
-func (x *LuckerPutByPrizeReq) String() string {
+func (x *LuckyPutByPrizeReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LuckerPutByPrizeReq) ProtoMessage() {}
+func (*LuckyPutByPrizeReq) ProtoMessage() {}
 
-func (x *LuckerPutByPrizeReq) ProtoReflect() protoreflect.Message {
+func (x *LuckyPutByPrizeReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[90]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5168,68 +5168,68 @@ func (x *LuckerPutByPrizeReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LuckerPutByPrizeReq.ProtoReflect.Descriptor instead.
-func (*LuckerPutByPrizeReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use LuckyPutByPrizeReq.ProtoReflect.Descriptor instead.
+func (*LuckyPutByPrizeReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{90}
 }
 
-func (x *LuckerPutByPrizeReq) GetId() int64 {
+func (x *LuckyPutByPrizeReq) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *LuckerPutByPrizeReq) GetUuid() string {
+func (x *LuckyPutByPrizeReq) GetUuid() string {
 	if x != nil {
 		return x.Uuid
 	}
 	return ""
 }
 
-func (x *LuckerPutByPrizeReq) GetUserId() int64 {
+func (x *LuckyPutByPrizeReq) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
 	return 0
 }
 
-func (x *LuckerPutByPrizeReq) GetPrizeId() int64 {
+func (x *LuckyPutByPrizeReq) GetPrizeId() int64 {
 	if x != nil {
 		return x.PrizeId
 	}
 	return 0
 }
 
-func (x *LuckerPutByPrizeReq) GetActivityId() int64 {
+func (x *LuckyPutByPrizeReq) GetActivityId() int64 {
 	if x != nil {
 		return x.ActivityId
 	}
 	return 0
 }
 
-func (x *LuckerPutByPrizeReq) GetStatus() int64 {
+func (x *LuckyPutByPrizeReq) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *LuckerPutByPrizeReq) GetLuckDate() int64 {
+func (x *LuckyPutByPrizeReq) GetLuckDate() int64 {
 	if x != nil {
 		return x.LuckDate
 	}
 	return 0
 }
 
-func (x *LuckerPutByPrizeReq) GetIp() string {
+func (x *LuckyPutByPrizeReq) GetIp() string {
 	if x != nil {
 		return x.Ip
 	}
 	return ""
 }
 
-type LuckerPutReq struct {
+type LuckyPutReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -5237,14 +5237,14 @@ type LuckerPutReq struct {
 	Id           int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
 	Uuid         string `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid"`
 	UserId       int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id"`
-	PrizesPoolId int64  `protobuf:"varint,4,opt,name=prizes_pool_id,json=prizesPoolId,proto3" json:"prizes_pool_id"`
+	PrizePoolId int64  `protobuf:"varint,4,opt,name=prize_pool_id,json=prizesPoolId,proto3" json:"prize_pool_id"`
 	Status       int64  `protobuf:"varint,5,opt,name=status,proto3" json:"status"` //状态: 0未领奖，1已领奖，2放弃领奖
 	LuckDate     int64  `protobuf:"varint,6,opt,name=luck_date,json=luckDate,proto3" json:"luck_date"`
 	Ip           string `protobuf:"bytes,7,opt,name=ip,proto3" json:"ip"`
 }
 
-func (x *LuckerPutReq) Reset() {
-	*x = LuckerPutReq{}
+func (x *LuckyPutReq) Reset() {
+	*x = LuckyPutReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[91]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5252,13 +5252,13 @@ func (x *LuckerPutReq) Reset() {
 	}
 }
 
-func (x *LuckerPutReq) String() string {
+func (x *LuckyPutReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LuckerPutReq) ProtoMessage() {}
+func (*LuckyPutReq) ProtoMessage() {}
 
-func (x *LuckerPutReq) ProtoReflect() protoreflect.Message {
+func (x *LuckyPutReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[91]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5270,54 +5270,54 @@ func (x *LuckerPutReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LuckerPutReq.ProtoReflect.Descriptor instead.
-func (*LuckerPutReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use LuckyPutReq.ProtoReflect.Descriptor instead.
+func (*LuckyPutReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{91}
 }
 
-func (x *LuckerPutReq) GetId() int64 {
+func (x *LuckyPutReq) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *LuckerPutReq) GetUuid() string {
+func (x *LuckyPutReq) GetUuid() string {
 	if x != nil {
 		return x.Uuid
 	}
 	return ""
 }
 
-func (x *LuckerPutReq) GetUserId() int64 {
+func (x *LuckyPutReq) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
 	return 0
 }
 
-func (x *LuckerPutReq) GetPrizesPoolId() int64 {
+func (x *LuckyPutReq) GetPrizePoolId() int64 {
 	if x != nil {
-		return x.PrizesPoolId
+		return x.PrizePoolId
 	}
 	return 0
 }
 
-func (x *LuckerPutReq) GetStatus() int64 {
+func (x *LuckyPutReq) GetStatus() int64 {
 	if x != nil {
 		return x.Status
 	}
 	return 0
 }
 
-func (x *LuckerPutReq) GetLuckDate() int64 {
+func (x *LuckyPutReq) GetLuckDate() int64 {
 	if x != nil {
 		return x.LuckDate
 	}
 	return 0
 }
 
-func (x *LuckerPutReq) GetIp() string {
+func (x *LuckyPutReq) GetIp() string {
 	if x != nil {
 		return x.Ip
 	}
@@ -5435,17 +5435,17 @@ func (x *UserListReq) GetUser() *User {
 	return nil
 }
 
-type UsersPoolListReq struct {
+type UserPoolListReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	ListReq   *ListReq   `protobuf:"bytes,1,opt,name=list_req,json=listReq,proto3" json:"list_req"`
-	UsersPool *UsersPool `protobuf:"bytes,2,opt,name=users_pool,json=usersPool,proto3" json:"users_pool"`
+	UserPool *UserPool `protobuf:"bytes,2,opt,name=user_pool,json=usersPool,proto3" json:"user_pool"`
 }
 
-func (x *UsersPoolListReq) Reset() {
-	*x = UsersPoolListReq{}
+func (x *UserPoolListReq) Reset() {
+	*x = UserPoolListReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[94]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5453,13 +5453,13 @@ func (x *UsersPoolListReq) Reset() {
 	}
 }
 
-func (x *UsersPoolListReq) String() string {
+func (x *UserPoolListReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UsersPoolListReq) ProtoMessage() {}
+func (*UserPoolListReq) ProtoMessage() {}
 
-func (x *UsersPoolListReq) ProtoReflect() protoreflect.Message {
+func (x *UserPoolListReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[94]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5471,21 +5471,21 @@ func (x *UsersPoolListReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UsersPoolListReq.ProtoReflect.Descriptor instead.
-func (*UsersPoolListReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use UserPoolListReq.ProtoReflect.Descriptor instead.
+func (*UserPoolListReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{94}
 }
 
-func (x *UsersPoolListReq) GetListReq() *ListReq {
+func (x *UserPoolListReq) GetListReq() *ListReq {
 	if x != nil {
 		return x.ListReq
 	}
 	return nil
 }
 
-func (x *UsersPoolListReq) GetUsersPool() *UsersPool {
+func (x *UserPoolListReq) GetUserPool() *UserPool {
 	if x != nil {
-		return x.UsersPool
+		return x.UserPool
 	}
 	return nil
 }
@@ -5655,17 +5655,17 @@ func (x *PrizeListReq) GetPrize() *Prize {
 	return nil
 }
 
-type PrizesPoolListReq struct {
+type PrizePoolListReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	ListReq    *ListReq    `protobuf:"bytes,1,opt,name=list_req,json=listReq,proto3" json:"list_req"`
-	PrizesPool *PrizesPool `protobuf:"bytes,2,opt,name=prizes_pool,json=prizesPool,proto3" json:"prizes_pool"`
+	PrizePool *PrizePool `protobuf:"bytes,2,opt,name=prize_pool,json=prizesPool,proto3" json:"prize_pool"`
 }
 
-func (x *PrizesPoolListReq) Reset() {
-	*x = PrizesPoolListReq{}
+func (x *PrizePoolListReq) Reset() {
+	*x = PrizePoolListReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[98]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5673,13 +5673,13 @@ func (x *PrizesPoolListReq) Reset() {
 	}
 }
 
-func (x *PrizesPoolListReq) String() string {
+func (x *PrizePoolListReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PrizesPoolListReq) ProtoMessage() {}
+func (*PrizePoolListReq) ProtoMessage() {}
 
-func (x *PrizesPoolListReq) ProtoReflect() protoreflect.Message {
+func (x *PrizePoolListReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[98]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5691,21 +5691,21 @@ func (x *PrizesPoolListReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PrizesPoolListReq.ProtoReflect.Descriptor instead.
-func (*PrizesPoolListReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use PrizePoolListReq.ProtoReflect.Descriptor instead.
+func (*PrizePoolListReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{98}
 }
 
-func (x *PrizesPoolListReq) GetListReq() *ListReq {
+func (x *PrizePoolListReq) GetListReq() *ListReq {
 	if x != nil {
 		return x.ListReq
 	}
 	return nil
 }
 
-func (x *PrizesPoolListReq) GetPrizesPool() *PrizesPool {
+func (x *PrizePoolListReq) GetPrizePool() *PrizePool {
 	if x != nil {
-		return x.PrizesPool
+		return x.PrizePool
 	}
 	return nil
 }
@@ -5765,17 +5765,17 @@ func (x *PrizeGradeListReq) GetPrizeGrade() *PrizeGrade {
 	return nil
 }
 
-type LuckerListReq struct {
+type LuckyListReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	ListReq *ListReq `protobuf:"bytes,1,opt,name=list_req,json=listReq,proto3" json:"list_req"`
-	Lucker  *Lucker  `protobuf:"bytes,2,opt,name=lucker,proto3" json:"lucker"`
+	Lucky  *Lucky  `protobuf:"bytes,2,opt,name=lucky,proto3" json:"lucky"`
 }
 
-func (x *LuckerListReq) Reset() {
-	*x = LuckerListReq{}
+func (x *LuckyListReq) Reset() {
+	*x = LuckyListReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_admin_proto_msgTypes[100]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5783,13 +5783,13 @@ func (x *LuckerListReq) Reset() {
 	}
 }
 
-func (x *LuckerListReq) String() string {
+func (x *LuckyListReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LuckerListReq) ProtoMessage() {}
+func (*LuckyListReq) ProtoMessage() {}
 
-func (x *LuckerListReq) ProtoReflect() protoreflect.Message {
+func (x *LuckyListReq) ProtoReflect() protoreflect.Message {
 	mi := &file_admin_proto_msgTypes[100]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -5801,21 +5801,21 @@ func (x *LuckerListReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LuckerListReq.ProtoReflect.Descriptor instead.
-func (*LuckerListReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use LuckyListReq.ProtoReflect.Descriptor instead.
+func (*LuckyListReq) Descriptor() ([]byte, []int) {
 	return file_admin_proto_rawDescGZIP(), []int{100}
 }
 
-func (x *LuckerListReq) GetListReq() *ListReq {
+func (x *LuckyListReq) GetListReq() *ListReq {
 	if x != nil {
 		return x.ListReq
 	}
 	return nil
 }
 
-func (x *LuckerListReq) GetLucker() *Lucker {
+func (x *LuckyListReq) GetLucky() *Lucky {
 	if x != nil {
-		return x.Lucker
+		return x.Lucky
 	}
 	return nil
 }
@@ -7098,15 +7098,15 @@ var file_admin_proto_goTypes = []interface{}{
 	(*TestResp)(nil),                   // 1: admin_proto.TestResp
 	(*Activity)(nil),                   // 2: admin_proto.Activity
 	(*Adminer)(nil),                    // 3: admin_proto.Adminer
-	(*Lucker)(nil),                     // 4: admin_proto.Lucker
+	(*Lucky)(nil),                     // 4: admin_proto.Lucky
 	(*Prize)(nil),                      // 5: admin_proto.Prize
-	(*PrizesPool)(nil),                 // 6: admin_proto.PrizesPool
+	(*PrizePool)(nil),                 // 6: admin_proto.PrizePool
 	(*PrizeGrade)(nil),                 // 7: admin_proto.PrizeGrade
 	(*Project)(nil),                    // 8: admin_proto.Project
 	(*User)(nil),                       // 9: admin_proto.User
-	(*UsersPool)(nil),                  // 10: admin_proto.UsersPool
+	(*UserPool)(nil),                  // 10: admin_proto.UserPool
 	(*Policy)(nil),                     // 11: admin_proto.Policy
-	(*LuckerDetail)(nil),               // 12: admin_proto.LuckerDetail
+	(*LuckyDetail)(nil),               // 12: admin_proto.LuckyDetail
 	(*JwtData)(nil),                    // 13: admin_proto.JwtData
 	(*JwtToken)(nil),                   // 14: admin_proto.JwtToken
 	(*Enum)(nil),                       // 15: admin_proto.Enum
@@ -7142,39 +7142,39 @@ var file_admin_proto_goTypes = []interface{}{
 	(*StatusResp)(nil),                 // 45: admin_proto.StatusResp
 	(*AddActivityResp)(nil),            // 46: admin_proto.AddActivityResp
 	(*AddAdminerResp)(nil),             // 47: admin_proto.AddAdminerResp
-	(*AddLuckerResp)(nil),              // 48: admin_proto.AddLuckerResp
+	(*AddLuckyResp)(nil),              // 48: admin_proto.AddLuckyResp
 	(*AddPrizeResp)(nil),               // 49: admin_proto.AddPrizeResp
 	(*AddPrizeGradeResp)(nil),          // 50: admin_proto.AddPrizeGradeResp
-	(*AddPrizesPoolResp)(nil),          // 51: admin_proto.AddPrizesPoolResp
+	(*AddPrizePoolResp)(nil),          // 51: admin_proto.AddPrizePoolResp
 	(*AddProjectResp)(nil),             // 52: admin_proto.AddProjectResp
 	(*AddUserResp)(nil),                // 53: admin_proto.AddUserResp
-	(*AddUsersPoolResp)(nil),           // 54: admin_proto.AddUsersPoolResp
+	(*AddUserPoolResp)(nil),           // 54: admin_proto.AddUserPoolResp
 	(*GetActivityResp)(nil),            // 55: admin_proto.GetActivityResp
 	(*GetAdminerResp)(nil),             // 56: admin_proto.GetAdminerResp
-	(*GetLuckerResp)(nil),              // 57: admin_proto.GetLuckerResp
+	(*GetLuckyResp)(nil),              // 57: admin_proto.GetLuckyResp
 	(*GetPrizeResp)(nil),               // 58: admin_proto.GetPrizeResp
 	(*GetPrizeGradeResp)(nil),          // 59: admin_proto.GetPrizeGradeResp
-	(*GetPrizesPoolResp)(nil),          // 60: admin_proto.GetPrizesPoolResp
+	(*GetPrizePoolResp)(nil),          // 60: admin_proto.GetPrizePoolResp
 	(*GetProjectResp)(nil),             // 61: admin_proto.GetProjectResp
 	(*GetUserResp)(nil),                // 62: admin_proto.GetUserResp
-	(*GetUsersPoolResp)(nil),           // 63: admin_proto.GetUsersPoolResp
+	(*GetUserPoolResp)(nil),           // 63: admin_proto.GetUserPoolResp
 	(*GetActivityDetailResp)(nil),      // 64: admin_proto.GetActivityDetailResp
 	(*GetUserDetailResp)(nil),          // 65: admin_proto.GetUserDetailResp
 	(*GetActivityListResp)(nil),        // 66: admin_proto.GetActivityListResp
 	(*GetAdminerListResp)(nil),         // 67: admin_proto.GetAdminerListResp
-	(*GetLuckerListResp)(nil),          // 68: admin_proto.GetLuckerListResp
-	(*GetLuckerDetailsResp)(nil),       // 69: admin_proto.GetLuckerDetailsResp
+	(*GetLuckyListResp)(nil),          // 68: admin_proto.GetLuckyListResp
+	(*GetLuckyDetailsResp)(nil),       // 69: admin_proto.GetLuckyDetailsResp
 	(*GetPrizeListResp)(nil),           // 70: admin_proto.GetPrizeListResp
 	(*GetPrizeGradeListResp)(nil),      // 71: admin_proto.GetPrizeGradeListResp
-	(*GetPrizesPoolListResp)(nil),      // 72: admin_proto.GetPrizesPoolListResp
+	(*GetPrizePoolListResp)(nil),      // 72: admin_proto.GetPrizePoolListResp
 	(*GetProjectListResp)(nil),         // 73: admin_proto.GetProjectListResp
 	(*GetUserListResp)(nil),            // 74: admin_proto.GetUserListResp
 	(*GetProjectDetailsListResp)(nil),  // 75: admin_proto.GetProjectDetailsListResp
 	(*GetActivityDetailsListResp)(nil), // 76: admin_proto.GetActivityDetailsListResp
 	(*GetUserDetailsListResp)(nil),     // 77: admin_proto.GetUserDetailsListResp
-	(*GetUsersPoolListResp)(nil),       // 78: admin_proto.GetUsersPoolListResp
-	(*SearchPrizesPoolReq)(nil),        // 79: admin_proto.SearchPrizesPoolReq
-	(*SearchPrizesPoolResp)(nil),       // 80: admin_proto.SearchPrizesPoolResp
+	(*GetUserPoolListResp)(nil),       // 78: admin_proto.GetUserPoolListResp
+	(*SearchPrizePoolReq)(nil),        // 79: admin_proto.SearchPrizePoolReq
+	(*SearchPrizePoolResp)(nil),       // 80: admin_proto.SearchPrizePoolResp
 	(*UserActivity)(nil),               // 81: admin_proto.UserActivity
 	(*UserActivityReq)(nil),            // 82: admin_proto.UserActivityReq
 	(*UserActivityResp)(nil),           // 83: admin_proto.UserActivityResp
@@ -7183,18 +7183,18 @@ var file_admin_proto_goTypes = []interface{}{
 	(*ActivityPrizesResp)(nil),         // 86: admin_proto.ActivityPrizesResp
 	(*ProjectActivityReq)(nil),         // 87: admin_proto.ProjectActivityReq
 	(*ProjectActivityResp)(nil),        // 88: admin_proto.ProjectActivityResp
-	(*LuckerDetailsReq)(nil),           // 89: admin_proto.LuckerDetailsReq
-	(*LuckerPutByPrizeReq)(nil),        // 90: admin_proto.LuckerPutByPrizeReq
-	(*LuckerPutReq)(nil),               // 91: admin_proto.LuckerPutReq
+	(*LuckyDetailsReq)(nil),           // 89: admin_proto.LuckyDetailsReq
+	(*LuckyPutByPrizeReq)(nil),        // 90: admin_proto.LuckyPutByPrizeReq
+	(*LuckyPutReq)(nil),               // 91: admin_proto.LuckyPutReq
 	(*AdminerListReq)(nil),             // 92: admin_proto.AdminerListReq
 	(*UserListReq)(nil),                // 93: admin_proto.UserListReq
-	(*UsersPoolListReq)(nil),           // 94: admin_proto.UsersPoolListReq
+	(*UserPoolListReq)(nil),           // 94: admin_proto.UserPoolListReq
 	(*ProjectListReq)(nil),             // 95: admin_proto.ProjectListReq
 	(*ActivityListReq)(nil),            // 96: admin_proto.ActivityListReq
 	(*PrizeListReq)(nil),               // 97: admin_proto.PrizeListReq
-	(*PrizesPoolListReq)(nil),          // 98: admin_proto.PrizesPoolListReq
+	(*PrizePoolListReq)(nil),          // 98: admin_proto.PrizePoolListReq
 	(*PrizeGradeListReq)(nil),          // 99: admin_proto.PrizeGradeListReq
-	(*LuckerListReq)(nil),              // 100: admin_proto.LuckerListReq
+	(*LuckyListReq)(nil),              // 100: admin_proto.LuckyListReq
 	(*NilReq)(nil),                     // 101: admin_proto.NilReq
 	(*VerifyPasswordReq)(nil),          // 102: admin_proto.VerifyPasswordReq
 	(*VerifyPasswordResp)(nil),         // 103: admin_proto.VerifyPasswordResp
@@ -7203,13 +7203,13 @@ var file_admin_proto_goTypes = []interface{}{
 	nil,                                // 106: admin_proto.ParseJwtTokenResp.ClaimsEntry
 }
 var file_admin_proto_depIdxs = []int32{
-	4,   // 0: admin_proto.LuckerDetail.lucker:type_name -> admin_proto.Lucker
-	9,   // 1: admin_proto.LuckerDetail.user:type_name -> admin_proto.User
-	6,   // 2: admin_proto.LuckerDetail.prizes_pool:type_name -> admin_proto.PrizesPool
-	2,   // 3: admin_proto.LuckerDetail.activity:type_name -> admin_proto.Activity
-	5,   // 4: admin_proto.LuckerDetail.prize:type_name -> admin_proto.Prize
-	7,   // 5: admin_proto.LuckerDetail.prize_grade:type_name -> admin_proto.PrizeGrade
-	8,   // 6: admin_proto.LuckerDetail.project:type_name -> admin_proto.Project
+	4,   // 0: admin_proto.LuckyDetail.lucky:type_name -> admin_proto.Lucky
+	9,   // 1: admin_proto.LuckyDetail.user:type_name -> admin_proto.User
+	6,   // 2: admin_proto.LuckyDetail.prize_pool:type_name -> admin_proto.PrizePool
+	2,   // 3: admin_proto.LuckyDetail.activity:type_name -> admin_proto.Activity
+	5,   // 4: admin_proto.LuckyDetail.prize:type_name -> admin_proto.Prize
+	7,   // 5: admin_proto.LuckyDetail.prize_grade:type_name -> admin_proto.PrizeGrade
+	8,   // 6: admin_proto.LuckyDetail.project:type_name -> admin_proto.Project
 	16,  // 7: admin_proto.TreeOptions.children:type_name -> admin_proto.TreeOptions
 	15,  // 8: admin_proto.EnumListResp.data:type_name -> admin_proto.Enum
 	8,   // 9: admin_proto.ProjectDetails.project:type_name -> admin_proto.Project
@@ -7229,66 +7229,66 @@ var file_admin_proto_depIdxs = []int32{
 	106, // 23: admin_proto.ParseJwtTokenResp.claims:type_name -> admin_proto.ParseJwtTokenResp.ClaimsEntry
 	2,   // 24: admin_proto.AddActivityResp.activity:type_name -> admin_proto.Activity
 	3,   // 25: admin_proto.AddAdminerResp.adminer:type_name -> admin_proto.Adminer
-	4,   // 26: admin_proto.AddLuckerResp.lucker:type_name -> admin_proto.Lucker
+	4,   // 26: admin_proto.AddLuckyResp.lucky:type_name -> admin_proto.Lucky
 	5,   // 27: admin_proto.AddPrizeResp.prize:type_name -> admin_proto.Prize
 	7,   // 28: admin_proto.AddPrizeGradeResp.prize_grade:type_name -> admin_proto.PrizeGrade
-	6,   // 29: admin_proto.AddPrizesPoolResp.prizes_pool:type_name -> admin_proto.PrizesPool
+	6,   // 29: admin_proto.AddPrizePoolResp.prize_pool:type_name -> admin_proto.PrizePool
 	8,   // 30: admin_proto.AddProjectResp.project:type_name -> admin_proto.Project
 	9,   // 31: admin_proto.AddUserResp.user:type_name -> admin_proto.User
-	10,  // 32: admin_proto.AddUsersPoolResp.users_pool:type_name -> admin_proto.UsersPool
+	10,  // 32: admin_proto.AddUserPoolResp.user_pool:type_name -> admin_proto.UserPool
 	2,   // 33: admin_proto.GetActivityResp.activity:type_name -> admin_proto.Activity
 	3,   // 34: admin_proto.GetAdminerResp.adminer:type_name -> admin_proto.Adminer
-	4,   // 35: admin_proto.GetLuckerResp.lucker:type_name -> admin_proto.Lucker
+	4,   // 35: admin_proto.GetLuckyResp.lucky:type_name -> admin_proto.Lucky
 	5,   // 36: admin_proto.GetPrizeResp.prize:type_name -> admin_proto.Prize
 	7,   // 37: admin_proto.GetPrizeGradeResp.prize_grade:type_name -> admin_proto.PrizeGrade
-	6,   // 38: admin_proto.GetPrizesPoolResp.prizes_pool:type_name -> admin_proto.PrizesPool
+	6,   // 38: admin_proto.GetPrizePoolResp.prize_pool:type_name -> admin_proto.PrizePool
 	8,   // 39: admin_proto.GetProjectResp.project:type_name -> admin_proto.Project
 	9,   // 40: admin_proto.GetUserResp.user:type_name -> admin_proto.User
-	10,  // 41: admin_proto.GetUsersPoolResp.users_pool:type_name -> admin_proto.UsersPool
+	10,  // 41: admin_proto.GetUserPoolResp.user_pool:type_name -> admin_proto.UserPool
 	24,  // 42: admin_proto.GetActivityDetailResp.data:type_name -> admin_proto.ActivityDetails
 	25,  // 43: admin_proto.GetUserDetailResp.data:type_name -> admin_proto.UserDetails
 	2,   // 44: admin_proto.GetActivityListResp.data:type_name -> admin_proto.Activity
 	3,   // 45: admin_proto.GetAdminerListResp.data:type_name -> admin_proto.Adminer
-	4,   // 46: admin_proto.GetLuckerListResp.data:type_name -> admin_proto.Lucker
-	12,  // 47: admin_proto.GetLuckerDetailsResp.data:type_name -> admin_proto.LuckerDetail
+	4,   // 46: admin_proto.GetLuckyListResp.data:type_name -> admin_proto.Lucky
+	12,  // 47: admin_proto.GetLuckyDetailsResp.data:type_name -> admin_proto.LuckyDetail
 	5,   // 48: admin_proto.GetPrizeListResp.data:type_name -> admin_proto.Prize
 	7,   // 49: admin_proto.GetPrizeGradeListResp.data:type_name -> admin_proto.PrizeGrade
-	6,   // 50: admin_proto.GetPrizesPoolListResp.data:type_name -> admin_proto.PrizesPool
+	6,   // 50: admin_proto.GetPrizePoolListResp.data:type_name -> admin_proto.PrizePool
 	8,   // 51: admin_proto.GetProjectListResp.data:type_name -> admin_proto.Project
 	9,   // 52: admin_proto.GetUserListResp.data:type_name -> admin_proto.User
 	21,  // 53: admin_proto.GetProjectDetailsListResp.data:type_name -> admin_proto.ProjectDetails
 	24,  // 54: admin_proto.GetActivityDetailsListResp.data:type_name -> admin_proto.ActivityDetails
 	25,  // 55: admin_proto.GetUserDetailsListResp.data:type_name -> admin_proto.UserDetails
-	10,  // 56: admin_proto.GetUsersPoolListResp.data:type_name -> admin_proto.UsersPool
-	6,   // 57: admin_proto.SearchPrizesPoolResp.data:type_name -> admin_proto.PrizesPool
+	10,  // 56: admin_proto.GetUserPoolListResp.data:type_name -> admin_proto.UserPool
+	6,   // 57: admin_proto.SearchPrizePoolResp.data:type_name -> admin_proto.PrizePool
 	2,   // 58: admin_proto.UserActivity.activity:type_name -> admin_proto.Activity
-	10,  // 59: admin_proto.UserActivity.users_pool:type_name -> admin_proto.UsersPool
+	10,  // 59: admin_proto.UserActivity.user_pool:type_name -> admin_proto.UserPool
 	81,  // 60: admin_proto.UserActivityResp.data:type_name -> admin_proto.UserActivity
 	5,   // 61: admin_proto.ActivityPrize.prize:type_name -> admin_proto.Prize
-	6,   // 62: admin_proto.ActivityPrize.prizes_pool:type_name -> admin_proto.PrizesPool
+	6,   // 62: admin_proto.ActivityPrize.prize_pool:type_name -> admin_proto.PrizePool
 	7,   // 63: admin_proto.ActivityPrize.prize_grade:type_name -> admin_proto.PrizeGrade
 	84,  // 64: admin_proto.ActivityPrizesResp.data:type_name -> admin_proto.ActivityPrize
 	2,   // 65: admin_proto.ProjectActivityResp.data:type_name -> admin_proto.Activity
-	43,  // 66: admin_proto.LuckerDetailsReq.list_req:type_name -> admin_proto.ListReq
-	4,   // 67: admin_proto.LuckerDetailsReq.lucker:type_name -> admin_proto.Lucker
+	43,  // 66: admin_proto.LuckyDetailsReq.list_req:type_name -> admin_proto.ListReq
+	4,   // 67: admin_proto.LuckyDetailsReq.lucky:type_name -> admin_proto.Lucky
 	43,  // 68: admin_proto.AdminerListReq.list_req:type_name -> admin_proto.ListReq
 	3,   // 69: admin_proto.AdminerListReq.adminer:type_name -> admin_proto.Adminer
 	43,  // 70: admin_proto.UserListReq.list_req:type_name -> admin_proto.ListReq
 	9,   // 71: admin_proto.UserListReq.user:type_name -> admin_proto.User
-	43,  // 72: admin_proto.UsersPoolListReq.list_req:type_name -> admin_proto.ListReq
-	10,  // 73: admin_proto.UsersPoolListReq.users_pool:type_name -> admin_proto.UsersPool
+	43,  // 72: admin_proto.UserPoolListReq.list_req:type_name -> admin_proto.ListReq
+	10,  // 73: admin_proto.UserPoolListReq.user_pool:type_name -> admin_proto.UserPool
 	43,  // 74: admin_proto.ProjectListReq.list_req:type_name -> admin_proto.ListReq
 	8,   // 75: admin_proto.ProjectListReq.project:type_name -> admin_proto.Project
 	43,  // 76: admin_proto.ActivityListReq.list_req:type_name -> admin_proto.ListReq
 	2,   // 77: admin_proto.ActivityListReq.activity:type_name -> admin_proto.Activity
 	43,  // 78: admin_proto.PrizeListReq.list_req:type_name -> admin_proto.ListReq
 	5,   // 79: admin_proto.PrizeListReq.prize:type_name -> admin_proto.Prize
-	43,  // 80: admin_proto.PrizesPoolListReq.list_req:type_name -> admin_proto.ListReq
-	6,   // 81: admin_proto.PrizesPoolListReq.prizes_pool:type_name -> admin_proto.PrizesPool
+	43,  // 80: admin_proto.PrizePoolListReq.list_req:type_name -> admin_proto.ListReq
+	6,   // 81: admin_proto.PrizePoolListReq.prize_pool:type_name -> admin_proto.PrizePool
 	43,  // 82: admin_proto.PrizeGradeListReq.list_req:type_name -> admin_proto.ListReq
 	7,   // 83: admin_proto.PrizeGradeListReq.prize_grade:type_name -> admin_proto.PrizeGrade
-	43,  // 84: admin_proto.LuckerListReq.list_req:type_name -> admin_proto.ListReq
-	4,   // 85: admin_proto.LuckerListReq.lucker:type_name -> admin_proto.Lucker
+	43,  // 84: admin_proto.LuckyListReq.list_req:type_name -> admin_proto.ListReq
+	4,   // 85: admin_proto.LuckyListReq.lucky:type_name -> admin_proto.Lucky
 	0,   // 86: admin_proto.Admin.Test:input_type -> admin_proto.TestReq
 	26,  // 87: admin_proto.Admin.GenerateToken:input_type -> admin_proto.GenerateTokenReq
 	28,  // 88: admin_proto.Admin.Login:input_type -> admin_proto.LoginReq
@@ -7313,13 +7313,13 @@ var file_admin_proto_depIdxs = []int32{
 	3,   // 107: admin_proto.Admin.PutAdminer:input_type -> admin_proto.Adminer
 	44,  // 108: admin_proto.Admin.DelAdminer:input_type -> admin_proto.ItemReq
 	104, // 109: admin_proto.Admin.PutPassword:input_type -> admin_proto.PutPasswordReq
-	100, // 110: admin_proto.Admin.GetLuckerList:input_type -> admin_proto.LuckerListReq
-	89,  // 111: admin_proto.Admin.GetLuckerDetailsList:input_type -> admin_proto.LuckerDetailsReq
-	44,  // 112: admin_proto.Admin.GetLucker:input_type -> admin_proto.ItemReq
-	4,   // 113: admin_proto.Admin.AddLucker:input_type -> admin_proto.Lucker
-	91,  // 114: admin_proto.Admin.PutLucker:input_type -> admin_proto.LuckerPutReq
-	90,  // 115: admin_proto.Admin.PutLuckerByPrize:input_type -> admin_proto.LuckerPutByPrizeReq
-	44,  // 116: admin_proto.Admin.DelLucker:input_type -> admin_proto.ItemReq
+	100, // 110: admin_proto.Admin.GetLuckyList:input_type -> admin_proto.LuckyListReq
+	89,  // 111: admin_proto.Admin.GetLuckyDetailsList:input_type -> admin_proto.LuckyDetailsReq
+	44,  // 112: admin_proto.Admin.GetLucky:input_type -> admin_proto.ItemReq
+	4,   // 113: admin_proto.Admin.AddLucky:input_type -> admin_proto.Lucky
+	91,  // 114: admin_proto.Admin.PutLucky:input_type -> admin_proto.LuckyPutReq
+	90,  // 115: admin_proto.Admin.PutLuckyByPrize:input_type -> admin_proto.LuckyPutByPrizeReq
+	44,  // 116: admin_proto.Admin.DelLucky:input_type -> admin_proto.ItemReq
 	97,  // 117: admin_proto.Admin.GetPrizeList:input_type -> admin_proto.PrizeListReq
 	44,  // 118: admin_proto.Admin.GetPrize:input_type -> admin_proto.ItemReq
 	5,   // 119: admin_proto.Admin.AddPrize:input_type -> admin_proto.Prize
@@ -7331,12 +7331,12 @@ var file_admin_proto_depIdxs = []int32{
 	7,   // 125: admin_proto.Admin.AddPrizeGrade:input_type -> admin_proto.PrizeGrade
 	7,   // 126: admin_proto.Admin.PutPrizeGrade:input_type -> admin_proto.PrizeGrade
 	44,  // 127: admin_proto.Admin.DelPrizeGrade:input_type -> admin_proto.ItemReq
-	98,  // 128: admin_proto.Admin.GetPrizesPoolList:input_type -> admin_proto.PrizesPoolListReq
-	44,  // 129: admin_proto.Admin.GetPrizesPool:input_type -> admin_proto.ItemReq
-	6,   // 130: admin_proto.Admin.AddPrizesPool:input_type -> admin_proto.PrizesPool
-	6,   // 131: admin_proto.Admin.PutPrizesPool:input_type -> admin_proto.PrizesPool
-	44,  // 132: admin_proto.Admin.DelPrizesPool:input_type -> admin_proto.ItemReq
-	79,  // 133: admin_proto.Admin.SearchPrizesPool:input_type -> admin_proto.SearchPrizesPoolReq
+	98,  // 128: admin_proto.Admin.GetPrizePoolList:input_type -> admin_proto.PrizePoolListReq
+	44,  // 129: admin_proto.Admin.GetPrizePool:input_type -> admin_proto.ItemReq
+	6,   // 130: admin_proto.Admin.AddPrizePool:input_type -> admin_proto.PrizePool
+	6,   // 131: admin_proto.Admin.PutPrizePool:input_type -> admin_proto.PrizePool
+	44,  // 132: admin_proto.Admin.DelPrizePool:input_type -> admin_proto.ItemReq
+	79,  // 133: admin_proto.Admin.SearchPrizePool:input_type -> admin_proto.SearchPrizePoolReq
 	105, // 134: admin_proto.Admin.ResetLuckValue:input_type -> admin_proto.ResetLuckValueReq
 	95,  // 135: admin_proto.Admin.GetProjectList:input_type -> admin_proto.ProjectListReq
 	44,  // 136: admin_proto.Admin.GetProject:input_type -> admin_proto.ItemReq
@@ -7353,17 +7353,17 @@ var file_admin_proto_depIdxs = []int32{
 	9,   // 147: admin_proto.Admin.PutUser:input_type -> admin_proto.User
 	44,  // 148: admin_proto.Admin.DelUser:input_type -> admin_proto.ItemReq
 	82,  // 149: admin_proto.Admin.UserActivity:input_type -> admin_proto.UserActivityReq
-	94,  // 150: admin_proto.Admin.GetUsersPoolList:input_type -> admin_proto.UsersPoolListReq
-	44,  // 151: admin_proto.Admin.GetUsersPool:input_type -> admin_proto.ItemReq
-	10,  // 152: admin_proto.Admin.AddUsersPool:input_type -> admin_proto.UsersPool
-	10,  // 153: admin_proto.Admin.PutUsersPool:input_type -> admin_proto.UsersPool
-	44,  // 154: admin_proto.Admin.DelUsersPool:input_type -> admin_proto.ItemReq
+	94,  // 150: admin_proto.Admin.GetUserPoolList:input_type -> admin_proto.UserPoolListReq
+	44,  // 151: admin_proto.Admin.GetUserPool:input_type -> admin_proto.ItemReq
+	10,  // 152: admin_proto.Admin.AddUserPool:input_type -> admin_proto.UserPool
+	10,  // 153: admin_proto.Admin.PutUserPool:input_type -> admin_proto.UserPool
+	44,  // 154: admin_proto.Admin.DelUserPool:input_type -> admin_proto.ItemReq
 	17,  // 155: admin_proto.Admin.GetAdminerEnumList:input_type -> admin_proto.EnumListReq
 	17,  // 156: admin_proto.Admin.GetProjectEnumList:input_type -> admin_proto.EnumListReq
 	18,  // 157: admin_proto.Admin.GetActivityEnumList:input_type -> admin_proto.GetActivityEnumListReq
 	17,  // 158: admin_proto.Admin.GetPrizeEnumList:input_type -> admin_proto.EnumListReq
 	17,  // 159: admin_proto.Admin.GetPrizeGradeEnumList:input_type -> admin_proto.EnumListReq
-	17,  // 160: admin_proto.Admin.GetLuckerEnumList:input_type -> admin_proto.EnumListReq
+	17,  // 160: admin_proto.Admin.GetLuckyEnumList:input_type -> admin_proto.EnumListReq
 	17,  // 161: admin_proto.Admin.GetUserEnumList:input_type -> admin_proto.EnumListReq
 	101, // 162: admin_proto.Admin.ActivityPatternEnumList:input_type -> admin_proto.NilReq
 	17,  // 163: admin_proto.Admin.GetProjectTreeOptions:input_type -> admin_proto.EnumListReq
@@ -7391,13 +7391,13 @@ var file_admin_proto_depIdxs = []int32{
 	45,  // 185: admin_proto.Admin.PutAdminer:output_type -> admin_proto.StatusResp
 	45,  // 186: admin_proto.Admin.DelAdminer:output_type -> admin_proto.StatusResp
 	45,  // 187: admin_proto.Admin.PutPassword:output_type -> admin_proto.StatusResp
-	68,  // 188: admin_proto.Admin.GetLuckerList:output_type -> admin_proto.GetLuckerListResp
-	69,  // 189: admin_proto.Admin.GetLuckerDetailsList:output_type -> admin_proto.GetLuckerDetailsResp
-	57,  // 190: admin_proto.Admin.GetLucker:output_type -> admin_proto.GetLuckerResp
-	48,  // 191: admin_proto.Admin.AddLucker:output_type -> admin_proto.AddLuckerResp
-	45,  // 192: admin_proto.Admin.PutLucker:output_type -> admin_proto.StatusResp
-	45,  // 193: admin_proto.Admin.PutLuckerByPrize:output_type -> admin_proto.StatusResp
-	45,  // 194: admin_proto.Admin.DelLucker:output_type -> admin_proto.StatusResp
+	68,  // 188: admin_proto.Admin.GetLuckyList:output_type -> admin_proto.GetLuckyListResp
+	69,  // 189: admin_proto.Admin.GetLuckyDetailsList:output_type -> admin_proto.GetLuckyDetailsResp
+	57,  // 190: admin_proto.Admin.GetLucky:output_type -> admin_proto.GetLuckyResp
+	48,  // 191: admin_proto.Admin.AddLucky:output_type -> admin_proto.AddLuckyResp
+	45,  // 192: admin_proto.Admin.PutLucky:output_type -> admin_proto.StatusResp
+	45,  // 193: admin_proto.Admin.PutLuckyByPrize:output_type -> admin_proto.StatusResp
+	45,  // 194: admin_proto.Admin.DelLucky:output_type -> admin_proto.StatusResp
 	70,  // 195: admin_proto.Admin.GetPrizeList:output_type -> admin_proto.GetPrizeListResp
 	58,  // 196: admin_proto.Admin.GetPrize:output_type -> admin_proto.GetPrizeResp
 	49,  // 197: admin_proto.Admin.AddPrize:output_type -> admin_proto.AddPrizeResp
@@ -7409,12 +7409,12 @@ var file_admin_proto_depIdxs = []int32{
 	50,  // 203: admin_proto.Admin.AddPrizeGrade:output_type -> admin_proto.AddPrizeGradeResp
 	45,  // 204: admin_proto.Admin.PutPrizeGrade:output_type -> admin_proto.StatusResp
 	45,  // 205: admin_proto.Admin.DelPrizeGrade:output_type -> admin_proto.StatusResp
-	72,  // 206: admin_proto.Admin.GetPrizesPoolList:output_type -> admin_proto.GetPrizesPoolListResp
-	60,  // 207: admin_proto.Admin.GetPrizesPool:output_type -> admin_proto.GetPrizesPoolResp
-	51,  // 208: admin_proto.Admin.AddPrizesPool:output_type -> admin_proto.AddPrizesPoolResp
-	45,  // 209: admin_proto.Admin.PutPrizesPool:output_type -> admin_proto.StatusResp
-	45,  // 210: admin_proto.Admin.DelPrizesPool:output_type -> admin_proto.StatusResp
-	80,  // 211: admin_proto.Admin.SearchPrizesPool:output_type -> admin_proto.SearchPrizesPoolResp
+	72,  // 206: admin_proto.Admin.GetPrizePoolList:output_type -> admin_proto.GetPrizePoolListResp
+	60,  // 207: admin_proto.Admin.GetPrizePool:output_type -> admin_proto.GetPrizePoolResp
+	51,  // 208: admin_proto.Admin.AddPrizePool:output_type -> admin_proto.AddPrizePoolResp
+	45,  // 209: admin_proto.Admin.PutPrizePool:output_type -> admin_proto.StatusResp
+	45,  // 210: admin_proto.Admin.DelPrizePool:output_type -> admin_proto.StatusResp
+	80,  // 211: admin_proto.Admin.SearchPrizePool:output_type -> admin_proto.SearchPrizePoolResp
 	45,  // 212: admin_proto.Admin.ResetLuckValue:output_type -> admin_proto.StatusResp
 	73,  // 213: admin_proto.Admin.GetProjectList:output_type -> admin_proto.GetProjectListResp
 	61,  // 214: admin_proto.Admin.GetProject:output_type -> admin_proto.GetProjectResp
@@ -7431,17 +7431,17 @@ var file_admin_proto_depIdxs = []int32{
 	45,  // 225: admin_proto.Admin.PutUser:output_type -> admin_proto.StatusResp
 	45,  // 226: admin_proto.Admin.DelUser:output_type -> admin_proto.StatusResp
 	83,  // 227: admin_proto.Admin.UserActivity:output_type -> admin_proto.UserActivityResp
-	78,  // 228: admin_proto.Admin.GetUsersPoolList:output_type -> admin_proto.GetUsersPoolListResp
-	63,  // 229: admin_proto.Admin.GetUsersPool:output_type -> admin_proto.GetUsersPoolResp
-	54,  // 230: admin_proto.Admin.AddUsersPool:output_type -> admin_proto.AddUsersPoolResp
-	45,  // 231: admin_proto.Admin.PutUsersPool:output_type -> admin_proto.StatusResp
-	45,  // 232: admin_proto.Admin.DelUsersPool:output_type -> admin_proto.StatusResp
+	78,  // 228: admin_proto.Admin.GetUserPoolList:output_type -> admin_proto.GetUserPoolListResp
+	63,  // 229: admin_proto.Admin.GetUserPool:output_type -> admin_proto.GetUserPoolResp
+	54,  // 230: admin_proto.Admin.AddUserPool:output_type -> admin_proto.AddUserPoolResp
+	45,  // 231: admin_proto.Admin.PutUserPool:output_type -> admin_proto.StatusResp
+	45,  // 232: admin_proto.Admin.DelUserPool:output_type -> admin_proto.StatusResp
 	19,  // 233: admin_proto.Admin.GetAdminerEnumList:output_type -> admin_proto.EnumListResp
 	19,  // 234: admin_proto.Admin.GetProjectEnumList:output_type -> admin_proto.EnumListResp
 	19,  // 235: admin_proto.Admin.GetActivityEnumList:output_type -> admin_proto.EnumListResp
 	19,  // 236: admin_proto.Admin.GetPrizeEnumList:output_type -> admin_proto.EnumListResp
 	19,  // 237: admin_proto.Admin.GetPrizeGradeEnumList:output_type -> admin_proto.EnumListResp
-	19,  // 238: admin_proto.Admin.GetLuckerEnumList:output_type -> admin_proto.EnumListResp
+	19,  // 238: admin_proto.Admin.GetLuckyEnumList:output_type -> admin_proto.EnumListResp
 	19,  // 239: admin_proto.Admin.GetUserEnumList:output_type -> admin_proto.EnumListResp
 	19,  // 240: admin_proto.Admin.ActivityPatternEnumList:output_type -> admin_proto.EnumListResp
 	23,  // 241: admin_proto.Admin.GetProjectTreeOptions:output_type -> admin_proto.ProjectTreeOptionsResp
@@ -7507,7 +7507,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Lucker); i {
+			switch v := v.(*Lucky); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7531,7 +7531,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PrizesPool); i {
+			switch v := v.(*PrizePool); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7579,7 +7579,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UsersPool); i {
+			switch v := v.(*UserPool); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7603,7 +7603,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LuckerDetail); i {
+			switch v := v.(*LuckyDetail); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8035,7 +8035,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddLuckerResp); i {
+			switch v := v.(*AddLuckyResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8071,7 +8071,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddPrizesPoolResp); i {
+			switch v := v.(*AddPrizePoolResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8107,7 +8107,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddUsersPoolResp); i {
+			switch v := v.(*AddUserPoolResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8143,7 +8143,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetLuckerResp); i {
+			switch v := v.(*GetLuckyResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8179,7 +8179,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPrizesPoolResp); i {
+			switch v := v.(*GetPrizePoolResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8215,7 +8215,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUsersPoolResp); i {
+			switch v := v.(*GetUserPoolResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8275,7 +8275,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[68].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetLuckerListResp); i {
+			switch v := v.(*GetLuckyListResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8287,7 +8287,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[69].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetLuckerDetailsResp); i {
+			switch v := v.(*GetLuckyDetailsResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8323,7 +8323,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[72].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetPrizesPoolListResp); i {
+			switch v := v.(*GetPrizePoolListResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8395,7 +8395,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetUsersPoolListResp); i {
+			switch v := v.(*GetUserPoolListResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8407,7 +8407,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SearchPrizesPoolReq); i {
+			switch v := v.(*SearchPrizePoolReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8419,7 +8419,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[80].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SearchPrizesPoolResp); i {
+			switch v := v.(*SearchPrizePoolResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8527,7 +8527,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[89].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LuckerDetailsReq); i {
+			switch v := v.(*LuckyDetailsReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8539,7 +8539,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[90].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LuckerPutByPrizeReq); i {
+			switch v := v.(*LuckyPutByPrizeReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8551,7 +8551,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[91].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LuckerPutReq); i {
+			switch v := v.(*LuckyPutReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8587,7 +8587,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[94].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UsersPoolListReq); i {
+			switch v := v.(*UserPoolListReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8635,7 +8635,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[98].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PrizesPoolListReq); i {
+			switch v := v.(*PrizePoolListReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -8659,7 +8659,7 @@ func file_admin_proto_init() {
 			}
 		}
 		file_admin_proto_msgTypes[100].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LuckerListReq); i {
+			switch v := v.(*LuckyListReq); i {
 			case 0:
 				return &v.state
 			case 1:

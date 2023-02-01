@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2023-01-14 16:10:15
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -40,7 +47,7 @@ func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutRe
 	}
 
 	//再从mysql中查找
-	exist, err = l.svcCtx.JwtBlacklistsModel.ExistByToken(l.ctx, in.JwtToken)
+	exist, err = l.svcCtx.JwtBlacklistModel.ExistByToken(l.ctx, in.JwtToken)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -12,22 +12,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DelPrizesPoolLogic struct {
+type DelPrizePoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewDelPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPrizesPoolLogic {
-	return &DelPrizesPoolLogic{
+func NewDelPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPrizePoolLogic {
+	return &DelPrizePoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *DelPrizesPoolLogic) DelPrizesPool(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
-	data, err := l.svcCtx.PrizesPoolModel.FindOne(l.ctx, in.Id)
+func (l *DelPrizePoolLogic) DelPrizePool(in *admin_pb.ItemReq) (*admin_pb.StatusResp, error) {
+	data, err := l.svcCtx.PrizePoolModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -36,7 +36,7 @@ func (l *DelPrizesPoolLogic) DelPrizesPool(in *admin_pb.ItemReq) (*admin_pb.Stat
 		return nil, errorx.ExtRpcErr(errors.New("prizesPool not found"))
 	}
 
-	err = l.svcCtx.PrizesPoolModel.DeleteSoft(l.ctx, data)
+	err = l.svcCtx.PrizePoolModel.DeleteSoft(l.ctx, data)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UsersPoolPutLogic struct {
+type UserPoolPutLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUsersPoolPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UsersPoolPutLogic {
-	return &UsersPoolPutLogic{
+func NewUserPoolPutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserPoolPutLogic {
+	return &UserPoolPutLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UsersPoolPutLogic) UsersPoolPut(req *types.UsersPoolPutReq) (any, error) {
-	_, err := l.svcCtx.AdminRpc.PutUsersPool(l.ctx, &admin_pb.UsersPool{
+func (l *UserPoolPutLogic) UserPoolPut(req *types.UserPoolPutReq) (any, error) {
+	_, err := l.svcCtx.AdminRpc.PutUserPool(l.ctx, &admin_pb.UserPool{
 		Id:         req.Id,
 		Uuid:       req.Uuid,
 		ActivityId: req.ActivityId,

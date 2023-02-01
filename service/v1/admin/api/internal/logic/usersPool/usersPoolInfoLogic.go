@@ -11,26 +11,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UsersPoolInfoLogic struct {
+type UserPoolInfoLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUsersPoolInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UsersPoolInfoLogic {
-	return &UsersPoolInfoLogic{
+func NewUserPoolInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserPoolInfoLogic {
+	return &UserPoolInfoLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UsersPoolInfoLogic) UsersPoolInfo(req *types.UsersPoolGetReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetUsersPool(l.ctx, &admin_pb.ItemReq{
+func (l *UserPoolInfoLogic) UserPoolInfo(req *types.UserPoolGetReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetUserPool(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(resp.UsersPool, err)
+	return respx.DefaultSingleResp(resp.UserPool, err)
 }

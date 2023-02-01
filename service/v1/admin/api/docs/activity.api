@@ -80,7 +80,7 @@ type ActivityDetailReq {
 
 type UserActivity {
 	Activity       Activity       `json:"activity"`    //活动信息
-  UsersPool      UsersPool       `json:"users_pool"`  //活动用户池信息
+  UserPool      UserPool       `json:"user_pool"`  //活动用户池信息
 }
 
 type UserActivitiesReq {

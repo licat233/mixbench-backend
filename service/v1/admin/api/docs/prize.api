@@ -40,7 +40,7 @@ type PrizeDelReq {
 //活动奖品信息
 type ActivityPrize {
 	Prize      Prize       `json:"prize"`        //奖品信息
-	PrizesPool PrizesPool  `json:"prizes_pool"`  //奖品池信息
+	PrizePool PrizePool  `json:"prize_pool"`  //奖品池信息
 	PrizeGrade PrizeGrade  `json:"prize_grade"`  //奖品池信息
 }
 

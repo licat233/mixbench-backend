@@ -25,13 +25,13 @@ type SingleData struct {
 
 // ListData 列表响应数据结构体
 type ListData struct {
-	Status    bool        `json:"success"`            //【响应状态】
-	Message   string      `json:"message,optional"`   //【给予的提示信息】
-	Data      interface{} `json:"data,optional"`      //【选填】响应的业务数据
-	Total     int64       `json:"total,optional"`     // 【选填】数据总个数
-	PageSize  int64       `json:"pageSize,optional"`  // 【选填】单页数量
-	Page      int64       `json:"current,optional"`   // 【选填】当前页码
-	TotalPage int64       `json:"totalPage,optional"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
+	Status    bool        `json:"success"`   //【响应状态】
+	Message   string      `json:"message"`   //【给予的提示信息】
+	Data      interface{} `json:"data"`      //【选填】响应的业务数据
+	Total     int64       `json:"total"`     // 【选填】数据总个数
+	PageSize  int64       `json:"pageSize"`  // 【选填】单页数量
+	Page      int64       `json:"current"`   // 【选填】当前页码
+	TotalPage int64       `json:"totalPage"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
 }
 
 func NewData(data any) *SingleData {

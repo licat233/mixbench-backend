@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2023-01-10 16:12:07
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -10,13 +17,13 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
-var CaptchaIpKeyPrefix = "cache:luckdraw:captcha:ip"
+var CaptchaIpKeyPrefix = "cache:captcha:ip"
 
 func formatCaptchaIpKey(ip string) string {
 	return fmt.Sprintf("%s:%v", CaptchaIpKeyPrefix, ip)
 }
 
-//RequestCountValid 请求限制，每个ip在10分钟内，最多只能访问1000次
+// RequestCountValid 请求限制，每个ip在10分钟内，最多只能访问1000次
 func RequestCountValid(ctx context.Context, redisClient *redis.Redis, r *http.Request) (bool, error) {
 	//每个ip在10分钟内，最多只能访问1000次
 	ip := utils.RemoteIp(r)

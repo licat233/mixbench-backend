@@ -13,25 +13,25 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PutUsersPoolLogic struct {
+type PutUserPoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewPutUsersPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutUsersPoolLogic {
-	return &PutUsersPoolLogic{
+func NewPutUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutUserPoolLogic {
+	return &PutUserPoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.StatusResp, error) {
+func (l *PutUserPoolLogic) PutUserPool(in *admin_pb.UserPool) (*admin_pb.StatusResp, error) {
 	//约定好的id=-1就表示是没有入库的usersPool
 	if in.Id == -1 {
 		//防止重复添加
-		_, err := l.svcCtx.UsersPoolModel.FindByUidAndAid(l.ctx, in.UserId, in.ActivityId)
+		_, err := l.svcCtx.UserPoolModel.FindByUidAndAid(l.ctx, in.UserId, in.ActivityId)
 		if err != nil && err != model.ErrNotFound {
 			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
@@ -39,7 +39,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 		//没有这样的用户池
 		if err == model.ErrNotFound {
 			//主动添加上去
-			if _, e := l.svcCtx.UsersPoolModel.Insert(l.ctx, &model.UsersPool{
+			if _, e := l.svcCtx.UserPoolModel.Insert(l.ctx, &model.UserPool{
 				Uuid:       uniqueid.NewUUID(),
 				ActivityId: in.ActivityId,
 				UserId:     in.UserId,
@@ -56,7 +56,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 		return nil, errorx.ExternalError(nil, errors.New("该可能已经已经产生变动，请刷新后重新修改！"))
 	}
 
-	data := &model.UsersPool{
+	data := &model.UserPool{
 		Id:         in.Id,
 		Uuid:       in.Uuid,
 		ActivityId: in.ActivityId,
@@ -65,7 +65,7 @@ func (l *PutUsersPoolLogic) PutUsersPool(in *admin_pb.UsersPool) (*admin_pb.Stat
 		Score:      in.Score,
 	}
 
-	if err := l.svcCtx.UsersPoolModel.Update(l.ctx, data); err != nil {
+	if err := l.svcCtx.UserPoolModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

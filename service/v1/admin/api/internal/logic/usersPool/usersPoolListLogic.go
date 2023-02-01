@@ -11,28 +11,28 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UsersPoolListLogic struct {
+type UserPoolListLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUsersPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UsersPoolListLogic {
-	return &UsersPoolListLogic{
+func NewUserPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserPoolListLogic {
+	return &UserPoolListLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UsersPoolListLogic) UsersPoolList(req *types.UsersPoolListReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetUsersPoolList(l.ctx, &admin_pb.UsersPoolListReq{
+func (l *UserPoolListLogic) UserPoolList(req *types.UserPoolListReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetUserPoolList(l.ctx, &admin_pb.UserPoolListReq{
 		ListReq: &admin_pb.ListReq{
 			PageSize: req.PageSize,
 			Page:     req.Page,
 			Keyword:  req.Keyword,
 		},
-		UsersPool: &admin_pb.UsersPool{
+		UserPool: &admin_pb.UserPool{
 			ActivityId: req.ActivityId,
 			UserId:     req.UserId,
 			Status:     req.Status,

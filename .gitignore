@@ -24,8 +24,8 @@ build/
 data/
 logs/
 ui/admin/node_modules
-ui/luckdraw/node_modules
-ui/luckdraw/*/node_modules
+ui/luckydraw/node_modules
+ui/luckydraw/*/node_modules
 
 # 取消忽略go文件
 !*.go
@@ -39,9 +39,9 @@ ui/luckdraw/*/node_modules
 
 captcha-rpc
 captcha-api
-luckdraw-rpc
-luckdraw-api
-luckdraw-mq
+luckydraw-rpc
+luckydraw-api
+luckydraw-mq
 admin-rpc
 admin-api
 

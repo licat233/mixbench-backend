@@ -1,0 +1,55 @@
+Name: luckydraw-mq
+Host: 0.0.0.0
+Port: ${LUCKDRAW_MQ_PORT}
+Mode: ${SERVICE_MODE}
+Debug: ${SERVICE_DEBUG}
+
+Log:
+  ServiceName: luckydraw-mq
+  Level: error
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_LUCKDRAW_MQ_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: luckydraw-mq
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Mysql:
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE}?${MYSQL_CONN_OPTIONS}
+
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+LuckdrawRpc:
+  Endpoints:
+    - 127.0.0.1:${LUCKDRAW_RPC_PORT}
+  NonBlock: true
+  # Etcd:
+  #   Hosts:
+  #     - 127.0.0.1:2379
+  #   Key: luckydraw.rpc
+
+#kafka配置
+GoodluckConf:
+    Name: GoodluckStatus
+    Brokers:
+      - kafka:9092
+    Group: luckydraw-group
+    Topic: goodluck-topic
+    Offset: first
+    Consumers: 1
+    Processors: 1

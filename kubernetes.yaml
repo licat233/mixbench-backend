@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mixbench-pod
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+
+      

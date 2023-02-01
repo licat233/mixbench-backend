@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type PrizesPool {
+type PrizePool {
 	Id         int64     `json:"id"`          // 表主键
 	Uuid       string    `json:"uuid"`        // 唯一识别码
 	ActivityId int64     `json:"activity_id"` // 活动id
@@ -16,11 +16,11 @@ type PrizesPool {
 	DeleteAt   int64     `json:"delete_at"`   // 删除时间
 }
 
-type PrizesPoolGetReq {
+type PrizePoolGetReq {
 	Id int64 `form:"id"`
 }
 
-type PrizesPoolAddReq {
+type PrizePoolAddReq {
 	ActivityId int64     `json:"activity_id"` // 活动id
 	PrizeId    int64     `json:"prize_id"`    // 奖品id
 	LuckValue  int64     `json:"luck_value"`  // 幸运值
@@ -30,7 +30,7 @@ type PrizesPoolAddReq {
 	Remainder  int64     `json:"remainder"`   // 奖品剩余数量
 }
 
-type PrizesPoolPutReq {
+type PrizePoolPutReq {
 	Id         int64     `json:"id"`          // 表主键
 	Uuid       string    `json:"uuid"`        // 唯一识别码
 	ActivityId int64     `json:"activity_id"` // 活动id
@@ -42,12 +42,12 @@ type PrizesPoolPutReq {
 	Remainder  int64     `json:"remainder"`      // 奖品剩余数量
 }
 
-type PrizesPoolDelReq {
+type PrizePoolDelReq {
 	Id int64 `json:"id"`
 }
 
 //通用页面数据请求
-type PrizesPoolListReq {
+type PrizePoolListReq {
 	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword  string `form:"keyword,optional"`                            //关键词，可选
@@ -74,24 +74,24 @@ type ResetLuckValueReq {
 )
 service admin-api {
 	@doc "获取奖品池列表"
-	@handler PrizesPoolList
-	get /list(PrizesPoolListReq) returns(BaseResp)
+	@handler PrizePoolList
+	get /list(PrizePoolListReq) returns(BaseResp)
 
 	@doc "获取奖品池信息"
-	@handler PrizesPoolInfo 
-	get /(PrizesPoolGetReq) returns(BaseResp)
+	@handler PrizePoolInfo 
+	get /(PrizePoolGetReq) returns(BaseResp)
 
     @doc "添加奖品池"
-	@handler PrizesPoolAdd 
-	post /(PrizesPoolAddReq) returns(BaseResp)
+	@handler PrizePoolAdd 
+	post /(PrizePoolAddReq) returns(BaseResp)
 
     @doc "编辑奖品池"
-	@handler PrizesPoolPut 
-	put /(PrizesPoolPutReq) returns(BaseResp)
+	@handler PrizePoolPut 
+	put /(PrizePoolPutReq) returns(BaseResp)
 
     @doc "删除奖品池"
-	@handler PrizesPoolDel 
-	delete /(PrizesPoolDelReq) returns(BaseResp)
+	@handler PrizePoolDel 
+	delete /(PrizePoolDelReq) returns(BaseResp)
 
 	@doc(
 		summary: 重置某活动的奖品池概率

@@ -101,42 +101,42 @@ func mdAdminerListToPbAdminerList(mdAdminerList []*model.Adminer) []*admin_pb.Ad
 	return pbAdminerList
 }
 
-func pbLuckerToMdLucker(pbLucker *admin_pb.Lucker) *model.Lucker {
-	if pbLucker == nil {
+func pbLuckyToMdLucky(pbLucky *admin_pb.Lucky) *model.Lucky {
+	if pbLucky == nil {
 		return nil
 	}
-	return &model.Lucker{
-		Id:           pbLucker.Id,
-		Uuid:         pbLucker.Uuid,
-		UserId:       pbLucker.UserId,
-		PrizesPoolId: pbLucker.PrizesPoolId,
-		Status:       pbLucker.Status,
-		LuckDate:     utils.Int64ToTime(pbLucker.LuckDate),
-		Ip:           pbLucker.Ip,
+	return &model.Lucky{
+		Id:          pbLucky.Id,
+		Uuid:        pbLucky.Uuid,
+		UserId:      pbLucky.UserId,
+		PrizePoolId: pbLucky.PrizePoolId,
+		Status:      pbLucky.Status,
+		LuckDate:    utils.Int64ToTime(pbLucky.LuckDate),
+		Ip:          pbLucky.Ip,
 	}
 }
 
-func mdLuckerToPbLucker(mdLucker *model.Lucker) *admin_pb.Lucker {
-	if mdLucker == nil {
+func mdLuckyToPbLucky(mdLucky *model.Lucky) *admin_pb.Lucky {
+	if mdLucky == nil {
 		return nil
 	}
-	return &admin_pb.Lucker{
-		Id:           mdLucker.Id,
-		Uuid:         mdLucker.Uuid,
-		UserId:       mdLucker.UserId,
-		PrizesPoolId: mdLucker.PrizesPoolId,
-		Status:       mdLucker.Status,
-		LuckDate:     mdLucker.LuckDate.Unix(),
-		Ip:           mdLucker.Ip,
+	return &admin_pb.Lucky{
+		Id:          mdLucky.Id,
+		Uuid:        mdLucky.Uuid,
+		UserId:      mdLucky.UserId,
+		PrizePoolId: mdLucky.PrizePoolId,
+		Status:      mdLucky.Status,
+		LuckDate:    mdLucky.LuckDate.Unix(),
+		Ip:          mdLucky.Ip,
 	}
 }
 
-func mdLuckerListToPbLuckerList(mdLuckerList []*model.Lucker) []*admin_pb.Lucker {
-	pbLuckerList := make([]*admin_pb.Lucker, 0, len(mdLuckerList))
-	for _, mdLucker := range mdLuckerList {
-		pbLuckerList = append(pbLuckerList, mdLuckerToPbLucker(mdLucker))
+func mdLuckyListToPbLuckyList(mdLuckyList []*model.Lucky) []*admin_pb.Lucky {
+	pbLuckyList := make([]*admin_pb.Lucky, 0, len(mdLuckyList))
+	for _, mdLucky := range mdLuckyList {
+		pbLuckyList = append(pbLuckyList, mdLuckyToPbLucky(mdLucky))
 	}
-	return pbLuckerList
+	return pbLuckyList
 }
 
 func pbPrizeToMdPrize(pbPrize *admin_pb.Prize) *model.Prize {
@@ -205,46 +205,46 @@ func mdPrizeGradeListToPbPrizeGradeList(mdPrizeGradeList []*model.PrizeGrade) []
 	return pbPrizeGradeList
 }
 
-func pbPrizesPoolToMdPrizesPool(pbPrizesPool *admin_pb.PrizesPool) *model.PrizesPool {
-	if pbPrizesPool == nil {
+func pbPrizePoolToMdPrizePool(pbPrizePool *admin_pb.PrizePool) *model.PrizePool {
+	if pbPrizePool == nil {
 		return nil
 	}
-	return &model.PrizesPool{
-		Id:         pbPrizesPool.Id,
-		Uuid:       pbPrizesPool.Uuid,
-		ActivityId: pbPrizesPool.ActivityId,
-		PrizeId:    pbPrizesPool.PrizeId,
-		GradeId:    pbPrizesPool.GradeId,
-		LuckValue:  pbPrizesPool.LuckValue,
-		Status:     pbPrizesPool.Status,
-		Total:      pbPrizesPool.Total,
-		Remainder:  pbPrizesPool.Remainder,
+	return &model.PrizePool{
+		Id:         pbPrizePool.Id,
+		Uuid:       pbPrizePool.Uuid,
+		ActivityId: pbPrizePool.ActivityId,
+		PrizeId:    pbPrizePool.PrizeId,
+		GradeId:    pbPrizePool.GradeId,
+		LuckValue:  pbPrizePool.LuckValue,
+		Status:     pbPrizePool.Status,
+		Total:      pbPrizePool.Total,
+		Remainder:  pbPrizePool.Remainder,
 	}
 }
 
-func mdPrizesPoolToPbPrizesPool(mdPrizesPool *model.PrizesPool) *admin_pb.PrizesPool {
-	if mdPrizesPool == nil {
+func mdPrizePoolToPbPrizePool(mdPrizePool *model.PrizePool) *admin_pb.PrizePool {
+	if mdPrizePool == nil {
 		return nil
 	}
-	return &admin_pb.PrizesPool{
-		Id:         mdPrizesPool.Id,
-		Uuid:       mdPrizesPool.Uuid,
-		ActivityId: mdPrizesPool.ActivityId,
-		PrizeId:    mdPrizesPool.PrizeId,
-		GradeId:    mdPrizesPool.GradeId,
-		LuckValue:  mdPrizesPool.LuckValue,
-		Status:     mdPrizesPool.Status,
-		Total:      mdPrizesPool.Total,
-		Remainder:  mdPrizesPool.Remainder,
+	return &admin_pb.PrizePool{
+		Id:         mdPrizePool.Id,
+		Uuid:       mdPrizePool.Uuid,
+		ActivityId: mdPrizePool.ActivityId,
+		PrizeId:    mdPrizePool.PrizeId,
+		GradeId:    mdPrizePool.GradeId,
+		LuckValue:  mdPrizePool.LuckValue,
+		Status:     mdPrizePool.Status,
+		Total:      mdPrizePool.Total,
+		Remainder:  mdPrizePool.Remainder,
 	}
 }
 
-func mdPrizesPoolListToPbPrizesPoolList(mdPrizesPoolList []*model.PrizesPool) []*admin_pb.PrizesPool {
-	pbPrizesPoolList := make([]*admin_pb.PrizesPool, 0, len(mdPrizesPoolList))
-	for _, mdPrizesPool := range mdPrizesPoolList {
-		pbPrizesPoolList = append(pbPrizesPoolList, mdPrizesPoolToPbPrizesPool(mdPrizesPool))
+func mdPrizePoolListToPbPrizePoolList(mdPrizePoolList []*model.PrizePool) []*admin_pb.PrizePool {
+	pbPrizePoolList := make([]*admin_pb.PrizePool, 0, len(mdPrizePoolList))
+	for _, mdPrizePool := range mdPrizePoolList {
+		pbPrizePoolList = append(pbPrizePoolList, mdPrizePoolToPbPrizePool(mdPrizePool))
 	}
-	return pbPrizesPoolList
+	return pbPrizePoolList
 }
 
 func pbProjectToMdProject(pbProject *admin_pb.Project) *model.Project {
@@ -321,40 +321,40 @@ func mdUserListToPbUserList(mdUserList []*model.User) []*admin_pb.User {
 	return pbUserList
 }
 
-func pbUsersPoolToMdUsersPool(pbUsersPool *admin_pb.UsersPool) *model.UsersPool {
-	if pbUsersPool == nil {
+func pbUserPoolToMdUserPool(pbUserPool *admin_pb.UserPool) *model.UserPool {
+	if pbUserPool == nil {
 		return nil
 	}
-	return &model.UsersPool{
-		Id:         pbUsersPool.Id,
-		Uuid:       pbUsersPool.Uuid,
-		ActivityId: pbUsersPool.ActivityId,
-		UserId:     pbUsersPool.UserId,
-		Status:     pbUsersPool.Status,
-		Score:      pbUsersPool.Score,
+	return &model.UserPool{
+		Id:         pbUserPool.Id,
+		Uuid:       pbUserPool.Uuid,
+		ActivityId: pbUserPool.ActivityId,
+		UserId:     pbUserPool.UserId,
+		Status:     pbUserPool.Status,
+		Score:      pbUserPool.Score,
 	}
 }
 
-func mdUsersPoolToPbUsersPool(mdUsersPool *model.UsersPool) *admin_pb.UsersPool {
-	if mdUsersPool == nil {
+func mdUserPoolToPbUserPool(mdUserPool *model.UserPool) *admin_pb.UserPool {
+	if mdUserPool == nil {
 		return nil
 	}
-	return &admin_pb.UsersPool{
-		Id:         mdUsersPool.Id,
-		Uuid:       mdUsersPool.Uuid,
-		ActivityId: mdUsersPool.ActivityId,
-		UserId:     mdUsersPool.UserId,
-		Status:     mdUsersPool.Status,
-		Score:      mdUsersPool.Score,
+	return &admin_pb.UserPool{
+		Id:         mdUserPool.Id,
+		Uuid:       mdUserPool.Uuid,
+		ActivityId: mdUserPool.ActivityId,
+		UserId:     mdUserPool.UserId,
+		Status:     mdUserPool.Status,
+		Score:      mdUserPool.Score,
 	}
 }
 
-func mdUsersPoolListToPbUsersPoolList(mdUsersPoolList []*model.UsersPool) []*admin_pb.UsersPool {
-	pbUsersPoolList := make([]*admin_pb.UsersPool, 0, len(mdUsersPoolList))
-	for _, mdUsersPool := range mdUsersPoolList {
-		pbUsersPoolList = append(pbUsersPoolList, mdUsersPoolToPbUsersPool(mdUsersPool))
+func mdUserPoolListToPbUserPoolList(mdUserPoolList []*model.UserPool) []*admin_pb.UserPool {
+	pbUserPoolList := make([]*admin_pb.UserPool, 0, len(mdUserPoolList))
+	for _, mdUserPool := range mdUserPoolList {
+		pbUserPoolList = append(pbUserPoolList, mdUserPoolToPbUserPool(mdUserPool))
 	}
-	return pbUsersPoolList
+	return pbUserPoolList
 }
 
 func verifyAdminerStatus(adminer *model.Adminer) error {
@@ -364,13 +364,13 @@ func verifyAdminerStatus(adminer *model.Adminer) error {
 	return nil
 }
 
-func convertLuckerDetailsList(in []*model.LuckerDetailsInfo) []*admin_pb.LuckerDetail {
-	var res []*admin_pb.LuckerDetail
+func convertLuckyDetailsList(in []*model.LuckyDetailsInfo) []*admin_pb.LuckyDetail {
+	var res []*admin_pb.LuckyDetail
 	for _, item := range in {
-		res = append(res, &admin_pb.LuckerDetail{
-			Lucker:     mdLuckerToPbLucker(item.Lucker),
+		res = append(res, &admin_pb.LuckyDetail{
+			Lucky:      mdLuckyToPbLucky(item.Lucky),
 			User:       mdUserToPbUser(item.User),
-			PrizesPool: mdPrizesPoolToPbPrizesPool(item.PrizesPool),
+			PrizePool:  mdPrizePoolToPbPrizePool(item.PrizePool),
 			Activity:   mdActivityToPbActivity(item.Activity),
 			Prize:      mdPrizeToPbPrize(item.Prize),
 			PrizeGrade: mdPrizeGradeToPbPrizeGrade(item.PrizeGrade),

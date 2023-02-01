@@ -37,10 +37,10 @@ kafka-consumer-groups --bootstrap-server localhost:9092 --list
 kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
 
 #删除consumer-group
-kafka-consumer-groups --bootstrap-server localhost:9092 --delete --group luckdraw-group
+kafka-consumer-groups --bootstrap-server localhost:9092 --delete --group luckydraw-group
 
 #on docker
-kafka-consumer-groups.sh --group luckdraw-group --bootstrap-server localhost:9092
+kafka-consumer-groups.sh --group luckydraw-group --bootstrap-server localhost:9092
 
 # ------
 

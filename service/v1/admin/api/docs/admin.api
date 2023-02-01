@@ -1,23 +1,26 @@
 info(
 	title: "管理服务"
 	author: "licat"
-	email: "1697470538@qq.com"
+	email: "licat233@gmail.com"
 	version: "v1"
 )
 
 import "types.api"
 import "activity.api"
 import "adminer.api"
-import "lucker.api"
+import "lucky.api"
 import "prize.api"
 import "prize_grade.api"
-import "prizes_pool.api"
+import "prize_pool.api"
 import "project.api"
 import "rbac.api"
 import "user.api"
-import "users_pool.api"
+import "user_pool.api"
 import "account.api"
 import "upload.api"
+import "goods.api"
+import "goods_category.api"
+import "goods_tag.api"
 
 //管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)
 type loginReq {

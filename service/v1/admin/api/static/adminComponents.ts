@@ -212,7 +212,7 @@ export interface ActivityDetailReqParams {
 
 export interface UserActivity {
 	activity: Activity // 活动信息
-	users_pool: UsersPool // 活动用户池信息
+	user_pool: UserPool // 活动用户池信息
 }
 
 export interface UserActivitiesReq {
@@ -296,11 +296,11 @@ export interface AdminerListReqParams {
 	last_login: number // 最后一次登录时间
 }
 
-export interface Lucker {
+export interface Lucky {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	user_id: number // 中奖用户id
-	prizes_pool_id: number // 抽中的奖品池id
+	prize_pool_id: number // 抽中的奖品池id
 	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
 	ip: string // ip地址
@@ -310,21 +310,21 @@ export interface Lucker {
 	delete_at: number // 删除时间
 }
 
-export interface LuckerGetReq {
+export interface LuckyGetReq {
 }
-export interface LuckerGetReqParams {
+export interface LuckyGetReqParams {
 	id: number
 }
 
-export interface LuckerAddReq {
+export interface LuckyAddReq {
 	user_id: number // 中奖用户id
-	prizes_pool_id: number // 抽中的奖品池id
+	prize_pool_id: number // 抽中的奖品池id
 	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
 	ip?: string // IP地址
 }
 
-export interface LuckerPutByPrizeReq {
+export interface LuckyPutByPrizeReq {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	user_id: number // 中奖用户id
@@ -335,31 +335,31 @@ export interface LuckerPutByPrizeReq {
 	ip?: string // IP地址
 }
 
-export interface LuckerPutReq {
+export interface LuckyPutReq {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	user_id: number // 中奖用户id
-	prizes_pool_id: number // 抽中的奖品池id
+	prize_pool_id: number // 抽中的奖品池id
 	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
 	ip?: string // IP地址
 }
 
-export interface LuckerDelReq {
+export interface LuckyDelReq {
 	id: number
 }
 
-export interface LuckerDetails {
-	lucker: Lucker // 中奖信息
+export interface LuckyDetails {
+	lucky: Lucky // 中奖信息
 	user: User // 中奖用户信息
-	prizes_pool: PrizesPool // 奖品池信息，奖品池信息
+	prize_pool: PrizePool // 奖品池信息，奖品池信息
 	prize: Prize // 奖品信息，中奖产品
 	prize_grade: PrizeGrade // 奖品级别，中奖级别
 	activity: Activity // 活动信息，中奖活动，
 	project: Project // 项目信息，中奖项目，
 }
 
-export interface LuckerDetailsReq {
+export interface LuckyDetailsReq {
 	pageSize?: number // 页面大小
 	current?: number // 当前页码
 	keyword?: string // 关键词，可选
@@ -369,7 +369,7 @@ export interface LuckerDetailsReq {
 	project_id?: number // 项目id
 	activity_id?: number // 活动id
 	activity_name?: string // 活动id
-	prizes_pool_id?: number // 奖品池id
+	prize_pool_id?: number // 奖品池id
 	prize_id?: number // 奖品id
 	prize_name?: string // 奖品名
 	prize_grade_id?: number // 奖品等级id
@@ -378,15 +378,15 @@ export interface LuckerDetailsReq {
 	ip?: string // IP地址
 }
 
-export interface LuckerListReq {
+export interface LuckyListReq {
 }
-export interface LuckerListReqParams {
+export interface LuckyListReqParams {
 	pageSize: number // 页面大小
 	current: number // 当前页码
 	keyword: string // 关键词，可选
 	//字段搜索
 	user_id: number // 中奖用户id
-	prizes_pool_id: number // 抽中的奖品池id
+	prize_pool_id: number // 抽中的奖品池id
 	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
 	luck_date: number // 抽奖时间
 	ip: string // ip地址
@@ -433,7 +433,7 @@ export interface PrizeDelReq {
 
 export interface ActivityPrize {
 	prize: Prize // 奖品信息
-	prizes_pool: PrizesPool // 奖品池信息
+	prize_pool: PrizePool // 奖品池信息
 	prize_grade: PrizeGrade // 奖品池信息
 }
 
@@ -501,7 +501,7 @@ export interface PrizeGradeListReqParams {
 	is_win: number // 是否中奖
 }
 
-export interface PrizesPool {
+export interface PrizePool {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	activity_id: number // 活动id
@@ -517,13 +517,13 @@ export interface PrizesPool {
 	delete_at: number // 删除时间
 }
 
-export interface PrizesPoolGetReq {
+export interface PrizePoolGetReq {
 }
-export interface PrizesPoolGetReqParams {
+export interface PrizePoolGetReqParams {
 	id: number
 }
 
-export interface PrizesPoolAddReq {
+export interface PrizePoolAddReq {
 	activity_id: number // 活动id
 	prize_id: number // 奖品id
 	luck_value: number // 幸运值
@@ -533,7 +533,7 @@ export interface PrizesPoolAddReq {
 	remainder: number // 奖品剩余数量
 }
 
-export interface PrizesPoolPutReq {
+export interface PrizePoolPutReq {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	activity_id: number // 活动id
@@ -545,13 +545,13 @@ export interface PrizesPoolPutReq {
 	remainder: number // 奖品剩余数量
 }
 
-export interface PrizesPoolDelReq {
+export interface PrizePoolDelReq {
 	id: number
 }
 
-export interface PrizesPoolListReq {
+export interface PrizePoolListReq {
 }
-export interface PrizesPoolListReqParams {
+export interface PrizePoolListReqParams {
 	pageSize: number // 页面大小
 	current: number // 当前页码
 	keyword: string // 关键词，可选
@@ -724,7 +724,7 @@ export interface UserDetails {
 	user_details: Array<UserDetail>
 }
 
-export interface UsersPool {
+export interface UserPool {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	activity_id: number // 活动id
@@ -737,20 +737,20 @@ export interface UsersPool {
 	delete_at: number // 删除时间
 }
 
-export interface UsersPoolGetReq {
+export interface UserPoolGetReq {
 }
-export interface UsersPoolGetReqParams {
+export interface UserPoolGetReqParams {
 	id: number
 }
 
-export interface UsersPoolAddReq {
+export interface UserPoolAddReq {
 	activity_id: number // 活动id
 	user_id: number // 奖品id
 	status: number // 状态:0未授权，1正常，2已冻结
 	score: number // 用户在当前活动的积分
 }
 
-export interface UsersPoolPutReq {
+export interface UserPoolPutReq {
 	id: number // 表主键
 	uuid: string // 唯一识别码
 	activity_id: number // 活动id
@@ -759,13 +759,13 @@ export interface UsersPoolPutReq {
 	score: number // 用户在当前活动的积分
 }
 
-export interface UsersPoolDelReq {
+export interface UserPoolDelReq {
 	id: number
 }
 
-export interface UsersPoolListReq {
+export interface UserPoolListReq {
 }
-export interface UsersPoolListReqParams {
+export interface UserPoolListReqParams {
 	pageSize: number // 页面大小
 	current: number // 当前页码
 	keyword: string // 关键词，可选
@@ -793,5 +793,215 @@ export interface PutPasswordReq {
 	//附加的验证码
 	captcha_id: string // 验证码ID
 	solution: string // 验证码答案
+}
+
+export interface Goods {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	category_id: number // 分类id
+	goods_sn: string // 商品的唯一货号
+	name: string // 商品名
+	keywords: string // 关键词
+	goods_desc: string // 商品描述
+	goods_thumb: string // 商品缩略图，用于在列表或搜索结果中预览显示
+	goods_banner_imgs: string // 商品轮播图地址
+	goods_tip: string // 商品提示
+	goods_price: number // 商品价格
+	goods_score: number // 商品积分
+	remain_count: number // 剩余数量
+	month_sell_count: number // 月销量
+	total_sell_count: number // 总销量
+	comment_count: number // 累计评论数
+	is_real: number // 真实商品？
+	is_on_sale: number // 正在打折？
+	is_alone_sale: number // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	is_best: number // 最精品？
+	is_new: number // 最新的？
+	is_hot: number // 热门的？
+	seller_note: string // 卖方发票抬头
+	shop_name: string // 店铺名称
+	tag: string // 标签
+	status: number // 状态:0下架，1上架，2预售
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
+export interface GoodsGetReq {
+}
+export interface GoodsGetReqParams {
+	id: number
+}
+
+export interface GoodsAddReq {
+	category_id: number // 分类id
+	goods_sn: string // 商品的唯一货号
+	name: string // 商品名
+	keywords: string // 关键词
+	goods_desc: string // 商品描述
+	goods_thumb: string // 商品缩略图，用于在列表或搜索结果中预览显示
+	goods_banner_imgs: string // 商品轮播图地址
+	goods_tip: string // 商品提示
+	goods_price: number // 商品价格
+	goods_score: number // 商品积分
+	remain_count: number // 剩余数量
+	month_sell_count: number // 月销量
+	total_sell_count: number // 总销量
+	comment_count: number // 累计评论数
+	is_real: number // 真实商品？
+	is_on_sale: number // 正在打折？
+	is_alone_sale: number // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	is_best: number // 最精品？
+	is_new: number // 最新的？
+	is_hot: number // 热门的？
+	seller_note: string // 卖方发票抬头
+	shop_name: string // 店铺名称
+	tag: string // 标签
+	status: number // 状态:0下架，1上架，2预售
+}
+
+export interface GoodsPutReq {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	category_id: number // 分类id
+	goods_sn: string // 商品的唯一货号
+	name: string // 商品名
+	keywords: string // 关键词
+	goods_desc: string // 商品描述
+	goods_thumb: string // 商品缩略图，用于在列表或搜索结果中预览显示
+	goods_banner_imgs: string // 商品轮播图地址
+	goods_tip: string // 商品提示
+	goods_price: number // 商品价格
+	goods_score: number // 商品积分
+	remain_count: number // 剩余数量
+	month_sell_count: number // 月销量
+	total_sell_count: number // 总销量
+	comment_count: number // 累计评论数
+	is_real: number // 真实商品？
+	is_on_sale: number // 正在打折？
+	is_alone_sale: number // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	is_best: number // 最精品？
+	is_new: number // 最新的？
+	is_hot: number // 热门的？
+	seller_note: string // 卖方发票抬头
+	shop_name: string // 店铺名称
+	tag: string // 标签
+	status: number // 状态:0下架，1上架，2预售
+}
+
+export interface GoodsDelReq {
+	id: number
+}
+
+export interface GoodsListReq {
+}
+export interface GoodsListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
+	keyword: string // 关键词，可选
+	//字段搜索
+	name: string // 商品名称
+	status: number // 状态:0下架，1上架，2预售
+	is_real: number // 真实商品？
+	is_on_sale: number // 正在打折？
+	is_alone_sale: number // 是否能单独销售？如果不能单独销售，则只能作为某商品的配件或者赠品销售
+	is_best: number // 最精品？
+	is_new: number // 最新的？
+	is_hot: number // 热门的？
+	tag: string // 标签
+	keywords: string // 关键词
+	goods_price: number // 商品价格
+	remain_count: number // 剩余数量
+	month_sell_count: number // 月销量
+	total_sell_count: number // 总销量
+}
+
+export interface GoodsCategory {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 名称
+	status: number // 状态:0下架，1上架，2预售
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
+export interface GoodsCategoryGetReq {
+}
+export interface GoodsCategoryGetReqParams {
+	id: number // 表主键
+}
+
+export interface GoodsCategoryAddReq {
+	name: string // 名称
+	status: number // 状态:0下架，1上架，2预售
+}
+
+export interface GoodsCategoryPutReq {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 名称
+	status: number // 状态:0下架，1上架，2预售
+}
+
+export interface GoodsCategoryDelReq {
+	id: number
+}
+
+export interface GoodsCategoryListReq {
+}
+export interface GoodsCategoryListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
+	keyword: string // 关键词，可选
+	//字段搜索
+	name: string // 名称
+	status: number // 状态:0下架，1上架，2预售
+}
+
+export interface GoodsTag {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 名称
+	status: number // 状态:0不可用，1可用
+	create_at: number // 创建时间
+	update_at: number // 更新时间
+	is_deleted: number // 是否已被删除
+	delete_at: number // 删除时间
+}
+
+export interface GoodsTagGetReq {
+}
+export interface GoodsTagGetReqParams {
+	id: number // 表主键
+}
+
+export interface GoodsTagAddReq {
+	name: string // 名称
+	status: number // 状态:0不可用，1可用
+}
+
+export interface GoodsTagPutReq {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	name: string // 名称
+	status: number // 状态:0不可用，1可用
+}
+
+export interface GoodsTagDelReq {
+	id: number
+}
+
+export interface GoodsTagListReq {
+}
+export interface GoodsTagListReqParams {
+	pageSize: number // 页面大小
+	current: number // 当前页码
+	keyword: string // 关键词，可选
+	//字段搜索
+	name: string // 名称
+	status: number // 是否可用
 }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-service_list=("admin" "captcha" "luckdraw")
+service_list=("admin" "captcha" "luckydraw")
 
 micro_list=("rpc" "api" "mq")
 

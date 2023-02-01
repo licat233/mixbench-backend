@@ -1,4 +1,11 @@
 #!/bin/bash
+###
+ # @Author: licat
+ # @Date: 2022-11-17 14:48:40
+ # @LastEditors: licat
+ # @LastEditTime: 2023-01-11 15:06:22
+ # @Description: licat233@gmail.com
+### 
 set -m
 
 #判断brew是否存在

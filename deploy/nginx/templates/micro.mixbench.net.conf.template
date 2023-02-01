@@ -62,7 +62,7 @@ server {
         proxy_pass http://app:${CAPTCHA_API_PORT};
     }
 
-    location ~ /v1/api/luckdraw(/)?.*(\.jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)?$ {
+    location ~ /v1/api/luckydraw(/)?.*(\.jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)?$ {
         proxy_pass http://app:${LUCKDRAW_API_PORT};
     }
 

@@ -11,26 +11,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PrizesPoolInfoLogic struct {
+type PrizePoolInfoLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewPrizesPoolInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PrizesPoolInfoLogic {
-	return &PrizesPoolInfoLogic{
+func NewPrizePoolInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PrizePoolInfoLogic {
+	return &PrizePoolInfoLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *PrizesPoolInfoLogic) PrizesPoolInfo(req *types.PrizesPoolGetReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetPrizesPool(l.ctx, &admin_pb.ItemReq{
+func (l *PrizePoolInfoLogic) PrizePoolInfo(req *types.PrizePoolGetReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetPrizePool(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(resp.PrizesPool, err)
+	return respx.DefaultSingleResp(resp.PrizePool, err)
 }

@@ -1,6 +1,6 @@
 syntax = "v1"
 
-type UsersPool {
+type UserPool {
 	Id         int64     `json:"id"`          // 表主键
 	Uuid       string    `json:"uuid"`        // 唯一识别码
 	ActivityId int64     `json:"activity_id"` // 活动id
@@ -13,18 +13,18 @@ type UsersPool {
 	DeleteAt   int64     `json:"delete_at"`   // 删除时间
 }
 
-type UsersPoolGetReq {
+type UserPoolGetReq {
 	Id int64 `form:"id"`
 }
 
-type UsersPoolAddReq {
+type UserPoolAddReq {
 	ActivityId int64     `json:"activity_id"` // 活动id
 	UserId     int64     `json:"user_id"`     // 奖品id
 	Status     int64     `json:"status"`      // 状态:0未授权，1正常，2已冻结
 	Score      int64     `json:"score"`       // 用户在当前活动的积分
 }
 
-type UsersPoolPutReq {  
+type UserPoolPutReq {  
 	Id         int64     `json:"id"`          // 表主键
 	Uuid       string    `json:"uuid"`        // 唯一识别码
 	ActivityId int64     `json:"activity_id"` // 活动id
@@ -33,12 +33,12 @@ type UsersPoolPutReq {
 	Score      int64     `json:"score"`       // 用户在当前活动的积分
 }
 
-type UsersPoolDelReq {
+type UserPoolDelReq {
 	Id int64 `json:"id"`
 }
 
 //通用页面数据请求
-type UsersPoolListReq {
+type UserPoolListReq {
 	PageSize int64  `form:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
 	Page     int64  `form:"current,optional,default=1,range=[1:]"`       //当前页码
 	Keyword  string `form:"keyword,optional"`                            //关键词，可选
@@ -57,23 +57,23 @@ type UsersPoolListReq {
 )
 service admin-api {	
 	@doc "获取用户池列表"
-	@handler UsersPoolList
-	get /list(UsersPoolListReq) returns(BaseResp)
+	@handler UserPoolList
+	get /list(UserPoolListReq) returns(BaseResp)
 
 	@doc "获取用户池信息"
-	@handler UsersPoolInfo 
-	get /(UsersPoolGetReq) returns(BaseResp)
+	@handler UserPoolInfo 
+	get /(UserPoolGetReq) returns(BaseResp)
 
     @doc "添加用户池"
-	@handler UsersPoolAdd 
-	post /(UsersPoolAddReq) returns(BaseResp)
+	@handler UserPoolAdd 
+	post /(UserPoolAddReq) returns(BaseResp)
 
     @doc "编辑用户池"
-	@handler UsersPoolPut 
-	put /(UsersPoolPutReq) returns(BaseResp)
+	@handler UserPoolPut 
+	put /(UserPoolPutReq) returns(BaseResp)
 
     @doc "删除用户池"
-	@handler UsersPoolDel 
-	delete /(UsersPoolDelReq) returns(BaseResp)
+	@handler UserPoolDel 
+	delete /(UserPoolDelReq) returns(BaseResp)
 }
 

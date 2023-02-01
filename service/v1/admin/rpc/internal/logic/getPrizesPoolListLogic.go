@@ -10,30 +10,30 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetPrizesPoolListLogic struct {
+type GetPrizePoolListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetPrizesPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPrizesPoolListLogic {
-	return &GetPrizesPoolListLogic{
+func NewGetPrizePoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPrizePoolListLogic {
+	return &GetPrizePoolListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetPrizesPoolListLogic) GetPrizesPoolList(in *admin_pb.PrizesPoolListReq) (*admin_pb.GetPrizesPoolListResp, error) {
+func (l *GetPrizePoolListLogic) GetPrizePoolList(in *admin_pb.PrizePoolListReq) (*admin_pb.GetPrizePoolListResp, error) {
 	in.ListReq = newListReq(in.ListReq)
-	list, total, err := l.svcCtx.PrizesPoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbPrizesPoolToMdPrizesPool(in.PrizesPool))
+	list, total, err := l.svcCtx.PrizePoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbPrizePoolToMdPrizePool(in.PrizePool))
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	return &admin_pb.GetPrizesPoolListResp{
-		Data:  mdPrizesPoolListToPbPrizesPoolList(list),
+	return &admin_pb.GetPrizePoolListResp{
+		Data:  mdPrizePoolListToPbPrizePoolList(list),
 		Total: total,
 	}, nil
 }

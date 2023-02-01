@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type UsersPoolAddLogic struct {
+type UserPoolAddLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewUsersPoolAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UsersPoolAddLogic {
-	return &UsersPoolAddLogic{
+func NewUserPoolAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserPoolAddLogic {
+	return &UserPoolAddLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *UsersPoolAddLogic) UsersPoolAdd(req *types.UsersPoolAddReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.AddUsersPool(l.ctx, &admin_pb.UsersPool{
+func (l *UserPoolAddLogic) UserPoolAdd(req *types.UserPoolAddReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.AddUserPool(l.ctx, &admin_pb.UserPool{
 		ActivityId: req.ActivityId,
 		UserId:     req.UserId,
 		Status:     req.Status,
@@ -35,5 +35,5 @@ func (l *UsersPoolAddLogic) UsersPoolAdd(req *types.UsersPoolAddReq) (any, error
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(resp.UsersPool, err)
+	return respx.DefaultSingleResp(resp.UserPool, err)
 }

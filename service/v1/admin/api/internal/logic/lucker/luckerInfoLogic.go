@@ -1,4 +1,4 @@
-package lucker
+package lucky
 
 import (
 	"context"
@@ -11,26 +11,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type LuckerInfoLogic struct {
+type LuckyInfoLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewLuckerInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckerInfoLogic {
-	return &LuckerInfoLogic{
+func NewLuckyInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckyInfoLogic {
+	return &LuckyInfoLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *LuckerInfoLogic) LuckerInfo(req *types.LuckerGetReq) (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetLucker(l.ctx, &admin_pb.ItemReq{
+func (l *LuckyInfoLogic) LuckyInfo(req *types.LuckyGetReq) (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetLucky(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(resp.Lucker, err)
+	return respx.DefaultSingleResp(resp.Lucky, err)
 }

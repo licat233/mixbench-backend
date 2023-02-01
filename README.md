@@ -34,9 +34,9 @@
 | 核心业务 | admin-rpc     | 7012     | -        | 管理员RPC服务                                    |
 | 核心业务 | captcha-api   | 7021     | -        | 验证码API服务                                    |
 | 核心业务 | captcha-rpc   | 7022     | -        | 验证码RPC服务                                    |
-| 核心业务 | luckdraw-api  | 7031     | -        | 抽奖API服务                                      |
-| 核心业务 | luckdraw-rpc  | 7032     | -        | 抽奖RPC服务                                      |
-| 核心业务 | luckdraw-mq   | 7033     | -        | 抽奖mq服务(kafka或asynq)                         |
+| 核心业务 | luckydraw-api  | 7031     | -        | 抽奖API服务                                      |
+| 核心业务 | luckydraw-rpc  | 7032     | -        | 抽奖RPC服务                                      |
+| 核心业务 | luckydraw-mq   | 7033     | -        | 抽奖mq服务(kafka或asynq)                         |
 
 > #### 外部访问所有的服务均通过nginx反向代理: SEVER_NAME.mixbench.net
 > #### 所有数据存储在datacenter数据卷容器中

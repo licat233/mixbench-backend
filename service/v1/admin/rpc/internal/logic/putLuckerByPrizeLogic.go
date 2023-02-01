@@ -15,29 +15,29 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PutLuckerByPrizeLogic struct {
+type PutLuckyByPrizeLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewPutLuckerByPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuckerByPrizeLogic {
-	return &PutLuckerByPrizeLogic{
+func NewPutLuckyByPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutLuckyByPrizeLogic {
+	return &PutLuckyByPrizeLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *PutLuckerByPrizeLogic) PutLuckerByPrize(in *admin_pb.LuckerPutByPrizeReq) (*admin_pb.StatusResp, error) {
+func (l *PutLuckyByPrizeLogic) PutLuckyByPrize(in *admin_pb.LuckyPutByPrizeReq) (*admin_pb.StatusResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 	if in.Ip != "" && !govalidator.IsIP(in.Ip) {
 		return nil, errorx.ExtRpcErr(errors.New("ip field invalid"))
 	}
-	//先查询出prizes_pool_id
-	pplist, err := l.svcCtx.PrizesPoolModel.FindsByActivityAndPrize(l.ctx, in.ActivityId, in.PrizeId)
+	//先查询出prize_pool_id
+	pplist, err := l.svcCtx.PrizePoolModel.FindsByActivityAndPrize(l.ctx, in.ActivityId, in.PrizeId)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -52,17 +52,17 @@ func (l *PutLuckerByPrizeLogic) PutLuckerByPrize(in *admin_pb.LuckerPutByPrizeRe
 	}
 
 	lukeDate := utils.TimestampHandle(in.LuckDate)
-	data := &model.Lucker{
-		Id:           in.Id,
-		Uuid:         in.Uuid,
-		UserId:       in.UserId,
-		PrizesPoolId: pplist[0].Id,
-		Status:       in.Status,
-		LuckDate:     utils.Int64ToTime(lukeDate),
-		Ip:           in.Ip,
+	data := &model.Lucky{
+		Id:          in.Id,
+		Uuid:        in.Uuid,
+		UserId:      in.UserId,
+		PrizePoolId: pplist[0].Id,
+		Status:      in.Status,
+		LuckDate:    utils.Int64ToTime(lukeDate),
+		Ip:          in.Ip,
 	}
 
-	if err := l.svcCtx.LuckerModel.Update(l.ctx, data); err != nil {
+	if err := l.svcCtx.LuckyModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}

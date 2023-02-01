@@ -7,7 +7,10 @@ import (
 	account "mixbench/service/v1/admin/api/internal/handler/account"
 	activity "mixbench/service/v1/admin/api/internal/handler/activity"
 	adminer "mixbench/service/v1/admin/api/internal/handler/adminer"
-	lucker "mixbench/service/v1/admin/api/internal/handler/lucker"
+	goods "mixbench/service/v1/admin/api/internal/handler/goods"
+	goodsCategory "mixbench/service/v1/admin/api/internal/handler/goodsCategory"
+	goodsTag "mixbench/service/v1/admin/api/internal/handler/goodsTag"
+	lucky "mixbench/service/v1/admin/api/internal/handler/lucky"
 	prize "mixbench/service/v1/admin/api/internal/handler/prize"
 	prizeGrade "mixbench/service/v1/admin/api/internal/handler/prizeGrade"
 	prizesPool "mixbench/service/v1/admin/api/internal/handler/prizesPool"
@@ -190,47 +193,47 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: lucker.LuckerListHandler(serverCtx),
+					Handler: lucky.LuckyListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/details",
-					Handler: lucker.LuckerDetailsHandler(serverCtx),
+					Handler: lucky.LuckyDetailsHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: lucker.LuckerInfoHandler(serverCtx),
+					Handler: lucky.LuckyInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: lucker.LuckerAddHandler(serverCtx),
+					Handler: lucky.LuckyAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: lucker.LuckerPutHandler(serverCtx),
+					Handler: lucky.LuckyPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/putByPrize",
-					Handler: lucker.PutByPrizeHandler(serverCtx),
+					Handler: lucky.PutByPrizeHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: lucker.LuckerDelHandler(serverCtx),
+					Handler: lucky.LuckyDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/enumList",
-					Handler: lucker.LuckerEnumListHandler(serverCtx),
+					Handler: lucky.LuckyEnumListHandler(serverCtx),
 				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/lucker"),
+		rest.WithPrefix("/v1/api/admin/lucky"),
 	)
 
 	server.AddRoutes(
@@ -325,27 +328,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: prizesPool.PrizesPoolListHandler(serverCtx),
+					Handler: prizesPool.PrizePoolListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: prizesPool.PrizesPoolInfoHandler(serverCtx),
+					Handler: prizesPool.PrizePoolInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: prizesPool.PrizesPoolAddHandler(serverCtx),
+					Handler: prizesPool.PrizePoolAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: prizesPool.PrizesPoolPutHandler(serverCtx),
+					Handler: prizesPool.PrizePoolPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: prizesPool.PrizesPoolDelHandler(serverCtx),
+					Handler: prizesPool.PrizePoolDelHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
@@ -545,27 +548,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: usersPool.UsersPoolListHandler(serverCtx),
+					Handler: usersPool.UserPoolListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: usersPool.UsersPoolInfoHandler(serverCtx),
+					Handler: usersPool.UserPoolInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
-					Handler: usersPool.UsersPoolAddHandler(serverCtx),
+					Handler: usersPool.UserPoolAddHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: usersPool.UsersPoolPutHandler(serverCtx),
+					Handler: usersPool.UserPoolPutHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: usersPool.UsersPoolDelHandler(serverCtx),
+					Handler: usersPool.UserPoolDelHandler(serverCtx),
 				},
 			}...,
 		),
@@ -626,5 +629,110 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/upload"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: goods.GoodsListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: goods.GoodsInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: goods.GoodsAddHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: goods.GoodsPutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: goods.GoodsDelHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/goods"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: goodsCategory.GoodsCategoryListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: goodsCategory.GoodsCategoryInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: goodsCategory.GoodsCategoryAddHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: goodsCategory.GoodsCategoryPutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: goodsCategory.GoodsCategoryDelHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/goodsCategory"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: goodsTag.GoodsTagListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: goodsTag.GoodsTagInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: goodsTag.GoodsTagAddHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: goodsTag.GoodsTagPutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: goodsTag.GoodsTagDelHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/goodsTag"),
 	)
 }

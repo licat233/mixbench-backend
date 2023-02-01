@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2023-01-14 16:10:20
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -38,14 +45,14 @@ func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, erro
 		return &admin_pb.LogoutResp{}, nil
 	}
 	//注销方案
-	data := &model.JwtBlacklists{
+	data := &model.JwtBlacklist{
 		Uuid:     adminer.Uuid,
 		Token:    in.JwtToken,
 		Platform: in.Platform,
 		Ip:       in.Ip,
 	}
 
-	_, err = l.svcCtx.JwtBlacklistsModel.Insert(l.ctx, data)
+	_, err = l.svcCtx.JwtBlacklistModel.Insert(l.ctx, data)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

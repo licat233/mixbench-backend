@@ -1,4 +1,4 @@
-package lucker
+package lucky
 
 import (
 	"context"
@@ -27,11 +27,11 @@ func NewPutByPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutByP
 	}
 }
 
-func (l *PutByPrizeLogic) PutByPrize(req *types.LuckerPutByPrizeReq) (any, error) {
+func (l *PutByPrizeLogic) PutByPrize(req *types.LuckyPutByPrizeReq) (any, error) {
 	if req.Ip != "" && !govalidator.IsIP(req.Ip) {
 		return nil, errorx.ErrInvalidParam
 	}
-	_, err := l.svcCtx.AdminRpc.PutLuckerByPrize(l.ctx, &admin_pb.LuckerPutByPrizeReq{
+	_, err := l.svcCtx.AdminRpc.PutLuckyByPrize(l.ctx, &admin_pb.LuckyPutByPrizeReq{
 		Id:         req.Id,
 		Uuid:       req.Uuid,
 		UserId:     req.Id,

@@ -9,16 +9,16 @@ import (
 	"mixbench/service/v1/admin/api/internal/types"
 )
 
-func PrizesPoolDelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func PrizePoolDelHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.PrizesPoolDelReq
+		var req types.PrizePoolDelReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := prizesPool.NewPrizesPoolDelLogic(r.Context(), svcCtx)
-		resp, err := l.PrizesPoolDel(&req)
+		l := prizesPool.NewPrizePoolDelLogic(r.Context(), svcCtx)
+		resp, err := l.PrizePoolDel(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

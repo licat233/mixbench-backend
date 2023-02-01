@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2023-01-14 16:08:22
+ * @Description: licat233@gmail.com
+ */
 package svc
 
 import (
@@ -18,15 +25,15 @@ type ServiceContext struct {
 	PrizeModel    model.PrizeModel
 	UserModel     model.UserModel
 
-	LuckerModel     model.LuckerModel
-	PrizesPoolModel model.PrizesPoolModel
-	UsersPoolModel  model.UsersPoolModel
+	LuckyModel      model.LuckyModel
+	PrizePoolModel  model.PrizePoolModel
+	UserPoolModel   model.UserPoolModel
 	PrizeGradeModel model.PrizeGradeModel
 
 	CommonModel *model.CommonModel
 
-	AdminerModel       model.AdminerModel
-	JwtBlacklistsModel model.JwtBlacklistsModel
+	AdminerModel      model.AdminerModel
+	JwtBlacklistModel model.JwtBlacklistModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -37,25 +44,25 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			r.Pass = c.Redis.Pass
 			r.Type = c.Redis.Type
 		}),
-		ProjectModel:       model.NewProjectModel(sqlConn, c.CacheRedis),
-		ActivityModel:      model.NewActivityModel(sqlConn, c.CacheRedis),
-		PrizeModel:         model.NewPrizeModel(sqlConn, c.CacheRedis),
-		UserModel:          model.NewUserModel(sqlConn, c.CacheRedis),
-		LuckerModel:        model.NewLuckerModel(sqlConn, c.CacheRedis),
-		PrizesPoolModel:    model.NewPrizesPoolModel(sqlConn, c.CacheRedis),
-		UsersPoolModel:     model.NewUsersPoolModel(sqlConn, c.CacheRedis),
-		PrizeGradeModel:    model.NewPrizeGradeModel(sqlConn, c.CacheRedis),
-		AdminerModel:       model.NewAdminerModel(sqlConn, c.CacheRedis),
-		JwtBlacklistsModel: model.NewJwtBlacklistsModel(sqlConn, c.CacheRedis),
+		ProjectModel:      model.NewProjectModel(sqlConn, c.CacheRedis),
+		ActivityModel:     model.NewActivityModel(sqlConn, c.CacheRedis),
+		PrizeModel:        model.NewPrizeModel(sqlConn, c.CacheRedis),
+		UserModel:         model.NewUserModel(sqlConn, c.CacheRedis),
+		LuckyModel:        model.NewLuckyModel(sqlConn, c.CacheRedis),
+		PrizePoolModel:    model.NewPrizePoolModel(sqlConn, c.CacheRedis),
+		UserPoolModel:     model.NewUserPoolModel(sqlConn, c.CacheRedis),
+		PrizeGradeModel:   model.NewPrizeGradeModel(sqlConn, c.CacheRedis),
+		AdminerModel:      model.NewAdminerModel(sqlConn, c.CacheRedis),
+		JwtBlacklistModel: model.NewJwtBlacklistModel(sqlConn, c.CacheRedis),
 	}
 	svc.CommonModel = &model.CommonModel{
 		ProjectModel:    svc.ProjectModel,
 		ActivityModel:   svc.ActivityModel,
 		PrizeModel:      svc.PrizeModel,
 		UserModel:       svc.UserModel,
-		LuckerModel:     svc.LuckerModel,
-		PrizesPoolModel: svc.PrizesPoolModel,
-		UsersPoolModel:  svc.UsersPoolModel,
+		LuckyModel:      svc.LuckyModel,
+		PrizePoolModel:  svc.PrizePoolModel,
+		UserPoolModel:   svc.UserPoolModel,
 		PrizeGradeModel: svc.PrizeGradeModel,
 	}
 	return svc

@@ -10,30 +10,30 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetUsersPoolListLogic struct {
+type GetUserPoolListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetUsersPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUsersPoolListLogic {
-	return &GetUsersPoolListLogic{
+func NewGetUserPoolListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserPoolListLogic {
+	return &GetUserPoolListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetUsersPoolListLogic) GetUsersPoolList(in *admin_pb.UsersPoolListReq) (*admin_pb.GetUsersPoolListResp, error) {
+func (l *GetUserPoolListLogic) GetUserPoolList(in *admin_pb.UserPoolListReq) (*admin_pb.GetUserPoolListResp, error) {
 	in.ListReq = newListReq(in.ListReq)
-	list, total, err := l.svcCtx.UsersPoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbUsersPoolToMdUsersPool(in.UsersPool))
+	list, total, err := l.svcCtx.UserPoolModel.FindList(l.ctx, in.ListReq.PageSize, in.ListReq.Page, pbUserPoolToMdUserPool(in.UserPool))
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	return &admin_pb.GetUsersPoolListResp{
-		Data:  mdUsersPoolListToPbUsersPoolList(list),
+	return &admin_pb.GetUserPoolListResp{
+		Data:  mdUserPoolListToPbUserPoolList(list),
 		Total: total,
 	}, nil
 }

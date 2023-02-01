@@ -22,21 +22,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddLuckerLogic struct {
+type AddLuckyLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewAddLuckerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddLuckerLogic {
-	return &AddLuckerLogic{
+func NewAddLuckyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddLuckyLogic {
+	return &AddLuckyLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp, error) {
+func (l *AddLuckyLogic) AddLucky(in *admin_pb.Lucky) (*admin_pb.AddLuckyResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
@@ -45,15 +45,15 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 	}
 
 	lukeDate := utils.TimestampHandle(in.LuckDate)
-	data := &model.Lucker{
-		Uuid:         uniqueid.NewUUID(),
-		UserId:       in.UserId,
-		PrizesPoolId: in.PrizesPoolId,
-		Status:       in.Status,
-		LuckDate:     utils.Int64ToTime(lukeDate),
-		Ip:           in.Ip,
+	data := &model.Lucky{
+		Uuid:        uniqueid.NewUUID(),
+		UserId:      in.UserId,
+		PrizePoolId: in.PrizePoolId,
+		Status:      in.Status,
+		LuckDate:    utils.Int64ToTime(lukeDate),
+		Ip:          in.Ip,
 	}
-	result, err := l.svcCtx.LuckerModel.Insert(l.ctx, data)
+	result, err := l.svcCtx.LuckyModel.Insert(l.ctx, data)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -64,7 +64,7 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	lucker, err := l.svcCtx.LuckerModel.FindOne(l.ctx, id)
+	lucky, err := l.svcCtx.LuckyModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -74,7 +74,7 @@ func (l *AddLuckerLogic) AddLucker(in *admin_pb.Lucker) (*admin_pb.AddLuckerResp
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	return &admin_pb.AddLuckerResp{
-		Lucker: mdLuckerToPbLucker(lucker),
+	return &admin_pb.AddLuckyResp{
+		Lucky: mdLuckyToPbLucky(lucky),
 	}, nil
 }

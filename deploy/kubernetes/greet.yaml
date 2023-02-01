@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment  # 表示我们要创建的资源是 Deployment 类型
+metadata:
+  name: mixbench  # 表示要创建的 deployment 的名字，这个名字需要是唯一的
+  namespace: default
+  labels:
+    app: mixbench
+spec:
+  replicas: 3  # 表示的是部署的 pod 副本数量
+  revisionHistoryLimit: 5
+  selector: # 表示的是 deployment 资源和 pod 资源关联的方式
+    matchLabels:
+      app: mixbench  # 表示 deployment 会管理 (selector) 所有 labels=mixbench 的 pod
+  template:  # template 的内容是用来定义 pod 资源，对应 Hellok8s Pod 资源的定义 hellok8s.yaml
+    metadata: # 不用在template 里面加上 metadata.name 是因为 deployment 会自动为我们创建 pod 的唯一name
+      labels:
+        app: mixbench  # 需要加上 metadata.labels 来和上面的 selector.matchLabels 对应起来，来表明 pod 是被 deployment 管理
+    spec:
+      containers:  # 表示要运行的容器的名称和镜像名称
+      - name: mixbench
+        image: greet:v1  
+        ports:
+        - containerPort: 8888
+        readinessProbe:
+          tcpSocket:
+            port: 8888
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8888
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1024Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mixbench-svc
+  namespace: default
+spec:
+  ports:
+  - nodePort: 32000
+    port: 8888
+    protocol: TCP
+    targetPort: 8888
+  type: NodePort
+  selector:
+    app: mixbench
+
+---
+
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mixbench-hpa-c
+  namespace: default
+  labels:
+    app: mixbench-hpa-c
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mixbench
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 80
+
+---
+
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mixbench-hpa-m
+  namespace: default
+  labels:
+    app: mixbench-hpa-m
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mixbench
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 80

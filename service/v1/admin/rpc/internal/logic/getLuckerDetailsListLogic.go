@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-01 14:00:57
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -13,32 +20,32 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetLuckerDetailsListLogic struct {
+type GetLuckyDetailsListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetLuckerDetailsListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuckerDetailsListLogic {
-	return &GetLuckerDetailsListLogic{
+func NewGetLuckyDetailsListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuckyDetailsListLogic {
+	return &GetLuckyDetailsListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.LuckerDetailsReq) (*admin_pb.GetLuckerDetailsResp, error) {
-	if in.Lucker != nil && in.Lucker.Ip != "" && !govalidator.IsIP(in.Lucker.Ip) {
-		return &admin_pb.GetLuckerDetailsResp{
-			Data:  []*admin_pb.LuckerDetail{},
+func (l *GetLuckyDetailsListLogic) GetLuckyDetailsList(in *admin_pb.LuckyDetailsReq) (*admin_pb.GetLuckyDetailsResp, error) {
+	if in.Lucky != nil && in.Lucky.Ip != "" && !govalidator.IsIP(in.Lucky.Ip) {
+		return &admin_pb.GetLuckyDetailsResp{
+			Data:  []*admin_pb.LuckyDetail{},
 			Total: 0,
 		}, nil
 	}
-	list, tatol, err := l.svcCtx.CommonModel.FindsLuckerDetails(l.ctx, &model.LuckerDetailsOptions{
+	list, tatol, err := l.svcCtx.CommonModel.FindsLuckyDetails(l.ctx, &model.LuckyDetailsOptions{
 		PageSize:     in.ListReq.PageSize,
 		Page:         in.ListReq.Page,
 		Keyword:      in.ListReq.Keyword,
-		Lucker:       &model.Lucker{UserId: in.Lucker.UserId, PrizesPoolId: in.Lucker.PrizesPoolId, Status: in.Lucker.Status, LuckDate: utils.Int64ToTime(in.Lucker.LuckDate), Ip: in.Lucker.Ip},
+		Lucky:        &model.Lucky{UserId: in.Lucky.UserId, PrizePoolId: in.Lucky.PrizePoolId, Status: in.Lucky.Status, LuckDate: utils.Int64ToTime(in.Lucky.LuckDate), Ip: in.Lucky.Ip},
 		UserName:     in.UserName,
 		PrizeName:    in.PrizeName,
 		ProjectId:    in.ProjectId,
@@ -52,8 +59,8 @@ func (l *GetLuckerDetailsListLogic) GetLuckerDetailsList(in *admin_pb.LuckerDeta
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	return &admin_pb.GetLuckerDetailsResp{
-		Data:  convertLuckerDetailsList(list),
+	return &admin_pb.GetLuckyDetailsResp{
+		Data:  convertLuckyDetailsList(list),
 		Total: tatol,
 	}, nil
 }

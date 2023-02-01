@@ -56,7 +56,7 @@ server {
     location /v1/api/captcha/ {
         proxy_pass http://mixbench:${CAPTCHA_API_PORT};
     }
-    location /v1/api/luckdraw/ {
+    location /v1/api/luckydraw/ {
         proxy_pass http://mixbench:${LUCKDRAW_API_PORT};
     }
 

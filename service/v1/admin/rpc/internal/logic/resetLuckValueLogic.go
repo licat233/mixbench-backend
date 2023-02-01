@@ -39,14 +39,14 @@ func (l *ResetLuckValueLogic) ResetLuckValue(in *admin_pb.ResetLuckValueReq) (*a
 	if activity.Uuid != in.ActivityUuid {
 		return nil, errorx.ExtRpcErr(errors.New("params invalid"))
 	}
-	prizesPools, err := l.svcCtx.PrizesPoolModel.FindsByActivityId(l.ctx, in.ActivityId)
+	prizesPools, err := l.svcCtx.PrizePoolModel.FindsByActivityId(l.ctx, in.ActivityId)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 	for _, prizesPool := range prizesPools {
 		prizesPool.LuckValue = 100
-		if err = l.svcCtx.PrizesPoolModel.Update(l.ctx, prizesPool); err != nil {
+		if err = l.svcCtx.PrizePoolModel.Update(l.ctx, prizesPool); err != nil {
 			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
 		}

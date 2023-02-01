@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetLuckerEnumListLogic struct {
+type GetLuckyEnumListLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetLuckerEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuckerEnumListLogic {
-	return &GetLuckerEnumListLogic{
+func NewGetLuckyEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLuckyEnumListLogic {
+	return &GetLuckyEnumListLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetLuckerEnumListLogic) GetLuckerEnumList(in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
-	list, _, err := l.svcCtx.LuckerModel.FindList(l.ctx, -1, -1, "", nil)
+func (l *GetLuckyEnumListLogic) GetLuckyEnumList(in *admin_pb.EnumListReq) (*admin_pb.EnumListResp, error) {
+	list, _, err := l.svcCtx.LuckyModel.FindList(l.ctx, -1, -1, "", nil)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

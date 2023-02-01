@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetUsersPoolLogic struct {
+type GetUserPoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewGetUsersPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUsersPoolLogic {
-	return &GetUsersPoolLogic{
+func NewGetUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserPoolLogic {
+	return &GetUserPoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *GetUsersPoolLogic) GetUsersPool(in *admin_pb.ItemReq) (*admin_pb.GetUsersPoolResp, error) {
-	res, err := l.svcCtx.UsersPoolModel.FindOne(l.ctx, in.Id)
+func (l *GetUserPoolLogic) GetUserPool(in *admin_pb.ItemReq) (*admin_pb.GetUserPoolResp, error) {
+	res, err := l.svcCtx.UserPoolModel.FindOne(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -34,7 +34,7 @@ func (l *GetUsersPoolLogic) GetUsersPool(in *admin_pb.ItemReq) (*admin_pb.GetUse
 	if err == model.ErrNotFound {
 		return nil, nil
 	}
-	return &admin_pb.GetUsersPoolResp{
-		UsersPool: mdUsersPoolToPbUsersPool(res),
+	return &admin_pb.GetUserPoolResp{
+		UserPool: mdUserPoolToPbUserPool(res),
 	}, nil
 }

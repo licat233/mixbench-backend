@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PrizesPoolDelLogic struct {
+type PrizePoolDelLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewPrizesPoolDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PrizesPoolDelLogic {
-	return &PrizesPoolDelLogic{
+func NewPrizePoolDelLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PrizePoolDelLogic {
+	return &PrizePoolDelLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *PrizesPoolDelLogic) PrizesPoolDel(req *types.PrizesPoolDelReq) (any, error) {
-	_, err := l.svcCtx.AdminRpc.DelPrizesPool(l.ctx, &admin_pb.ItemReq{
+func (l *PrizePoolDelLogic) PrizePoolDel(req *types.PrizePoolDelReq) (any, error) {
+	_, err := l.svcCtx.AdminRpc.DelPrizePool(l.ctx, &admin_pb.ItemReq{
 		Id: req.Id,
 	})
 	if err != nil {

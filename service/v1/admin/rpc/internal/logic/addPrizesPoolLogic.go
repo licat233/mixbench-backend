@@ -12,26 +12,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddPrizesPoolLogic struct {
+type AddPrizePoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewAddPrizesPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPrizesPoolLogic {
-	return &AddPrizesPoolLogic{
+func NewAddPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPrizePoolLogic {
+	return &AddPrizePoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.AddPrizesPoolResp, error) {
+func (l *AddPrizePoolLogic) AddPrizePool(in *admin_pb.PrizePool) (*admin_pb.AddPrizePoolResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
-	data := &model.PrizesPool{
+	data := &model.PrizePool{
 		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		PrizeId:    in.PrizeId,
@@ -41,7 +41,7 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 		Total:      in.Total,
 		Remainder:  in.Remainder,
 	}
-	result, err := l.svcCtx.PrizesPoolModel.Insert(l.ctx, data)
+	result, err := l.svcCtx.PrizePoolModel.Insert(l.ctx, data)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -52,7 +52,7 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	prizesPool, err := l.svcCtx.PrizesPoolModel.FindOne(l.ctx, id)
+	prizesPool, err := l.svcCtx.PrizePoolModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -62,7 +62,7 @@ func (l *AddPrizesPoolLogic) AddPrizesPool(in *admin_pb.PrizesPool) (*admin_pb.A
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	return &admin_pb.AddPrizesPoolResp{
-		PrizesPool: mdPrizesPoolToPbPrizesPool(prizesPool),
+	return &admin_pb.AddPrizePoolResp{
+		PrizePool: mdPrizePoolToPbPrizePool(prizesPool),
 	}, nil
 }

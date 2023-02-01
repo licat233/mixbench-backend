@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-12-03 16:21:57
+ * @LastEditors: licat
+ * @LastEditTime: 2023-01-11 14:47:27
+ * @Description: licat233@gmail.com
+ */
 package utils
 
 import (
@@ -72,4 +79,20 @@ func QueryAddress(ipAddress string) *AddressInfo {
 	info.Longitude = record.Location.Longitude
 
 	return info
+}
+
+func LocalIp() (string, error) {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return "", err
+	}
+	res := "0.0.0.0"
+	for _, value := range addrs {
+		if ipnet, ok := value.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				res = ipnet.IP.String()
+			}
+		}
+	}
+	return res, nil
 }

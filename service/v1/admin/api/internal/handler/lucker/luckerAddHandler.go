@@ -1,24 +1,25 @@
-package lucker
+package lucky
 
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
-	"mixbench/service/v1/admin/api/internal/logic/lucker"
+	"mixbench/service/v1/admin/api/internal/logic/lucky"
 	"mixbench/service/v1/admin/api/internal/svc"
 	"mixbench/service/v1/admin/api/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func LuckerAddHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func LuckyAddHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LuckerAddReq
+		var req types.LuckyAddReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := lucker.NewLuckerAddLogic(r.Context(), svcCtx)
-		resp, err := l.LuckerAdd(&req)
+		l := lucky.NewLuckyAddLogic(r.Context(), svcCtx)
+		resp, err := l.LuckyAdd(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

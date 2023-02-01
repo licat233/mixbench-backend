@@ -17,18 +17,18 @@ import (
 )
 
 type JwtMiddleware struct {
-	ctx                context.Context
-	Config             config.Config
-	AdminerModel       model.AdminerModel
-	JwtBlacklistsModel model.JwtBlacklistsModel
+	ctx               context.Context
+	Config            config.Config
+	AdminerModel      model.AdminerModel
+	jwtBlacklistModel model.JwtBlacklistModel
 }
 
-func NewJwtMiddleware(c config.Config, jwtModel model.JwtBlacklistsModel, adminerModel model.AdminerModel) *JwtMiddleware {
+func NewJwtMiddleware(c config.Config, jwtModel model.JwtBlacklistModel, adminerModel model.AdminerModel) *JwtMiddleware {
 	return &JwtMiddleware{
-		ctx:                context.Background(),
-		Config:             c,
-		AdminerModel:       adminerModel,
-		JwtBlacklistsModel: jwtModel,
+		ctx:               context.Background(),
+		Config:            c,
+		AdminerModel:      adminerModel,
+		jwtBlacklistModel: jwtModel,
 	}
 }
 
@@ -100,7 +100,7 @@ func (m *JwtMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		// 校验token是否已被加入黑名单
-		exist, err := m.JwtBlacklistsModel.ExistByToken(m.ctx, jwtToken)
+		exist, err := m.jwtBlacklistModel.ExistByToken(m.ctx, jwtToken)
 		if err != nil {
 			logx.WithContext(m.ctx).Error(err)
 			httpx.Error(w, errorx.InternalError(err))

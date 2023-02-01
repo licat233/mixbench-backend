@@ -1,4 +1,4 @@
-package lucker
+package lucky
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type LuckerEnumListLogic struct {
+type LuckyEnumListLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewLuckerEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckerEnumListLogic {
-	return &LuckerEnumListLogic{
+func NewLuckyEnumListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LuckyEnumListLogic {
+	return &LuckyEnumListLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *LuckerEnumListLogic) LuckerEnumList() (any, error) {
-	resp, err := l.svcCtx.AdminRpc.GetLuckerEnumList(l.ctx, &admin_pb.EnumListReq{})
+func (l *LuckyEnumListLogic) LuckyEnumList() (any, error) {
+	resp, err := l.svcCtx.AdminRpc.GetLuckyEnumList(l.ctx, &admin_pb.EnumListReq{})
 	if err != nil {
 		return nil, err
 	}

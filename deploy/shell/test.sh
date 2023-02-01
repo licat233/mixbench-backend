@@ -81,7 +81,7 @@ loading 80
 loading 100
 exit
 
-all_services=("captcha" "luckdraw" "admin")
+all_services=("captcha" "luckydraw" "admin")
 for name in ${all_services[@]}; do
     echo $name
 done

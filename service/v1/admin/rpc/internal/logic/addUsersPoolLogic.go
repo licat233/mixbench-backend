@@ -12,26 +12,26 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddUsersPoolLogic struct {
+type AddUserPoolLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewAddUsersPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUsersPoolLogic {
-	return &AddUsersPoolLogic{
+func NewAddUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserPoolLogic {
+	return &AddUserPoolLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *AddUsersPoolLogic) AddUsersPool(in *admin_pb.UsersPool) (*admin_pb.AddUsersPoolResp, error) {
+func (l *AddUserPoolLogic) AddUserPool(in *admin_pb.UserPool) (*admin_pb.AddUserPoolResp, error) {
 	if in == nil {
 		return nil, errorx.SecRpcErr(errorx.ErrEmptyParam)
 	}
 
-	data := &model.UsersPool{
+	data := &model.UserPool{
 		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		UserId:     in.UserId,
@@ -39,7 +39,7 @@ func (l *AddUsersPoolLogic) AddUsersPool(in *admin_pb.UsersPool) (*admin_pb.AddU
 		Score:      in.Score,
 	}
 
-	result, err := l.svcCtx.UsersPoolModel.Insert(l.ctx, data)
+	result, err := l.svcCtx.UserPoolModel.Insert(l.ctx, data)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -50,7 +50,7 @@ func (l *AddUsersPoolLogic) AddUsersPool(in *admin_pb.UsersPool) (*admin_pb.AddU
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	usersPool, err := l.svcCtx.UsersPoolModel.FindOne(l.ctx, id)
+	usersPool, err := l.svcCtx.UserPoolModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -60,7 +60,7 @@ func (l *AddUsersPoolLogic) AddUsersPool(in *admin_pb.UsersPool) (*admin_pb.AddU
 		return nil, errorx.IntRpcErr(err)
 	}
 
-	return &admin_pb.AddUsersPoolResp{
-		UsersPool: mdUsersPoolToPbUsersPool(usersPool),
+	return &admin_pb.AddUserPoolResp{
+		UserPool: mdUserPoolToPbUserPool(usersPool),
 	}, nil
 }
