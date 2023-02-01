@@ -863,6 +863,19 @@ message GetUserActivitiesResp {
   repeated UserActivity user_activities = 1;
 }
 
+// 重置某活动的运气值请求
+message ResetActivityLuckValueReq {
+  string activity_uuid = 1;
+  int64 activity_id = 2;
+}
+
+// 通过奖品更新中奖信息请求
+message PutLuckyByPrizeReq {
+  Lucky lucky = 1;
+  int64 prize_id = 2;
+  int64 activity_id = 3;
+}
+
 //------ custom message end ------
 
 // ------------------------------------ 
@@ -964,10 +977,14 @@ service luckydraw {
   // 获取每个项目及其包含的活动
   rpc GetProjectTreeOptions (NilReq) returns (TreeOptions);
 
+  //project
+
   // 获取项目详细
   rpc GetProjectDetail (GetProjectDetailReq) returns (GetProjectDetailResp);
   // 获取项目详细列表
   rpc GetProjectDetails (GetProjectDetailsReq) returns (GetProjectDetailsResp);
+
+  //activity
 
   // 获取活动详细
   rpc GetActivityDetail (GetActivityDetailReq) returns (GetActivityDetailResp);
@@ -978,11 +995,17 @@ service luckydraw {
   // 某用户可参与的活动列表
   rpc GetUserActivities (GetUserActivitiesReq) returns (GetUserActivitiesResp);
 
+  //prize
+
   // 获取某活动的奖品列表
   rpc GetActivityPrizes (GetActivityPrizesReq) returns (GetActivityPrizesResp);
 
+  //prize pool
+
   // 获取某活动的奖品池
   rpc GetActivityPrizePool (GetActivityPrizePoolReq) returns (GetActivityPrizePoolResp);
+  // 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+  rpc ResetActivityLuckValue (ResetActivityLuckValueReq) returns (StatusResp);
 
   // 获取用户详细
   rpc GetUserDetail (GetUserDetailReq) returns (GetUserDetailResp);
@@ -999,6 +1022,8 @@ service luckydraw {
   rpc GetUALuckyDetails (GetUALuckyDetailsReq) returns (GetUALuckyDetailsResp);
   // 查询某用户的中奖信息
   rpc GetUserLuckyDetail (GetUserLuckyDetailReq) returns (GetUserLuckyDetailResp);
+  // 通过奖品更新幸运单
+  rpc PutLuckyByPrize (PutLuckyByPrizeReq) returns (StatusResp);
 
   //------ custom service end ------
 }

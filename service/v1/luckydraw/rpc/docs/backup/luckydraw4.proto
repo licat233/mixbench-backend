@@ -118,7 +118,7 @@ message GetActivityByIdResp {
 }
 
 message GetActivityListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   Activity activity = 2; //Activity参数
 }
 
@@ -185,7 +185,7 @@ message GetLuckyByIdResp {
 }
 
 message GetLuckyListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   Lucky lucky = 2; //Lucky参数
 }
 
@@ -249,7 +249,7 @@ message GetPrizeByIdResp {
 }
 
 message GetPrizeListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   Prize prize = 2; //Prize参数
 }
 
@@ -305,7 +305,7 @@ message GetPrizeGradeByIdResp {
 }
 
 message GetPrizeGradeListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   PrizeGrade prize_grade = 2; //PrizeGrade参数
 }
 
@@ -378,7 +378,7 @@ message GetPrizePoolByIdResp {
 }
 
 message GetPrizePoolListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   PrizePool prize_pool = 2; //PrizePool参数
 }
 
@@ -436,7 +436,7 @@ message GetProjectByIdResp {
 }
 
 message GetProjectListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   Project project = 2; //Project参数
 }
 
@@ -509,7 +509,7 @@ message GetUserByIdResp {
 }
 
 message GetUserListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   User user = 2; //User参数
 }
 
@@ -573,7 +573,7 @@ message GetUserPoolByIdResp {
 }
 
 message GetUserPoolListReq {
-  ListReq list_req = 1; //列表参数
+  ListReq list_req = 1; //列表页码参数
   UserPool user_pool = 2; //UserPool参数
 }
 
@@ -734,6 +734,16 @@ message GetUserDetailsResp {
   int64 total = 2;
 }
 
+// 通过关键词查找用户请求【精确查找】
+message GetUserByKeywordReq {
+  string keyword = 1; //关键词
+}
+
+// 通过关键词查找用户响应【精确查找】
+message GetUserByKeywordResp {
+  User user = 1;
+}
+
 // 通过关键词查找用户请求【模糊查找】
 message GetUsersByKeywordReq {
   ListReq list_req = 1; //列表参数
@@ -745,15 +755,7 @@ message GetUsersByKeywordResp {
   int64 total = 2;
 }
 
-// 通过关键词查找用户请求【精确查找】
-message GetUserByKeywordReq {
-  string keyword = 1; //关键词
-}
 
-// 通过关键词查找用户响应【精确查找】
-message GetUserByKeywordResp {
-  User users = 1;
-}
 
 //请求项目详细
 message GetProjectDetailReq {
@@ -861,6 +863,12 @@ message GetUserActivitiesResp {
   repeated UserActivity user_activities = 1;
 }
 
+// 重置某活动的运气值请求
+message ResetActivityLuckValueReq {
+  string activity_uuid = 1;
+  int64 activity_id = 2;
+}
+
 //------ custom message end ------
 
 // ------------------------------------ 
@@ -962,10 +970,14 @@ service luckydraw {
   // 获取每个项目及其包含的活动
   rpc GetProjectTreeOptions (NilReq) returns (TreeOptions);
 
+  //project
+
   // 获取项目详细
   rpc GetProjectDetail (GetProjectDetailReq) returns (GetProjectDetailResp);
   // 获取项目详细列表
   rpc GetProjectDetails (GetProjectDetailsReq) returns (GetProjectDetailsResp);
+
+  //activity
 
   // 获取活动详细
   rpc GetActivityDetail (GetActivityDetailReq) returns (GetActivityDetailResp);
@@ -976,11 +988,17 @@ service luckydraw {
   // 某用户可参与的活动列表
   rpc GetUserActivities (GetUserActivitiesReq) returns (GetUserActivitiesResp);
 
+  //prize
+
   // 获取某活动的奖品列表
   rpc GetActivityPrizes (GetActivityPrizesReq) returns (GetActivityPrizesResp);
 
+  //prize pool
+
   // 获取某活动的奖品池
   rpc GetActivityPrizePool (GetActivityPrizePoolReq) returns (GetActivityPrizePoolResp);
+  // 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+  rpc ResetActivityLuckValue (ResetActivityLuckValueReq) returns (StatusResp);
 
   // 获取用户详细
   rpc GetUserDetail (GetUserDetailReq) returns (GetUserDetailResp);

@@ -98,6 +98,8 @@ type LuckydrawClient interface {
 	GetActivityPrizes(ctx context.Context, in *GetActivityPrizesReq, opts ...grpc.CallOption) (*GetActivityPrizesResp, error)
 	// 获取某活动的奖品池
 	GetActivityPrizePool(ctx context.Context, in *GetActivityPrizePoolReq, opts ...grpc.CallOption) (*GetActivityPrizePoolResp, error)
+	// 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+	ResetActivityLuckValue(ctx context.Context, in *ResetActivityLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 	// 获取用户详细
 	GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error)
 	// 获取用户详细列表
@@ -112,6 +114,8 @@ type LuckydrawClient interface {
 	GetUALuckyDetails(ctx context.Context, in *GetUALuckyDetailsReq, opts ...grpc.CallOption) (*GetUALuckyDetailsResp, error)
 	// 查询某用户的中奖信息
 	GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error)
+	// 通过奖品更新幸运单
+	PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
 }
 
 type luckydrawClient struct {
@@ -680,6 +684,15 @@ func (c *luckydrawClient) GetActivityPrizePool(ctx context.Context, in *GetActiv
 	return out, nil
 }
 
+func (c *luckydrawClient) ResetActivityLuckValue(ctx context.Context, in *ResetActivityLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/ResetActivityLuckValue", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *luckydrawClient) GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error) {
 	out := new(GetUserDetailResp)
 	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserDetail", in, out, opts...)
@@ -737,6 +750,15 @@ func (c *luckydrawClient) GetUALuckyDetails(ctx context.Context, in *GetUALuckyD
 func (c *luckydrawClient) GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error) {
 	out := new(GetUserLuckyDetailResp)
 	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserLuckyDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *luckydrawClient) PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/PutLuckyByPrize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -823,6 +845,8 @@ type LuckydrawServer interface {
 	GetActivityPrizes(context.Context, *GetActivityPrizesReq) (*GetActivityPrizesResp, error)
 	// 获取某活动的奖品池
 	GetActivityPrizePool(context.Context, *GetActivityPrizePoolReq) (*GetActivityPrizePoolResp, error)
+	// 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+	ResetActivityLuckValue(context.Context, *ResetActivityLuckValueReq) (*StatusResp, error)
 	// 获取用户详细
 	GetUserDetail(context.Context, *GetUserDetailReq) (*GetUserDetailResp, error)
 	// 获取用户详细列表
@@ -837,6 +861,8 @@ type LuckydrawServer interface {
 	GetUALuckyDetails(context.Context, *GetUALuckyDetailsReq) (*GetUALuckyDetailsResp, error)
 	// 查询某用户的中奖信息
 	GetUserLuckyDetail(context.Context, *GetUserLuckyDetailReq) (*GetUserLuckyDetailResp, error)
+	// 通过奖品更新幸运单
+	PutLuckyByPrize(context.Context, *PutLuckyByPrizeReq) (*StatusResp, error)
 	mustEmbedUnimplementedLuckydrawServer()
 }
 
@@ -1030,6 +1056,9 @@ func (UnimplementedLuckydrawServer) GetActivityPrizes(context.Context, *GetActiv
 func (UnimplementedLuckydrawServer) GetActivityPrizePool(context.Context, *GetActivityPrizePoolReq) (*GetActivityPrizePoolResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivityPrizePool not implemented")
 }
+func (UnimplementedLuckydrawServer) ResetActivityLuckValue(context.Context, *ResetActivityLuckValueReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetActivityLuckValue not implemented")
+}
 func (UnimplementedLuckydrawServer) GetUserDetail(context.Context, *GetUserDetailReq) (*GetUserDetailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserDetail not implemented")
 }
@@ -1050,6 +1079,9 @@ func (UnimplementedLuckydrawServer) GetUALuckyDetails(context.Context, *GetUALuc
 }
 func (UnimplementedLuckydrawServer) GetUserLuckyDetail(context.Context, *GetUserLuckyDetailReq) (*GetUserLuckyDetailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserLuckyDetail not implemented")
+}
+func (UnimplementedLuckydrawServer) PutLuckyByPrize(context.Context, *PutLuckyByPrizeReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutLuckyByPrize not implemented")
 }
 func (UnimplementedLuckydrawServer) mustEmbedUnimplementedLuckydrawServer() {}
 
@@ -2180,6 +2212,24 @@ func _Luckydraw_GetActivityPrizePool_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Luckydraw_ResetActivityLuckValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetActivityLuckValueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LuckydrawServer).ResetActivityLuckValue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.luckydraw/ResetActivityLuckValue",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LuckydrawServer).ResetActivityLuckValue(ctx, req.(*ResetActivityLuckValueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Luckydraw_GetUserDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserDetailReq)
 	if err := dec(in); err != nil {
@@ -2302,6 +2352,24 @@ func _Luckydraw_GetUserLuckyDetail_Handler(srv interface{}, ctx context.Context,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUserLuckyDetail(ctx, req.(*GetUserLuckyDetailReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Luckydraw_PutLuckyByPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutLuckyByPrizeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LuckydrawServer).PutLuckyByPrize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.luckydraw/PutLuckyByPrize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LuckydrawServer).PutLuckyByPrize(ctx, req.(*PutLuckyByPrizeReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2562,6 +2630,10 @@ var Luckydraw_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Luckydraw_GetActivityPrizePool_Handler,
 		},
 		{
+			MethodName: "ResetActivityLuckValue",
+			Handler:    _Luckydraw_ResetActivityLuckValue_Handler,
+		},
+		{
 			MethodName: "GetUserDetail",
 			Handler:    _Luckydraw_GetUserDetail_Handler,
 		},
@@ -2588,6 +2660,10 @@ var Luckydraw_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserLuckyDetail",
 			Handler:    _Luckydraw_GetUserLuckyDetail_Handler,
+		},
+		{
+			MethodName: "PutLuckyByPrize",
+			Handler:    _Luckydraw_PutLuckyByPrize_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

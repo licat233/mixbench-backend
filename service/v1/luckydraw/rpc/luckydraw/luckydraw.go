@@ -13,158 +13,160 @@ import (
 )
 
 type (
-	Activity                 = luckydraw_pb.Activity
-	ActivityDetail           = luckydraw_pb.ActivityDetail
-	ActivityPrize            = luckydraw_pb.ActivityPrize
-	AddActivityReq           = luckydraw_pb.AddActivityReq
-	AddActivityResp          = luckydraw_pb.AddActivityResp
-	AddLuckyReq              = luckydraw_pb.AddLuckyReq
-	AddLuckyResp             = luckydraw_pb.AddLuckyResp
-	AddPrizeGradeReq         = luckydraw_pb.AddPrizeGradeReq
-	AddPrizeGradeResp        = luckydraw_pb.AddPrizeGradeResp
-	AddPrizePoolReq          = luckydraw_pb.AddPrizePoolReq
-	AddPrizePoolResp         = luckydraw_pb.AddPrizePoolResp
-	AddPrizeReq              = luckydraw_pb.AddPrizeReq
-	AddPrizeResp             = luckydraw_pb.AddPrizeResp
-	AddProjectReq            = luckydraw_pb.AddProjectReq
-	AddProjectResp           = luckydraw_pb.AddProjectResp
-	AddUserPoolReq           = luckydraw_pb.AddUserPoolReq
-	AddUserPoolResp          = luckydraw_pb.AddUserPoolResp
-	AddUserReq               = luckydraw_pb.AddUserReq
-	AddUserResp              = luckydraw_pb.AddUserResp
-	DelActivityReq           = luckydraw_pb.DelActivityReq
-	DelActivityResp          = luckydraw_pb.DelActivityResp
-	DelLuckyReq              = luckydraw_pb.DelLuckyReq
-	DelLuckyResp             = luckydraw_pb.DelLuckyResp
-	DelPrizeGradeReq         = luckydraw_pb.DelPrizeGradeReq
-	DelPrizeGradeResp        = luckydraw_pb.DelPrizeGradeResp
-	DelPrizePoolReq          = luckydraw_pb.DelPrizePoolReq
-	DelPrizePoolResp         = luckydraw_pb.DelPrizePoolResp
-	DelPrizeReq              = luckydraw_pb.DelPrizeReq
-	DelPrizeResp             = luckydraw_pb.DelPrizeResp
-	DelProjectReq            = luckydraw_pb.DelProjectReq
-	DelProjectResp           = luckydraw_pb.DelProjectResp
-	DelUserPoolReq           = luckydraw_pb.DelUserPoolReq
-	DelUserPoolResp          = luckydraw_pb.DelUserPoolResp
-	DelUserReq               = luckydraw_pb.DelUserReq
-	DelUserResp              = luckydraw_pb.DelUserResp
-	Enum                     = luckydraw_pb.Enum
-	GenerateTokenReq         = luckydraw_pb.GenerateTokenReq
-	GenerateTokenResp        = luckydraw_pb.GenerateTokenResp
-	GetALuckyDetailsReq      = luckydraw_pb.GetALuckyDetailsReq
-	GetALuckyDetailsResp     = luckydraw_pb.GetALuckyDetailsResp
-	GetActivityByIdReq       = luckydraw_pb.GetActivityByIdReq
-	GetActivityByIdResp      = luckydraw_pb.GetActivityByIdResp
-	GetActivityDetailReq     = luckydraw_pb.GetActivityDetailReq
-	GetActivityDetailResp    = luckydraw_pb.GetActivityDetailResp
-	GetActivityDetailsReq    = luckydraw_pb.GetActivityDetailsReq
-	GetActivityDetailsResp   = luckydraw_pb.GetActivityDetailsResp
-	GetActivityEnumsReq      = luckydraw_pb.GetActivityEnumsReq
-	GetActivityListReq       = luckydraw_pb.GetActivityListReq
-	GetActivityListResp      = luckydraw_pb.GetActivityListResp
-	GetActivityPrizePoolReq  = luckydraw_pb.GetActivityPrizePoolReq
-	GetActivityPrizePoolResp = luckydraw_pb.GetActivityPrizePoolResp
-	GetActivityPrizesReq     = luckydraw_pb.GetActivityPrizesReq
-	GetActivityPrizesResp    = luckydraw_pb.GetActivityPrizesResp
-	GetEnumsResp             = luckydraw_pb.GetEnumsResp
-	GetLuckyByIdReq          = luckydraw_pb.GetLuckyByIdReq
-	GetLuckyByIdResp         = luckydraw_pb.GetLuckyByIdResp
-	GetLuckyEnumsReq         = luckydraw_pb.GetLuckyEnumsReq
-	GetLuckyListReq          = luckydraw_pb.GetLuckyListReq
-	GetLuckyListResp         = luckydraw_pb.GetLuckyListResp
-	GetPrizeByIdReq          = luckydraw_pb.GetPrizeByIdReq
-	GetPrizeByIdResp         = luckydraw_pb.GetPrizeByIdResp
-	GetPrizeEnumsReq         = luckydraw_pb.GetPrizeEnumsReq
-	GetPrizeGradeByIdReq     = luckydraw_pb.GetPrizeGradeByIdReq
-	GetPrizeGradeByIdResp    = luckydraw_pb.GetPrizeGradeByIdResp
-	GetPrizeGradeEnumsReq    = luckydraw_pb.GetPrizeGradeEnumsReq
-	GetPrizeGradeListReq     = luckydraw_pb.GetPrizeGradeListReq
-	GetPrizeGradeListResp    = luckydraw_pb.GetPrizeGradeListResp
-	GetPrizeListReq          = luckydraw_pb.GetPrizeListReq
-	GetPrizeListResp         = luckydraw_pb.GetPrizeListResp
-	GetPrizePoolByIdReq      = luckydraw_pb.GetPrizePoolByIdReq
-	GetPrizePoolByIdResp     = luckydraw_pb.GetPrizePoolByIdResp
-	GetPrizePoolEnumsReq     = luckydraw_pb.GetPrizePoolEnumsReq
-	GetPrizePoolListReq      = luckydraw_pb.GetPrizePoolListReq
-	GetPrizePoolListResp     = luckydraw_pb.GetPrizePoolListResp
-	GetProjectActivitiesReq  = luckydraw_pb.GetProjectActivitiesReq
-	GetProjectActivitiesResp = luckydraw_pb.GetProjectActivitiesResp
-	GetProjectByIdReq        = luckydraw_pb.GetProjectByIdReq
-	GetProjectByIdResp       = luckydraw_pb.GetProjectByIdResp
-	GetProjectDetailReq      = luckydraw_pb.GetProjectDetailReq
-	GetProjectDetailResp     = luckydraw_pb.GetProjectDetailResp
-	GetProjectDetailsReq     = luckydraw_pb.GetProjectDetailsReq
-	GetProjectDetailsResp    = luckydraw_pb.GetProjectDetailsResp
-	GetProjectEnumsReq       = luckydraw_pb.GetProjectEnumsReq
-	GetProjectListReq        = luckydraw_pb.GetProjectListReq
-	GetProjectListResp       = luckydraw_pb.GetProjectListResp
-	GetUALuckyDetailsReq     = luckydraw_pb.GetUALuckyDetailsReq
-	GetUALuckyDetailsResp    = luckydraw_pb.GetUALuckyDetailsResp
-	GetUserActivitiesReq     = luckydraw_pb.GetUserActivitiesReq
-	GetUserActivitiesResp    = luckydraw_pb.GetUserActivitiesResp
-	GetUserByIdReq           = luckydraw_pb.GetUserByIdReq
-	GetUserByIdResp          = luckydraw_pb.GetUserByIdResp
-	GetUserByKeywordReq      = luckydraw_pb.GetUserByKeywordReq
-	GetUserByKeywordResp     = luckydraw_pb.GetUserByKeywordResp
-	GetUserDetailReq         = luckydraw_pb.GetUserDetailReq
-	GetUserDetailResp        = luckydraw_pb.GetUserDetailResp
-	GetUserDetailsReq        = luckydraw_pb.GetUserDetailsReq
-	GetUserDetailsResp       = luckydraw_pb.GetUserDetailsResp
-	GetUserEnumsReq          = luckydraw_pb.GetUserEnumsReq
-	GetUserListReq           = luckydraw_pb.GetUserListReq
-	GetUserListResp          = luckydraw_pb.GetUserListResp
-	GetUserLuckyDetailReq    = luckydraw_pb.GetUserLuckyDetailReq
-	GetUserLuckyDetailResp   = luckydraw_pb.GetUserLuckyDetailResp
-	GetUserPoolByIdReq       = luckydraw_pb.GetUserPoolByIdReq
-	GetUserPoolByIdResp      = luckydraw_pb.GetUserPoolByIdResp
-	GetUserPoolEnumsReq      = luckydraw_pb.GetUserPoolEnumsReq
-	GetUserPoolListReq       = luckydraw_pb.GetUserPoolListReq
-	GetUserPoolListResp      = luckydraw_pb.GetUserPoolListResp
-	GetUsersByKeywordReq     = luckydraw_pb.GetUsersByKeywordReq
-	GetUsersByKeywordResp    = luckydraw_pb.GetUsersByKeywordResp
-	IdentifyReq              = luckydraw_pb.IdentifyReq
-	IdentifyResp             = luckydraw_pb.IdentifyResp
-	JwtData                  = luckydraw_pb.JwtData
-	JwtToken                 = luckydraw_pb.JwtToken
-	ListReq                  = luckydraw_pb.ListReq
-	Lucky                    = luckydraw_pb.Lucky
-	LuckyDetail              = luckydraw_pb.LuckyDetail
-	LuckyDrawReq             = luckydraw_pb.LuckyDrawReq
-	LuckyDrawResp            = luckydraw_pb.LuckyDrawResp
-	NilReq                   = luckydraw_pb.NilReq
-	NilResp                  = luckydraw_pb.NilResp
-	Option                   = luckydraw_pb.Option
-	Options                  = luckydraw_pb.Options
-	Prize                    = luckydraw_pb.Prize
-	PrizeGrade               = luckydraw_pb.PrizeGrade
-	PrizePool                = luckydraw_pb.PrizePool
-	Project                  = luckydraw_pb.Project
-	ProjectDetail            = luckydraw_pb.ProjectDetail
-	PutActivityReq           = luckydraw_pb.PutActivityReq
-	PutActivityResp          = luckydraw_pb.PutActivityResp
-	PutLuckyReq              = luckydraw_pb.PutLuckyReq
-	PutLuckyResp             = luckydraw_pb.PutLuckyResp
-	PutPrizeGradeReq         = luckydraw_pb.PutPrizeGradeReq
-	PutPrizeGradeResp        = luckydraw_pb.PutPrizeGradeResp
-	PutPrizePoolReq          = luckydraw_pb.PutPrizePoolReq
-	PutPrizePoolResp         = luckydraw_pb.PutPrizePoolResp
-	PutPrizeReq              = luckydraw_pb.PutPrizeReq
-	PutPrizeResp             = luckydraw_pb.PutPrizeResp
-	PutProjectReq            = luckydraw_pb.PutProjectReq
-	PutProjectResp           = luckydraw_pb.PutProjectResp
-	PutUserPoolReq           = luckydraw_pb.PutUserPoolReq
-	PutUserPoolResp          = luckydraw_pb.PutUserPoolResp
-	PutUserReq               = luckydraw_pb.PutUserReq
-	PutUserResp              = luckydraw_pb.PutUserResp
-	SelectPrizesReq          = luckydraw_pb.SelectPrizesReq
-	SelectPrizesResp         = luckydraw_pb.SelectPrizesResp
-	StatusResp               = luckydraw_pb.StatusResp
-	TreeOption               = luckydraw_pb.TreeOption
-	TreeOptions              = luckydraw_pb.TreeOptions
-	User                     = luckydraw_pb.User
-	UserActivity             = luckydraw_pb.UserActivity
-	UserDetail               = luckydraw_pb.UserDetail
-	UserPool                 = luckydraw_pb.UserPool
+	Activity                  = luckydraw_pb.Activity
+	ActivityDetail            = luckydraw_pb.ActivityDetail
+	ActivityPrize             = luckydraw_pb.ActivityPrize
+	AddActivityReq            = luckydraw_pb.AddActivityReq
+	AddActivityResp           = luckydraw_pb.AddActivityResp
+	AddLuckyReq               = luckydraw_pb.AddLuckyReq
+	AddLuckyResp              = luckydraw_pb.AddLuckyResp
+	AddPrizeGradeReq          = luckydraw_pb.AddPrizeGradeReq
+	AddPrizeGradeResp         = luckydraw_pb.AddPrizeGradeResp
+	AddPrizePoolReq           = luckydraw_pb.AddPrizePoolReq
+	AddPrizePoolResp          = luckydraw_pb.AddPrizePoolResp
+	AddPrizeReq               = luckydraw_pb.AddPrizeReq
+	AddPrizeResp              = luckydraw_pb.AddPrizeResp
+	AddProjectReq             = luckydraw_pb.AddProjectReq
+	AddProjectResp            = luckydraw_pb.AddProjectResp
+	AddUserPoolReq            = luckydraw_pb.AddUserPoolReq
+	AddUserPoolResp           = luckydraw_pb.AddUserPoolResp
+	AddUserReq                = luckydraw_pb.AddUserReq
+	AddUserResp               = luckydraw_pb.AddUserResp
+	DelActivityReq            = luckydraw_pb.DelActivityReq
+	DelActivityResp           = luckydraw_pb.DelActivityResp
+	DelLuckyReq               = luckydraw_pb.DelLuckyReq
+	DelLuckyResp              = luckydraw_pb.DelLuckyResp
+	DelPrizeGradeReq          = luckydraw_pb.DelPrizeGradeReq
+	DelPrizeGradeResp         = luckydraw_pb.DelPrizeGradeResp
+	DelPrizePoolReq           = luckydraw_pb.DelPrizePoolReq
+	DelPrizePoolResp          = luckydraw_pb.DelPrizePoolResp
+	DelPrizeReq               = luckydraw_pb.DelPrizeReq
+	DelPrizeResp              = luckydraw_pb.DelPrizeResp
+	DelProjectReq             = luckydraw_pb.DelProjectReq
+	DelProjectResp            = luckydraw_pb.DelProjectResp
+	DelUserPoolReq            = luckydraw_pb.DelUserPoolReq
+	DelUserPoolResp           = luckydraw_pb.DelUserPoolResp
+	DelUserReq                = luckydraw_pb.DelUserReq
+	DelUserResp               = luckydraw_pb.DelUserResp
+	Enum                      = luckydraw_pb.Enum
+	GenerateTokenReq          = luckydraw_pb.GenerateTokenReq
+	GenerateTokenResp         = luckydraw_pb.GenerateTokenResp
+	GetALuckyDetailsReq       = luckydraw_pb.GetALuckyDetailsReq
+	GetALuckyDetailsResp      = luckydraw_pb.GetALuckyDetailsResp
+	GetActivityByIdReq        = luckydraw_pb.GetActivityByIdReq
+	GetActivityByIdResp       = luckydraw_pb.GetActivityByIdResp
+	GetActivityDetailReq      = luckydraw_pb.GetActivityDetailReq
+	GetActivityDetailResp     = luckydraw_pb.GetActivityDetailResp
+	GetActivityDetailsReq     = luckydraw_pb.GetActivityDetailsReq
+	GetActivityDetailsResp    = luckydraw_pb.GetActivityDetailsResp
+	GetActivityEnumsReq       = luckydraw_pb.GetActivityEnumsReq
+	GetActivityListReq        = luckydraw_pb.GetActivityListReq
+	GetActivityListResp       = luckydraw_pb.GetActivityListResp
+	GetActivityPrizePoolReq   = luckydraw_pb.GetActivityPrizePoolReq
+	GetActivityPrizePoolResp  = luckydraw_pb.GetActivityPrizePoolResp
+	GetActivityPrizesReq      = luckydraw_pb.GetActivityPrizesReq
+	GetActivityPrizesResp     = luckydraw_pb.GetActivityPrizesResp
+	GetEnumsResp              = luckydraw_pb.GetEnumsResp
+	GetLuckyByIdReq           = luckydraw_pb.GetLuckyByIdReq
+	GetLuckyByIdResp          = luckydraw_pb.GetLuckyByIdResp
+	GetLuckyEnumsReq          = luckydraw_pb.GetLuckyEnumsReq
+	GetLuckyListReq           = luckydraw_pb.GetLuckyListReq
+	GetLuckyListResp          = luckydraw_pb.GetLuckyListResp
+	GetPrizeByIdReq           = luckydraw_pb.GetPrizeByIdReq
+	GetPrizeByIdResp          = luckydraw_pb.GetPrizeByIdResp
+	GetPrizeEnumsReq          = luckydraw_pb.GetPrizeEnumsReq
+	GetPrizeGradeByIdReq      = luckydraw_pb.GetPrizeGradeByIdReq
+	GetPrizeGradeByIdResp     = luckydraw_pb.GetPrizeGradeByIdResp
+	GetPrizeGradeEnumsReq     = luckydraw_pb.GetPrizeGradeEnumsReq
+	GetPrizeGradeListReq      = luckydraw_pb.GetPrizeGradeListReq
+	GetPrizeGradeListResp     = luckydraw_pb.GetPrizeGradeListResp
+	GetPrizeListReq           = luckydraw_pb.GetPrizeListReq
+	GetPrizeListResp          = luckydraw_pb.GetPrizeListResp
+	GetPrizePoolByIdReq       = luckydraw_pb.GetPrizePoolByIdReq
+	GetPrizePoolByIdResp      = luckydraw_pb.GetPrizePoolByIdResp
+	GetPrizePoolEnumsReq      = luckydraw_pb.GetPrizePoolEnumsReq
+	GetPrizePoolListReq       = luckydraw_pb.GetPrizePoolListReq
+	GetPrizePoolListResp      = luckydraw_pb.GetPrizePoolListResp
+	GetProjectActivitiesReq   = luckydraw_pb.GetProjectActivitiesReq
+	GetProjectActivitiesResp  = luckydraw_pb.GetProjectActivitiesResp
+	GetProjectByIdReq         = luckydraw_pb.GetProjectByIdReq
+	GetProjectByIdResp        = luckydraw_pb.GetProjectByIdResp
+	GetProjectDetailReq       = luckydraw_pb.GetProjectDetailReq
+	GetProjectDetailResp      = luckydraw_pb.GetProjectDetailResp
+	GetProjectDetailsReq      = luckydraw_pb.GetProjectDetailsReq
+	GetProjectDetailsResp     = luckydraw_pb.GetProjectDetailsResp
+	GetProjectEnumsReq        = luckydraw_pb.GetProjectEnumsReq
+	GetProjectListReq         = luckydraw_pb.GetProjectListReq
+	GetProjectListResp        = luckydraw_pb.GetProjectListResp
+	GetUALuckyDetailsReq      = luckydraw_pb.GetUALuckyDetailsReq
+	GetUALuckyDetailsResp     = luckydraw_pb.GetUALuckyDetailsResp
+	GetUserActivitiesReq      = luckydraw_pb.GetUserActivitiesReq
+	GetUserActivitiesResp     = luckydraw_pb.GetUserActivitiesResp
+	GetUserByIdReq            = luckydraw_pb.GetUserByIdReq
+	GetUserByIdResp           = luckydraw_pb.GetUserByIdResp
+	GetUserByKeywordReq       = luckydraw_pb.GetUserByKeywordReq
+	GetUserByKeywordResp      = luckydraw_pb.GetUserByKeywordResp
+	GetUserDetailReq          = luckydraw_pb.GetUserDetailReq
+	GetUserDetailResp         = luckydraw_pb.GetUserDetailResp
+	GetUserDetailsReq         = luckydraw_pb.GetUserDetailsReq
+	GetUserDetailsResp        = luckydraw_pb.GetUserDetailsResp
+	GetUserEnumsReq           = luckydraw_pb.GetUserEnumsReq
+	GetUserListReq            = luckydraw_pb.GetUserListReq
+	GetUserListResp           = luckydraw_pb.GetUserListResp
+	GetUserLuckyDetailReq     = luckydraw_pb.GetUserLuckyDetailReq
+	GetUserLuckyDetailResp    = luckydraw_pb.GetUserLuckyDetailResp
+	GetUserPoolByIdReq        = luckydraw_pb.GetUserPoolByIdReq
+	GetUserPoolByIdResp       = luckydraw_pb.GetUserPoolByIdResp
+	GetUserPoolEnumsReq       = luckydraw_pb.GetUserPoolEnumsReq
+	GetUserPoolListReq        = luckydraw_pb.GetUserPoolListReq
+	GetUserPoolListResp       = luckydraw_pb.GetUserPoolListResp
+	GetUsersByKeywordReq      = luckydraw_pb.GetUsersByKeywordReq
+	GetUsersByKeywordResp     = luckydraw_pb.GetUsersByKeywordResp
+	IdentifyReq               = luckydraw_pb.IdentifyReq
+	IdentifyResp              = luckydraw_pb.IdentifyResp
+	JwtData                   = luckydraw_pb.JwtData
+	JwtToken                  = luckydraw_pb.JwtToken
+	ListReq                   = luckydraw_pb.ListReq
+	Lucky                     = luckydraw_pb.Lucky
+	LuckyDetail               = luckydraw_pb.LuckyDetail
+	LuckyDrawReq              = luckydraw_pb.LuckyDrawReq
+	LuckyDrawResp             = luckydraw_pb.LuckyDrawResp
+	NilReq                    = luckydraw_pb.NilReq
+	NilResp                   = luckydraw_pb.NilResp
+	Option                    = luckydraw_pb.Option
+	Options                   = luckydraw_pb.Options
+	Prize                     = luckydraw_pb.Prize
+	PrizeGrade                = luckydraw_pb.PrizeGrade
+	PrizePool                 = luckydraw_pb.PrizePool
+	Project                   = luckydraw_pb.Project
+	ProjectDetail             = luckydraw_pb.ProjectDetail
+	PutActivityReq            = luckydraw_pb.PutActivityReq
+	PutActivityResp           = luckydraw_pb.PutActivityResp
+	PutLuckyByPrizeReq        = luckydraw_pb.PutLuckyByPrizeReq
+	PutLuckyReq               = luckydraw_pb.PutLuckyReq
+	PutLuckyResp              = luckydraw_pb.PutLuckyResp
+	PutPrizeGradeReq          = luckydraw_pb.PutPrizeGradeReq
+	PutPrizeGradeResp         = luckydraw_pb.PutPrizeGradeResp
+	PutPrizePoolReq           = luckydraw_pb.PutPrizePoolReq
+	PutPrizePoolResp          = luckydraw_pb.PutPrizePoolResp
+	PutPrizeReq               = luckydraw_pb.PutPrizeReq
+	PutPrizeResp              = luckydraw_pb.PutPrizeResp
+	PutProjectReq             = luckydraw_pb.PutProjectReq
+	PutProjectResp            = luckydraw_pb.PutProjectResp
+	PutUserPoolReq            = luckydraw_pb.PutUserPoolReq
+	PutUserPoolResp           = luckydraw_pb.PutUserPoolResp
+	PutUserReq                = luckydraw_pb.PutUserReq
+	PutUserResp               = luckydraw_pb.PutUserResp
+	ResetActivityLuckValueReq = luckydraw_pb.ResetActivityLuckValueReq
+	SelectPrizesReq           = luckydraw_pb.SelectPrizesReq
+	SelectPrizesResp          = luckydraw_pb.SelectPrizesResp
+	StatusResp                = luckydraw_pb.StatusResp
+	TreeOption                = luckydraw_pb.TreeOption
+	TreeOptions               = luckydraw_pb.TreeOptions
+	User                      = luckydraw_pb.User
+	UserActivity              = luckydraw_pb.UserActivity
+	UserDetail                = luckydraw_pb.UserDetail
+	UserPool                  = luckydraw_pb.UserPool
 
 	Luckydraw interface {
 		BaseAddActivity(ctx context.Context, in *AddActivityReq, opts ...grpc.CallOption) (*AddActivityResp, error)
@@ -243,6 +245,8 @@ type (
 		GetActivityPrizes(ctx context.Context, in *GetActivityPrizesReq, opts ...grpc.CallOption) (*GetActivityPrizesResp, error)
 		// 获取某活动的奖品池
 		GetActivityPrizePool(ctx context.Context, in *GetActivityPrizePoolReq, opts ...grpc.CallOption) (*GetActivityPrizePoolResp, error)
+		// 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+		ResetActivityLuckValue(ctx context.Context, in *ResetActivityLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 		// 获取用户详细
 		GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error)
 		// 获取用户详细列表
@@ -257,6 +261,8 @@ type (
 		GetUALuckyDetails(ctx context.Context, in *GetUALuckyDetailsReq, opts ...grpc.CallOption) (*GetUALuckyDetailsResp, error)
 		// 查询某用户的中奖信息
 		GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error)
+		// 通过奖品更新幸运单
+		PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
 	}
 
 	defaultLuckydraw struct {
@@ -594,6 +600,12 @@ func (m *defaultLuckydraw) GetActivityPrizePool(ctx context.Context, in *GetActi
 	return client.GetActivityPrizePool(ctx, in, opts...)
 }
 
+// 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+func (m *defaultLuckydraw) ResetActivityLuckValue(ctx context.Context, in *ResetActivityLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
+	return client.ResetActivityLuckValue(ctx, in, opts...)
+}
+
 // 获取用户详细
 func (m *defaultLuckydraw) GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error) {
 	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
@@ -634,4 +646,10 @@ func (m *defaultLuckydraw) GetUALuckyDetails(ctx context.Context, in *GetUALucky
 func (m *defaultLuckydraw) GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error) {
 	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
 	return client.GetUserLuckyDetail(ctx, in, opts...)
+}
+
+// 通过奖品更新幸运单
+func (m *defaultLuckydraw) PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
+	return client.PutLuckyByPrize(ctx, in, opts...)
 }

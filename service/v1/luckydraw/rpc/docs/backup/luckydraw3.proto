@@ -724,25 +724,13 @@ message GetUserDetailResp {
 }
 
 message GetUserDetailsReq {
-  ListReq list_req = 1; //列表页码参数
+  ListReq list_req = 1; //列表参数
   User user = 2; //User参数
 }
 
 //用户详细列表
 message GetUserDetailsResp {
   repeated UserDetail user_details = 1;
-  int64 total = 2;
-}
-
-// 通过关键词查找用户请求【模糊查找】
-message GetUsersByKeywordReq {
-  ListReq list_req = 1; //列表页码参数
-  string keyword = 2; //关键词
-}
-
-// 通过关键词查找用户响应【模糊查找】
-message GetUsersByKeywordResp {
-  repeated User users = 1;
   int64 total = 2;
 }
 
@@ -753,8 +741,21 @@ message GetUserByKeywordReq {
 
 // 通过关键词查找用户响应【精确查找】
 message GetUserByKeywordResp {
-  User users = 1;
+  User user = 1;
 }
+
+// 通过关键词查找用户请求【模糊查找】
+message GetUsersByKeywordReq {
+  ListReq list_req = 1; //列表参数
+}
+
+// 通过关键词查找用户响应【模糊查找】
+message GetUsersByKeywordResp {
+  repeated User users = 1;
+  int64 total = 2;
+}
+
+
 
 //请求项目详细
 message GetProjectDetailReq {
@@ -772,7 +773,7 @@ message GetProjectDetailResp {
 }
 
 message GetProjectDetailsReq {
-  ListReq list_req = 1; //列表页码参数
+  ListReq list_req = 1; //列表参数
   Project project = 2; //Project参数
 }
 
@@ -783,7 +784,7 @@ message GetProjectDetailsResp {
 }
 
 message GetActivityDetailsReq {
-  ListReq list_req = 1; //列表页码参数
+  ListReq list_req = 1; //列表参数
   Activity activity = 2; //Activity参数
 }
 
@@ -860,6 +861,12 @@ message GetUserActivitiesReq {
 // 获取某用户可参加活动的响应
 message GetUserActivitiesResp {
   repeated UserActivity user_activities = 1;
+}
+
+// 重置某活动的运气值，传入一个即可，由于是危险操作，所以需要同时传入 uuid 和 id
+message ResetActivityLuckValueReq {
+  string activity_uuid = 1;
+  int64 activity_id = 2;
 }
 
 //------ custom message end ------
@@ -963,10 +970,14 @@ service luckydraw {
   // 获取每个项目及其包含的活动
   rpc GetProjectTreeOptions (NilReq) returns (TreeOptions);
 
+  //project
+
   // 获取项目详细
   rpc GetProjectDetail (GetProjectDetailReq) returns (GetProjectDetailResp);
   // 获取项目详细列表
   rpc GetProjectDetails (GetProjectDetailsReq) returns (GetProjectDetailsResp);
+
+  //activity
 
   // 获取活动详细
   rpc GetActivityDetail (GetActivityDetailReq) returns (GetActivityDetailResp);
@@ -977,20 +988,26 @@ service luckydraw {
   // 某用户可参与的活动列表
   rpc GetUserActivities (GetUserActivitiesReq) returns (GetUserActivitiesResp);
 
+  //prize
+
   // 获取某活动的奖品列表
   rpc GetActivityPrizes (GetActivityPrizesReq) returns (GetActivityPrizesResp);
 
+  //prize pool
+
   // 获取某活动的奖品池
   rpc GetActivityPrizePool (GetActivityPrizePoolReq) returns (GetActivityPrizePoolResp);
+  // 重置某活动奖品池的奖品运气值
+  rpc ResetActivityLuckValue (ResetActivityLuckValueReq) returns (StatusResp);
 
   // 获取用户详细
   rpc GetUserDetail (GetUserDetailReq) returns (GetUserDetailResp);
   // 获取用户详细列表
   rpc GetUserDetails (GetUserDetailsReq) returns (GetUserDetailsResp);
-  // 通过关键词查找用户【模糊查找】，关键词可以是电话、邮箱、账号
-  rpc GetUsersByKeyword (GetUsersByKeywordReq) returns (GetUsersByKeywordResp);
   // 通过关键词查找用户【精确查找】，关键词可以是电话、邮箱、账号
   rpc GetUserByKeyword (GetUserByKeywordReq) returns (GetUserByKeywordResp);
+  // 通过关键词查找用户【模糊查找】，关键词可以是电话、邮箱、账号、姓名等等
+  rpc GetUsersByKeyword (GetUsersByKeywordReq) returns (GetUsersByKeywordResp);
 
   // 获取某活动的中奖详细列表
   rpc GetALuckyDetails (GetALuckyDetailsReq) returns (GetALuckyDetailsResp);

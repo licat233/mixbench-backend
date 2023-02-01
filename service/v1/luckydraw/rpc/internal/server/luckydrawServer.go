@@ -346,6 +346,12 @@ func (s *LuckydrawServer) GetActivityPrizePool(ctx context.Context, in *luckydra
 	return l.GetActivityPrizePool(in)
 }
 
+// 重置某活动奖品池的奖品运气值，由于是危险操作，所以需要同时传入 uuid 和 id
+func (s *LuckydrawServer) ResetActivityLuckValue(ctx context.Context, in *luckydraw_pb.ResetActivityLuckValueReq) (*luckydraw_pb.StatusResp, error) {
+	l := logic.NewResetActivityLuckValueLogic(ctx, s.svcCtx)
+	return l.ResetActivityLuckValue(in)
+}
+
 // 获取用户详细
 func (s *LuckydrawServer) GetUserDetail(ctx context.Context, in *luckydraw_pb.GetUserDetailReq) (*luckydraw_pb.GetUserDetailResp, error) {
 	l := logic.NewGetUserDetailLogic(ctx, s.svcCtx)
@@ -386,4 +392,10 @@ func (s *LuckydrawServer) GetUALuckyDetails(ctx context.Context, in *luckydraw_p
 func (s *LuckydrawServer) GetUserLuckyDetail(ctx context.Context, in *luckydraw_pb.GetUserLuckyDetailReq) (*luckydraw_pb.GetUserLuckyDetailResp, error) {
 	l := logic.NewGetUserLuckyDetailLogic(ctx, s.svcCtx)
 	return l.GetUserLuckyDetail(in)
+}
+
+// 通过奖品更新幸运单
+func (s *LuckydrawServer) PutLuckyByPrize(ctx context.Context, in *luckydraw_pb.PutLuckyByPrizeReq) (*luckydraw_pb.StatusResp, error) {
+	l := logic.NewPutLuckyByPrizeLogic(ctx, s.svcCtx)
+	return l.PutLuckyByPrize(in)
 }
