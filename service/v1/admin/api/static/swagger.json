@@ -1,0 +1,1508 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/api/admin/adminer/": {
+      "get": {
+        "summary": "获取管理员 基础API",
+        "operationId": "GetAdminer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "管理员 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      },
+      "delete": {
+        "summary": "删除管理员 基础API",
+        "operationId": "DelAdminer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除管理员请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelAdminerReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      },
+      "post": {
+        "summary": "添加管理员 基础API",
+        "operationId": "AddAdminer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加管理员请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddAdminerReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      },
+      "put": {
+        "summary": "更新管理员 基础API",
+        "operationId": "PutAdminer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新管理员请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutAdminerReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/currentInfo": {
+      "get": {
+        "summary": "获取自己的账号信息",
+        "operationId": "currentInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/enums": {
+      "get": {
+        "summary": "获取管理员枚举列表 基础API",
+        "operationId": "GetAdminerEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/list": {
+      "get": {
+        "summary": "获取管理员列表 基础API",
+        "operationId": "GetAdminerList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "管理员名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "avatar",
+            "description": "头像",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "access",
+            "description": "身份",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "passport",
+            "description": "账号",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "description": "密码",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "邮箱",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "账号状态，是否可用",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "isSuperAdmin",
+            "description": "是否为超级管理员",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "loginCount",
+            "description": "登录次数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "lastLogin",
+            "description": "最后一次登录时间",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/putCurrent": {
+      "post": {
+        "summary": "管理员修改自己的账号信息，当修改密码时，需要提供验证码",
+        "operationId": "putCurrent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start],修改个人信息请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutCurrentReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/putPassword": {
+      "post": {
+        "summary": "修改自己的密码",
+        "operationId": "putPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/putPasswordReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/adminer/verifyPassword": {
+      "post": {
+        "summary": "管理员校验自己的密码",
+        "operationId": "verifyPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyPasswordReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
+    "/v1/api/admin/auth": {
+      "get": {
+        "summary": "鉴权接口",
+        "operationId": "auth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/bindEmailCaptcha": {
+      "post": {
+        "summary": "给绑定邮箱发送验证码",
+        "operationId": "bindEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bindEmailCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/currentUser": {
+      "post": {
+        "summary": "获取当前用户信息",
+        "operationId": "currentUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/login": {
+      "post": {
+        "summary": "登录",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start],管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/loginByEmail": {
+      "post": {
+        "summary": "邮箱登录",
+        "operationId": "loginByEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginByEmailReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/loginEmailCaptcha": {
+      "post": {
+        "summary": "给登录邮箱发送验证码",
+        "operationId": "loginEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginEmailCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/logout": {
+      "post": {
+        "summary": "注销登录",
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/registerEmailCaptcha": {
+      "post": {
+        "summary": "给注册邮箱发送验证码",
+        "operationId": "registerEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/registerEmailCaptchaReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/test": {
+      "get": {
+        "summary": "'预留的调试端口'",
+        "operationId": "test",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "数据",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AddAdminerReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "头像"
+        },
+        "access": {
+          "type": "string",
+          "description": "身份"
+        },
+        "passport": {
+          "type": "string",
+          "description": "账号"
+        },
+        "password": {
+          "type": "string",
+          "description": "密码"
+        },
+        "email": {
+          "type": "string",
+          "description": "邮箱"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "账号状态，是否可用"
+        },
+        "isSuperAdmin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "是否为超级管理员"
+        },
+        "loginCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "登录次数"
+        },
+        "lastLogin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
+        }
+      },
+      "title": "AddAdminerReq",
+      "required": [
+        "name",
+        "avatar",
+        "access",
+        "passport",
+        "password",
+        "email",
+        "status",
+        "isSuperAdmin",
+        "loginCount",
+        "lastLogin"
+      ]
+    },
+    "Adminer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "头像"
+        },
+        "access": {
+          "type": "string",
+          "description": "身份"
+        },
+        "passport": {
+          "type": "string",
+          "description": "账号"
+        },
+        "password": {
+          "type": "string",
+          "description": "密码"
+        },
+        "email": {
+          "type": "string",
+          "description": "邮箱"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "账号状态，是否可用"
+        },
+        "isSuperAdmin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "是否为超级管理员"
+        },
+        "loginCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "登录次数"
+        },
+        "lastLogin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
+        }
+      },
+      "title": "Adminer",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "avatar",
+        "access",
+        "passport",
+        "password",
+        "email",
+        "status",
+        "isSuperAdmin",
+        "loginCount",
+        "lastLogin"
+      ]
+    },
+    "BaseResp": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "响应状态"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "响应状态，用于对接umijs"
+        },
+        "message": {
+          "type": "string",
+          "description": "给予的提示信息"
+        },
+        "data": {
+          "type": "object",
+          "description": "【选填】响应的业务数据"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】数据总个数"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】单页数量"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】当前页码，用于对接umijs"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】当前页码"
+        },
+        "totalPage": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】自增项，总共有多少页，根据前端的pageSize来计算"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功"
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "【选填】向用户显示消息"
+        },
+        "traceMessage": {
+          "type": "string",
+          "description": "【选填】调试错误信息，请勿在生产环境下使用，可有可无"
+        },
+        "showType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转"
+        },
+        "traceId": {
+          "type": "string",
+          "description": "【选填】方便后端故障排除：唯一的请求ID"
+        },
+        "host": {
+          "type": "string",
+          "description": "【选填】方便后端故障排除：当前访问服务器的主机"
+        }
+      },
+      "title": "BaseResp",
+      "required": [
+        "status",
+        "success",
+        "message",
+        "data",
+        "total",
+        "pageSize",
+        "current",
+        "page",
+        "totalPage",
+        "errorCode",
+        "errorMessage",
+        "traceMessage",
+        "showType",
+        "traceId",
+        "host"
+      ]
+    },
+    "ByIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "主键"
+        }
+      },
+      "title": "ByIdReq",
+      "required": [
+        "id"
+      ]
+    },
+    "CaptchaResp": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "captcha id"
+        },
+        "expiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "description": "expires time"
+        }
+      },
+      "title": "CaptchaResp",
+      "required": [
+        "captchaId",
+        "expiresAt"
+      ]
+    },
+    "DelAdminerReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "管理员 ID"
+        }
+      },
+      "title": "DelAdminerReq",
+      "required": [
+        "id"
+      ]
+    },
+    "Enum": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "object",
+          "description": "名"
+        },
+        "value": {
+          "type": "object",
+          "description": "值"
+        }
+      },
+      "title": "Enum",
+      "required": [
+        "label",
+        "value"
+      ]
+    },
+    "Enums": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Enum"
+          },
+          "description": "枚举列表数据"
+        }
+      },
+      "title": "Enums",
+      "required": [
+        "list"
+      ]
+    },
+    "GetAdminerEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetAdminerEnumsReq",
+      "required": [
+        "parentId"
+      ]
+    },
+    "GetAdminerListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "头像"
+        },
+        "access": {
+          "type": "string",
+          "description": "身份"
+        },
+        "passport": {
+          "type": "string",
+          "description": "账号"
+        },
+        "password": {
+          "type": "string",
+          "description": "密码"
+        },
+        "email": {
+          "type": "string",
+          "description": "邮箱"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "账号状态，是否可用"
+        },
+        "isSuperAdmin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "是否为超级管理员"
+        },
+        "loginCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "登录次数"
+        },
+        "lastLogin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
+        }
+      },
+      "title": "GetAdminerListReq",
+      "required": [
+        "pageSize",
+        "page",
+        "current",
+        "id",
+        "uuid",
+        "name",
+        "avatar",
+        "access",
+        "passport",
+        "password",
+        "email",
+        "status",
+        "isSuperAdmin",
+        "loginCount",
+        "lastLogin"
+      ]
+    },
+    "GetAdminerReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "管理员 ID"
+        }
+      },
+      "title": "GetAdminerReq",
+      "required": [
+        "id"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "token"
+        },
+        "accessExpire": {
+          "type": "integer",
+          "format": "int64",
+          "description": "expire"
+        },
+        "refreshAfter": {
+          "type": "integer",
+          "format": "int64",
+          "description": "refresh at"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "accessToken",
+        "accessExpire",
+        "refreshAfter"
+      ]
+    },
+    "ListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        }
+      },
+      "title": "ListReq",
+      "required": [
+        "pageSize",
+        "page",
+        "current"
+      ]
+    },
+    "NilReq": {
+      "type": "object",
+      "title": "NilReq"
+    },
+    "NilResp": {
+      "type": "object",
+      "title": "NilResp"
+    },
+    "Option": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "名"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "值"
+        }
+      },
+      "title": "Option",
+      "required": [
+        "title",
+        "value"
+      ]
+    },
+    "Options": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Option"
+          },
+          "description": "选项列表数据"
+        }
+      },
+      "title": "Options",
+      "required": [
+        "list"
+      ]
+    },
+    "PutAdminerReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "头像"
+        },
+        "access": {
+          "type": "string",
+          "description": "身份"
+        },
+        "passport": {
+          "type": "string",
+          "description": "账号"
+        },
+        "password": {
+          "type": "string",
+          "description": "密码"
+        },
+        "email": {
+          "type": "string",
+          "description": "邮箱"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "账号状态，是否可用"
+        },
+        "isSuperAdmin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "是否为超级管理员"
+        },
+        "loginCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "登录次数"
+        },
+        "lastLogin": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
+        }
+      },
+      "title": "PutAdminerReq",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "avatar",
+        "access",
+        "passport",
+        "password",
+        "email",
+        "status",
+        "isSuperAdmin",
+        "loginCount",
+        "lastLogin"
+      ]
+    },
+    "PutCurrentReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": " 管理员名称"
+        },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
+        "passport": {
+          "type": "string",
+          "description": " 账号"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        }
+      },
+      "title": "PutCurrentReq",
+      "required": [
+        "name",
+        "avatar",
+        "passport",
+        "email"
+      ]
+    },
+    "Resp": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "object",
+          "description": "响应数据"
+        }
+      },
+      "title": "Resp",
+      "required": [
+        "body"
+      ]
+    },
+    "TreeOption": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "名"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "值"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TreeOption"
+          },
+          "description": "子集"
+        }
+      },
+      "title": "TreeOption",
+      "required": [
+        "title",
+        "value"
+      ]
+    },
+    "TreeOptions": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TreeOption"
+          },
+          "description": "树形选项列表数据"
+        }
+      },
+      "title": "TreeOptions",
+      "required": [
+        "list"
+      ]
+    },
+    "VerifyPasswordReq": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        }
+      },
+      "title": "VerifyPasswordReq",
+      "required": [
+        "password"
+      ]
+    },
+    "bindEmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "bindEmailCaptchaReq",
+      "required": [
+        "email",
+        "solution"
+      ]
+    },
+    "loginByEmailReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "autoLogin": {
+          "type": "boolean",
+          "format": "boolean",
+          "default": "false",
+          "description": "是否开启自动登录"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "loginByEmailReq",
+      "required": [
+        "email",
+        "autoLogin",
+        "solution"
+      ]
+    },
+    "loginEmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "loginEmailCaptchaReq",
+      "required": [
+        "email",
+        "solution"
+      ]
+    },
+    "loginReq": {
+      "type": "object",
+      "properties": {
+        "passport": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "autoLogin": {
+          "type": "boolean",
+          "format": "boolean",
+          "default": "false"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "loginReq",
+      "required": [
+        "passport",
+        "password",
+        "autoLogin",
+        "captcha_id",
+        "solution"
+      ]
+    },
+    "putPasswordReq": {
+      "type": "object",
+      "properties": {
+        "old_password": {
+          "type": "string",
+          "description": " 旧密码"
+        },
+        "new_password": {
+          "type": "string",
+          "description": " 新密码"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "putPasswordReq",
+      "required": [
+        "old_password",
+        "new_password",
+        "captcha_id",
+        "solution"
+      ]
+    },
+    "registerEmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "registerEmailCaptchaReq",
+      "required": [
+        "email",
+        "solution"
+      ]
+    },
+    "testReq": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "数据"
+        }
+      },
+      "title": "testReq"
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}
