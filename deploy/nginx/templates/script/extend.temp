@@ -40,7 +40,7 @@ server {
         error_log /dev/null;
         access_log /dev/null;
     }
-    
+
     access_log  /var/log/nginx/__NAME__.__DOMAIN__.log;
     error_log  /var/log/nginx/__NAME__.__DOMAIN__.error.log;
 }

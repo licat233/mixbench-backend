@@ -324,7 +324,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.PrizePool[lucky.PrizePoolId]; ok && v != nil {
 			prizesPool = v
 		} else {
-			prizesPool, err = m.PrizePoolModel.QueryOne(ctx, lucky.PrizePoolId)
+			prizesPool, err = m.PrizePoolModel.FindOne(ctx, lucky.PrizePoolId)
 			if err != nil && err != ErrNotFound {
 				return
 			}

@@ -19,8 +19,8 @@ import (
 var (
 	activityFieldNames          = builder.RawFieldNames(&Activity{})
 	activityRows                = strings.Join(activityFieldNames, ",")
-	activityRowsExpectAutoSet   = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`", "`create_time`"), ",")
-	activityRowsWithPlaceHolder = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`", "`create_time`"), "=?,") + "=?"
+	activityRowsExpectAutoSet   = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	activityRowsWithPlaceHolder = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheActivityIdPrefix = "cache:activity:id:"
 )
@@ -40,7 +40,7 @@ type (
 
 	Activity struct {
 		Id        int64     `db:"id"`         // 表主键
-		Uuid      string    `db:"uuid"`       // 唯一识别码
+		Uuid      string    `db:"uuid"`       // UUID
 		Name      string    `db:"name"`       // 活动名称
 		ProjectId int64     `db:"project_id"` // 项目id
 		Status    int64     `db:"status"`     // 活动状态，是否在举办，默认关闭，需手动开启
@@ -51,14 +51,12 @@ type (
 		EndTime   time.Time `db:"end_time"`   // 活动结束时间
 		CreateAt  time.Time `db:"create_at"`  // 创建时间
 		UpdateAt  time.Time `db:"update_at"`  // 更新时间
-		IsDeleted int64     `db:"is_deleted"` // 是否已被删除
-		DeleteAt  time.Time `db:"delete_at"`  // 删除时间
 	}
 )
 
-func newActivityModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultActivityModel {
+func newActivityModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultActivityModel {
 	return &defaultActivityModel{
-		CachedConn: sqlc.NewConn(conn, c),
+		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`activity`",
 	}
 }
@@ -75,7 +73,7 @@ func (m *defaultActivityModel) Delete(ctx context.Context, id int64) error {
 func (m *defaultActivityModel) FindOne(ctx context.Context, id int64) (*Activity, error) {
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, id)
 	var resp Activity
-	err := m.QueryRowCtx(ctx, &resp, activityIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+	err := m.QueryRowCtx(ctx, &resp, activityIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", activityRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -92,8 +90,8 @@ func (m *defaultActivityModel) FindOne(ctx context.Context, id int64) (*Activity
 func (m *defaultActivityModel) Insert(ctx context.Context, data *Activity) (sql.Result, error) {
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime)
 	}, activityIdKey)
 	return ret, err
 }
@@ -102,16 +100,16 @@ func (m *defaultActivityModel) Update(ctx context.Context, data *Activity) error
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, activityRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.Id)
 	}, activityIdKey)
 	return err
 }
 
-func (m *defaultActivityModel) formatPrimary(primary interface{}) string {
+func (m *defaultActivityModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheActivityIdPrefix, primary)
 }
 
-func (m *defaultActivityModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+func (m *defaultActivityModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", activityRows, m.table)
 	return conn.QueryRowCtx(ctx, v, query, primary)
 }

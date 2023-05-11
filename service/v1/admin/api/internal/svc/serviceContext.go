@@ -1,18 +1,21 @@
 /*
  * @Author: licat
- * @Date: 2022-11-17 14:55:32
+ * @Date: 2023-02-17 15:41:34
  * @LastEditors: licat
- * @LastEditTime: 2023-01-14 16:12:35
+ * @LastEditTime: 2023-02-20 16:04:44
  * @Description: licat233@gmail.com
  */
 package svc
 
 import (
+	"log"
+	"mixbench/common/rbacx"
 	"mixbench/service/v1/admin/api/internal/config"
 	"mixbench/service/v1/admin/api/internal/middleware"
-	"mixbench/service/v1/admin/rpc/admin"
+	"mixbench/service/v1/admin/model"
+	"mixbench/service/v1/admin/rpc/admin_pb"
 	"mixbench/service/v1/captcha/rpc/captcha"
-	"mixbench/service/v1/model"
+	"path"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -20,29 +23,48 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
+type AdminRpc struct {
+	admin_pb.AdminClient
+	admin_pb.BaseClient
+}
+
 type ServiceContext struct {
 	Config         config.Config
-	JwtMiddleware  rest.Middleware
+	AuthMiddleware rest.Middleware
 	RbacMiddleware rest.Middleware
 
-	CaptchaRpc captcha.Captcha
-	AdminRpc   admin.Admin
-
+	CaptchaRpc     captcha.Captcha
+	AdminRpc       AdminRpc
 	CasbinEnforcer *casbin.SyncedEnforcer
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
-	db, _ := sqlConn.RawDB()
-	rbacMiddleware := middleware.NewRbacMiddleware(db, c)
-	jwtBlacklistModel := model.NewJwtBlacklistModel(sqlConn, c.CacheRedis)
+	db, err := sqlConn.RawDB()
+	if err != nil {
+		log.Fatalf("[NewServiceContext] sqlConn.RawDB err: %v", err)
+	}
+	if err := db.Ping(); err != nil {
+		log.Fatalf("[NewServiceContext] SqlConnPing err: %v", err)
+	}
+	JwtBlacklistsModel := model.NewJwtBlacklistModel(sqlConn, c.CacheRedis)
 	AdminerModel := model.NewAdminerModel(sqlConn, c.CacheRedis)
+
+	clientConn := zrpc.MustNewClient(c.AdminRpc).Conn()
+
+	adminRpc := AdminRpc{
+		admin_pb.NewAdminClient(clientConn),
+		admin_pb.NewBaseClient(clientConn),
+	}
+
+	casbinFile := path.Join(c.RootDir, "etc/rbac_with_domains_model.conf")
+	enforcer := rbacx.NewCasbinEnforcer(db, casbinFile)
 	return &ServiceContext{
 		Config:         c,
-		JwtMiddleware:  middleware.NewJwtMiddleware(c, jwtBlacklistModel, AdminerModel).Handle,
-		RbacMiddleware: rbacMiddleware.Handle,
+		AuthMiddleware: middleware.NewAuthMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
+		RbacMiddleware: middleware.NewRbacMiddleware(enforcer, &adminRpc.BaseClient).Handle,
 		CaptchaRpc:     captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
-		AdminRpc:       admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
-		CasbinEnforcer: rbacMiddleware.CasbinEnforcer,
+		AdminRpc:       adminRpc,
+		CasbinEnforcer: enforcer,
 	}
 }

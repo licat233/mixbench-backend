@@ -30,7 +30,7 @@ type (
 		FindOneByEmail(ctx context.Context, email string) (*Adminer, error)
 		FindOneByPassport(ctx context.Context, passport string) (*Adminer, error)
 
-		ExsitByEmail(ctx context.Context, email string) (bool, error)
+		ExistsByEmail(ctx context.Context, email string) (bool, error)
 	}
 
 	customAdminerModel struct {
@@ -230,7 +230,7 @@ func (m *customAdminerModel) FindOneByEmail(ctx context.Context, email string) (
 	}
 }
 
-func (m *customAdminerModel) ExsitByEmail(ctx context.Context, email string) (bool, error) {
+func (m *customAdminerModel) ExistsByEmail(ctx context.Context, email string) (bool, error) {
 	query := fmt.Sprintf("select count(*) as count from %s where `email` = ? and `is_deleted`= 0 limit 1", m.table)
 	var count int64
 	err := m.QueryRowNoCacheCtx(ctx, &count, query, email)

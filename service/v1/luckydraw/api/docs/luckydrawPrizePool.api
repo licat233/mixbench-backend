@@ -1,0 +1,131 @@
+syntax = "v1"
+
+// ------------------------------ Import Start ------------------------------
+
+// The content in this block will not be updated
+// 此区块内的内容不会被更新
+//[custom import start]
+
+//[custom import end]
+
+// ------------------------------ Struct Start ------------------------------
+
+//---------活动奖品池，某活动中的奖品信息---------
+
+//活动奖品池，某活动中的奖品信息
+type PrizePool {
+  Id int64 `json:"id"`  // 表主键
+  Uuid string `json:"uuid"`  // 唯一识别码
+  ActivityId int64 `json:"activityId"`  // 活动id
+  PrizeId int64 `json:"prizeId"`  // 奖品id
+  GradeId int64 `json:"gradeId"`  // 奖品等级
+  LuckValue int64 `json:"luckValue"`  // 幸运值
+  Status int64 `json:"status"`  // 是否可用，0不可用，1可用
+  Total int64 `json:"total"`  // 奖品总数量
+  Remainder int64 `json:"remainder"`  // 奖品剩余数量
+}
+
+//添加活动奖品池，某活动中的奖品信息请求
+type AddPrizePoolReq {
+  ActivityId int64 `json:"activityId"`  // 活动id
+  PrizeId int64 `json:"prizeId"`  // 奖品id
+  GradeId int64 `json:"gradeId"`  // 奖品等级
+  LuckValue int64 `json:"luckValue"`  // 幸运值
+  Status int64 `json:"status"`  // 是否可用，0不可用，1可用
+  Total int64 `json:"total"`  // 奖品总数量
+  Remainder int64 `json:"remainder"`  // 奖品剩余数量
+}
+
+//更新活动奖品池，某活动中的奖品信息请求
+type PutPrizePoolReq {
+  Id int64 `json:"id"`  // 表主键
+  Uuid string `json:"uuid"`  // 唯一识别码
+  ActivityId int64 `json:"activityId"`  // 活动id
+  PrizeId int64 `json:"prizeId"`  // 奖品id
+  GradeId int64 `json:"gradeId"`  // 奖品等级
+  LuckValue int64 `json:"luckValue"`  // 幸运值
+  Status int64 `json:"status"`  // 是否可用，0不可用，1可用
+  Total int64 `json:"total"`  // 奖品总数量
+  Remainder int64 `json:"remainder"`  // 奖品剩余数量
+}
+
+//删除活动奖品池，某活动中的奖品信息请求
+type DelPrizePoolReq {
+  Id int64 `json:"id"`  // 活动奖品池，某活动中的奖品信息 ID
+}
+
+//获取活动奖品池，某活动中的奖品信息请求
+type GetPrizePoolReq {
+  Id int64 `form:"id"`  // 活动奖品池，某活动中的奖品信息 ID
+}
+
+//获取活动奖品池，某活动中的奖品信息列表请求
+type GetPrizePoolListReq {
+  PageSize int64 `form:"pageSize,optional,default=20"`  // 页面容量，默认20，可选
+  Page int64 `form:"page,optional,default=1"`  // 当前页码，默认1，可选
+  Current int64 `form:"current,optional,default=1"`  // 当前页码，默认1，用于对接umijs，可选
+  Keyword string `form:"keyword,optional"`  // 关键词，可选
+  Id int64 `form:"id,optional,default=-1"`  // 表主键
+  Uuid string `form:"uuid,optional"`  // 唯一识别码
+  ActivityId int64 `form:"activityId,optional,default=-1"`  // 活动id
+  PrizeId int64 `form:"prizeId,optional,default=-1"`  // 奖品id
+  GradeId int64 `form:"gradeId,optional,default=-1"`  // 奖品等级
+  LuckValue int64 `form:"luckValue,optional,default=-1"`  // 幸运值
+  Status int64 `form:"status,optional,default=-1"`  // 是否可用，0不可用，1可用
+  Total int64 `form:"total,optional,default=-1"`  // 奖品总数量
+  Remainder int64 `form:"remainder,optional,default=-1"`  // 奖品剩余数量
+}
+
+//获取活动奖品池，某活动中的奖品信息枚举请求
+type GetPrizePoolEnumsReq {
+  ParentId int64 `form:"parentId,optional,default=-1"`  // 父级ID
+}
+
+// The content in this block will not be updated
+// 此区块内的内容不会被更新
+//[custom struct start]
+
+//[custom struct end]
+
+// ------------------------------ Service Start ------------------------------
+
+// 活动奖品池，某活动中的奖品信息
+@server(
+  jwt: Auth
+  group: prizePool
+  middleware: AdminAuthMiddleware
+  prefix: /v1/api/admin/luckydraw/prizePool
+)
+service luckydraw-api {
+
+  @doc "添加活动奖品池，某活动中的奖品信息 基础API"
+  @handler AddPrizePool
+  post /(AddPrizePoolReq) returns (BaseResp)
+
+  @doc "更新活动奖品池，某活动中的奖品信息 基础API"
+  @handler PutPrizePool
+  put /(PutPrizePoolReq) returns (BaseResp)
+
+  @doc "获取活动奖品池，某活动中的奖品信息 基础API"
+  @handler GetPrizePool
+  get /(GetPrizePoolReq) returns (BaseResp)
+
+  @doc "删除活动奖品池，某活动中的奖品信息 基础API"
+  @handler DelPrizePool
+  delete /(DelPrizePoolReq) returns (BaseResp)
+
+  @doc "获取活动奖品池，某活动中的奖品信息列表 基础API"
+  @handler GetPrizePoolList
+  get /list(GetPrizePoolListReq) returns (BaseResp)
+
+  @doc "获取活动奖品池，某活动中的奖品信息枚举列表 基础API"
+  @handler GetPrizePoolEnums
+  get /enums(GetPrizePoolEnumsReq) returns (BaseResp)
+
+}
+
+// The content in this block will not be updated
+// 此区块内的内容不会被更新
+//[custom service start]
+
+//[custom service end]

@@ -4,6 +4,14 @@ package handler
 import (
 	"net/http"
 
+	activity "mixbench/service/v1/luckydraw/api/internal/handler/activity"
+	lucky "mixbench/service/v1/luckydraw/api/internal/handler/lucky"
+	prize "mixbench/service/v1/luckydraw/api/internal/handler/prize"
+	prizeGrade "mixbench/service/v1/luckydraw/api/internal/handler/prizeGrade"
+	prizePool "mixbench/service/v1/luckydraw/api/internal/handler/prizePool"
+	project "mixbench/service/v1/luckydraw/api/internal/handler/project"
+	user "mixbench/service/v1/luckydraw/api/internal/handler/user"
+	userPool "mixbench/service/v1/luckydraw/api/internal/handler/userPool"
 	"mixbench/service/v1/luckydraw/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -14,36 +22,36 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/identify",
-				Handler: identifyHandler(serverCtx),
+				Path:    "/userIdentify",
+				Handler: UserIdentifyHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/prizes",
-				Handler: prizesHandler(serverCtx),
+				Path:    "/activityPrizes",
+				Handler: ActivityPrizesHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/v1/api/luckydraw"),
+		rest.WithPrefix("/v1/api/admin/luckydraw"),
 	)
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Middleware{serverCtx.UserAuthMiddleware},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
-					Path:    "/luckyList",
-					Handler: luckyListHandler(serverCtx),
+					Path:    "/activityLuckyList",
+					Handler: GetALuckyListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/goodluck",
-					Handler: goodluckHandler(serverCtx),
+					Path:    "/luckydraw",
+					Handler: luckydrawHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
-					Path:    "/search",
-					Handler: searchHandler(serverCtx),
+					Path:    "/searchLucky",
+					Handler: searchLuckyHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
@@ -52,7 +60,294 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/luckydraw"),
+		rest.WithPrefix("/v1/api/admin/luckydraw"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: activity.AddActivityHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: activity.PutActivityHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: activity.GetActivityHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: activity.DelActivityHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: activity.GetActivityListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: activity.GetActivityEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/activity"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: lucky.AddLuckyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: lucky.PutLuckyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: lucky.GetLuckyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: lucky.DelLuckyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: lucky.GetLuckyListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: lucky.GetLuckyEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/lucky"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: prize.AddPrizeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: prize.PutPrizeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: prize.GetPrizeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: prize.DelPrizeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: prize.GetPrizeListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: prize.GetPrizeEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/prize"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: prizeGrade.AddPrizeGradeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: prizeGrade.PutPrizeGradeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: prizeGrade.GetPrizeGradeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: prizeGrade.DelPrizeGradeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: prizeGrade.GetPrizeGradeListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: prizeGrade.GetPrizeGradeEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/prizeGrade"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: prizePool.AddPrizePoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: prizePool.PutPrizePoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: prizePool.GetPrizePoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: prizePool.DelPrizePoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: prizePool.GetPrizePoolListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: prizePool.GetPrizePoolEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/prizePool"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: project.AddProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: project.PutProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: project.GetProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: project.DelProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: project.GetProjectListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: project.GetProjectEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/project"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: user.AddUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: user.PutUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: user.GetUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: user.DelUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: user.GetUserListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: user.GetUserEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/user"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: userPool.AddUserPoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: userPool.PutUserPoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: userPool.GetUserPoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: userPool.DelUserPoolHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: userPool.GetUserPoolListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: userPool.GetUserPoolEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/userPool"),
 	)
 }

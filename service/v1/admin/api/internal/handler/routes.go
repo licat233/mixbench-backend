@@ -4,27 +4,45 @@ package handler
 import (
 	"net/http"
 
-	account "mixbench/service/v1/admin/api/internal/handler/account"
-	activity "mixbench/service/v1/admin/api/internal/handler/activity"
 	adminer "mixbench/service/v1/admin/api/internal/handler/adminer"
-	goods "mixbench/service/v1/admin/api/internal/handler/goods"
-	goodsCategory "mixbench/service/v1/admin/api/internal/handler/goodsCategory"
-	goodsTag "mixbench/service/v1/admin/api/internal/handler/goodsTag"
-	lucky "mixbench/service/v1/admin/api/internal/handler/lucky"
-	prize "mixbench/service/v1/admin/api/internal/handler/prize"
-	prizeGrade "mixbench/service/v1/admin/api/internal/handler/prizeGrade"
-	prizesPool "mixbench/service/v1/admin/api/internal/handler/prizesPool"
-	project "mixbench/service/v1/admin/api/internal/handler/project"
-	rbac "mixbench/service/v1/admin/api/internal/handler/rbac"
-	upload "mixbench/service/v1/admin/api/internal/handler/upload"
-	user "mixbench/service/v1/admin/api/internal/handler/user"
-	usersPool "mixbench/service/v1/admin/api/internal/handler/usersPool"
 	"mixbench/service/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/auth",
+				Handler: authHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/logout",
+					Handler: logoutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/currentUser",
+					Handler: currentUserHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin"),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{
@@ -63,676 +81,71 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
-					Path:    "/logout",
-					Handler: logoutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/currentUser",
-					Handler: currentUserHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/list",
-					Handler: activity.ActivityListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/detail",
-					Handler: activity.ActivityDetailHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/details",
-					Handler: activity.ActivityDetailsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
 					Path:    "/",
-					Handler: activity.ActivityInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: activity.ActivityAddHandler(serverCtx),
+					Handler: adminer.AddAdminerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
 					Path:    "/",
-					Handler: activity.ActivityPutHandler(serverCtx),
+					Handler: adminer.PutAdminerHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: adminer.GetAdminerHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodDelete,
 					Path:    "/",
-					Handler: activity.ActivityDelHandler(serverCtx),
+					Handler: adminer.DelAdminerHandler(serverCtx),
 				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: activity.ActivityEnumListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/projectActivity",
-					Handler: activity.ProjectActivityHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/userActivities",
-					Handler: activity.UserActivitiesHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/patternEnumList",
-					Handler: activity.ActivityPatternEnumListHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/activity"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
 				{
 					Method:  http.MethodGet,
 					Path:    "/list",
-					Handler: adminer.AdminerListHandler(serverCtx),
+					Handler: adminer.GetAdminerListHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: adminer.AdminerInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: adminer.AdminerAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: adminer.AdminerPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: adminer.AdminerDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: adminer.AdminerEnumListHandler(serverCtx),
+					Path:    "/enums",
+					Handler: adminer.GetAdminerEnumsHandler(serverCtx),
 				},
 			}...,
 		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/adminer"),
 	)
 
 	server.AddRoutes(
 		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: lucky.LuckyListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/details",
-					Handler: lucky.LuckyDetailsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: lucky.LuckyInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: lucky.LuckyAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: lucky.LuckyPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/putByPrize",
-					Handler: lucky.PutByPrizeHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: lucky.LuckyDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: lucky.LuckyEnumListHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/lucky"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: prize.PrizeListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: prize.PrizeInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: prize.PrizeAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: prize.PrizePutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: prize.PrizeDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: prize.PrizeEnumListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/activityPrizes",
-					Handler: prize.ActivityPrizesHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/prize"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: prizeGrade.PrizeGradeListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: prizeGrade.PrizeGradeInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: prizeGrade.PrizeGradeAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: prizeGrade.PrizeGradePutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: prizeGrade.PrizeGradeDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: prizeGrade.PrizeGradeEnumListHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/prizeGrade"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: prizesPool.PrizePoolListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: prizesPool.PrizePoolInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: prizesPool.PrizePoolAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: prizesPool.PrizePoolPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: prizesPool.PrizePoolDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/resetLuckValue",
-					Handler: prizesPool.ResetLuckValueHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/prizesPool"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: project.ProjectListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/projectDetails",
-					Handler: project.ProjectDetailsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: project.ProjectInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: project.ProjectAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: project.ProjectPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: project.ProjectDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: project.ProjectEnumListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/projectDetail",
-					Handler: project.ProjectDetailHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/projectTreeOptions",
-					Handler: project.ProjectTreeOptionsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/project"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/policy",
-					Handler: rbac.GetPolicyHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/policy",
-					Handler: rbac.AddPolicyHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/policy",
-					Handler: rbac.PutPolicyHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/policy",
-					Handler: rbac.DelPolicyHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/policies",
-					Handler: rbac.GetPoliciesHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/policies",
-					Handler: rbac.AddPoliciesHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/policies",
-					Handler: rbac.PutPoliciesHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/policies",
-					Handler: rbac.DelPoliciesHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/all-actions",
-					Handler: rbac.GetAllActionsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/all-policies",
-					Handler: rbac.GetAllPolicyHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/all-objects",
-					Handler: rbac.GetAllObjectsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/domain-users",
-					Handler: rbac.GetAllUsersByDomainHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/permissions",
-					Handler: rbac.GetPermissionsForUserInDomainHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/rbac"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: user.UserListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/detail",
-					Handler: user.UserDetailHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/details",
-					Handler: user.UserDetailsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: user.UserInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: user.UserAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: user.UserPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: user.UserDelHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enumList",
-					Handler: user.UserEnumListHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/user"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: usersPool.UserPoolListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: usersPool.UserPoolInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: usersPool.UserPoolAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: usersPool.UserPoolPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: usersPool.UserPoolDelHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/usersPool"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
 					Path:    "/verifyPassword",
-					Handler: account.VerifyPasswordHandler(serverCtx),
+					Handler: adminer.VerifyPasswordHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/putCurrent",
-					Handler: account.PutCurrentHandler(serverCtx),
+					Handler: adminer.PutCurrentHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
 					Path:    "/currentInfo",
-					Handler: account.CurrentInfoHandler(serverCtx),
+					Handler: adminer.CurrentInfoHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPost,
 					Path:    "/putPassword",
-					Handler: account.PutPasswordHandler(serverCtx),
+					Handler: adminer.PutPasswordHandler(serverCtx),
 				},
 			}...,
 		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/account"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/avatar",
-					Handler: upload.UploadAvatarHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/logo",
-					Handler: upload.UploadLogoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/image",
-					Handler: upload.UploadImgHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/upload"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: goods.GoodsListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: goods.GoodsInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: goods.GoodsAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: goods.GoodsPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: goods.GoodsDelHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/goods"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: goodsCategory.GoodsCategoryListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: goodsCategory.GoodsCategoryInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: goodsCategory.GoodsCategoryAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: goodsCategory.GoodsCategoryPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: goodsCategory.GoodsCategoryDelHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/goodsCategory"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.JwtMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: goodsTag.GoodsTagListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: goodsTag.GoodsTagInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: goodsTag.GoodsTagAddHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: goodsTag.GoodsTagPutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: goodsTag.GoodsTagDelHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
-		rest.WithPrefix("/v1/api/admin/goodsTag"),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/adminer"),
 	)
 }

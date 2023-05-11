@@ -19,8 +19,8 @@ import (
 var (
 	adminerFieldNames          = builder.RawFieldNames(&Adminer{})
 	adminerRows                = strings.Join(adminerFieldNames, ",")
-	adminerRowsExpectAutoSet   = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`"), ",")
-	adminerRowsWithPlaceHolder = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`"), "=?,") + "=?"
+	adminerRowsExpectAutoSet   = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	adminerRowsWithPlaceHolder = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheAdminerIdPrefix = "cache:adminer:id:"
 )
@@ -40,9 +40,10 @@ type (
 
 	Adminer struct {
 		Id           int64     `db:"id"`             // 表主键
-		Uuid         string    `db:"uuid"`           // 唯一识别码
+		Uuid         string    `db:"uuid"`           // UUID
 		Name         string    `db:"name"`           // 管理员名称
 		Avatar       string    `db:"avatar"`         // 头像
+		Access       string    `db:"access"`         // 身份
 		Passport     string    `db:"passport"`       // 账号
 		Password     string    `db:"password"`       // 密码
 		Email        string    `db:"email"`          // 邮箱
@@ -52,14 +53,12 @@ type (
 		LastLogin    time.Time `db:"last_login"`     // 最后一次登录时间
 		CreateAt     time.Time `db:"create_at"`      // 创建时间
 		UpdateAt     time.Time `db:"update_at"`      // 更新时间
-		IsDeleted    int64     `db:"is_deleted"`     // 是否已被删除
-		DeleteAt     time.Time `db:"delete_at"`      // 删除时间
 	}
 )
 
-func newAdminerModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultAdminerModel {
+func newAdminerModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultAdminerModel {
 	return &defaultAdminerModel{
-		CachedConn: sqlc.NewConn(conn, c),
+		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`adminer`",
 	}
 }
@@ -76,7 +75,7 @@ func (m *defaultAdminerModel) Delete(ctx context.Context, id int64) error {
 func (m *defaultAdminerModel) FindOne(ctx context.Context, id int64) (*Adminer, error) {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, id)
 	var resp Adminer
-	err := m.QueryRowCtx(ctx, &resp, adminerIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+	err := m.QueryRowCtx(ctx, &resp, adminerIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", adminerRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -93,8 +92,8 @@ func (m *defaultAdminerModel) FindOne(ctx context.Context, id int64) (*Adminer, 
 func (m *defaultAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Result, error) {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin)
 	}, adminerIdKey)
 	return ret, err
 }
@@ -103,16 +102,16 @@ func (m *defaultAdminerModel) Update(ctx context.Context, data *Adminer) error {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, adminerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.Id)
 	}, adminerIdKey)
 	return err
 }
 
-func (m *defaultAdminerModel) formatPrimary(primary interface{}) string {
+func (m *defaultAdminerModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheAdminerIdPrefix, primary)
 }
 
-func (m *defaultAdminerModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+func (m *defaultAdminerModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", adminerRows, m.table)
 	return conn.QueryRowCtx(ctx, v, query, primary)
 }

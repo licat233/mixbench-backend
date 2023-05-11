@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:32
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-17 15:43:03
+ * @Description: licat233@gmail.com
+ */
 package config
 
 import (
@@ -13,7 +20,7 @@ type Config struct {
 	Mysql struct {
 		DataSource string
 	}
-	JwtAuth struct {
+	Auth struct {
 		AccessSecret string
 		AccessExpire int64
 	}

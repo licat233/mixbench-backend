@@ -1,15 +1,23 @@
+/*
+ * @Author: licat
+ * @Date: 2023-02-17 15:41:34
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 12:23:43
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
 	"context"
-	"mixbench/service/v1/admin/api/internal/svc"
-	"mixbench/service/v1/admin/rpc/admin_pb"
 	"net/http"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/common/utils"
+	"mixbench/service/v1/admin/api/internal/svc"
+	"mixbench/service/v1/admin/rpc/admin_pb"
+
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LogoutLogic struct {

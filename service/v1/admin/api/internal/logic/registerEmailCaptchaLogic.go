@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2023-02-17 15:41:34
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 12:24:47
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -52,13 +59,13 @@ func (l *RegisterEmailCaptchaLogic) RegisterEmailCaptcha(req *types.RegisterEmai
 	}
 
 	//检查该邮箱是否存在
-	resp, err := l.svcCtx.AdminRpc.ExsitEmail(l.ctx, &admin_pb.ExsitEmailReq{
+	resp, err := l.svcCtx.AdminRpc.ExistsEmail(l.ctx, &admin_pb.ExistsEmailReq{
 		Email: email,
 	})
 	if err != nil {
 		return nil, err
 	}
-	if resp.Exsit {
+	if resp.Exists {
 		return nil, errorx.Alert("This email already exists")
 	}
 

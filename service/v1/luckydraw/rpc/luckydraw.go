@@ -1,10 +1,3 @@
-/*
- * @Author: licat
- * @Date: 2023-02-01 16:08:53
- * @LastEditors: licat
- * @LastEditTime: 2023-02-01 16:09:34
- * @Description: licat233@gmail.com
- */
 package main
 
 import (
@@ -13,7 +6,8 @@ import (
 
 	"mixbench/common/errorx"
 	"mixbench/service/v1/luckydraw/rpc/internal/config"
-	"mixbench/service/v1/luckydraw/rpc/internal/server"
+	baseluckydrawServer "mixbench/service/v1/luckydraw/rpc/internal/server/base"
+	luckydrawServer "mixbench/service/v1/luckydraw/rpc/internal/server/luckydraw"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
 
@@ -38,7 +32,8 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		luckydraw_pb.RegisterLuckydrawServer(grpcServer, server.NewLuckydrawServer(ctx))
+		luckydraw_pb.RegisterBaseServer(grpcServer, baseluckydrawServer.NewBaseServer(ctx))
+		luckydraw_pb.RegisterLuckydrawServer(grpcServer, luckydrawServer.NewLuckydrawServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

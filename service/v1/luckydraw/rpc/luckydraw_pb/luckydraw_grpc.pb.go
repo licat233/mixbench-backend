@@ -18,68 +18,1894 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
+// BaseClient is the client API for Base service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type BaseClient interface {
+	// 添加活动
+	AddActivity(ctx context.Context, in *AddActivityReq, opts ...grpc.CallOption) (*AddActivityResp, error)
+	// 更新活动
+	PutActivity(ctx context.Context, in *PutActivityReq, opts ...grpc.CallOption) (*PutActivityResp, error)
+	// 获取活动
+	GetActivity(ctx context.Context, in *GetActivityReq, opts ...grpc.CallOption) (*GetActivityResp, error)
+	// 删除活动
+	DelActivity(ctx context.Context, in *DelActivityReq, opts ...grpc.CallOption) (*DelActivityResp, error)
+	// 获取活动列表
+	GetActivityList(ctx context.Context, in *GetActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
+	// 获取活动枚举列表
+	GetActivityEnums(ctx context.Context, in *GetActivityEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加中奖名单
+	AddLucky(ctx context.Context, in *AddLuckyReq, opts ...grpc.CallOption) (*AddLuckyResp, error)
+	// 更新中奖名单
+	PutLucky(ctx context.Context, in *PutLuckyReq, opts ...grpc.CallOption) (*PutLuckyResp, error)
+	// 获取中奖名单
+	GetLucky(ctx context.Context, in *GetLuckyReq, opts ...grpc.CallOption) (*GetLuckyResp, error)
+	// 删除中奖名单
+	DelLucky(ctx context.Context, in *DelLuckyReq, opts ...grpc.CallOption) (*DelLuckyResp, error)
+	// 获取中奖名单列表
+	GetLuckyList(ctx context.Context, in *GetLuckyListReq, opts ...grpc.CallOption) (*GetLuckyListResp, error)
+	// 获取中奖名单枚举列表
+	GetLuckyEnums(ctx context.Context, in *GetLuckyEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加奖品名单
+	AddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error)
+	// 更新奖品名单
+	PutPrize(ctx context.Context, in *PutPrizeReq, opts ...grpc.CallOption) (*PutPrizeResp, error)
+	// 获取奖品名单
+	GetPrize(ctx context.Context, in *GetPrizeReq, opts ...grpc.CallOption) (*GetPrizeResp, error)
+	// 删除奖品名单
+	DelPrize(ctx context.Context, in *DelPrizeReq, opts ...grpc.CallOption) (*DelPrizeResp, error)
+	// 获取奖品名单列表
+	GetPrizeList(ctx context.Context, in *GetPrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error)
+	// 获取奖品名单枚举列表
+	GetPrizeEnums(ctx context.Context, in *GetPrizeEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加奖品级别
+	AddPrizeGrade(ctx context.Context, in *AddPrizeGradeReq, opts ...grpc.CallOption) (*AddPrizeGradeResp, error)
+	// 更新奖品级别
+	PutPrizeGrade(ctx context.Context, in *PutPrizeGradeReq, opts ...grpc.CallOption) (*PutPrizeGradeResp, error)
+	// 获取奖品级别
+	GetPrizeGrade(ctx context.Context, in *GetPrizeGradeReq, opts ...grpc.CallOption) (*GetPrizeGradeResp, error)
+	// 删除奖品级别
+	DelPrizeGrade(ctx context.Context, in *DelPrizeGradeReq, opts ...grpc.CallOption) (*DelPrizeGradeResp, error)
+	// 获取奖品级别列表
+	GetPrizeGradeList(ctx context.Context, in *GetPrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error)
+	// 获取奖品级别枚举列表
+	GetPrizeGradeEnums(ctx context.Context, in *GetPrizeGradeEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加活动奖品池，某活动中的奖品信息
+	AddPrizePool(ctx context.Context, in *AddPrizePoolReq, opts ...grpc.CallOption) (*AddPrizePoolResp, error)
+	// 更新活动奖品池，某活动中的奖品信息
+	PutPrizePool(ctx context.Context, in *PutPrizePoolReq, opts ...grpc.CallOption) (*PutPrizePoolResp, error)
+	// 获取活动奖品池，某活动中的奖品信息
+	GetPrizePool(ctx context.Context, in *GetPrizePoolReq, opts ...grpc.CallOption) (*GetPrizePoolResp, error)
+	// 删除活动奖品池，某活动中的奖品信息
+	DelPrizePool(ctx context.Context, in *DelPrizePoolReq, opts ...grpc.CallOption) (*DelPrizePoolResp, error)
+	// 获取活动奖品池，某活动中的奖品信息列表
+	GetPrizePoolList(ctx context.Context, in *GetPrizePoolListReq, opts ...grpc.CallOption) (*GetPrizePoolListResp, error)
+	// 获取活动奖品池，某活动中的奖品信息枚举列表
+	GetPrizePoolEnums(ctx context.Context, in *GetPrizePoolEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加项目
+	AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
+	// 更新项目
+	PutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error)
+	// 获取项目
+	GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectResp, error)
+	// 删除项目
+	DelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error)
+	// 获取项目列表
+	GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
+	// 获取项目枚举列表
+	GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加用户名单
+	AddUser(ctx context.Context, in *AddUserReq, opts ...grpc.CallOption) (*AddUserResp, error)
+	// 更新用户名单
+	PutUser(ctx context.Context, in *PutUserReq, opts ...grpc.CallOption) (*PutUserResp, error)
+	// 获取用户名单
+	GetUser(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserResp, error)
+	// 删除用户名单
+	DelUser(ctx context.Context, in *DelUserReq, opts ...grpc.CallOption) (*DelUserResp, error)
+	// 获取用户名单列表
+	GetUserList(ctx context.Context, in *GetUserListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
+	// 获取用户名单枚举列表
+	GetUserEnums(ctx context.Context, in *GetUserEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	AddUserPool(ctx context.Context, in *AddUserPoolReq, opts ...grpc.CallOption) (*AddUserPoolResp, error)
+	// 更新活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	PutUserPool(ctx context.Context, in *PutUserPoolReq, opts ...grpc.CallOption) (*PutUserPoolResp, error)
+	// 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	GetUserPool(ctx context.Context, in *GetUserPoolReq, opts ...grpc.CallOption) (*GetUserPoolResp, error)
+	// 删除活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	DelUserPool(ctx context.Context, in *DelUserPoolReq, opts ...grpc.CallOption) (*DelUserPoolResp, error)
+	// 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理列表
+	GetUserPoolList(ctx context.Context, in *GetUserPoolListReq, opts ...grpc.CallOption) (*GetUserPoolListResp, error)
+	// 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理枚举列表
+	GetUserPoolEnums(ctx context.Context, in *GetUserPoolEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+}
+
+type baseClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewBaseClient(cc grpc.ClientConnInterface) BaseClient {
+	return &baseClient{cc}
+}
+
+func (c *baseClient) AddActivity(ctx context.Context, in *AddActivityReq, opts ...grpc.CallOption) (*AddActivityResp, error) {
+	out := new(AddActivityResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddActivity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutActivity(ctx context.Context, in *PutActivityReq, opts ...grpc.CallOption) (*PutActivityResp, error) {
+	out := new(PutActivityResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutActivity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetActivity(ctx context.Context, in *GetActivityReq, opts ...grpc.CallOption) (*GetActivityResp, error) {
+	out := new(GetActivityResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetActivity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelActivity(ctx context.Context, in *DelActivityReq, opts ...grpc.CallOption) (*DelActivityResp, error) {
+	out := new(DelActivityResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelActivity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetActivityList(ctx context.Context, in *GetActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
+	out := new(GetActivityListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetActivityList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetActivityEnums(ctx context.Context, in *GetActivityEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetActivityEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddLucky(ctx context.Context, in *AddLuckyReq, opts ...grpc.CallOption) (*AddLuckyResp, error) {
+	out := new(AddLuckyResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddLucky", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutLucky(ctx context.Context, in *PutLuckyReq, opts ...grpc.CallOption) (*PutLuckyResp, error) {
+	out := new(PutLuckyResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutLucky", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetLucky(ctx context.Context, in *GetLuckyReq, opts ...grpc.CallOption) (*GetLuckyResp, error) {
+	out := new(GetLuckyResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetLucky", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelLucky(ctx context.Context, in *DelLuckyReq, opts ...grpc.CallOption) (*DelLuckyResp, error) {
+	out := new(DelLuckyResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelLucky", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetLuckyList(ctx context.Context, in *GetLuckyListReq, opts ...grpc.CallOption) (*GetLuckyListResp, error) {
+	out := new(GetLuckyListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetLuckyList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetLuckyEnums(ctx context.Context, in *GetLuckyEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetLuckyEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error) {
+	out := new(AddPrizeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddPrize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutPrize(ctx context.Context, in *PutPrizeReq, opts ...grpc.CallOption) (*PutPrizeResp, error) {
+	out := new(PutPrizeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutPrize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrize(ctx context.Context, in *GetPrizeReq, opts ...grpc.CallOption) (*GetPrizeResp, error) {
+	out := new(GetPrizeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelPrize(ctx context.Context, in *DelPrizeReq, opts ...grpc.CallOption) (*DelPrizeResp, error) {
+	out := new(DelPrizeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelPrize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizeList(ctx context.Context, in *GetPrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error) {
+	out := new(GetPrizeListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizeList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizeEnums(ctx context.Context, in *GetPrizeEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizeEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddPrizeGrade(ctx context.Context, in *AddPrizeGradeReq, opts ...grpc.CallOption) (*AddPrizeGradeResp, error) {
+	out := new(AddPrizeGradeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddPrizeGrade", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutPrizeGrade(ctx context.Context, in *PutPrizeGradeReq, opts ...grpc.CallOption) (*PutPrizeGradeResp, error) {
+	out := new(PutPrizeGradeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutPrizeGrade", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizeGrade(ctx context.Context, in *GetPrizeGradeReq, opts ...grpc.CallOption) (*GetPrizeGradeResp, error) {
+	out := new(GetPrizeGradeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizeGrade", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelPrizeGrade(ctx context.Context, in *DelPrizeGradeReq, opts ...grpc.CallOption) (*DelPrizeGradeResp, error) {
+	out := new(DelPrizeGradeResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelPrizeGrade", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizeGradeList(ctx context.Context, in *GetPrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error) {
+	out := new(GetPrizeGradeListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizeGradeList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizeGradeEnums(ctx context.Context, in *GetPrizeGradeEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizeGradeEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddPrizePool(ctx context.Context, in *AddPrizePoolReq, opts ...grpc.CallOption) (*AddPrizePoolResp, error) {
+	out := new(AddPrizePoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddPrizePool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutPrizePool(ctx context.Context, in *PutPrizePoolReq, opts ...grpc.CallOption) (*PutPrizePoolResp, error) {
+	out := new(PutPrizePoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutPrizePool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizePool(ctx context.Context, in *GetPrizePoolReq, opts ...grpc.CallOption) (*GetPrizePoolResp, error) {
+	out := new(GetPrizePoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizePool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelPrizePool(ctx context.Context, in *DelPrizePoolReq, opts ...grpc.CallOption) (*DelPrizePoolResp, error) {
+	out := new(DelPrizePoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelPrizePool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizePoolList(ctx context.Context, in *GetPrizePoolListReq, opts ...grpc.CallOption) (*GetPrizePoolListResp, error) {
+	out := new(GetPrizePoolListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizePoolList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetPrizePoolEnums(ctx context.Context, in *GetPrizePoolEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetPrizePoolEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
+	out := new(AddProjectResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error) {
+	out := new(PutProjectResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectResp, error) {
+	out := new(GetProjectResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error) {
+	out := new(DelProjectResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
+	out := new(GetProjectListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetProjectList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetProjectEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddUser(ctx context.Context, in *AddUserReq, opts ...grpc.CallOption) (*AddUserResp, error) {
+	out := new(AddUserResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutUser(ctx context.Context, in *PutUserReq, opts ...grpc.CallOption) (*PutUserResp, error) {
+	out := new(PutUserResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetUser(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserResp, error) {
+	out := new(GetUserResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelUser(ctx context.Context, in *DelUserReq, opts ...grpc.CallOption) (*DelUserResp, error) {
+	out := new(DelUserResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetUserList(ctx context.Context, in *GetUserListReq, opts ...grpc.CallOption) (*GetUserListResp, error) {
+	out := new(GetUserListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetUserList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetUserEnums(ctx context.Context, in *GetUserEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetUserEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddUserPool(ctx context.Context, in *AddUserPoolReq, opts ...grpc.CallOption) (*AddUserPoolResp, error) {
+	out := new(AddUserPoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/AddUserPool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutUserPool(ctx context.Context, in *PutUserPoolReq, opts ...grpc.CallOption) (*PutUserPoolResp, error) {
+	out := new(PutUserPoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/PutUserPool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetUserPool(ctx context.Context, in *GetUserPoolReq, opts ...grpc.CallOption) (*GetUserPoolResp, error) {
+	out := new(GetUserPoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetUserPool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelUserPool(ctx context.Context, in *DelUserPoolReq, opts ...grpc.CallOption) (*DelUserPoolResp, error) {
+	out := new(DelUserPoolResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/DelUserPool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetUserPoolList(ctx context.Context, in *GetUserPoolListReq, opts ...grpc.CallOption) (*GetUserPoolListResp, error) {
+	out := new(GetUserPoolListResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetUserPoolList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetUserPoolEnums(ctx context.Context, in *GetUserPoolEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Base/GetUserPoolEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// BaseServer is the server API for Base service.
+// All implementations must embed UnimplementedBaseServer
+// for forward compatibility
+type BaseServer interface {
+	// 添加活动
+	AddActivity(context.Context, *AddActivityReq) (*AddActivityResp, error)
+	// 更新活动
+	PutActivity(context.Context, *PutActivityReq) (*PutActivityResp, error)
+	// 获取活动
+	GetActivity(context.Context, *GetActivityReq) (*GetActivityResp, error)
+	// 删除活动
+	DelActivity(context.Context, *DelActivityReq) (*DelActivityResp, error)
+	// 获取活动列表
+	GetActivityList(context.Context, *GetActivityListReq) (*GetActivityListResp, error)
+	// 获取活动枚举列表
+	GetActivityEnums(context.Context, *GetActivityEnumsReq) (*Enums, error)
+	// 添加中奖名单
+	AddLucky(context.Context, *AddLuckyReq) (*AddLuckyResp, error)
+	// 更新中奖名单
+	PutLucky(context.Context, *PutLuckyReq) (*PutLuckyResp, error)
+	// 获取中奖名单
+	GetLucky(context.Context, *GetLuckyReq) (*GetLuckyResp, error)
+	// 删除中奖名单
+	DelLucky(context.Context, *DelLuckyReq) (*DelLuckyResp, error)
+	// 获取中奖名单列表
+	GetLuckyList(context.Context, *GetLuckyListReq) (*GetLuckyListResp, error)
+	// 获取中奖名单枚举列表
+	GetLuckyEnums(context.Context, *GetLuckyEnumsReq) (*Enums, error)
+	// 添加奖品名单
+	AddPrize(context.Context, *AddPrizeReq) (*AddPrizeResp, error)
+	// 更新奖品名单
+	PutPrize(context.Context, *PutPrizeReq) (*PutPrizeResp, error)
+	// 获取奖品名单
+	GetPrize(context.Context, *GetPrizeReq) (*GetPrizeResp, error)
+	// 删除奖品名单
+	DelPrize(context.Context, *DelPrizeReq) (*DelPrizeResp, error)
+	// 获取奖品名单列表
+	GetPrizeList(context.Context, *GetPrizeListReq) (*GetPrizeListResp, error)
+	// 获取奖品名单枚举列表
+	GetPrizeEnums(context.Context, *GetPrizeEnumsReq) (*Enums, error)
+	// 添加奖品级别
+	AddPrizeGrade(context.Context, *AddPrizeGradeReq) (*AddPrizeGradeResp, error)
+	// 更新奖品级别
+	PutPrizeGrade(context.Context, *PutPrizeGradeReq) (*PutPrizeGradeResp, error)
+	// 获取奖品级别
+	GetPrizeGrade(context.Context, *GetPrizeGradeReq) (*GetPrizeGradeResp, error)
+	// 删除奖品级别
+	DelPrizeGrade(context.Context, *DelPrizeGradeReq) (*DelPrizeGradeResp, error)
+	// 获取奖品级别列表
+	GetPrizeGradeList(context.Context, *GetPrizeGradeListReq) (*GetPrizeGradeListResp, error)
+	// 获取奖品级别枚举列表
+	GetPrizeGradeEnums(context.Context, *GetPrizeGradeEnumsReq) (*Enums, error)
+	// 添加活动奖品池，某活动中的奖品信息
+	AddPrizePool(context.Context, *AddPrizePoolReq) (*AddPrizePoolResp, error)
+	// 更新活动奖品池，某活动中的奖品信息
+	PutPrizePool(context.Context, *PutPrizePoolReq) (*PutPrizePoolResp, error)
+	// 获取活动奖品池，某活动中的奖品信息
+	GetPrizePool(context.Context, *GetPrizePoolReq) (*GetPrizePoolResp, error)
+	// 删除活动奖品池，某活动中的奖品信息
+	DelPrizePool(context.Context, *DelPrizePoolReq) (*DelPrizePoolResp, error)
+	// 获取活动奖品池，某活动中的奖品信息列表
+	GetPrizePoolList(context.Context, *GetPrizePoolListReq) (*GetPrizePoolListResp, error)
+	// 获取活动奖品池，某活动中的奖品信息枚举列表
+	GetPrizePoolEnums(context.Context, *GetPrizePoolEnumsReq) (*Enums, error)
+	// 添加项目
+	AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error)
+	// 更新项目
+	PutProject(context.Context, *PutProjectReq) (*PutProjectResp, error)
+	// 获取项目
+	GetProject(context.Context, *GetProjectReq) (*GetProjectResp, error)
+	// 删除项目
+	DelProject(context.Context, *DelProjectReq) (*DelProjectResp, error)
+	// 获取项目列表
+	GetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error)
+	// 获取项目枚举列表
+	GetProjectEnums(context.Context, *GetProjectEnumsReq) (*Enums, error)
+	// 添加用户名单
+	AddUser(context.Context, *AddUserReq) (*AddUserResp, error)
+	// 更新用户名单
+	PutUser(context.Context, *PutUserReq) (*PutUserResp, error)
+	// 获取用户名单
+	GetUser(context.Context, *GetUserReq) (*GetUserResp, error)
+	// 删除用户名单
+	DelUser(context.Context, *DelUserReq) (*DelUserResp, error)
+	// 获取用户名单列表
+	GetUserList(context.Context, *GetUserListReq) (*GetUserListResp, error)
+	// 获取用户名单枚举列表
+	GetUserEnums(context.Context, *GetUserEnumsReq) (*Enums, error)
+	// 添加活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	AddUserPool(context.Context, *AddUserPoolReq) (*AddUserPoolResp, error)
+	// 更新活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	PutUserPool(context.Context, *PutUserPoolReq) (*PutUserPoolResp, error)
+	// 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	GetUserPool(context.Context, *GetUserPoolReq) (*GetUserPoolResp, error)
+	// 删除活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
+	DelUserPool(context.Context, *DelUserPoolReq) (*DelUserPoolResp, error)
+	// 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理列表
+	GetUserPoolList(context.Context, *GetUserPoolListReq) (*GetUserPoolListResp, error)
+	// 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理枚举列表
+	GetUserPoolEnums(context.Context, *GetUserPoolEnumsReq) (*Enums, error)
+	mustEmbedUnimplementedBaseServer()
+}
+
+// UnimplementedBaseServer must be embedded to have forward compatible implementations.
+type UnimplementedBaseServer struct {
+}
+
+func (UnimplementedBaseServer) AddActivity(context.Context, *AddActivityReq) (*AddActivityResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddActivity not implemented")
+}
+func (UnimplementedBaseServer) PutActivity(context.Context, *PutActivityReq) (*PutActivityResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutActivity not implemented")
+}
+func (UnimplementedBaseServer) GetActivity(context.Context, *GetActivityReq) (*GetActivityResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActivity not implemented")
+}
+func (UnimplementedBaseServer) DelActivity(context.Context, *DelActivityReq) (*DelActivityResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelActivity not implemented")
+}
+func (UnimplementedBaseServer) GetActivityList(context.Context, *GetActivityListReq) (*GetActivityListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActivityList not implemented")
+}
+func (UnimplementedBaseServer) GetActivityEnums(context.Context, *GetActivityEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActivityEnums not implemented")
+}
+func (UnimplementedBaseServer) AddLucky(context.Context, *AddLuckyReq) (*AddLuckyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddLucky not implemented")
+}
+func (UnimplementedBaseServer) PutLucky(context.Context, *PutLuckyReq) (*PutLuckyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutLucky not implemented")
+}
+func (UnimplementedBaseServer) GetLucky(context.Context, *GetLuckyReq) (*GetLuckyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLucky not implemented")
+}
+func (UnimplementedBaseServer) DelLucky(context.Context, *DelLuckyReq) (*DelLuckyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelLucky not implemented")
+}
+func (UnimplementedBaseServer) GetLuckyList(context.Context, *GetLuckyListReq) (*GetLuckyListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLuckyList not implemented")
+}
+func (UnimplementedBaseServer) GetLuckyEnums(context.Context, *GetLuckyEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLuckyEnums not implemented")
+}
+func (UnimplementedBaseServer) AddPrize(context.Context, *AddPrizeReq) (*AddPrizeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPrize not implemented")
+}
+func (UnimplementedBaseServer) PutPrize(context.Context, *PutPrizeReq) (*PutPrizeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutPrize not implemented")
+}
+func (UnimplementedBaseServer) GetPrize(context.Context, *GetPrizeReq) (*GetPrizeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrize not implemented")
+}
+func (UnimplementedBaseServer) DelPrize(context.Context, *DelPrizeReq) (*DelPrizeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelPrize not implemented")
+}
+func (UnimplementedBaseServer) GetPrizeList(context.Context, *GetPrizeListReq) (*GetPrizeListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeList not implemented")
+}
+func (UnimplementedBaseServer) GetPrizeEnums(context.Context, *GetPrizeEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeEnums not implemented")
+}
+func (UnimplementedBaseServer) AddPrizeGrade(context.Context, *AddPrizeGradeReq) (*AddPrizeGradeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPrizeGrade not implemented")
+}
+func (UnimplementedBaseServer) PutPrizeGrade(context.Context, *PutPrizeGradeReq) (*PutPrizeGradeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutPrizeGrade not implemented")
+}
+func (UnimplementedBaseServer) GetPrizeGrade(context.Context, *GetPrizeGradeReq) (*GetPrizeGradeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeGrade not implemented")
+}
+func (UnimplementedBaseServer) DelPrizeGrade(context.Context, *DelPrizeGradeReq) (*DelPrizeGradeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelPrizeGrade not implemented")
+}
+func (UnimplementedBaseServer) GetPrizeGradeList(context.Context, *GetPrizeGradeListReq) (*GetPrizeGradeListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeGradeList not implemented")
+}
+func (UnimplementedBaseServer) GetPrizeGradeEnums(context.Context, *GetPrizeGradeEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizeGradeEnums not implemented")
+}
+func (UnimplementedBaseServer) AddPrizePool(context.Context, *AddPrizePoolReq) (*AddPrizePoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPrizePool not implemented")
+}
+func (UnimplementedBaseServer) PutPrizePool(context.Context, *PutPrizePoolReq) (*PutPrizePoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutPrizePool not implemented")
+}
+func (UnimplementedBaseServer) GetPrizePool(context.Context, *GetPrizePoolReq) (*GetPrizePoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizePool not implemented")
+}
+func (UnimplementedBaseServer) DelPrizePool(context.Context, *DelPrizePoolReq) (*DelPrizePoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelPrizePool not implemented")
+}
+func (UnimplementedBaseServer) GetPrizePoolList(context.Context, *GetPrizePoolListReq) (*GetPrizePoolListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizePoolList not implemented")
+}
+func (UnimplementedBaseServer) GetPrizePoolEnums(context.Context, *GetPrizePoolEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPrizePoolEnums not implemented")
+}
+func (UnimplementedBaseServer) AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddProject not implemented")
+}
+func (UnimplementedBaseServer) PutProject(context.Context, *PutProjectReq) (*PutProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutProject not implemented")
+}
+func (UnimplementedBaseServer) GetProject(context.Context, *GetProjectReq) (*GetProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
+}
+func (UnimplementedBaseServer) DelProject(context.Context, *DelProjectReq) (*DelProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelProject not implemented")
+}
+func (UnimplementedBaseServer) GetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectList not implemented")
+}
+func (UnimplementedBaseServer) GetProjectEnums(context.Context, *GetProjectEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectEnums not implemented")
+}
+func (UnimplementedBaseServer) AddUser(context.Context, *AddUserReq) (*AddUserResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
+}
+func (UnimplementedBaseServer) PutUser(context.Context, *PutUserReq) (*PutUserResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutUser not implemented")
+}
+func (UnimplementedBaseServer) GetUser(context.Context, *GetUserReq) (*GetUserResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedBaseServer) DelUser(context.Context, *DelUserReq) (*DelUserResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelUser not implemented")
+}
+func (UnimplementedBaseServer) GetUserList(context.Context, *GetUserListReq) (*GetUserListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserList not implemented")
+}
+func (UnimplementedBaseServer) GetUserEnums(context.Context, *GetUserEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserEnums not implemented")
+}
+func (UnimplementedBaseServer) AddUserPool(context.Context, *AddUserPoolReq) (*AddUserPoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUserPool not implemented")
+}
+func (UnimplementedBaseServer) PutUserPool(context.Context, *PutUserPoolReq) (*PutUserPoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutUserPool not implemented")
+}
+func (UnimplementedBaseServer) GetUserPool(context.Context, *GetUserPoolReq) (*GetUserPoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserPool not implemented")
+}
+func (UnimplementedBaseServer) DelUserPool(context.Context, *DelUserPoolReq) (*DelUserPoolResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelUserPool not implemented")
+}
+func (UnimplementedBaseServer) GetUserPoolList(context.Context, *GetUserPoolListReq) (*GetUserPoolListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserPoolList not implemented")
+}
+func (UnimplementedBaseServer) GetUserPoolEnums(context.Context, *GetUserPoolEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserPoolEnums not implemented")
+}
+func (UnimplementedBaseServer) mustEmbedUnimplementedBaseServer() {}
+
+// UnsafeBaseServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BaseServer will
+// result in compilation errors.
+type UnsafeBaseServer interface {
+	mustEmbedUnimplementedBaseServer()
+}
+
+func RegisterBaseServer(s grpc.ServiceRegistrar, srv BaseServer) {
+	s.RegisterService(&Base_ServiceDesc, srv)
+}
+
+func _Base_AddActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddActivityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddActivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddActivity(ctx, req.(*AddActivityReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutActivityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutActivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutActivity(ctx, req.(*PutActivityReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActivityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetActivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetActivity(ctx, req.(*GetActivityReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelActivityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelActivity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelActivity(ctx, req.(*DelActivityReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetActivityList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActivityListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetActivityList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetActivityList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetActivityList(ctx, req.(*GetActivityListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetActivityEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActivityEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetActivityEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetActivityEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetActivityEnums(ctx, req.(*GetActivityEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddLuckyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddLucky(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddLucky",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddLucky(ctx, req.(*AddLuckyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutLuckyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutLucky(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutLucky",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutLucky(ctx, req.(*PutLuckyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLuckyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetLucky(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetLucky",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetLucky(ctx, req.(*GetLuckyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelLuckyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelLucky(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelLucky",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelLucky(ctx, req.(*DelLuckyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetLuckyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLuckyListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetLuckyList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetLuckyList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetLuckyList(ctx, req.(*GetLuckyListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetLuckyEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLuckyEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetLuckyEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetLuckyEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetLuckyEnums(ctx, req.(*GetLuckyEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPrizeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddPrize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddPrize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddPrize(ctx, req.(*AddPrizeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutPrizeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutPrize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutPrize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutPrize(ctx, req.(*PutPrizeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrize(ctx, req.(*GetPrizeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelPrizeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelPrize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelPrize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelPrize(ctx, req.(*DelPrizeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizeListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizeList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizeList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizeList(ctx, req.(*GetPrizeListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizeEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizeEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizeEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizeEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizeEnums(ctx, req.(*GetPrizeEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPrizeGradeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddPrizeGrade(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddPrizeGrade",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddPrizeGrade(ctx, req.(*AddPrizeGradeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutPrizeGradeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutPrizeGrade(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutPrizeGrade",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutPrizeGrade(ctx, req.(*PutPrizeGradeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizeGradeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizeGrade(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizeGrade",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizeGrade(ctx, req.(*GetPrizeGradeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelPrizeGradeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelPrizeGrade(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelPrizeGrade",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelPrizeGrade(ctx, req.(*DelPrizeGradeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizeGradeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizeGradeListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizeGradeList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizeGradeList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizeGradeList(ctx, req.(*GetPrizeGradeListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizeGradeEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizeGradeEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizeGradeEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizeGradeEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizeGradeEnums(ctx, req.(*GetPrizeGradeEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPrizePoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddPrizePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddPrizePool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddPrizePool(ctx, req.(*AddPrizePoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutPrizePoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutPrizePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutPrizePool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutPrizePool(ctx, req.(*PutPrizePoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizePoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizePool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizePool(ctx, req.(*GetPrizePoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelPrizePoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelPrizePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelPrizePool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelPrizePool(ctx, req.(*DelPrizePoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizePoolList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizePoolListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizePoolList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizePoolList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizePoolList(ctx, req.(*GetPrizePoolListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetPrizePoolEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPrizePoolEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetPrizePoolEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetPrizePoolEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetPrizePoolEnums(ctx, req.(*GetPrizePoolEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddProject(ctx, req.(*AddProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutProject(ctx, req.(*PutProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetProject(ctx, req.(*GetProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelProject(ctx, req.(*DelProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetProjectList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetProjectList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetProjectList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetProjectList(ctx, req.(*GetProjectListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetProjectEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetProjectEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetProjectEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetProjectEnums(ctx, req.(*GetProjectEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddUser(ctx, req.(*AddUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutUser(ctx, req.(*PutUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetUser(ctx, req.(*GetUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelUser(ctx, req.(*DelUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetUserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetUserList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetUserList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetUserList(ctx, req.(*GetUserListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetUserEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetUserEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetUserEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetUserEnums(ctx, req.(*GetUserEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserPoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddUserPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/AddUserPool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddUserPool(ctx, req.(*AddUserPoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutUserPoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutUserPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/PutUserPool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutUserPool(ctx, req.(*PutUserPoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserPoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetUserPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetUserPool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetUserPool(ctx, req.(*GetUserPoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelUserPoolReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelUserPool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/DelUserPool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelUserPool(ctx, req.(*DelUserPoolReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetUserPoolList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserPoolListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetUserPoolList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetUserPoolList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetUserPoolList(ctx, req.(*GetUserPoolListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetUserPoolEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserPoolEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetUserPoolEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Base/GetUserPoolEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetUserPoolEnums(ctx, req.(*GetUserPoolEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Base_ServiceDesc is the grpc.ServiceDesc for Base service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Base_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "luckydraw_proto.Base",
+	HandlerType: (*BaseServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddActivity",
+			Handler:    _Base_AddActivity_Handler,
+		},
+		{
+			MethodName: "PutActivity",
+			Handler:    _Base_PutActivity_Handler,
+		},
+		{
+			MethodName: "GetActivity",
+			Handler:    _Base_GetActivity_Handler,
+		},
+		{
+			MethodName: "DelActivity",
+			Handler:    _Base_DelActivity_Handler,
+		},
+		{
+			MethodName: "GetActivityList",
+			Handler:    _Base_GetActivityList_Handler,
+		},
+		{
+			MethodName: "GetActivityEnums",
+			Handler:    _Base_GetActivityEnums_Handler,
+		},
+		{
+			MethodName: "AddLucky",
+			Handler:    _Base_AddLucky_Handler,
+		},
+		{
+			MethodName: "PutLucky",
+			Handler:    _Base_PutLucky_Handler,
+		},
+		{
+			MethodName: "GetLucky",
+			Handler:    _Base_GetLucky_Handler,
+		},
+		{
+			MethodName: "DelLucky",
+			Handler:    _Base_DelLucky_Handler,
+		},
+		{
+			MethodName: "GetLuckyList",
+			Handler:    _Base_GetLuckyList_Handler,
+		},
+		{
+			MethodName: "GetLuckyEnums",
+			Handler:    _Base_GetLuckyEnums_Handler,
+		},
+		{
+			MethodName: "AddPrize",
+			Handler:    _Base_AddPrize_Handler,
+		},
+		{
+			MethodName: "PutPrize",
+			Handler:    _Base_PutPrize_Handler,
+		},
+		{
+			MethodName: "GetPrize",
+			Handler:    _Base_GetPrize_Handler,
+		},
+		{
+			MethodName: "DelPrize",
+			Handler:    _Base_DelPrize_Handler,
+		},
+		{
+			MethodName: "GetPrizeList",
+			Handler:    _Base_GetPrizeList_Handler,
+		},
+		{
+			MethodName: "GetPrizeEnums",
+			Handler:    _Base_GetPrizeEnums_Handler,
+		},
+		{
+			MethodName: "AddPrizeGrade",
+			Handler:    _Base_AddPrizeGrade_Handler,
+		},
+		{
+			MethodName: "PutPrizeGrade",
+			Handler:    _Base_PutPrizeGrade_Handler,
+		},
+		{
+			MethodName: "GetPrizeGrade",
+			Handler:    _Base_GetPrizeGrade_Handler,
+		},
+		{
+			MethodName: "DelPrizeGrade",
+			Handler:    _Base_DelPrizeGrade_Handler,
+		},
+		{
+			MethodName: "GetPrizeGradeList",
+			Handler:    _Base_GetPrizeGradeList_Handler,
+		},
+		{
+			MethodName: "GetPrizeGradeEnums",
+			Handler:    _Base_GetPrizeGradeEnums_Handler,
+		},
+		{
+			MethodName: "AddPrizePool",
+			Handler:    _Base_AddPrizePool_Handler,
+		},
+		{
+			MethodName: "PutPrizePool",
+			Handler:    _Base_PutPrizePool_Handler,
+		},
+		{
+			MethodName: "GetPrizePool",
+			Handler:    _Base_GetPrizePool_Handler,
+		},
+		{
+			MethodName: "DelPrizePool",
+			Handler:    _Base_DelPrizePool_Handler,
+		},
+		{
+			MethodName: "GetPrizePoolList",
+			Handler:    _Base_GetPrizePoolList_Handler,
+		},
+		{
+			MethodName: "GetPrizePoolEnums",
+			Handler:    _Base_GetPrizePoolEnums_Handler,
+		},
+		{
+			MethodName: "AddProject",
+			Handler:    _Base_AddProject_Handler,
+		},
+		{
+			MethodName: "PutProject",
+			Handler:    _Base_PutProject_Handler,
+		},
+		{
+			MethodName: "GetProject",
+			Handler:    _Base_GetProject_Handler,
+		},
+		{
+			MethodName: "DelProject",
+			Handler:    _Base_DelProject_Handler,
+		},
+		{
+			MethodName: "GetProjectList",
+			Handler:    _Base_GetProjectList_Handler,
+		},
+		{
+			MethodName: "GetProjectEnums",
+			Handler:    _Base_GetProjectEnums_Handler,
+		},
+		{
+			MethodName: "AddUser",
+			Handler:    _Base_AddUser_Handler,
+		},
+		{
+			MethodName: "PutUser",
+			Handler:    _Base_PutUser_Handler,
+		},
+		{
+			MethodName: "GetUser",
+			Handler:    _Base_GetUser_Handler,
+		},
+		{
+			MethodName: "DelUser",
+			Handler:    _Base_DelUser_Handler,
+		},
+		{
+			MethodName: "GetUserList",
+			Handler:    _Base_GetUserList_Handler,
+		},
+		{
+			MethodName: "GetUserEnums",
+			Handler:    _Base_GetUserEnums_Handler,
+		},
+		{
+			MethodName: "AddUserPool",
+			Handler:    _Base_AddUserPool_Handler,
+		},
+		{
+			MethodName: "PutUserPool",
+			Handler:    _Base_PutUserPool_Handler,
+		},
+		{
+			MethodName: "GetUserPool",
+			Handler:    _Base_GetUserPool_Handler,
+		},
+		{
+			MethodName: "DelUserPool",
+			Handler:    _Base_DelUserPool_Handler,
+		},
+		{
+			MethodName: "GetUserPoolList",
+			Handler:    _Base_GetUserPoolList_Handler,
+		},
+		{
+			MethodName: "GetUserPoolEnums",
+			Handler:    _Base_GetUserPoolEnums_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "luckydraw.proto",
+}
+
 // LuckydrawClient is the client API for Luckydraw service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LuckydrawClient interface {
-	BaseAddActivity(ctx context.Context, in *AddActivityReq, opts ...grpc.CallOption) (*AddActivityResp, error)
-	BasePutActivity(ctx context.Context, in *PutActivityReq, opts ...grpc.CallOption) (*PutActivityResp, error)
-	BaseDelActivity(ctx context.Context, in *DelActivityReq, opts ...grpc.CallOption) (*DelActivityResp, error)
-	BaseGetActivityById(ctx context.Context, in *GetActivityByIdReq, opts ...grpc.CallOption) (*GetActivityByIdResp, error)
-	BaseGetActivityList(ctx context.Context, in *GetActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error)
-	BaseGetActivityEnums(ctx context.Context, in *GetActivityEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddLucky(ctx context.Context, in *AddLuckyReq, opts ...grpc.CallOption) (*AddLuckyResp, error)
-	BasePutLucky(ctx context.Context, in *PutLuckyReq, opts ...grpc.CallOption) (*PutLuckyResp, error)
-	BaseDelLucky(ctx context.Context, in *DelLuckyReq, opts ...grpc.CallOption) (*DelLuckyResp, error)
-	BaseGetLuckyById(ctx context.Context, in *GetLuckyByIdReq, opts ...grpc.CallOption) (*GetLuckyByIdResp, error)
-	BaseGetLuckyList(ctx context.Context, in *GetLuckyListReq, opts ...grpc.CallOption) (*GetLuckyListResp, error)
-	BaseGetLuckyEnums(ctx context.Context, in *GetLuckyEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error)
-	BasePutPrize(ctx context.Context, in *PutPrizeReq, opts ...grpc.CallOption) (*PutPrizeResp, error)
-	BaseDelPrize(ctx context.Context, in *DelPrizeReq, opts ...grpc.CallOption) (*DelPrizeResp, error)
-	BaseGetPrizeById(ctx context.Context, in *GetPrizeByIdReq, opts ...grpc.CallOption) (*GetPrizeByIdResp, error)
-	BaseGetPrizeList(ctx context.Context, in *GetPrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error)
-	BaseGetPrizeEnums(ctx context.Context, in *GetPrizeEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddPrizeGrade(ctx context.Context, in *AddPrizeGradeReq, opts ...grpc.CallOption) (*AddPrizeGradeResp, error)
-	BasePutPrizeGrade(ctx context.Context, in *PutPrizeGradeReq, opts ...grpc.CallOption) (*PutPrizeGradeResp, error)
-	BaseDelPrizeGrade(ctx context.Context, in *DelPrizeGradeReq, opts ...grpc.CallOption) (*DelPrizeGradeResp, error)
-	BaseGetPrizeGradeById(ctx context.Context, in *GetPrizeGradeByIdReq, opts ...grpc.CallOption) (*GetPrizeGradeByIdResp, error)
-	BaseGetPrizeGradeList(ctx context.Context, in *GetPrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error)
-	BaseGetPrizeGradeEnums(ctx context.Context, in *GetPrizeGradeEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddPrizePool(ctx context.Context, in *AddPrizePoolReq, opts ...grpc.CallOption) (*AddPrizePoolResp, error)
-	BasePutPrizePool(ctx context.Context, in *PutPrizePoolReq, opts ...grpc.CallOption) (*PutPrizePoolResp, error)
-	BaseDelPrizePool(ctx context.Context, in *DelPrizePoolReq, opts ...grpc.CallOption) (*DelPrizePoolResp, error)
-	BaseGetPrizePoolById(ctx context.Context, in *GetPrizePoolByIdReq, opts ...grpc.CallOption) (*GetPrizePoolByIdResp, error)
-	BaseGetPrizePoolList(ctx context.Context, in *GetPrizePoolListReq, opts ...grpc.CallOption) (*GetPrizePoolListResp, error)
-	BaseGetPrizePoolEnums(ctx context.Context, in *GetPrizePoolEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
-	BasePutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error)
-	BaseDelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error)
-	BaseGetProjectById(ctx context.Context, in *GetProjectByIdReq, opts ...grpc.CallOption) (*GetProjectByIdResp, error)
-	BaseGetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
-	BaseGetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddUser(ctx context.Context, in *AddUserReq, opts ...grpc.CallOption) (*AddUserResp, error)
-	BasePutUser(ctx context.Context, in *PutUserReq, opts ...grpc.CallOption) (*PutUserResp, error)
-	BaseDelUser(ctx context.Context, in *DelUserReq, opts ...grpc.CallOption) (*DelUserResp, error)
-	BaseGetUserById(ctx context.Context, in *GetUserByIdReq, opts ...grpc.CallOption) (*GetUserByIdResp, error)
-	BaseGetUserList(ctx context.Context, in *GetUserListReq, opts ...grpc.CallOption) (*GetUserListResp, error)
-	BaseGetUserEnums(ctx context.Context, in *GetUserEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
-	BaseAddUserPool(ctx context.Context, in *AddUserPoolReq, opts ...grpc.CallOption) (*AddUserPoolResp, error)
-	BasePutUserPool(ctx context.Context, in *PutUserPoolReq, opts ...grpc.CallOption) (*PutUserPoolResp, error)
-	BaseDelUserPool(ctx context.Context, in *DelUserPoolReq, opts ...grpc.CallOption) (*DelUserPoolResp, error)
-	BaseGetUserPoolById(ctx context.Context, in *GetUserPoolByIdReq, opts ...grpc.CallOption) (*GetUserPoolByIdResp, error)
-	BaseGetUserPoolList(ctx context.Context, in *GetUserPoolListReq, opts ...grpc.CallOption) (*GetUserPoolListResp, error)
-	BaseGetUserPoolEnums(ctx context.Context, in *GetUserPoolEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
 	// 抽奖凭证校验，验证用户身份，颁发jwt
-	UserIdentify(ctx context.Context, in *IdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error)
+	UserIdentify(ctx context.Context, in *UserIdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error)
 	// 抽奖接口
-	LuckyDraw(ctx context.Context, in *LuckyDrawReq, opts ...grpc.CallOption) (*LuckyDrawResp, error)
+	Luckydraw(ctx context.Context, in *LuckydrawReq, opts ...grpc.CallOption) (*LuckydrawResp, error)
 	// 用户确认认领奖品名单，记得把剩余的改为弃领状态
 	SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error)
 	// 生产jwtToken
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
 	// 活动规则枚举
-	GetActivityPatternEnums(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*GetEnumsResp, error)
+	GetActivityPatternEnums(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*Enums, error)
 	// 获取每个项目及其包含的活动
 	GetProjectTreeOptions(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*TreeOptions, error)
 	// 获取项目详细
@@ -126,450 +1952,18 @@ func NewLuckydrawClient(cc grpc.ClientConnInterface) LuckydrawClient {
 	return &luckydrawClient{cc}
 }
 
-func (c *luckydrawClient) BaseAddActivity(ctx context.Context, in *AddActivityReq, opts ...grpc.CallOption) (*AddActivityResp, error) {
-	out := new(AddActivityResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddActivity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutActivity(ctx context.Context, in *PutActivityReq, opts ...grpc.CallOption) (*PutActivityResp, error) {
-	out := new(PutActivityResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutActivity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelActivity(ctx context.Context, in *DelActivityReq, opts ...grpc.CallOption) (*DelActivityResp, error) {
-	out := new(DelActivityResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelActivity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetActivityById(ctx context.Context, in *GetActivityByIdReq, opts ...grpc.CallOption) (*GetActivityByIdResp, error) {
-	out := new(GetActivityByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetActivityById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetActivityList(ctx context.Context, in *GetActivityListReq, opts ...grpc.CallOption) (*GetActivityListResp, error) {
-	out := new(GetActivityListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetActivityList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetActivityEnums(ctx context.Context, in *GetActivityEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetActivityEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddLucky(ctx context.Context, in *AddLuckyReq, opts ...grpc.CallOption) (*AddLuckyResp, error) {
-	out := new(AddLuckyResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddLucky", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutLucky(ctx context.Context, in *PutLuckyReq, opts ...grpc.CallOption) (*PutLuckyResp, error) {
-	out := new(PutLuckyResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutLucky", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelLucky(ctx context.Context, in *DelLuckyReq, opts ...grpc.CallOption) (*DelLuckyResp, error) {
-	out := new(DelLuckyResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelLucky", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetLuckyById(ctx context.Context, in *GetLuckyByIdReq, opts ...grpc.CallOption) (*GetLuckyByIdResp, error) {
-	out := new(GetLuckyByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetLuckyById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetLuckyList(ctx context.Context, in *GetLuckyListReq, opts ...grpc.CallOption) (*GetLuckyListResp, error) {
-	out := new(GetLuckyListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetLuckyList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetLuckyEnums(ctx context.Context, in *GetLuckyEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetLuckyEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error) {
-	out := new(AddPrizeResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddPrize", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutPrize(ctx context.Context, in *PutPrizeReq, opts ...grpc.CallOption) (*PutPrizeResp, error) {
-	out := new(PutPrizeResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutPrize", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelPrize(ctx context.Context, in *DelPrizeReq, opts ...grpc.CallOption) (*DelPrizeResp, error) {
-	out := new(DelPrizeResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelPrize", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizeById(ctx context.Context, in *GetPrizeByIdReq, opts ...grpc.CallOption) (*GetPrizeByIdResp, error) {
-	out := new(GetPrizeByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizeById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizeList(ctx context.Context, in *GetPrizeListReq, opts ...grpc.CallOption) (*GetPrizeListResp, error) {
-	out := new(GetPrizeListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizeList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizeEnums(ctx context.Context, in *GetPrizeEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizeEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddPrizeGrade(ctx context.Context, in *AddPrizeGradeReq, opts ...grpc.CallOption) (*AddPrizeGradeResp, error) {
-	out := new(AddPrizeGradeResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddPrizeGrade", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutPrizeGrade(ctx context.Context, in *PutPrizeGradeReq, opts ...grpc.CallOption) (*PutPrizeGradeResp, error) {
-	out := new(PutPrizeGradeResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutPrizeGrade", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelPrizeGrade(ctx context.Context, in *DelPrizeGradeReq, opts ...grpc.CallOption) (*DelPrizeGradeResp, error) {
-	out := new(DelPrizeGradeResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelPrizeGrade", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizeGradeById(ctx context.Context, in *GetPrizeGradeByIdReq, opts ...grpc.CallOption) (*GetPrizeGradeByIdResp, error) {
-	out := new(GetPrizeGradeByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizeGradeById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizeGradeList(ctx context.Context, in *GetPrizeGradeListReq, opts ...grpc.CallOption) (*GetPrizeGradeListResp, error) {
-	out := new(GetPrizeGradeListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizeGradeList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizeGradeEnums(ctx context.Context, in *GetPrizeGradeEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizeGradeEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddPrizePool(ctx context.Context, in *AddPrizePoolReq, opts ...grpc.CallOption) (*AddPrizePoolResp, error) {
-	out := new(AddPrizePoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddPrizePool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutPrizePool(ctx context.Context, in *PutPrizePoolReq, opts ...grpc.CallOption) (*PutPrizePoolResp, error) {
-	out := new(PutPrizePoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutPrizePool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelPrizePool(ctx context.Context, in *DelPrizePoolReq, opts ...grpc.CallOption) (*DelPrizePoolResp, error) {
-	out := new(DelPrizePoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelPrizePool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizePoolById(ctx context.Context, in *GetPrizePoolByIdReq, opts ...grpc.CallOption) (*GetPrizePoolByIdResp, error) {
-	out := new(GetPrizePoolByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizePoolById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizePoolList(ctx context.Context, in *GetPrizePoolListReq, opts ...grpc.CallOption) (*GetPrizePoolListResp, error) {
-	out := new(GetPrizePoolListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizePoolList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetPrizePoolEnums(ctx context.Context, in *GetPrizePoolEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetPrizePoolEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
-	out := new(AddProjectResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddProject", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error) {
-	out := new(PutProjectResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutProject", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error) {
-	out := new(DelProjectResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelProject", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetProjectById(ctx context.Context, in *GetProjectByIdReq, opts ...grpc.CallOption) (*GetProjectByIdResp, error) {
-	out := new(GetProjectByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetProjectById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
-	out := new(GetProjectListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetProjectList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetProjectEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddUser(ctx context.Context, in *AddUserReq, opts ...grpc.CallOption) (*AddUserResp, error) {
-	out := new(AddUserResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutUser(ctx context.Context, in *PutUserReq, opts ...grpc.CallOption) (*PutUserResp, error) {
-	out := new(PutUserResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelUser(ctx context.Context, in *DelUserReq, opts ...grpc.CallOption) (*DelUserResp, error) {
-	out := new(DelUserResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetUserById(ctx context.Context, in *GetUserByIdReq, opts ...grpc.CallOption) (*GetUserByIdResp, error) {
-	out := new(GetUserByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetUserById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetUserList(ctx context.Context, in *GetUserListReq, opts ...grpc.CallOption) (*GetUserListResp, error) {
-	out := new(GetUserListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetUserList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetUserEnums(ctx context.Context, in *GetUserEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetUserEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseAddUserPool(ctx context.Context, in *AddUserPoolReq, opts ...grpc.CallOption) (*AddUserPoolResp, error) {
-	out := new(AddUserPoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseAddUserPool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BasePutUserPool(ctx context.Context, in *PutUserPoolReq, opts ...grpc.CallOption) (*PutUserPoolResp, error) {
-	out := new(PutUserPoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BasePutUserPool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseDelUserPool(ctx context.Context, in *DelUserPoolReq, opts ...grpc.CallOption) (*DelUserPoolResp, error) {
-	out := new(DelUserPoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseDelUserPool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetUserPoolById(ctx context.Context, in *GetUserPoolByIdReq, opts ...grpc.CallOption) (*GetUserPoolByIdResp, error) {
-	out := new(GetUserPoolByIdResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetUserPoolById", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetUserPoolList(ctx context.Context, in *GetUserPoolListReq, opts ...grpc.CallOption) (*GetUserPoolListResp, error) {
-	out := new(GetUserPoolListResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetUserPoolList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) BaseGetUserPoolEnums(ctx context.Context, in *GetUserPoolEnumsReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/BaseGetUserPoolEnums", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) UserIdentify(ctx context.Context, in *IdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error) {
+func (c *luckydrawClient) UserIdentify(ctx context.Context, in *UserIdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error) {
 	out := new(IdentifyResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/UserIdentify", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/UserIdentify", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *luckydrawClient) LuckyDraw(ctx context.Context, in *LuckyDrawReq, opts ...grpc.CallOption) (*LuckyDrawResp, error) {
-	out := new(LuckyDrawResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/luckyDraw", in, out, opts...)
+func (c *luckydrawClient) Luckydraw(ctx context.Context, in *LuckydrawReq, opts ...grpc.CallOption) (*LuckydrawResp, error) {
+	out := new(LuckydrawResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/Luckydraw", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -578,7 +1972,7 @@ func (c *luckydrawClient) LuckyDraw(ctx context.Context, in *LuckyDrawReq, opts 
 
 func (c *luckydrawClient) SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error) {
 	out := new(SelectPrizesResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/SelectPrizes", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/SelectPrizes", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -587,16 +1981,16 @@ func (c *luckydrawClient) SelectPrizes(ctx context.Context, in *SelectPrizesReq,
 
 func (c *luckydrawClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
 	out := new(GenerateTokenResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GenerateToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GenerateToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *luckydrawClient) GetActivityPatternEnums(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*GetEnumsResp, error) {
-	out := new(GetEnumsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetActivityPatternEnums", in, out, opts...)
+func (c *luckydrawClient) GetActivityPatternEnums(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetActivityPatternEnums", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -605,7 +1999,7 @@ func (c *luckydrawClient) GetActivityPatternEnums(ctx context.Context, in *NilRe
 
 func (c *luckydrawClient) GetProjectTreeOptions(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*TreeOptions, error) {
 	out := new(TreeOptions)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetProjectTreeOptions", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetProjectTreeOptions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -614,7 +2008,7 @@ func (c *luckydrawClient) GetProjectTreeOptions(ctx context.Context, in *NilReq,
 
 func (c *luckydrawClient) GetProjectDetail(ctx context.Context, in *GetProjectDetailReq, opts ...grpc.CallOption) (*GetProjectDetailResp, error) {
 	out := new(GetProjectDetailResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetProjectDetail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetProjectDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -623,7 +2017,7 @@ func (c *luckydrawClient) GetProjectDetail(ctx context.Context, in *GetProjectDe
 
 func (c *luckydrawClient) GetProjectDetails(ctx context.Context, in *GetProjectDetailsReq, opts ...grpc.CallOption) (*GetProjectDetailsResp, error) {
 	out := new(GetProjectDetailsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetProjectDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetProjectDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -632,7 +2026,7 @@ func (c *luckydrawClient) GetProjectDetails(ctx context.Context, in *GetProjectD
 
 func (c *luckydrawClient) GetActivityDetail(ctx context.Context, in *GetActivityDetailReq, opts ...grpc.CallOption) (*GetActivityDetailResp, error) {
 	out := new(GetActivityDetailResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetActivityDetail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetActivityDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -641,7 +2035,7 @@ func (c *luckydrawClient) GetActivityDetail(ctx context.Context, in *GetActivity
 
 func (c *luckydrawClient) GetActivityDetails(ctx context.Context, in *GetActivityDetailsReq, opts ...grpc.CallOption) (*GetActivityDetailsResp, error) {
 	out := new(GetActivityDetailsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetActivityDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetActivityDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -650,7 +2044,7 @@ func (c *luckydrawClient) GetActivityDetails(ctx context.Context, in *GetActivit
 
 func (c *luckydrawClient) GetProjectActivities(ctx context.Context, in *GetProjectActivitiesReq, opts ...grpc.CallOption) (*GetProjectActivitiesResp, error) {
 	out := new(GetProjectActivitiesResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetProjectActivities", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetProjectActivities", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -659,7 +2053,7 @@ func (c *luckydrawClient) GetProjectActivities(ctx context.Context, in *GetProje
 
 func (c *luckydrawClient) GetUserActivities(ctx context.Context, in *GetUserActivitiesReq, opts ...grpc.CallOption) (*GetUserActivitiesResp, error) {
 	out := new(GetUserActivitiesResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserActivities", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUserActivities", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -668,7 +2062,7 @@ func (c *luckydrawClient) GetUserActivities(ctx context.Context, in *GetUserActi
 
 func (c *luckydrawClient) GetActivityPrizes(ctx context.Context, in *GetActivityPrizesReq, opts ...grpc.CallOption) (*GetActivityPrizesResp, error) {
 	out := new(GetActivityPrizesResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetActivityPrizes", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetActivityPrizes", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -677,7 +2071,7 @@ func (c *luckydrawClient) GetActivityPrizes(ctx context.Context, in *GetActivity
 
 func (c *luckydrawClient) GetActivityPrizePool(ctx context.Context, in *GetActivityPrizePoolReq, opts ...grpc.CallOption) (*GetActivityPrizePoolResp, error) {
 	out := new(GetActivityPrizePoolResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetActivityPrizePool", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetActivityPrizePool", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -686,7 +2080,7 @@ func (c *luckydrawClient) GetActivityPrizePool(ctx context.Context, in *GetActiv
 
 func (c *luckydrawClient) ResetActivityLuckValue(ctx context.Context, in *ResetActivityLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	out := new(StatusResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/ResetActivityLuckValue", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/ResetActivityLuckValue", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -695,7 +2089,7 @@ func (c *luckydrawClient) ResetActivityLuckValue(ctx context.Context, in *ResetA
 
 func (c *luckydrawClient) GetUserDetail(ctx context.Context, in *GetUserDetailReq, opts ...grpc.CallOption) (*GetUserDetailResp, error) {
 	out := new(GetUserDetailResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserDetail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUserDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -704,7 +2098,7 @@ func (c *luckydrawClient) GetUserDetail(ctx context.Context, in *GetUserDetailRe
 
 func (c *luckydrawClient) GetUserDetails(ctx context.Context, in *GetUserDetailsReq, opts ...grpc.CallOption) (*GetUserDetailsResp, error) {
 	out := new(GetUserDetailsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUserDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -713,7 +2107,7 @@ func (c *luckydrawClient) GetUserDetails(ctx context.Context, in *GetUserDetails
 
 func (c *luckydrawClient) GetUserByKeyword(ctx context.Context, in *GetUserByKeywordReq, opts ...grpc.CallOption) (*GetUserByKeywordResp, error) {
 	out := new(GetUserByKeywordResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserByKeyword", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUserByKeyword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -722,7 +2116,7 @@ func (c *luckydrawClient) GetUserByKeyword(ctx context.Context, in *GetUserByKey
 
 func (c *luckydrawClient) GetUsersByKeyword(ctx context.Context, in *GetUsersByKeywordReq, opts ...grpc.CallOption) (*GetUsersByKeywordResp, error) {
 	out := new(GetUsersByKeywordResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUsersByKeyword", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUsersByKeyword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -731,7 +2125,7 @@ func (c *luckydrawClient) GetUsersByKeyword(ctx context.Context, in *GetUsersByK
 
 func (c *luckydrawClient) GetALuckyDetails(ctx context.Context, in *GetALuckyDetailsReq, opts ...grpc.CallOption) (*GetALuckyDetailsResp, error) {
 	out := new(GetALuckyDetailsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetALuckyDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetALuckyDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -740,7 +2134,7 @@ func (c *luckydrawClient) GetALuckyDetails(ctx context.Context, in *GetALuckyDet
 
 func (c *luckydrawClient) GetUALuckyDetails(ctx context.Context, in *GetUALuckyDetailsReq, opts ...grpc.CallOption) (*GetUALuckyDetailsResp, error) {
 	out := new(GetUALuckyDetailsResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUALuckyDetails", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUALuckyDetails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -749,7 +2143,7 @@ func (c *luckydrawClient) GetUALuckyDetails(ctx context.Context, in *GetUALuckyD
 
 func (c *luckydrawClient) GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error) {
 	out := new(GetUserLuckyDetailResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/GetUserLuckyDetail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetUserLuckyDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -758,7 +2152,7 @@ func (c *luckydrawClient) GetUserLuckyDetail(ctx context.Context, in *GetUserLuc
 
 func (c *luckydrawClient) PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	out := new(StatusResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.luckydraw/PutLuckyByPrize", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/PutLuckyByPrize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -769,64 +2163,16 @@ func (c *luckydrawClient) PutLuckyByPrize(ctx context.Context, in *PutLuckyByPri
 // All implementations must embed UnimplementedLuckydrawServer
 // for forward compatibility
 type LuckydrawServer interface {
-	BaseAddActivity(context.Context, *AddActivityReq) (*AddActivityResp, error)
-	BasePutActivity(context.Context, *PutActivityReq) (*PutActivityResp, error)
-	BaseDelActivity(context.Context, *DelActivityReq) (*DelActivityResp, error)
-	BaseGetActivityById(context.Context, *GetActivityByIdReq) (*GetActivityByIdResp, error)
-	BaseGetActivityList(context.Context, *GetActivityListReq) (*GetActivityListResp, error)
-	BaseGetActivityEnums(context.Context, *GetActivityEnumsReq) (*GetEnumsResp, error)
-	BaseAddLucky(context.Context, *AddLuckyReq) (*AddLuckyResp, error)
-	BasePutLucky(context.Context, *PutLuckyReq) (*PutLuckyResp, error)
-	BaseDelLucky(context.Context, *DelLuckyReq) (*DelLuckyResp, error)
-	BaseGetLuckyById(context.Context, *GetLuckyByIdReq) (*GetLuckyByIdResp, error)
-	BaseGetLuckyList(context.Context, *GetLuckyListReq) (*GetLuckyListResp, error)
-	BaseGetLuckyEnums(context.Context, *GetLuckyEnumsReq) (*GetEnumsResp, error)
-	BaseAddPrize(context.Context, *AddPrizeReq) (*AddPrizeResp, error)
-	BasePutPrize(context.Context, *PutPrizeReq) (*PutPrizeResp, error)
-	BaseDelPrize(context.Context, *DelPrizeReq) (*DelPrizeResp, error)
-	BaseGetPrizeById(context.Context, *GetPrizeByIdReq) (*GetPrizeByIdResp, error)
-	BaseGetPrizeList(context.Context, *GetPrizeListReq) (*GetPrizeListResp, error)
-	BaseGetPrizeEnums(context.Context, *GetPrizeEnumsReq) (*GetEnumsResp, error)
-	BaseAddPrizeGrade(context.Context, *AddPrizeGradeReq) (*AddPrizeGradeResp, error)
-	BasePutPrizeGrade(context.Context, *PutPrizeGradeReq) (*PutPrizeGradeResp, error)
-	BaseDelPrizeGrade(context.Context, *DelPrizeGradeReq) (*DelPrizeGradeResp, error)
-	BaseGetPrizeGradeById(context.Context, *GetPrizeGradeByIdReq) (*GetPrizeGradeByIdResp, error)
-	BaseGetPrizeGradeList(context.Context, *GetPrizeGradeListReq) (*GetPrizeGradeListResp, error)
-	BaseGetPrizeGradeEnums(context.Context, *GetPrizeGradeEnumsReq) (*GetEnumsResp, error)
-	BaseAddPrizePool(context.Context, *AddPrizePoolReq) (*AddPrizePoolResp, error)
-	BasePutPrizePool(context.Context, *PutPrizePoolReq) (*PutPrizePoolResp, error)
-	BaseDelPrizePool(context.Context, *DelPrizePoolReq) (*DelPrizePoolResp, error)
-	BaseGetPrizePoolById(context.Context, *GetPrizePoolByIdReq) (*GetPrizePoolByIdResp, error)
-	BaseGetPrizePoolList(context.Context, *GetPrizePoolListReq) (*GetPrizePoolListResp, error)
-	BaseGetPrizePoolEnums(context.Context, *GetPrizePoolEnumsReq) (*GetEnumsResp, error)
-	BaseAddProject(context.Context, *AddProjectReq) (*AddProjectResp, error)
-	BasePutProject(context.Context, *PutProjectReq) (*PutProjectResp, error)
-	BaseDelProject(context.Context, *DelProjectReq) (*DelProjectResp, error)
-	BaseGetProjectById(context.Context, *GetProjectByIdReq) (*GetProjectByIdResp, error)
-	BaseGetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error)
-	BaseGetProjectEnums(context.Context, *GetProjectEnumsReq) (*GetEnumsResp, error)
-	BaseAddUser(context.Context, *AddUserReq) (*AddUserResp, error)
-	BasePutUser(context.Context, *PutUserReq) (*PutUserResp, error)
-	BaseDelUser(context.Context, *DelUserReq) (*DelUserResp, error)
-	BaseGetUserById(context.Context, *GetUserByIdReq) (*GetUserByIdResp, error)
-	BaseGetUserList(context.Context, *GetUserListReq) (*GetUserListResp, error)
-	BaseGetUserEnums(context.Context, *GetUserEnumsReq) (*GetEnumsResp, error)
-	BaseAddUserPool(context.Context, *AddUserPoolReq) (*AddUserPoolResp, error)
-	BasePutUserPool(context.Context, *PutUserPoolReq) (*PutUserPoolResp, error)
-	BaseDelUserPool(context.Context, *DelUserPoolReq) (*DelUserPoolResp, error)
-	BaseGetUserPoolById(context.Context, *GetUserPoolByIdReq) (*GetUserPoolByIdResp, error)
-	BaseGetUserPoolList(context.Context, *GetUserPoolListReq) (*GetUserPoolListResp, error)
-	BaseGetUserPoolEnums(context.Context, *GetUserPoolEnumsReq) (*GetEnumsResp, error)
 	// 抽奖凭证校验，验证用户身份，颁发jwt
-	UserIdentify(context.Context, *IdentifyReq) (*IdentifyResp, error)
+	UserIdentify(context.Context, *UserIdentifyReq) (*IdentifyResp, error)
 	// 抽奖接口
-	LuckyDraw(context.Context, *LuckyDrawReq) (*LuckyDrawResp, error)
+	Luckydraw(context.Context, *LuckydrawReq) (*LuckydrawResp, error)
 	// 用户确认认领奖品名单，记得把剩余的改为弃领状态
 	SelectPrizes(context.Context, *SelectPrizesReq) (*SelectPrizesResp, error)
 	// 生产jwtToken
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
 	// 活动规则枚举
-	GetActivityPatternEnums(context.Context, *NilReq) (*GetEnumsResp, error)
+	GetActivityPatternEnums(context.Context, *NilReq) (*Enums, error)
 	// 获取每个项目及其包含的活动
 	GetProjectTreeOptions(context.Context, *NilReq) (*TreeOptions, error)
 	// 获取项目详细
@@ -870,155 +2216,11 @@ type LuckydrawServer interface {
 type UnimplementedLuckydrawServer struct {
 }
 
-func (UnimplementedLuckydrawServer) BaseAddActivity(context.Context, *AddActivityReq) (*AddActivityResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddActivity not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutActivity(context.Context, *PutActivityReq) (*PutActivityResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutActivity not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelActivity(context.Context, *DelActivityReq) (*DelActivityResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelActivity not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetActivityById(context.Context, *GetActivityByIdReq) (*GetActivityByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetActivityById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetActivityList(context.Context, *GetActivityListReq) (*GetActivityListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetActivityList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetActivityEnums(context.Context, *GetActivityEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetActivityEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddLucky(context.Context, *AddLuckyReq) (*AddLuckyResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddLucky not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutLucky(context.Context, *PutLuckyReq) (*PutLuckyResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutLucky not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelLucky(context.Context, *DelLuckyReq) (*DelLuckyResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelLucky not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetLuckyById(context.Context, *GetLuckyByIdReq) (*GetLuckyByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetLuckyById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetLuckyList(context.Context, *GetLuckyListReq) (*GetLuckyListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetLuckyList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetLuckyEnums(context.Context, *GetLuckyEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetLuckyEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddPrize(context.Context, *AddPrizeReq) (*AddPrizeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddPrize not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutPrize(context.Context, *PutPrizeReq) (*PutPrizeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutPrize not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelPrize(context.Context, *DelPrizeReq) (*DelPrizeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelPrize not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizeById(context.Context, *GetPrizeByIdReq) (*GetPrizeByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizeById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizeList(context.Context, *GetPrizeListReq) (*GetPrizeListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizeList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizeEnums(context.Context, *GetPrizeEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizeEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddPrizeGrade(context.Context, *AddPrizeGradeReq) (*AddPrizeGradeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddPrizeGrade not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutPrizeGrade(context.Context, *PutPrizeGradeReq) (*PutPrizeGradeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutPrizeGrade not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelPrizeGrade(context.Context, *DelPrizeGradeReq) (*DelPrizeGradeResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelPrizeGrade not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizeGradeById(context.Context, *GetPrizeGradeByIdReq) (*GetPrizeGradeByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizeGradeById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizeGradeList(context.Context, *GetPrizeGradeListReq) (*GetPrizeGradeListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizeGradeList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizeGradeEnums(context.Context, *GetPrizeGradeEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizeGradeEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddPrizePool(context.Context, *AddPrizePoolReq) (*AddPrizePoolResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddPrizePool not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutPrizePool(context.Context, *PutPrizePoolReq) (*PutPrizePoolResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutPrizePool not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelPrizePool(context.Context, *DelPrizePoolReq) (*DelPrizePoolResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelPrizePool not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizePoolById(context.Context, *GetPrizePoolByIdReq) (*GetPrizePoolByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizePoolById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizePoolList(context.Context, *GetPrizePoolListReq) (*GetPrizePoolListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizePoolList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetPrizePoolEnums(context.Context, *GetPrizePoolEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetPrizePoolEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddProject(context.Context, *AddProjectReq) (*AddProjectResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddProject not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutProject(context.Context, *PutProjectReq) (*PutProjectResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutProject not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelProject(context.Context, *DelProjectReq) (*DelProjectResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelProject not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetProjectById(context.Context, *GetProjectByIdReq) (*GetProjectByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetProjectById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetProjectList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetProjectEnums(context.Context, *GetProjectEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetProjectEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddUser(context.Context, *AddUserReq) (*AddUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddUser not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutUser(context.Context, *PutUserReq) (*PutUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutUser not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelUser(context.Context, *DelUserReq) (*DelUserResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelUser not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetUserById(context.Context, *GetUserByIdReq) (*GetUserByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetUserById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetUserList(context.Context, *GetUserListReq) (*GetUserListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetUserList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetUserEnums(context.Context, *GetUserEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetUserEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseAddUserPool(context.Context, *AddUserPoolReq) (*AddUserPoolResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseAddUserPool not implemented")
-}
-func (UnimplementedLuckydrawServer) BasePutUserPool(context.Context, *PutUserPoolReq) (*PutUserPoolResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BasePutUserPool not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseDelUserPool(context.Context, *DelUserPoolReq) (*DelUserPoolResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseDelUserPool not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetUserPoolById(context.Context, *GetUserPoolByIdReq) (*GetUserPoolByIdResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetUserPoolById not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetUserPoolList(context.Context, *GetUserPoolListReq) (*GetUserPoolListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetUserPoolList not implemented")
-}
-func (UnimplementedLuckydrawServer) BaseGetUserPoolEnums(context.Context, *GetUserPoolEnumsReq) (*GetEnumsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BaseGetUserPoolEnums not implemented")
-}
-func (UnimplementedLuckydrawServer) UserIdentify(context.Context, *IdentifyReq) (*IdentifyResp, error) {
+func (UnimplementedLuckydrawServer) UserIdentify(context.Context, *UserIdentifyReq) (*IdentifyResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserIdentify not implemented")
 }
-func (UnimplementedLuckydrawServer) LuckyDraw(context.Context, *LuckyDrawReq) (*LuckyDrawResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LuckyDraw not implemented")
+func (UnimplementedLuckydrawServer) Luckydraw(context.Context, *LuckydrawReq) (*LuckydrawResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Luckydraw not implemented")
 }
 func (UnimplementedLuckydrawServer) SelectPrizes(context.Context, *SelectPrizesReq) (*SelectPrizesResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SelectPrizes not implemented")
@@ -1026,7 +2228,7 @@ func (UnimplementedLuckydrawServer) SelectPrizes(context.Context, *SelectPrizesR
 func (UnimplementedLuckydrawServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
 }
-func (UnimplementedLuckydrawServer) GetActivityPatternEnums(context.Context, *NilReq) (*GetEnumsResp, error) {
+func (UnimplementedLuckydrawServer) GetActivityPatternEnums(context.Context, *NilReq) (*Enums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivityPatternEnums not implemented")
 }
 func (UnimplementedLuckydrawServer) GetProjectTreeOptions(context.Context, *NilReq) (*TreeOptions, error) {
@@ -1096,872 +2298,8 @@ func RegisterLuckydrawServer(s grpc.ServiceRegistrar, srv LuckydrawServer) {
 	s.RegisterService(&Luckydraw_ServiceDesc, srv)
 }
 
-func _Luckydraw_BaseAddActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddActivityReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddActivity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddActivity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddActivity(ctx, req.(*AddActivityReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutActivityReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutActivity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutActivity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutActivity(ctx, req.(*PutActivityReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelActivityReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelActivity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelActivity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelActivity(ctx, req.(*DelActivityReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetActivityById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetActivityByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetActivityById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetActivityById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetActivityById(ctx, req.(*GetActivityByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetActivityList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetActivityListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetActivityList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetActivityList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetActivityList(ctx, req.(*GetActivityListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetActivityEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetActivityEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetActivityEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetActivityEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetActivityEnums(ctx, req.(*GetActivityEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddLuckyReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddLucky(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddLucky",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddLucky(ctx, req.(*AddLuckyReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutLuckyReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutLucky(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutLucky",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutLucky(ctx, req.(*PutLuckyReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelLucky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelLuckyReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelLucky(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelLucky",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelLucky(ctx, req.(*DelLuckyReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetLuckyById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLuckyByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetLuckyById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetLuckyById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetLuckyById(ctx, req.(*GetLuckyByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetLuckyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLuckyListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetLuckyList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetLuckyList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetLuckyList(ctx, req.(*GetLuckyListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetLuckyEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLuckyEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetLuckyEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetLuckyEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetLuckyEnums(ctx, req.(*GetLuckyEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPrizeReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddPrize(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddPrize",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddPrize(ctx, req.(*AddPrizeReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutPrizeReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutPrize(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutPrize",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutPrize(ctx, req.(*PutPrizeReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelPrizeReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelPrize(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelPrize",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelPrize(ctx, req.(*DelPrizeReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizeById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizeByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizeById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizeById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizeById(ctx, req.(*GetPrizeByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizeListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizeList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizeList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizeList(ctx, req.(*GetPrizeListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizeEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizeEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizeEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizeEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizeEnums(ctx, req.(*GetPrizeEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPrizeGradeReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddPrizeGrade(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddPrizeGrade",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddPrizeGrade(ctx, req.(*AddPrizeGradeReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutPrizeGradeReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutPrizeGrade(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutPrizeGrade",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutPrizeGrade(ctx, req.(*PutPrizeGradeReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelPrizeGrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelPrizeGradeReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelPrizeGrade(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelPrizeGrade",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelPrizeGrade(ctx, req.(*DelPrizeGradeReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizeGradeById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizeGradeByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizeGradeById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizeGradeById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizeGradeById(ctx, req.(*GetPrizeGradeByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizeGradeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizeGradeListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizeGradeList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizeGradeList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizeGradeList(ctx, req.(*GetPrizeGradeListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizeGradeEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizeGradeEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizeGradeEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizeGradeEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizeGradeEnums(ctx, req.(*GetPrizeGradeEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPrizePoolReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddPrizePool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddPrizePool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddPrizePool(ctx, req.(*AddPrizePoolReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutPrizePoolReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutPrizePool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutPrizePool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutPrizePool(ctx, req.(*PutPrizePoolReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelPrizePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelPrizePoolReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelPrizePool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelPrizePool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelPrizePool(ctx, req.(*DelPrizePoolReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizePoolById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizePoolByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizePoolById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizePoolById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizePoolById(ctx, req.(*GetPrizePoolByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizePoolList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizePoolListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizePoolList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizePoolList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizePoolList(ctx, req.(*GetPrizePoolListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetPrizePoolEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrizePoolEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetPrizePoolEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetPrizePoolEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetPrizePoolEnums(ctx, req.(*GetPrizePoolEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddProjectReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddProject(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddProject",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddProject(ctx, req.(*AddProjectReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutProjectReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutProject(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutProject",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutProject(ctx, req.(*PutProjectReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelProjectReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelProject(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelProject",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelProject(ctx, req.(*DelProjectReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetProjectById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProjectByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetProjectById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetProjectById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetProjectById(ctx, req.(*GetProjectByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetProjectList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProjectListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetProjectList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetProjectList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetProjectList(ctx, req.(*GetProjectListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetProjectEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProjectEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetProjectEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetProjectEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetProjectEnums(ctx, req.(*GetProjectEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddUser(ctx, req.(*AddUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutUser(ctx, req.(*PutUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelUser(ctx, req.(*DelUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetUserById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetUserById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetUserById(ctx, req.(*GetUserByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetUserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetUserList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetUserList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetUserList(ctx, req.(*GetUserListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetUserEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetUserEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetUserEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetUserEnums(ctx, req.(*GetUserEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseAddUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddUserPoolReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseAddUserPool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseAddUserPool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseAddUserPool(ctx, req.(*AddUserPoolReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BasePutUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutUserPoolReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BasePutUserPool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BasePutUserPool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BasePutUserPool(ctx, req.(*PutUserPoolReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseDelUserPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelUserPoolReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseDelUserPool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseDelUserPool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseDelUserPool(ctx, req.(*DelUserPoolReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetUserPoolById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserPoolByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetUserPoolById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetUserPoolById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetUserPoolById(ctx, req.(*GetUserPoolByIdReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetUserPoolList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserPoolListReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetUserPoolList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetUserPoolList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetUserPoolList(ctx, req.(*GetUserPoolListReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_BaseGetUserPoolEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserPoolEnumsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).BaseGetUserPoolEnums(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/BaseGetUserPoolEnums",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).BaseGetUserPoolEnums(ctx, req.(*GetUserPoolEnumsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Luckydraw_UserIdentify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IdentifyReq)
+	in := new(UserIdentifyReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1970,28 +2308,28 @@ func _Luckydraw_UserIdentify_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/UserIdentify",
+		FullMethod: "/luckydraw_proto.Luckydraw/UserIdentify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).UserIdentify(ctx, req.(*IdentifyReq))
+		return srv.(LuckydrawServer).UserIdentify(ctx, req.(*UserIdentifyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Luckydraw_LuckyDraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LuckyDrawReq)
+func _Luckydraw_Luckydraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LuckydrawReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LuckydrawServer).LuckyDraw(ctx, in)
+		return srv.(LuckydrawServer).Luckydraw(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/luckyDraw",
+		FullMethod: "/luckydraw_proto.Luckydraw/Luckydraw",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).LuckyDraw(ctx, req.(*LuckyDrawReq))
+		return srv.(LuckydrawServer).Luckydraw(ctx, req.(*LuckydrawReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2006,7 +2344,7 @@ func _Luckydraw_SelectPrizes_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/SelectPrizes",
+		FullMethod: "/luckydraw_proto.Luckydraw/SelectPrizes",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).SelectPrizes(ctx, req.(*SelectPrizesReq))
@@ -2024,7 +2362,7 @@ func _Luckydraw_GenerateToken_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GenerateToken",
+		FullMethod: "/luckydraw_proto.Luckydraw/GenerateToken",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GenerateToken(ctx, req.(*GenerateTokenReq))
@@ -2042,7 +2380,7 @@ func _Luckydraw_GetActivityPatternEnums_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetActivityPatternEnums",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetActivityPatternEnums",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetActivityPatternEnums(ctx, req.(*NilReq))
@@ -2060,7 +2398,7 @@ func _Luckydraw_GetProjectTreeOptions_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetProjectTreeOptions",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetProjectTreeOptions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetProjectTreeOptions(ctx, req.(*NilReq))
@@ -2078,7 +2416,7 @@ func _Luckydraw_GetProjectDetail_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetProjectDetail",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetProjectDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetProjectDetail(ctx, req.(*GetProjectDetailReq))
@@ -2096,7 +2434,7 @@ func _Luckydraw_GetProjectDetails_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetProjectDetails",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetProjectDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetProjectDetails(ctx, req.(*GetProjectDetailsReq))
@@ -2114,7 +2452,7 @@ func _Luckydraw_GetActivityDetail_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetActivityDetail",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetActivityDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetActivityDetail(ctx, req.(*GetActivityDetailReq))
@@ -2132,7 +2470,7 @@ func _Luckydraw_GetActivityDetails_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetActivityDetails",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetActivityDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetActivityDetails(ctx, req.(*GetActivityDetailsReq))
@@ -2150,7 +2488,7 @@ func _Luckydraw_GetProjectActivities_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetProjectActivities",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetProjectActivities",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetProjectActivities(ctx, req.(*GetProjectActivitiesReq))
@@ -2168,7 +2506,7 @@ func _Luckydraw_GetUserActivities_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUserActivities",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUserActivities",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUserActivities(ctx, req.(*GetUserActivitiesReq))
@@ -2186,7 +2524,7 @@ func _Luckydraw_GetActivityPrizes_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetActivityPrizes",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetActivityPrizes",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetActivityPrizes(ctx, req.(*GetActivityPrizesReq))
@@ -2204,7 +2542,7 @@ func _Luckydraw_GetActivityPrizePool_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetActivityPrizePool",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetActivityPrizePool",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetActivityPrizePool(ctx, req.(*GetActivityPrizePoolReq))
@@ -2222,7 +2560,7 @@ func _Luckydraw_ResetActivityLuckValue_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/ResetActivityLuckValue",
+		FullMethod: "/luckydraw_proto.Luckydraw/ResetActivityLuckValue",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).ResetActivityLuckValue(ctx, req.(*ResetActivityLuckValueReq))
@@ -2240,7 +2578,7 @@ func _Luckydraw_GetUserDetail_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUserDetail",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUserDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUserDetail(ctx, req.(*GetUserDetailReq))
@@ -2258,7 +2596,7 @@ func _Luckydraw_GetUserDetails_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUserDetails",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUserDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUserDetails(ctx, req.(*GetUserDetailsReq))
@@ -2276,7 +2614,7 @@ func _Luckydraw_GetUserByKeyword_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUserByKeyword",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUserByKeyword",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUserByKeyword(ctx, req.(*GetUserByKeywordReq))
@@ -2294,7 +2632,7 @@ func _Luckydraw_GetUsersByKeyword_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUsersByKeyword",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUsersByKeyword",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUsersByKeyword(ctx, req.(*GetUsersByKeywordReq))
@@ -2312,7 +2650,7 @@ func _Luckydraw_GetALuckyDetails_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetALuckyDetails",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetALuckyDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetALuckyDetails(ctx, req.(*GetALuckyDetailsReq))
@@ -2330,7 +2668,7 @@ func _Luckydraw_GetUALuckyDetails_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUALuckyDetails",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUALuckyDetails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUALuckyDetails(ctx, req.(*GetUALuckyDetailsReq))
@@ -2348,7 +2686,7 @@ func _Luckydraw_GetUserLuckyDetail_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/GetUserLuckyDetail",
+		FullMethod: "/luckydraw_proto.Luckydraw/GetUserLuckyDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).GetUserLuckyDetail(ctx, req.(*GetUserLuckyDetailReq))
@@ -2366,7 +2704,7 @@ func _Luckydraw_PutLuckyByPrize_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/luckydraw_proto.luckydraw/PutLuckyByPrize",
+		FullMethod: "/luckydraw_proto.Luckydraw/PutLuckyByPrize",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).PutLuckyByPrize(ctx, req.(*PutLuckyByPrizeReq))
@@ -2378,208 +2716,16 @@ func _Luckydraw_PutLuckyByPrize_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Luckydraw_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "luckydraw_proto.luckydraw",
+	ServiceName: "luckydraw_proto.Luckydraw",
 	HandlerType: (*LuckydrawServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "BaseAddActivity",
-			Handler:    _Luckydraw_BaseAddActivity_Handler,
-		},
-		{
-			MethodName: "BasePutActivity",
-			Handler:    _Luckydraw_BasePutActivity_Handler,
-		},
-		{
-			MethodName: "BaseDelActivity",
-			Handler:    _Luckydraw_BaseDelActivity_Handler,
-		},
-		{
-			MethodName: "BaseGetActivityById",
-			Handler:    _Luckydraw_BaseGetActivityById_Handler,
-		},
-		{
-			MethodName: "BaseGetActivityList",
-			Handler:    _Luckydraw_BaseGetActivityList_Handler,
-		},
-		{
-			MethodName: "BaseGetActivityEnums",
-			Handler:    _Luckydraw_BaseGetActivityEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddLucky",
-			Handler:    _Luckydraw_BaseAddLucky_Handler,
-		},
-		{
-			MethodName: "BasePutLucky",
-			Handler:    _Luckydraw_BasePutLucky_Handler,
-		},
-		{
-			MethodName: "BaseDelLucky",
-			Handler:    _Luckydraw_BaseDelLucky_Handler,
-		},
-		{
-			MethodName: "BaseGetLuckyById",
-			Handler:    _Luckydraw_BaseGetLuckyById_Handler,
-		},
-		{
-			MethodName: "BaseGetLuckyList",
-			Handler:    _Luckydraw_BaseGetLuckyList_Handler,
-		},
-		{
-			MethodName: "BaseGetLuckyEnums",
-			Handler:    _Luckydraw_BaseGetLuckyEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddPrize",
-			Handler:    _Luckydraw_BaseAddPrize_Handler,
-		},
-		{
-			MethodName: "BasePutPrize",
-			Handler:    _Luckydraw_BasePutPrize_Handler,
-		},
-		{
-			MethodName: "BaseDelPrize",
-			Handler:    _Luckydraw_BaseDelPrize_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizeById",
-			Handler:    _Luckydraw_BaseGetPrizeById_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizeList",
-			Handler:    _Luckydraw_BaseGetPrizeList_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizeEnums",
-			Handler:    _Luckydraw_BaseGetPrizeEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddPrizeGrade",
-			Handler:    _Luckydraw_BaseAddPrizeGrade_Handler,
-		},
-		{
-			MethodName: "BasePutPrizeGrade",
-			Handler:    _Luckydraw_BasePutPrizeGrade_Handler,
-		},
-		{
-			MethodName: "BaseDelPrizeGrade",
-			Handler:    _Luckydraw_BaseDelPrizeGrade_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizeGradeById",
-			Handler:    _Luckydraw_BaseGetPrizeGradeById_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizeGradeList",
-			Handler:    _Luckydraw_BaseGetPrizeGradeList_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizeGradeEnums",
-			Handler:    _Luckydraw_BaseGetPrizeGradeEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddPrizePool",
-			Handler:    _Luckydraw_BaseAddPrizePool_Handler,
-		},
-		{
-			MethodName: "BasePutPrizePool",
-			Handler:    _Luckydraw_BasePutPrizePool_Handler,
-		},
-		{
-			MethodName: "BaseDelPrizePool",
-			Handler:    _Luckydraw_BaseDelPrizePool_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizePoolById",
-			Handler:    _Luckydraw_BaseGetPrizePoolById_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizePoolList",
-			Handler:    _Luckydraw_BaseGetPrizePoolList_Handler,
-		},
-		{
-			MethodName: "BaseGetPrizePoolEnums",
-			Handler:    _Luckydraw_BaseGetPrizePoolEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddProject",
-			Handler:    _Luckydraw_BaseAddProject_Handler,
-		},
-		{
-			MethodName: "BasePutProject",
-			Handler:    _Luckydraw_BasePutProject_Handler,
-		},
-		{
-			MethodName: "BaseDelProject",
-			Handler:    _Luckydraw_BaseDelProject_Handler,
-		},
-		{
-			MethodName: "BaseGetProjectById",
-			Handler:    _Luckydraw_BaseGetProjectById_Handler,
-		},
-		{
-			MethodName: "BaseGetProjectList",
-			Handler:    _Luckydraw_BaseGetProjectList_Handler,
-		},
-		{
-			MethodName: "BaseGetProjectEnums",
-			Handler:    _Luckydraw_BaseGetProjectEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddUser",
-			Handler:    _Luckydraw_BaseAddUser_Handler,
-		},
-		{
-			MethodName: "BasePutUser",
-			Handler:    _Luckydraw_BasePutUser_Handler,
-		},
-		{
-			MethodName: "BaseDelUser",
-			Handler:    _Luckydraw_BaseDelUser_Handler,
-		},
-		{
-			MethodName: "BaseGetUserById",
-			Handler:    _Luckydraw_BaseGetUserById_Handler,
-		},
-		{
-			MethodName: "BaseGetUserList",
-			Handler:    _Luckydraw_BaseGetUserList_Handler,
-		},
-		{
-			MethodName: "BaseGetUserEnums",
-			Handler:    _Luckydraw_BaseGetUserEnums_Handler,
-		},
-		{
-			MethodName: "BaseAddUserPool",
-			Handler:    _Luckydraw_BaseAddUserPool_Handler,
-		},
-		{
-			MethodName: "BasePutUserPool",
-			Handler:    _Luckydraw_BasePutUserPool_Handler,
-		},
-		{
-			MethodName: "BaseDelUserPool",
-			Handler:    _Luckydraw_BaseDelUserPool_Handler,
-		},
-		{
-			MethodName: "BaseGetUserPoolById",
-			Handler:    _Luckydraw_BaseGetUserPoolById_Handler,
-		},
-		{
-			MethodName: "BaseGetUserPoolList",
-			Handler:    _Luckydraw_BaseGetUserPoolList_Handler,
-		},
-		{
-			MethodName: "BaseGetUserPoolEnums",
-			Handler:    _Luckydraw_BaseGetUserPoolEnums_Handler,
-		},
 		{
 			MethodName: "UserIdentify",
 			Handler:    _Luckydraw_UserIdentify_Handler,
 		},
 		{
-			MethodName: "luckyDraw",
-			Handler:    _Luckydraw_LuckyDraw_Handler,
+			MethodName: "Luckydraw",
+			Handler:    _Luckydraw_Luckydraw_Handler,
 		},
 		{
 			MethodName: "SelectPrizes",

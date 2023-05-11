@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mixbench/service/v1/admin/rpc/admin_pb"
-	"mixbench/service/v1/admin/rpc/internal/config"
-	"mixbench/service/v1/admin/rpc/internal/server"
-	"mixbench/service/v1/admin/rpc/internal/svc"
 
 	"mixbench/common/errorx"
+	"mixbench/service/v1/admin/rpc/admin_pb"
+	"mixbench/service/v1/admin/rpc/internal/config"
+	adminServer "mixbench/service/v1/admin/rpc/internal/server/admin"
+	baseServer "mixbench/service/v1/admin/rpc/internal/server/base"
+	"mixbench/service/v1/admin/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -29,10 +30,10 @@ func main() {
 	errorx.Debug = c.Debug
 
 	ctx := svc.NewServiceContext(c)
-	svr := server.NewAdminServer(ctx)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		admin_pb.RegisterAdminServer(grpcServer, svr)
+		admin_pb.RegisterBaseServer(grpcServer, baseServer.NewBaseServer(ctx))
+		admin_pb.RegisterAdminServer(grpcServer, adminServer.NewAdminServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

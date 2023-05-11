@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2023-02-17 15:41:34
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 11:21:05
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -27,7 +34,7 @@ func NewCurrentUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Curre
 
 func (l *CurrentUserLogic) CurrentUser() (any, error) {
 	uid := ctxdata.GetUidFromCtx(l.ctx)
-	resp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.ItemReq{
+	resp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{
 		Id: uid,
 	})
 	if err != nil {

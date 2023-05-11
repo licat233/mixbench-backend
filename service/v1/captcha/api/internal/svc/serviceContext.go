@@ -1,7 +1,14 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 16:08:52
+ * @Description: licat233@gmail.com
+ */
 package svc
 
 import (
-	"mixbench/service/v1/admin/rpc/admin"
+	"mixbench/service/v1/admin/rpc/admin_pb"
 	"mixbench/service/v1/captcha/api/internal/config"
 	"mixbench/service/v1/captcha/rpc/captcha"
 
@@ -9,10 +16,15 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
+type AdminRpc struct {
+	admin_pb.AdminClient
+	admin_pb.BaseClient
+}
+
 type ServiceContext struct {
 	Config      config.Config
 	CaptchaRpc  captcha.Captcha
-	AdminRpc    admin.Admin
+	AdminRpc    AdminRpc
 	RedisClient *redis.Redis
 }
 
@@ -23,10 +35,17 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		r.Addr = c.Redis.Addr
 	})
 
+	clientConn := zrpc.MustNewClient(c.AdminRpc).Conn()
+
+	adminRpc := AdminRpc{
+		admin_pb.NewAdminClient(clientConn),
+		admin_pb.NewBaseClient(clientConn),
+	}
+
 	return &ServiceContext{
 		Config:      c,
 		CaptchaRpc:  captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
-		AdminRpc:    admin.NewAdmin(zrpc.MustNewClient(c.AdminRpc)),
+		AdminRpc:    adminRpc,
 		RedisClient: redisConn,
 	}
 }

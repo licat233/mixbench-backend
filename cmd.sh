@@ -5,7 +5,7 @@
  # @LastEditors: licat
  # @LastEditTime: 2023-01-11 15:06:22
  # @Description: licat233@gmail.com
-### 
+###
 set -m
 
 #判断brew是否存在
@@ -24,17 +24,15 @@ if false && command -v brew >/dev/null 2>&1; then
 fi
 
 current_path=$(
-    cd $(dirname $0)
+    cd $(dirname $0) || exit
     pwd
 )
 
-script_path=$current_path
-
-cd "$current_path/deploy/script"
+cd "$current_path/deploy/script" || exit
 
 chmod a+x ./gen.sh
 chmod a+x ./build.sh
 chmod a+x ./run.sh
 chmod a+x ./start.sh
 
-./start.sh $1 $2 $3
+./start.sh "$1" "$2" "$3"

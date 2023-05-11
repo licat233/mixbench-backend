@@ -1,0 +1,108 @@
+syntax = "v1"
+
+// ------------------------------ Import Start ------------------------------
+
+// The content in this block will not be updated
+// 此区块内的内容不会被更新
+//[custom import start]
+
+//[custom import end]
+
+// ------------------------------ Struct Start ------------------------------
+
+//---------奖品级别---------
+
+//奖品级别
+type PrizeGrade {
+  Id int64 `json:"id"`  // 表主键
+  Name string `json:"name"`  // 级别名称
+  IsWin int64 `json:"isWin"`  // 是否中奖
+}
+
+//添加奖品级别请求
+type AddPrizeGradeReq {
+  Name string `json:"name"`  // 级别名称
+  IsWin int64 `json:"isWin"`  // 是否中奖
+}
+
+//更新奖品级别请求
+type PutPrizeGradeReq {
+  Id int64 `json:"id"`  // 表主键
+  Name string `json:"name"`  // 级别名称
+  IsWin int64 `json:"isWin"`  // 是否中奖
+}
+
+//删除奖品级别请求
+type DelPrizeGradeReq {
+  Id int64 `json:"id"`  // 奖品级别 ID
+}
+
+//获取奖品级别请求
+type GetPrizeGradeReq {
+  Id int64 `form:"id"`  // 奖品级别 ID
+}
+
+//获取奖品级别列表请求
+type GetPrizeGradeListReq {
+  PageSize int64 `form:"pageSize,optional,default=20"`  // 页面容量，默认20，可选
+  Page int64 `form:"page,optional,default=1"`  // 当前页码，默认1，可选
+  Current int64 `form:"current,optional,default=1"`  // 当前页码，默认1，用于对接umijs，可选
+  Keyword string `form:"keyword,optional"`  // 关键词，可选
+  Id int64 `form:"id,optional,default=-1"`  // 表主键
+  Name string `form:"name,optional"`  // 级别名称
+  IsWin int64 `form:"isWin,optional,default=-1"`  // 是否中奖
+}
+
+//获取奖品级别枚举请求
+type GetPrizeGradeEnumsReq {
+  ParentId int64 `form:"parentId,optional,default=-1"`  // 父级ID
+}
+
+// The content in this block will not be updated
+// 此区块内的内容不会被更新
+//[custom struct start]
+
+//[custom struct end]
+
+// ------------------------------ Service Start ------------------------------
+
+// 奖品级别
+@server(
+  jwt: Auth
+  group: prizeGrade
+  middleware: AdminAuthMiddleware
+  prefix: /v1/api/admin/luckydraw/prizeGrade
+)
+service luckydraw-api {
+
+  @doc "添加奖品级别 基础API"
+  @handler AddPrizeGrade
+  post /(AddPrizeGradeReq) returns (BaseResp)
+
+  @doc "更新奖品级别 基础API"
+  @handler PutPrizeGrade
+  put /(PutPrizeGradeReq) returns (BaseResp)
+
+  @doc "获取奖品级别 基础API"
+  @handler GetPrizeGrade
+  get /(GetPrizeGradeReq) returns (BaseResp)
+
+  @doc "删除奖品级别 基础API"
+  @handler DelPrizeGrade
+  delete /(DelPrizeGradeReq) returns (BaseResp)
+
+  @doc "获取奖品级别列表 基础API"
+  @handler GetPrizeGradeList
+  get /list(GetPrizeGradeListReq) returns (BaseResp)
+
+  @doc "获取奖品级别枚举列表 基础API"
+  @handler GetPrizeGradeEnums
+  get /enums(GetPrizeGradeEnumsReq) returns (BaseResp)
+
+}
+
+// The content in this block will not be updated
+// 此区块内的内容不会被更新
+//[custom service start]
+
+//[custom service end]

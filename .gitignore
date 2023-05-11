@@ -26,6 +26,7 @@ logs/
 ui/admin/node_modules
 ui/luckydraw/node_modules
 ui/luckydraw/*/node_modules
+tmp
 
 # 取消忽略go文件
 !*.go

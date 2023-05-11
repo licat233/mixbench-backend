@@ -9,7 +9,7 @@ package svc
 
 import (
 	"context"
-	"mixbench/common/asynqmq"
+	"mixbench/service/v1/luckydraw/asynqmq"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/config"
 

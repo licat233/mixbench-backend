@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-02 10:23:23
+ * @Description: licat233@gmail.com
+ */
 package consumer
 
 import (
@@ -5,9 +12,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/mq/internal/svc"
 	"mixbench/service/v1/luckydraw/mq/types"
-	"mixbench/service/v1/model"
 
 	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-zero/core/service"
@@ -44,12 +51,12 @@ func (p *AsynqConsumer) Stop() {
 
 func (p *AsynqConsumer) handler(ctx context.Context, t *asynq.Task) error {
 	switch t.Type() {
-	case types.TypeLuckdrawResult:
-		var msg types.LuckdrawResultMsg
+	case types.TypeLuckydrawResult:
+		var msg types.LuckydrawResultMsg
 		if err := json.Unmarshal(t.Payload(), &msg); err != nil {
 			return err
 		}
-		return p.LuckdrawResultHandler(msg)
+		return p.LuckydrawResultHandler(msg)
 	default:
 		return fmt.Errorf("unexpected task type: %s", t.Type())
 	}
@@ -57,7 +64,7 @@ func (p *AsynqConsumer) handler(ctx context.Context, t *asynq.Task) error {
 
 // 如果没有中奖，那就给予10个积分奖励
 // 如果中奖了，不给额外的奖励
-func (p *AsynqConsumer) LuckdrawResultHandler(msg types.LuckdrawResultMsg) (err error) {
+func (p *AsynqConsumer) LuckydrawResultHandler(msg types.LuckydrawResultMsg) (err error) {
 	if msg.IsWin {
 		return
 	}

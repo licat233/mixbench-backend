@@ -1,0 +1,58 @@
+api:
+    dir: ""
+    ignoreColumns: []
+    ignoreTables:
+        - jwt_blacklist
+        - casbin_rule
+    jwt: Auth
+    middleware:
+        - AuthMiddleware
+        - RbacMiddleware
+    multiple: true
+    prefix: /v1/api/admin
+    serviceName: admin
+    status: true
+    style: genZero
+    tables: []
+database:
+    dsn: ""
+    ignoreColumns: []
+    ignoreTables: []
+    src: ../../../../deploy/mysql/admin.sql
+    tables: []
+logic:
+    api:
+        dir: ../api/internal/logic
+        ignoreTables: []
+        rpcMultiple: true
+        status: true
+        style: genZero
+        tables: []
+        useRpc: true
+    rpc:
+        dir: ../rpc/internal/logic
+        ignoreTables: []
+        multiple: true
+        status: true
+        style: genZero
+        tables: []
+    status: true
+model:
+    dir: ../model
+    ignoreColumns: []
+    ignoreTables: []
+    status: true
+    tables: []
+proto:
+    dir: ""
+    goPackage: ""
+    ignoreColumns: []
+    ignoreTables:
+        - jwt_blacklist
+        - casbin_rule
+    multiple: true
+    package: ""
+    serviceName: admin
+    status: true
+    style: genZero
+    tables: []

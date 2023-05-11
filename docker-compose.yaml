@@ -472,6 +472,24 @@ services:
     networks:
       - backend_net
 
+  # apisix:
+  #   image: apache/apisix
+  #   container_name: ${COMPOSE_PROJECT_NAME}_apisix
+  #   hostname: apisix
+  #   restart: on-failure
+  #   expose:
+  #     - 9080
+  #     - 9180
+  #   environment:
+  #     - APISIX_STAND_ALONE=true
+  #   volumes:
+  #     - ./deploy/apisix/conf/apisix.yaml:/usr/local/apisix/conf/apisix.yaml
+  #     - ./deploy/apisix/conf/config.yaml:/usr/local/apisix/conf/config.yaml
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - backend_net
+
 # 网络配置
 networks:
   backend_net:

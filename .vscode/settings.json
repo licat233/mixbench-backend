@@ -1,0 +1,6 @@
+{
+    "go.autocompleteUnimportedPackages": true,
+    "go.gotoSymbol.includeImports": true,
+    "go.docsTool": "godoc",
+    "editor.links": false
+}

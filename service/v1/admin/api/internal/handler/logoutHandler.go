@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2023-02-18 19:01:16
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 12:24:20
+ * @Description: licat233@gmail.com
+ */
 package handler
 
 import (
@@ -14,9 +21,9 @@ func logoutHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := logic.NewLogoutLogic(r.Context(), svcCtx, r)
 		resp, err := l.Logout()
 		if err != nil {
-			httpx.Error(w, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			httpx.OkJson(w, resp)
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }

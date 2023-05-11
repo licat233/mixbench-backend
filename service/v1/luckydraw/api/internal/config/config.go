@@ -17,11 +17,11 @@ type Config struct {
 	Mode    string
 	Debug   bool
 	RootDir string
-	JwtAuth struct {
+	Auth    struct {
 		AccessSecret string
 	}
 	CaptchaRpc   zrpc.RpcClientConf
-	LuckdrawRpc  zrpc.RpcClientConf
+	LuckydrawRpc zrpc.RpcClientConf
 	StaticConfig struct {
 		Domain string
 		Root   string

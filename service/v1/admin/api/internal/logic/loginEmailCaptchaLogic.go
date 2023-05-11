@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2023-02-17 15:41:34
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 12:06:13
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -29,7 +36,6 @@ func NewLoginEmailCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 	}
 }
 
-// 通过邮箱登录时，给邮箱发送验证码
 func (l *LoginEmailCaptchaLogic) LoginEmailCaptcha(req *types.LoginEmailCaptchaReq) (any, error) {
 	if req.Solution == "" || req.CaptchaId == "" || req.Email == "" {
 		return nil, errorx.ErrInvalidParam
@@ -53,13 +59,13 @@ func (l *LoginEmailCaptchaLogic) LoginEmailCaptcha(req *types.LoginEmailCaptchaR
 	}
 
 	//检查该邮箱是否存在
-	resp, err := l.svcCtx.AdminRpc.ExsitEmail(l.ctx, &admin_pb.ExsitEmailReq{
+	resp, err := l.svcCtx.AdminRpc.ExistsEmail(l.ctx, &admin_pb.ExistsEmailReq{
 		Email: email,
 	})
 	if err != nil {
 		return nil, err
 	}
-	if !resp.Exsit {
+	if !resp.Exists {
 		return nil, errorx.Alert("This email is not registered")
 	}
 

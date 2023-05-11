@@ -19,8 +19,8 @@ import (
 var (
 	projectFieldNames          = builder.RawFieldNames(&Project{})
 	projectRows                = strings.Join(projectFieldNames, ",")
-	projectRowsExpectAutoSet   = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`", "`create_time`"), ",")
-	projectRowsWithPlaceHolder = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`", "`create_time`"), "=?,") + "=?"
+	projectRowsExpectAutoSet   = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	projectRowsWithPlaceHolder = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheProjectIdPrefix = "cache:project:id:"
 )
@@ -39,20 +39,18 @@ type (
 	}
 
 	Project struct {
-		Id        int64     `db:"id"`         // 表主键
-		Uuid      string    `db:"uuid"`       // 唯一识别码
-		Name      string    `db:"name"`       // 项目名称
-		Status    int64     `db:"status"`     // 项目状态
-		CreateAt  time.Time `db:"create_at"`  // 创建日期
-		UpdateAt  time.Time `db:"update_at"`  // 更新时间
-		IsDeleted int64     `db:"is_deleted"` // 是否已被删除
-		DeleteAt  time.Time `db:"delete_at"`  // 删除时间
+		Id       int64     `db:"id"`        // 表主键
+		Uuid     string    `db:"uuid"`      // UUID
+		Name     string    `db:"name"`      // 项目名称
+		Status   int64     `db:"status"`    // 项目状态
+		CreateAt time.Time `db:"create_at"` // 创建日期
+		UpdateAt time.Time `db:"update_at"` // 更新时间
 	}
 )
 
-func newProjectModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultProjectModel {
+func newProjectModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultProjectModel {
 	return &defaultProjectModel{
-		CachedConn: sqlc.NewConn(conn, c),
+		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`project`",
 	}
 }
@@ -69,7 +67,7 @@ func (m *defaultProjectModel) Delete(ctx context.Context, id int64) error {
 func (m *defaultProjectModel) FindOne(ctx context.Context, id int64) (*Project, error) {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, id)
 	var resp Project
-	err := m.QueryRowCtx(ctx, &resp, projectIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+	err := m.QueryRowCtx(ctx, &resp, projectIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", projectRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -86,8 +84,8 @@ func (m *defaultProjectModel) FindOne(ctx context.Context, id int64) (*Project, 
 func (m *defaultProjectModel) Insert(ctx context.Context, data *Project) (sql.Result, error) {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, projectRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, projectRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status)
 	}, projectIdKey)
 	return ret, err
 }
@@ -96,16 +94,16 @@ func (m *defaultProjectModel) Update(ctx context.Context, data *Project) error {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, projectRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.Id)
 	}, projectIdKey)
 	return err
 }
 
-func (m *defaultProjectModel) formatPrimary(primary interface{}) string {
+func (m *defaultProjectModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheProjectIdPrefix, primary)
 }
 
-func (m *defaultProjectModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+func (m *defaultProjectModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", projectRows, m.table)
 	return conn.QueryRowCtx(ctx, v, query, primary)
 }

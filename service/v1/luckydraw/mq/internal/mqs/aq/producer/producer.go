@@ -2,7 +2,7 @@ package producer
 
 import (
 	"context"
-	"mixbench/common/asynqmq"
+	"mixbench/service/v1/luckydraw/asynqmq"
 
 	"github.com/hibiken/asynq"
 )

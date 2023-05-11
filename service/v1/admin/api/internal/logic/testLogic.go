@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2023-02-17 15:41:34
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 12:25:21
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -25,6 +32,6 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext) *TestLogic {
 }
 
 func (l *TestLogic) Test(req *types.TestReq) (any, error) {
-	data := l.svcCtx.Config.RootDir
+	data := "hello gozero"
 	return respx.DefaultSingleResp(data, nil)
 }

@@ -1,3 +1,10 @@
+/*
+ * @Author: licat
+ * @Date: 2022-11-17 14:55:33
+ * @LastEditors: licat
+ * @LastEditTime: 2023-02-20 18:25:38
+ * @Description: licat233@gmail.com
+ */
 package logic
 
 import (
@@ -29,7 +36,7 @@ func NewSelectPrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sele
 }
 
 func (l *SelectPrizesLogic) SelectPrizes(req *types.SelectPrizesReq) (resp any, err error) {
-	if govalidator.IsUUID(req.ActivityUUID) == false {
+	if !govalidator.IsUUID(req.ActivityUUID) {
 		return nil, errorx.ErrInvalidUuid
 	}
 	userId := ctxdata.GetUidFromCtx(l.ctx)
@@ -39,7 +46,7 @@ func (l *SelectPrizesLogic) SelectPrizes(req *types.SelectPrizesReq) (resp any, 
 		ActivityUuid: req.ActivityUUID,
 		LuckyUuids:   req.LuckyUuidList,
 	}
-	res, err := l.svcCtx.LuckdrawRpc.SelectPrizes(l.ctx, in)
+	res, err := l.svcCtx.LuckydrawRpc.SelectPrizes(l.ctx, in)
 	if err != nil {
 		return nil, err
 	}

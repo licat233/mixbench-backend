@@ -19,8 +19,8 @@ import (
 var (
 	prizeGradeFieldNames          = builder.RawFieldNames(&PrizeGrade{})
 	prizeGradeRows                = strings.Join(prizeGradeFieldNames, ",")
-	prizeGradeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`"), ",")
-	prizeGradeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`"), "=?,") + "=?"
+	prizeGradeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	prizeGradeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cachePrizeGradeIdPrefix = "cache:prizeGrade:id:"
 )
@@ -39,19 +39,18 @@ type (
 	}
 
 	PrizeGrade struct {
-		Id        int64     `db:"id"`         // 表主键
-		Name      string    `db:"name"`       // 级别名称
-		IsWin     int64     `db:"is_win"`     // 是否中奖
-		CreateAt  time.Time `db:"create_at"`  // 创建时间
-		UpdateAt  time.Time `db:"update_at"`  // 更新时间
-		IsDeleted int64     `db:"is_deleted"` // 是否已被删除
-		DeleteAt  time.Time `db:"delete_at"`  // 删除时间
+		Id       int64     `db:"id"`        // 表主键
+		Uuid     string    `db:"uuid"`      // UUID
+		Name     string    `db:"name"`      // 级别名称
+		IsWin    int64     `db:"is_win"`    // 是否中奖
+		CreateAt time.Time `db:"create_at"` // 创建时间
+		UpdateAt time.Time `db:"update_at"` // 更新时间
 	}
 )
 
-func newPrizeGradeModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultPrizeGradeModel {
+func newPrizeGradeModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultPrizeGradeModel {
 	return &defaultPrizeGradeModel{
-		CachedConn: sqlc.NewConn(conn, c),
+		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`prize_grade`",
 	}
 }
@@ -68,7 +67,7 @@ func (m *defaultPrizeGradeModel) Delete(ctx context.Context, id int64) error {
 func (m *defaultPrizeGradeModel) FindOne(ctx context.Context, id int64) (*PrizeGrade, error) {
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, id)
 	var resp PrizeGrade
-	err := m.QueryRowCtx(ctx, &resp, prizeGradeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+	err := m.QueryRowCtx(ctx, &resp, prizeGradeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", prizeGradeRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -85,8 +84,8 @@ func (m *defaultPrizeGradeModel) FindOne(ctx context.Context, id int64) (*PrizeG
 func (m *defaultPrizeGradeModel) Insert(ctx context.Context, data *PrizeGrade) (sql.Result, error) {
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, prizeGradeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Name, data.IsWin, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, prizeGradeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin)
 	}, prizeGradeIdKey)
 	return ret, err
 }
@@ -95,16 +94,16 @@ func (m *defaultPrizeGradeModel) Update(ctx context.Context, data *PrizeGrade) e
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeGradeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Name, data.IsWin, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.Id)
 	}, prizeGradeIdKey)
 	return err
 }
 
-func (m *defaultPrizeGradeModel) formatPrimary(primary interface{}) string {
+func (m *defaultPrizeGradeModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, primary)
 }
 
-func (m *defaultPrizeGradeModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+func (m *defaultPrizeGradeModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", prizeGradeRows, m.table)
 	return conn.QueryRowCtx(ctx, v, query, primary)
 }

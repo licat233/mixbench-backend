@@ -19,8 +19,8 @@ import (
 var (
 	jwtBlacklistFieldNames          = builder.RawFieldNames(&JwtBlacklist{})
 	jwtBlacklistRows                = strings.Join(jwtBlacklistFieldNames, ",")
-	jwtBlacklistRowsExpectAutoSet   = strings.Join(stringx.Remove(jwtBlacklistFieldNames, "`id`", "`update_time`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`"), ",")
-	jwtBlacklistRowsWithPlaceHolder = strings.Join(stringx.Remove(jwtBlacklistFieldNames, "`id`", "`update_time`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`"), "=?,") + "=?"
+	jwtBlacklistRowsExpectAutoSet   = strings.Join(stringx.Remove(jwtBlacklistFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	jwtBlacklistRowsWithPlaceHolder = strings.Join(stringx.Remove(jwtBlacklistFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheJwtBlacklistIdPrefix = "cache:jwtBlacklist:id:"
 )
@@ -40,7 +40,6 @@ type (
 
 	JwtBlacklist struct {
 		Id       int64     `db:"id"`        // 表主键
-		Uuid     string    `db:"uuid"`      // 用户或者管理员的唯一识别码
 		Token    string    `db:"token"`     // jwt-token
 		Platform string    `db:"platform"`  // 绑定平台
 		Ip       string    `db:"ip"`        // 绑定ip
@@ -50,9 +49,9 @@ type (
 	}
 )
 
-func newJwtBlacklistModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultJwtBlacklistModel {
+func newJwtBlacklistModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultJwtBlacklistModel {
 	return &defaultJwtBlacklistModel{
-		CachedConn: sqlc.NewConn(conn, c),
+		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`jwt_blacklist`",
 	}
 }
@@ -69,7 +68,7 @@ func (m *defaultJwtBlacklistModel) Delete(ctx context.Context, id int64) error {
 func (m *defaultJwtBlacklistModel) FindOne(ctx context.Context, id int64) (*JwtBlacklist, error) {
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, id)
 	var resp JwtBlacklist
-	err := m.QueryRowCtx(ctx, &resp, jwtBlacklistIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+	err := m.QueryRowCtx(ctx, &resp, jwtBlacklistIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", jwtBlacklistRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -86,8 +85,8 @@ func (m *defaultJwtBlacklistModel) FindOne(ctx context.Context, id int64) (*JwtB
 func (m *defaultJwtBlacklistModel) Insert(ctx context.Context, data *JwtBlacklist) (sql.Result, error) {
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, jwtBlacklistRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, jwtBlacklistRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Token, data.Platform, data.Ip, data.ExpireAt)
 	}, jwtBlacklistIdKey)
 	return ret, err
 }
@@ -96,16 +95,16 @@ func (m *defaultJwtBlacklistModel) Update(ctx context.Context, data *JwtBlacklis
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, jwtBlacklistRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Token, data.Platform, data.Ip, data.ExpireAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Token, data.Platform, data.Ip, data.ExpireAt, data.Id)
 	}, jwtBlacklistIdKey)
 	return err
 }
 
-func (m *defaultJwtBlacklistModel) formatPrimary(primary interface{}) string {
+func (m *defaultJwtBlacklistModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, primary)
 }
 
-func (m *defaultJwtBlacklistModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+func (m *defaultJwtBlacklistModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", jwtBlacklistRows, m.table)
 	return conn.QueryRowCtx(ctx, v, query, primary)
 }

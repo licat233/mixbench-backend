@@ -1,0 +1,52 @@
+api:
+    dir: ""
+    ignoreColumns: []
+    ignoreTables:
+    jwt:
+    middleware:
+    multiple: true
+    prefix: /v1/api/luckydraw
+    serviceName: luckydraw
+    status: true
+    style: genZero
+    tables: []
+database:
+    dsn: ""
+    ignoreColumns: []
+    ignoreTables: []
+    src: ../../../../deploy/mysql/luckydraw.sql
+    tables: []
+logic:
+    api:
+        dir: ../api/internal/logic
+        ignoreTables: []
+        rpcMultiple: true
+        status: true
+        style: genZero
+        tables: []
+        useRpc: true
+    rpc:
+        dir: ../rpc/internal/logic
+        ignoreTables: []
+        multiple: true
+        status: true
+        style: genZero
+        tables: []
+    status: true
+model:
+    dir: ../model
+    ignoreColumns: []
+    ignoreTables: []
+    status: true
+    tables: []
+proto:
+    dir: ""
+    goPackage: ""
+    ignoreColumns: []
+    ignoreTables:
+    multiple: true
+    package: ""
+    serviceName: luckydraw
+    status: true
+    style: genZero
+    tables: []

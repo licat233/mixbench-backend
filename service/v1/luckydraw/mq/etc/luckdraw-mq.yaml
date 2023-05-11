@@ -34,7 +34,7 @@ CacheRedis:
     Pass: ${REDIS_PASSWORD}
     Type: node
 
-LuckdrawRpc:
+LuckydrawRpc:
   Endpoints:
     - 127.0.0.1:${LUCKDRAW_RPC_PORT}
   NonBlock: true

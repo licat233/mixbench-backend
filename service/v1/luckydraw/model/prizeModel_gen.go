@@ -19,8 +19,8 @@ import (
 var (
 	prizeFieldNames          = builder.RawFieldNames(&Prize{})
 	prizeRows                = strings.Join(prizeFieldNames, ",")
-	prizeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`update_time`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`"), ",")
-	prizeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`update_time`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`"), "=?,") + "=?"
+	prizeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	prizeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cachePrizeIdPrefix = "cache:prize:id:"
 )
@@ -39,22 +39,20 @@ type (
 	}
 
 	Prize struct {
-		Id        int64     `db:"id"`         // 表主键
-		Uuid      string    `db:"uuid"`       // 唯一识别码
-		Name      string    `db:"name"`       // 奖品名称
-		Image     string    `db:"image"`      // 奖品图片
-		Price     float64   `db:"price"`      // 奖品价格
-		Status    int64     `db:"status"`     // 是否可用
-		CreateAt  time.Time `db:"create_at"`  // 创建时间
-		UpdateAt  time.Time `db:"update_at"`  // 更新时间
-		IsDeleted int64     `db:"is_deleted"` // 是否已被删除
-		DeleteAt  time.Time `db:"delete_at"`  // 删除时间
+		Id       int64     `db:"id"`        // 表主键
+		Uuid     string    `db:"uuid"`      // UUID
+		Name     string    `db:"name"`      // 奖品名称
+		Image    string    `db:"image"`     // 奖品图片
+		Price    float64   `db:"price"`     // 奖品价格
+		Status   int64     `db:"status"`    // 是否可用
+		CreateAt time.Time `db:"create_at"` // 创建时间
+		UpdateAt time.Time `db:"update_at"` // 更新时间
 	}
 )
 
-func newPrizeModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultPrizeModel {
+func newPrizeModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultPrizeModel {
 	return &defaultPrizeModel{
-		CachedConn: sqlc.NewConn(conn, c),
+		CachedConn: sqlc.NewConn(conn, c, opts...),
 		table:      "`prize`",
 	}
 }
@@ -71,7 +69,7 @@ func (m *defaultPrizeModel) Delete(ctx context.Context, id int64) error {
 func (m *defaultPrizeModel) FindOne(ctx context.Context, id int64) (*Prize, error) {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, id)
 	var resp Prize
-	err := m.QueryRowCtx(ctx, &resp, prizeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+	err := m.QueryRowCtx(ctx, &resp, prizeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", prizeRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -88,8 +86,8 @@ func (m *defaultPrizeModel) FindOne(ctx context.Context, id int64) (*Prize, erro
 func (m *defaultPrizeModel) Insert(ctx context.Context, data *Prize) (sql.Result, error) {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted, data.DeleteAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status)
 	}, prizeIdKey)
 	return ret, err
 }
@@ -98,16 +96,16 @@ func (m *defaultPrizeModel) Update(ctx context.Context, data *Prize) error {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted, data.DeleteAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.Id)
 	}, prizeIdKey)
 	return err
 }
 
-func (m *defaultPrizeModel) formatPrimary(primary interface{}) string {
+func (m *defaultPrizeModel) formatPrimary(primary any) string {
 	return fmt.Sprintf("%s%v", cachePrizeIdPrefix, primary)
 }
 
-func (m *defaultPrizeModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary interface{}) error {
+func (m *defaultPrizeModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", prizeRows, m.table)
 	return conn.QueryRowCtx(ctx, v, query, primary)
 }

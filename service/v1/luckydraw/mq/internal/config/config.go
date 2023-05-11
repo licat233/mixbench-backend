@@ -22,7 +22,7 @@ type Config struct {
 	GoodluckConf kq.KqConf
 
 	//rpc
-	LuckdrawRpc zrpc.RpcClientConf
+	LuckydrawRpc zrpc.RpcClientConf
 
 	//mysql
 	Mysql struct {
