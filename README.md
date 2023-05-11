@@ -188,10 +188,10 @@ git pull origin main
 goctl api ts -api captcha.api -dir .
 ```
 
-## .proto 和 .api 文件由 [sql2rpc](https://github.com/licat233/sql2rpc) 生成更新
+## .proto 和 .api 文件，以及基础的增删改查代码，由 [genzero](https://github.com/licat233/genzero) 生成更新
 
-`go install github.com/licat233/sql2rpc@latest`
+`go install github.com/licat233/genzero`
 
 ```shell
-sql2rpc -h
+genzero -h
 ```
