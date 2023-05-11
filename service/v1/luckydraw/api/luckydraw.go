@@ -17,7 +17,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-var configFile = flag.String("f", "etc/luckydraw-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/luckydraw.yaml", "the config file")
 var rootDir = flag.String("root", "./", "the project root path")
 
 func main() {

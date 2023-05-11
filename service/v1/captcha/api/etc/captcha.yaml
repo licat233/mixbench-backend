@@ -1,11 +1,12 @@
-Name: luckydraw-api
+Name: captcha-api
 Host: 0.0.0.0
-Port: ${LUCKDRAW_API_PORT}
+Port: ${CAPTCHA_API_PORT}
+
 Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
 Log:
-  ServiceName: luckydraw-api
+  ServiceName: captcha-api
   Level: error
 
 RootDir: ./
@@ -18,34 +19,28 @@ StaticConfig:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: ${PROMETHEUS_LUCKDRAW_API_PORT}
+  Port: ${PROMETHEUS_CAPTCHA_API_PORT}
   Path: /metrics
 
 #链路追踪
 Telemetry:
-  Name: luckdarw-api
+  Name: captcha-api
   Endpoint: http://jaeger:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger
-
-Auth:
-  AccessSecret: ${JWT_SECRET}
-  AccessExpire: 86400
 
 CaptchaRpc:
   Endpoints:
     - 127.0.0.1:${CAPTCHA_RPC_PORT}
   NonBlock: true
-  # Etcd:
-  #   Hosts:
-  #     - 127.0.0.1:2379
-  #   Key: captcha.rpc
 
-LuckydrawRpc:
+AdminRpc:
   Endpoints:
-    - 127.0.0.1:${LUCKDRAW_RPC_PORT}
+    - 127.0.0.1:${ADMIN_RPC_PORT}
   NonBlock: true
-  # Etcd:
-  #   Hosts:
-  #     - 127.0.0.1:2379
-  #   Key: luckydraw.rpc
+
+Redis:
+  Addr: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+  DB: 1

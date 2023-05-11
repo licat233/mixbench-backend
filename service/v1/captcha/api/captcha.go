@@ -17,7 +17,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-var configFile = flag.String("f", "etc/captcha-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/captcha.yaml", "the config file")
 var rootDir = flag.String("root", "./", "the project root path")
 
 func main() {
