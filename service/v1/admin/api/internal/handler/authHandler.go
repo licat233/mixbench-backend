@@ -11,10 +11,11 @@ import (
 
 func authHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		l := logic.NewAuthLogic(r.Context(), svcCtx, r)
+		l := logic.NewAuthLogic(r.Context(), svcCtx, w, r)
 		err := l.Auth()
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			w.WriteHeader(http.StatusForbidden)
+			// httpx.ErrorCtx(r.Context(), w, err)
 		} else {
 			httpx.Ok(w)
 		}
