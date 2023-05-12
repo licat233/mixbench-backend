@@ -168,7 +168,7 @@ type testReq {
 //[custom service start]
 
 @server(
-  jwt: Auth
+  // jwt: Auth
   prefix: /v1/api/admin
 )
 service admin {

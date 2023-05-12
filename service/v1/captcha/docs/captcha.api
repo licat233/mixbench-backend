@@ -78,12 +78,18 @@ type ProcessCaptchaReq {
 	CaptchaId string `json:"captcha_id"`
 	Solution  string `json:"solution"`
 }
+
+//预留的调试端口
+type testReq {
+	Data string `form:"data,optional"` //数据
+}
+
 //--------end captcha----------
 
 @server(
 	prefix: /v1/api/captcha
 )
-service captcha-api {
+service captcha {
 	@doc(
 		summary: "获取数学验证码"
 	)
@@ -113,4 +119,10 @@ service captcha-api {
 	)
 	@handler emailCaptchaVerify
 	post /email/process (EmailCaptchaVerifyReq) returns(EmailCaptchaResp)
+	
+	@doc(
+		summary: '预留的调试端口'
+	)
+	@handler test
+	get /test(testReq) returns(BaseResp)
 }

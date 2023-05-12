@@ -7,7 +7,7 @@ export * from "./luckydrawComponents"
  * @param req
  */
 export function userIdentify(req: components.UserIdentifyReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/luckydraw/userIdentify`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/userIdentify`, req)
 }
 
 /**
@@ -15,7 +15,15 @@ export function userIdentify(req: components.UserIdentifyReq) {
  * @param req
  */
 export function activityPrizes(req: components.ActivityPrizesReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/luckydraw/activityPrizes`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/activityPrizes`, req)
+}
+
+/**
+ * @description '预留的调试端口'
+ * @param params
+ */
+export function test(params: components.TestReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/test`, params)
 }
 
 /**
@@ -23,7 +31,7 @@ export function activityPrizes(req: components.ActivityPrizesReq) {
  * @param req
  */
 export function getALuckyList(req: components.GetALuckyListReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/luckydraw/activityLuckyList`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/activityLuckyList`, req)
 }
 
 /**
@@ -31,7 +39,7 @@ export function getALuckyList(req: components.GetALuckyListReq) {
  * @param req
  */
 export function luckydraw(req: components.LuckydrawReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/luckydraw/luckydraw`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/luckydraw`, req)
 }
 
 /**
@@ -39,7 +47,7 @@ export function luckydraw(req: components.LuckydrawReq) {
  * @param req
  */
 export function searchLucky(req: components.SearchLuckyReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/luckydraw/searchLucky`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/searchLucky`, req)
 }
 
 /**
@@ -47,7 +55,7 @@ export function searchLucky(req: components.SearchLuckyReq) {
  * @param req
  */
 export function selectPrizes(req: components.SelectPrizesReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/luckydraw/selectPrizes`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/selectPrizes`, req)
 }
 
 /**

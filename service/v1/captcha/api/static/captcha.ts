@@ -40,3 +40,11 @@ export function emailCaptcha(req: components.EmailCaptchaReq) {
 export function emailCaptchaVerify(req: components.EmailCaptchaVerifyReq) {
 	return webapi.post<components.EmailCaptchaResp>(`/v1/api/captcha/email/process`, req)
 }
+
+/**
+ * @description '预留的调试端口'
+ * @param params
+ */
+export function test(params: components.TestReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/captcha/test`, params)
+}

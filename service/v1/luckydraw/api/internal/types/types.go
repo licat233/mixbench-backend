@@ -108,6 +108,10 @@ type SelectPrizesReq struct {
 	LuckyUuidList []string `json:"lucky_uuid_list"` //中奖名单UUID
 }
 
+type TestReq struct {
+	Data string `form:"data,optional"` //数据
+}
+
 type Activity struct {
 	Id        int64  `json:"id"`        //表主键
 	Uuid      string `json:"uuid"`      //UUID

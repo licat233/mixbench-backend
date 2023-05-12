@@ -56,3 +56,7 @@ type ProcessCaptchaReq struct {
 	CaptchaId string `json:"captcha_id"`
 	Solution  string `json:"solution"`
 }
+
+type TestReq struct {
+	Data string `form:"data,optional"` //数据
+}

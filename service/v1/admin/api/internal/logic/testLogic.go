@@ -32,6 +32,6 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext) *TestLogic {
 }
 
 func (l *TestLogic) Test(req *types.TestReq) (any, error) {
-	data := "hello gozero"
+	data := "admin service"
 	return respx.DefaultSingleResp(data, nil)
 }

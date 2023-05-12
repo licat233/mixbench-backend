@@ -156,6 +156,11 @@ type selectPrizesReq {
   LuckyUuidList []string `json:"lucky_uuid_list"` //中奖名单UUID
 }
 
+//预留的调试端口
+type testReq {
+  Data string `form:"data,optional"` //数据
+}
+
 //[custom struct end]
 
 // ------------------------------ Struct End ------------------------------
@@ -165,7 +170,7 @@ type selectPrizesReq {
 //[custom service start]
 
 @server(
-  prefix: /v1/api/admin/luckydraw
+  prefix: /v1/api/luckydraw
 )
 service luckydraw {
   // @doc "展现抽奖页面"
@@ -179,11 +184,17 @@ service luckydraw {
   @doc "获取活动奖品列表"
   @handler ActivityPrizes
   post /activityPrizes (ActivityPrizesReq) returns(BaseResp)
+
+  @doc(
+    summary: '预留的调试端口'
+  )
+  @handler test
+  get /test(testReq) returns(BaseResp)
 }
 
 @server(
   middleware: UserAuthMiddleware
-  prefix: /v1/api/admin/luckydraw
+  prefix: /v1/api/luckydraw
 )
 service luckydraw {
   @doc "获取自己在某活动的中奖名单"

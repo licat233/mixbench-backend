@@ -30,8 +30,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/activityPrizes",
 				Handler: ActivityPrizesHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/test",
+				Handler: testHandler(serverCtx),
+			},
 		},
-		rest.WithPrefix("/v1/api/admin/luckydraw"),
+		rest.WithPrefix("/v1/api/luckydraw"),
 	)
 
 	server.AddRoutes(
@@ -60,7 +65,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
-		rest.WithPrefix("/v1/api/admin/luckydraw"),
+		rest.WithPrefix("/v1/api/luckydraw"),
 	)
 
 	server.AddRoutes(

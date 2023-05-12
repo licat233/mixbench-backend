@@ -62,3 +62,9 @@ export interface ProcessCaptchaReq {
 	solution: string
 }
 
+export interface TestReq {
+}
+export interface TestReqParams {
+	data: string // 数据
+}
+

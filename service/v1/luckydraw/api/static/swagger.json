@@ -15,175 +15,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/api/admin/luckydraw/activityLuckyList": {
-      "post": {
-        "summary": "获取自己在某活动的中奖名单",
-        "operationId": "GetALuckyList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GetALuckyListReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "luckydraw"
-        ]
-      }
-    },
-    "/v1/api/admin/luckydraw/activityPrizes": {
-      "post": {
-        "summary": "获取活动奖品列表",
-        "operationId": "ActivityPrizes",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ActivityPrizesReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "luckydraw"
-        ]
-      }
-    },
-    "/v1/api/admin/luckydraw/luckydraw": {
-      "post": {
-        "summary": "抽取奖品",
-        "operationId": "luckydraw",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/luckydrawReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "luckydraw"
-        ]
-      }
-    },
-    "/v1/api/admin/luckydraw/searchLucky": {
-      "post": {
-        "summary": "查询中奖信息",
-        "operationId": "searchLucky",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/searchLuckyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "luckydraw"
-        ]
-      }
-    },
-    "/v1/api/admin/luckydraw/selectPrizes": {
-      "post": {
-        "summary": "挑选奖品",
-        "operationId": "selectPrizes",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/selectPrizesReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "luckydraw"
-        ]
-      }
-    },
-    "/v1/api/admin/luckydraw/userIdentify": {
-      "post": {
-        "summary": "抽奖者身份验证",
-        "operationId": "UserIdentify",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start]",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserIdentifyReq"
-            }
-          }
-        ],
-        "requestBody": {},
-        "tags": [
-          "luckydraw"
-        ]
-      }
-    },
     "/v1/api/luckydraw/activity/": {
       "get": {
         "summary": "获取活动 基础API",
@@ -454,6 +285,62 @@
         ]
       }
     },
+    "/v1/api/luckydraw/activityLuckyList": {
+      "post": {
+        "summary": "获取自己在某活动的中奖名单",
+        "operationId": "GetALuckyList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetALuckyListReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/activityPrizes": {
+      "post": {
+        "summary": "获取活动奖品列表",
+        "operationId": "ActivityPrizes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ActivityPrizesReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
+        ]
+      }
+    },
     "/v1/api/luckydraw/lucky/": {
       "get": {
         "summary": "获取中奖名单 基础API",
@@ -697,6 +584,34 @@
         "requestBody": {},
         "tags": [
           "lucky"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/luckydraw": {
+      "post": {
+        "summary": "抽取奖品",
+        "operationId": "luckydraw",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/luckydrawReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
         ]
       }
     },
@@ -1644,6 +1559,89 @@
         ]
       }
     },
+    "/v1/api/luckydraw/searchLucky": {
+      "post": {
+        "summary": "查询中奖信息",
+        "operationId": "searchLucky",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/searchLuckyReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/selectPrizes": {
+      "post": {
+        "summary": "挑选奖品",
+        "operationId": "selectPrizes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/selectPrizesReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/test": {
+      "get": {
+        "summary": "'预留的调试端口'",
+        "operationId": "test",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "数据",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
+        ]
+      }
+    },
     "/v1/api/luckydraw/user/": {
       "get": {
         "summary": "获取用户名单 基础API",
@@ -1899,6 +1897,35 @@
         "requestBody": {},
         "tags": [
           "user"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/userIdentify": {
+      "post": {
+        "summary": "抽奖者身份验证",
+        "operationId": "UserIdentify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start]",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserIdentifyReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "luckydraw"
         ]
       }
     },
@@ -4525,6 +4552,16 @@
         "activity_uuid",
         "lucky_uuid_list"
       ]
+    },
+    "testReq": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "数据"
+        }
+      },
+      "title": "testReq"
     }
   },
   "securityDefinitions": {

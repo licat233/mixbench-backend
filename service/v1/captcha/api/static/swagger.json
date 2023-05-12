@@ -40,7 +40,7 @@
         ],
         "requestBody": {},
         "tags": [
-          "captcha-api"
+          "captcha"
         ]
       }
     },
@@ -69,7 +69,7 @@
         ],
         "requestBody": {},
         "tags": [
-          "captcha-api"
+          "captcha"
         ]
       }
     },
@@ -98,7 +98,7 @@
         ],
         "requestBody": {},
         "tags": [
-          "captcha-api"
+          "captcha"
         ]
       }
     },
@@ -127,7 +127,7 @@
         ],
         "requestBody": {},
         "tags": [
-          "captcha-api"
+          "captcha"
         ]
       }
     },
@@ -143,7 +143,34 @@
         },
         "requestBody": {},
         "tags": [
-          "captcha-api"
+          "captcha"
+        ]
+      }
+    },
+    "/v1/api/captcha/test": {
+      "get": {
+        "summary": "'预留的调试端口'",
+        "operationId": "test",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "数据",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "captcha"
         ]
       }
     }
@@ -362,6 +389,16 @@
         "captcha_id",
         "solution"
       ]
+    },
+    "testReq": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "数据"
+        }
+      },
+      "title": "testReq"
     }
   },
   "securityDefinitions": {

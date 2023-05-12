@@ -109,6 +109,12 @@ export interface SelectPrizesReq {
 	lucky_uuid_list: Array<string> // 中奖名单UUID
 }
 
+export interface TestReq {
+}
+export interface TestReqParams {
+	data: string // 数据
+}
+
 export interface Activity {
 	id: number // 表主键
 	uuid: string // UUID

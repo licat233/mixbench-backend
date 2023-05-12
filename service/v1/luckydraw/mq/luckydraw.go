@@ -11,7 +11,7 @@ import (
 	"github.com/zeromicro/go-zero/core/service"
 )
 
-var configFile = flag.String("f", "etc/luckydraw-mq.yaml", "the config file")
+var configFile = flag.String("f", "etc/luckydraw.yaml", "the config file")
 
 func main() {
 	flag.Parse()
