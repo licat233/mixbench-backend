@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -28,6 +29,7 @@ func NewAddProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 // 添加项目
 func (l *AddProjectLogic) AddProject(in *luckydraw_pb.AddProjectReq) (*luckydraw_pb.AddProjectResp, error) {
 	data := &model.Project{
+		Uuid:   uniqueid.NewUUID(),
 		Name:   in.Name,
 		Status: in.Status,
 	}

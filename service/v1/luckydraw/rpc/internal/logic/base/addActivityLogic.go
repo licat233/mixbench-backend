@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -29,6 +30,7 @@ func NewAddActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddAc
 // 添加活动
 func (l *AddActivityLogic) AddActivity(in *luckydraw_pb.AddActivityReq) (*luckydraw_pb.AddActivityResp, error) {
 	data := &model.Activity{
+		Uuid:      uniqueid.NewUUID(),
 		Name:      in.Name,
 		ProjectId: in.ProjectId,
 		Status:    in.Status,

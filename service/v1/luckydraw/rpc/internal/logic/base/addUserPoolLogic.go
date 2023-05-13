@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -28,6 +29,7 @@ func NewAddUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUs
 // 添加活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
 func (l *AddUserPoolLogic) AddUserPool(in *luckydraw_pb.AddUserPoolReq) (*luckydraw_pb.AddUserPoolResp, error) {
 	data := &model.UserPool{
+		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		UserId:     in.UserId,
 		Status:     in.Status,

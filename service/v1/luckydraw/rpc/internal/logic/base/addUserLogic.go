@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -28,6 +29,7 @@ func NewAddUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserLo
 // 添加用户名单
 func (l *AddUserLogic) AddUser(in *luckydraw_pb.AddUserReq) (*luckydraw_pb.AddUserResp, error) {
 	data := &model.User{
+		Uuid:     uniqueid.NewUUID(),
 		Passport: in.Passport,
 		Email:    in.Email,
 		Phone:    in.Phone,

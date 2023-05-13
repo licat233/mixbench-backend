@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -29,6 +30,7 @@ func NewAddLuckyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddLucky
 // 添加中奖名单
 func (l *AddLuckyLogic) AddLucky(in *luckydraw_pb.AddLuckyReq) (*luckydraw_pb.AddLuckyResp, error) {
 	data := &model.Lucky{
+		Uuid:        uniqueid.NewUUID(),
 		UserId:      in.UserId,
 		PrizePoolId: in.PrizePoolId,
 		Status:      in.Status,

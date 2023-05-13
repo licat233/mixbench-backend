@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -28,6 +29,7 @@ func NewAddPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddP
 // 添加活动奖品池，某活动中的奖品信息
 func (l *AddPrizePoolLogic) AddPrizePool(in *luckydraw_pb.AddPrizePoolReq) (*luckydraw_pb.AddPrizePoolResp, error) {
 	data := &model.PrizePool{
+		Uuid:       uniqueid.NewUUID(),
 		ActivityId: in.ActivityId,
 		PrizeId:    in.PrizeId,
 		GradeId:    in.GradeId,

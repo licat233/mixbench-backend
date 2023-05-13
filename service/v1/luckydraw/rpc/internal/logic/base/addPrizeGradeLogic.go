@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/luckydraw/model"
 	"mixbench/service/v1/luckydraw/rpc/internal/svc"
 	"mixbench/service/v1/luckydraw/rpc/luckydraw_pb"
@@ -28,6 +29,7 @@ func NewAddPrizeGradeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Add
 // 添加奖品级别
 func (l *AddPrizeGradeLogic) AddPrizeGrade(in *luckydraw_pb.AddPrizeGradeReq) (*luckydraw_pb.AddPrizeGradeResp, error) {
 	data := &model.PrizeGrade{
+		Uuid:  uniqueid.NewUUID(),
 		Name:  in.Name,
 		IsWin: in.IsWin,
 	}

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"mixbench/common/errorx"
+	"mixbench/common/uniqueid"
 	"mixbench/service/v1/admin/model"
 	"mixbench/service/v1/admin/rpc/admin_pb"
 	"mixbench/service/v1/admin/rpc/internal/svc"
@@ -29,6 +30,7 @@ func NewAddAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddAdm
 // 添加管理员
 func (l *AddAdminerLogic) AddAdminer(in *admin_pb.AddAdminerReq) (*admin_pb.AddAdminerResp, error) {
 	data := &model.Adminer{
+		Uuid:         uniqueid.NewUUID(),
 		Name:         in.Name,
 		Avatar:       in.Avatar,
 		Access:       in.Access,
