@@ -9,7 +9,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `goods_category`;
 CREATE TABLE `goods_category` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0下架，1上架，2预售',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -25,7 +25,7 @@ CREATE TABLE `goods_category` (
 DROP TABLE IF EXISTS `goods_tag`;
 CREATE TABLE `goods_tag` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '名称',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0不可用，1可用',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -41,7 +41,7 @@ CREATE TABLE `goods_tag` (
 DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `category_id` int NOT NULL DEFAULT '0' COMMENT '分类id',
   `goods_sn` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品的唯一货号',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '商品名',

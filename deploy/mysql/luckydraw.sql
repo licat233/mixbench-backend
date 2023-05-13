@@ -9,7 +9,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `activity`;
 CREATE TABLE `activity` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '活动名称',
   `project_id` int NOT NULL DEFAULT '0' COMMENT '项目id',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '活动状态，是否在举办，默认关闭，需手动开启',
@@ -40,7 +40,7 @@ COMMIT;
 DROP TABLE IF EXISTS `lucky`;
 CREATE TABLE `lucky` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `user_id` int NOT NULL DEFAULT '0' COMMENT '中奖用户id',
   `prize_pool_id` int NOT NULL DEFAULT '0' COMMENT '所属奖品池id',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态: 0未领奖，1已领奖，2弃领',
@@ -67,7 +67,7 @@ COMMIT;
 DROP TABLE IF EXISTS `prize`;
 CREATE TABLE `prize` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '奖品名称',
   `image` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '奖品图片',
   `price` decimal(10,2) NOT NULL DEFAULT 0.00 COMMENT '奖品价格',
@@ -97,7 +97,7 @@ COMMIT;
 DROP TABLE IF EXISTS `prize_grade`;
 CREATE TABLE `prize_grade` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '级别名称',
   `is_win` tinyint NOT NULL DEFAULT '0' COMMENT '是否中奖',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -125,7 +125,7 @@ COMMIT;
 DROP TABLE IF EXISTS `prize_pool`;
 CREATE TABLE `prize_pool` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `activity_id` int NOT NULL DEFAULT '0' COMMENT '活动id',
   `prize_id` int NOT NULL DEFAULT '0' COMMENT '奖品id',
   `grade_id` int NOT NULL DEFAULT '1' COMMENT '奖品等级',
@@ -167,7 +167,7 @@ COMMIT;
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '项目名称',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '项目状态',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
@@ -190,7 +190,7 @@ COMMIT;
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `passport` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '凭证，可以是手机号或者社交账号，一般是由客户填入',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '邮箱',
   `phone` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '手机号',
@@ -217,7 +217,7 @@ COMMIT;
 DROP TABLE IF EXISTS `user_pool`;
 CREATE TABLE `user_pool` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `activity_id` int NOT NULL DEFAULT '0' COMMENT '活动id',
   `user_id` int NOT NULL DEFAULT '0' COMMENT '用户id',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0未授权，1正常，2已冻结',
