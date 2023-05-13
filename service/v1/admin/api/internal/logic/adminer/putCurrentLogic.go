@@ -42,6 +42,7 @@ func (l *PutCurrentLogic) PutCurrent(req *types.PutCurrentReq) (any, error) {
 	adminer.Email = req.Email
 	_, err = l.svcCtx.AdminRpc.PutAdminer(l.ctx, &admin_pb.PutAdminerReq{
 		Id:           adminer.Id,
+		Uuid:         adminer.Uuid,
 		Name:         adminer.Name,
 		Avatar:       adminer.Avatar,
 		Access:       adminer.Access,

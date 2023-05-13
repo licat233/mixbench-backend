@@ -28,6 +28,7 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 func (l *PutAdminerLogic) PutAdminer(req *types.PutAdminerReq) (any, error) {
 	in := &admin_pb.PutAdminerReq{
 		Id:           req.Id,
+		Uuid:         req.Uuid,
 		Name:         req.Name,
 		Avatar:       req.Avatar,
 		Access:       req.Access,
