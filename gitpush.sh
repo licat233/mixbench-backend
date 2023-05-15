@@ -12,8 +12,13 @@ cd $current_path
 
 COMMENT="$1"
 
-if [ -z "$COMMENT" ]; then
+if [ "$COMMENT" == "" ] || [ "$COMMENT" == "," ]; then
     COMMENT="update"
+fi
+
+
+if [ $? ne 0 ]; then
+    exit 1
 fi
 
 git add .
