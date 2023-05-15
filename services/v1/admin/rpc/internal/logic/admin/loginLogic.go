@@ -57,6 +57,7 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
+
 	//账户不存在
 	if err == model.ErrNotFound {
 		return nil, errorx.ExtRpcErr(errors.New("account does not exist"))

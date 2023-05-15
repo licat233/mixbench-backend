@@ -88,12 +88,3 @@ location ~ /prometheus/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg
 location /prometheus {
    proxy_pass http://prometheus:9090;
 }
-
-location ~ /nginx/.*\.(jpg|jpeg|gif|png|ico|css|pdf|ppt|txt|bmp|rtf|ttf|svg|js)$ {
-    proxy_pass http://nginx:80;
-    expires 30d;
-    add_header Cache-Control public;
-}
-location /nginx {
-   proxy_pass http://nginx:80;
-}

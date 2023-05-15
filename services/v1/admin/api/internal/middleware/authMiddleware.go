@@ -41,84 +41,80 @@ func NewAuthMiddleware(c config.Config, jwtModel model.JwtBlacklistModel, admine
 
 func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		jwtToken := r.Header.Get(jwtx.ReqHeaderKey)
-		if jwtToken == "" {
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrAuth)
-			return
-		}
-
-		//解析 token
-		claims, err := jwtx.ParseToken(jwtToken, m.Config.Auth.AccessSecret)
+		err := AuthLogic(m.ctx, r, m.Config, m.AdminerModel, m.JwtBlacklistsModel)
 		if err != nil {
-			httpx.ErrorCtx(m.ctx, w, errorx.InternalError(err))
-			return
-		}
-
-		//获取请求设备
-		reqPlatform, err := utils.RemotePlatform(r)
-		if err != nil {
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrPlatform)
-			return
-		}
-
-		jwtPlatform := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtPlatform, *claims)
-		//设备 校验
-		if reqPlatform != jwtPlatform {
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrPlatform)
-			return
-		}
-
-		jwtIp := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtIp, *claims)
-		//获取请求ip
-		reqIp := utils.RemoteIp(r)
-		//ip 校验
-		if reqIp != jwtIp {
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrIp)
-			return
-		}
-
-		//检查用户状态
-		uidValue := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtUserId, *claims)
-		if uidValue == "" {
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrAuth)
-			return
-		}
-		uid, err := strconv.Atoi(uidValue)
-		if err != nil {
-			logx.WithContext(m.ctx).Error(err)
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrAuth)
-			return
-		}
-
-		adminer, err := m.AdminerModel.FindOne(m.ctx, int64(uid))
-		if err != nil && err != model.ErrNotFound {
-			logx.WithContext(m.ctx).Error(err)
-			httpx.ErrorCtx(m.ctx, w, errorx.InternalError(err))
-			return
-		}
-		if err == model.ErrNotFound {
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrAuth)
-			return
-		}
-		if adminer.Status == 0 {
-			httpx.ErrorCtx(m.ctx, w, errorx.AuthError(errors.New("当前用户不可用")))
-			return
-		}
-
-		// 校验token是否已被加入黑名单
-		_, err = m.JwtBlacklistsModel.FindOneByToken(m.ctx, jwtToken)
-		if err != nil {
-			logx.WithContext(m.ctx).Error(err)
-			httpx.ErrorCtx(m.ctx, w, errorx.InternalError(err))
-			return
-		}
-		if err == nil {
-			//如果存在了，则失效
-			httpx.ErrorCtx(m.ctx, w, errorx.ErrAuth)
+			httpx.ErrorCtx(m.ctx, w, err)
 			return
 		}
 
 		// Passthrough to next handler if need
 		next(w, r)
 	}
+}
+
+func AuthLogic(ctx context.Context, r *http.Request, config config.Config, adminerModel model.AdminerModel, jwtBlacklistsModel model.JwtBlacklistModel) error {
+	jwtToken := r.Header.Get(jwtx.ReqHeaderKey)
+	if jwtToken == "" {
+		return errorx.ErrAuth
+	}
+
+	//解析 token
+	claims, err := jwtx.ParseToken(jwtToken, config.Auth.AccessSecret)
+	if err != nil {
+		return errorx.InternalError(err)
+	}
+
+	//获取请求设备
+	reqPlatform, err := utils.RemotePlatform(r)
+	if err != nil {
+		return errorx.ErrPlatform
+	}
+
+	jwtPlatform := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtPlatform, *claims)
+	//设备 校验
+	if reqPlatform != jwtPlatform {
+		return errorx.ErrPlatform
+	}
+
+	jwtIp := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtIp, *claims)
+	//获取请求ip
+	reqIp := utils.RemoteIp(r)
+	//ip 校验
+	if reqIp != jwtIp {
+		return errorx.ErrIp
+	}
+
+	//检查用户状态
+	uidValue := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtUserId, *claims)
+	if uidValue == "" {
+		return errorx.ErrAuth
+	}
+	uid, err := strconv.Atoi(uidValue)
+	if err != nil {
+		logx.WithContext(ctx).Error(err)
+		return errorx.ErrAuth
+	}
+
+	adminer, err := adminerModel.FindOne(ctx, int64(uid))
+	if err != nil && err != model.ErrNotFound {
+		logx.WithContext(ctx).Error(err)
+		return errorx.InternalError(err)
+	}
+	if err == model.ErrNotFound {
+		return errorx.ErrAuth
+	}
+	if adminer.Status == 0 {
+		return errorx.AuthError(errors.New("当前用户不可用"))
+	}
+
+	// 校验token是否已被加入黑名单
+	_, err = jwtBlacklistsModel.FindOneByToken(ctx, jwtToken)
+	if err != nil {
+		logx.WithContext(ctx).Error(err)
+		return errorx.InternalError(err)
+	}
+	if err == model.ErrNotFound { //不存在该黑名单
+		return nil
+	}
+	return errorx.ErrAuth
 }

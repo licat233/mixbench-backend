@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 
+	"mixbench/services/v1/admin/api/internal/middleware"
 	"mixbench/services/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -31,10 +32,9 @@ func NewAuthLogic(ctx context.Context, svcCtx *svc.ServiceContext, w http.Respon
 }
 
 func (l *AuthLogic) Auth() error {
-	// jwtToken := l.req.Header.Get(jwtx.ReqHeaderKey)
-	// jwtToken = strings.TrimSpace(jwtToken)
-	// if jwtToken == "" {
-	// 	return l.err
-	// }
+	err := middleware.AuthLogic(l.ctx, l.req, l.svcCtx.Config, l.svcCtx.AdminerModel, l.svcCtx.JwtBlacklistModel)
+	if err != nil {
+		return l.err
+	}
 	return nil
 }

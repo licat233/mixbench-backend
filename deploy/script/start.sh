@@ -22,7 +22,7 @@ current_path=$(
 )
 
 # 从 string 字符串最后一次出现 *chars 的位置开始，截取 *chars 左边的所有字符
-# project_root="${current_path%%mixbench-backend*}mixbench-backend" 
+# project_root="${current_path%%mixbench-backend*}mixbench-backend"
 # script_path="${project_root}/deploy/script/mac"
 
 script_path=$current_path
@@ -42,16 +42,20 @@ elif [[ "$1" = "run" ]];then
 ./run.sh $2 $3
 elif [[ "$1" = "clear" ]];then
 ./run.sh $2 $3
+elif [[ "$1" = "rebuild" ]];then
+./gen.sh $2 $3
+./build.sh $2 $3
 elif [[ "$1" = "-h" ]];then
 echo "command: "
 echo "gen [service-name] [micro-name]"
 echo "build [service-name] [micro-name]"
 echo "run [service-name] [micro-name]"
+echo "rebuild [service-name] [micro-name]"
 echo "clear [service-name] [micro-name]"
 echo "[service-name] [micro-name]"
 else
 #开始 gen
-nohup=$(./gen.sh $1 $2) 
+nohup=$(./gen.sh $1 $2)
 #开始 编译
 # nohup=$(./build.sh $1 $2) # 交由modd来编译
 #开始 运行

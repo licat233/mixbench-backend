@@ -30,8 +30,8 @@ CREATE TABLE `activity` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `activity` VALUES (1, 'b411d67c-97cc-463f-a366-65b5caa5e3aa','618购物节', 1, 0, 0, 1, 1, '2022-07-07 17:38:50', '2022-07-31 17:38:52', '2022-07-07 17:38:56', '2022-08-29 11:34:43');
-INSERT INTO `activity` VALUES (2,  'b431d67c-97cc-463f-a366-65b5caa5e3aa','七夕促销', 1, 1, 1, 1, 1, '2022-07-07 17:39:39', '2022-08-31 17:39:41', '2022-07-07 17:39:46', '2022-07-07 17:39:46');
-INSERT INTO `activity` VALUES (3,  'b441d67c-97cc-463f-a366-65b5caa5e3aa','中秋活动', 1, 1, 2, 1, 1, '2022-08-30 14:56:10', '2022-08-31 14:56:14', '2022-08-30 14:59:43', '2022-09-20 17:03:04');
+INSERT INTO `activity` VALUES (2, 'b431d67c-97cc-463f-a366-65b5caa5e3aa','七夕促销', 1, 1, 1, 1, 1, '2022-07-07 17:39:39', '2022-08-31 17:39:41', '2022-07-07 17:39:46', '2022-07-07 17:39:46');
+INSERT INTO `activity` VALUES (3, 'b441d67c-97cc-463f-a366-65b5caa5e3aa','中秋活动', 1, 1, 2, 1, 1, '2022-08-30 14:56:10', '2022-08-31 14:56:14', '2022-08-30 14:59:43', '2022-09-20 17:03:04');
 COMMIT;
 
 -- ----------------------------
@@ -83,11 +83,11 @@ CREATE TABLE `prize` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `prize` VALUES (1, 'b4a1d67c-97cc-463f-a366-65b5caa3e3aa', '美的蒸烤箱', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Us4mhB2BlAymmJh8F_!!917298378.png', 325.99, 0, '2022-07-07 17:51:03', '2022-09-02 09:45:09');
-INSERT INTO `prize` VALUES (2,  'b4a1d67c-97cc-463f-a366-65b5caa4e3aa','YSL-聖羅蘭', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01WlLtDx2BlAyrbjRQs_!!917298378.png', 199.89, 1, '2022-07-07 17:51:38', '2022-07-07 17:51:38');
-INSERT INTO `prize` VALUES (3,  'b4a1d67c-97cc-463f-a366-65b5caase3aa','雪肌淨膚面膜', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Nr8x9L2BlAyrbiAQ8_!!917298378.png', 668.99, 1, '2022-07-07 17:36:33', '2022-07-07 17:36:33');
-INSERT INTO `prize` VALUES (4,  'b4a1d67c-97cc-463f-a366-65b5caaae3aa','谢谢参与', '', 0.00, 1, '2022-07-07 17:44:39', '2022-09-01 17:40:00');
-INSERT INTO `prize` VALUES (5, 'b4a1d67c-97cc-463f-a366-65b5caafe3aa','黑头仪', '//mixbench.net/static/img/img_1_1663557715940496000.jpg', 32.00, 1, '2022-09-19 11:22:09', '2022-09-19 11:26:23', 1, '2022-09-19 11:26:23');
-INSERT INTO `prize` VALUES (6, 'b4a1d67c-97cc-463f-a366-65b5caaze3aa', '黑头仪', '//mixbench.net/static/img/img_1_1663557803475449000.jpg', 32.00, 1, '2022-09-19 11:23:39', '2022-09-19 11:29:44', 1, '2022-09-19 11:29:44');
+INSERT INTO `prize` VALUES (2, 'b4a1d67c-97cc-463f-a366-65b5caa4e3aa', 'YSL-聖羅蘭', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01WlLtDx2BlAyrbjRQs_!!917298378.png', 199.89, 1, '2022-07-07 17:51:38', '2022-07-07 17:51:38');
+INSERT INTO `prize` VALUES (3, 'b4a1d67c-97cc-463f-a366-65b5caase3aa', '雪肌淨膚面膜', 'https://img.alicdn.com/imgextra/i3/917298378/O1CN01Nr8x9L2BlAyrbiAQ8_!!917298378.png', 668.99, 1, '2022-07-07 17:36:33', '2022-07-07 17:36:33');
+INSERT INTO `prize` VALUES (4, 'b4a1d67c-97cc-463f-a366-65b5caaae3aa', '谢谢参与', '', 0.00, 1, '2022-07-07 17:44:39', '2022-09-01 17:40:00');
+INSERT INTO `prize` VALUES (5, 'b4a1d67c-97cc-463f-a366-65b5caafe3aa', '黑头仪', '//mixbench.net/static/img/img_1_1663557715940496000.jpg', 32.00, 1, '2022-09-19 11:22:09', '2022-09-19 11:26:23');
+INSERT INTO `prize` VALUES (6, 'b4a1d67c-97cc-463f-a366-65b5caaze3aa', '黑头仪', '//mixbench.net/static/img/img_1_1663557803475449000.jpg', 32.00, 1, '2022-09-19 11:23:39', '2022-09-19 11:29:44');
 INSERT INTO `prize` VALUES (7, 'b4a1d67c-97cc-463f-a366-65b5caaxe3aa', '黑头仪', '//mixbench.net/static/img/img_1_1663557945410676000.jpg', 32.00, 1, '2022-09-19 11:25:48', '2022-09-19 11:25:48');
 COMMIT;
 

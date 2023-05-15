@@ -36,6 +36,9 @@ type ServiceContext struct {
 	CaptchaRpc     captcha.Captcha
 	AdminRpc       AdminRpc
 	CasbinEnforcer *casbin.SyncedEnforcer
+
+	AdminerModel      model.AdminerModel
+	JwtBlacklistModel model.JwtBlacklistModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -60,11 +63,13 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	casbinFile := path.Join(c.RootDir, "etc/rbac_with_domains_model.conf")
 	enforcer := rbacx.NewCasbinEnforcer(db, casbinFile)
 	return &ServiceContext{
-		Config:         c,
-		AuthMiddleware: middleware.NewAuthMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
-		RbacMiddleware: middleware.NewRbacMiddleware(enforcer, &adminRpc.BaseClient).Handle,
-		CaptchaRpc:     captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
-		AdminRpc:       adminRpc,
-		CasbinEnforcer: enforcer,
+		Config:            c,
+		AuthMiddleware:    middleware.NewAuthMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
+		RbacMiddleware:    middleware.NewRbacMiddleware(enforcer, &adminRpc.BaseClient).Handle,
+		CaptchaRpc:        captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
+		AdminRpc:          adminRpc,
+		CasbinEnforcer:    enforcer,
+		AdminerModel:      AdminerModel,
+		JwtBlacklistModel: JwtBlacklistsModel,
 	}
 }
