@@ -16,11 +16,6 @@ if [ "$COMMENT" == "" ] || [ "$COMMENT" == "," ]; then
     COMMENT="update"
 fi
 
-
-if [ $? != 0 ]; then
-    exit 1
-fi
-
 git add .
 git commit -m "$COMMENT" --no-verify
 git push origin main
