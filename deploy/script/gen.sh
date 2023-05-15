@@ -26,7 +26,7 @@ gen_api() {
     if [ "$micro" != "api" ]; then
         return
     fi
-    service_path="${project_root}/service/v1/${name}/docs"
+    service_path="${project_root}/services/v1/${name}/docs"
     if [ ! -d "$service_path" ]; then
         #如果目录不存在，则退出
         echo "目录: ${service_path} 不存在"
@@ -75,7 +75,7 @@ gen_rpc() {
     if [ "$micro" != "rpc" ]; then
         return
     fi
-    service_path="${project_root}/service/v1/${name}/docs"
+    service_path="${project_root}/services/v1/${name}/docs"
     if [ ! -d $service_path ]; then
         #如果目录不存在，则退出
         echo "目录: ${service_path} 不存在"
@@ -89,7 +89,7 @@ gen_rpc() {
         return
     fi
     nohup=$(goctl rpc protoc $filename --go_out=../rpc --go-grpc_out=../rpc --zrpc_out=../rpc -style goZero)
-    pb_path="${project_root}/service/v1/${name}/rpc/${name}_pb"
+    pb_path="${project_root}/services/v1/${name}/rpc/${name}_pb"
     if [ ! -d $pb_path ]; then
         #如果目录不存在，则退出
         echo "目录: ${pb_path} 不存在!!!"
@@ -113,7 +113,7 @@ gen_rpc() {
 
 gen() {
     name=$1
-    service_path="${project_root}/service/v1/${name}/docs"
+    service_path="${project_root}/services/v1/${name}/docs"
     if [ ! -d $service_path ]; then
         #如果目录不存在，则退出
         echo "目录: ${service_path} 不存在"

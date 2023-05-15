@@ -10,9 +10,14 @@ current_path=$(
 
 cd $current_path
 
+COMMENT="$1"
+
+if [ -z "$COMMENT" ]; then
+    COMMENT="update"
+fi
+
 git add .
-git commit -m update --no-verify
+git commit -m "$COMMENT" --no-verify
 git push origin main
 
 echo "git push 已完成"
-

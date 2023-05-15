@@ -10,14 +10,14 @@ if [ ! -z $pid ]; then
         exit
     fi
 fi
-service_path="/www/wwwroot/mixbench/service/v1/${name}/rpc"
+service_path="/www/wwwroot/mixbench/services/v1/${name}/rpc"
 cd $service_path
 
 "./${name}-rpc" &
 exit
 
 name=admin
-service_path="/www/wwwroot/mixbench/service/v1/${name}"
+service_path="/www/wwwroot/mixbench/services/v1/${name}"
 if [ ! -d $service_path ]; then
     echo "不存在"
 else

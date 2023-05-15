@@ -23,7 +23,7 @@ clear_build(){
         exit
     fi
 
-    service_path="${project_root}/service/v1/${name}/${micro}"
+    service_path="${project_root}/services/v1/${name}/${micro}"
     if [ ! -d $service_path ]; then
         #如果不存在，说明没有这个服务，直接返回
         return
@@ -51,7 +51,7 @@ clear_build(){
     fi
     #清除二进制文件
     rm -f $filename
-    
+
     echo "${filename} 已清除"
 }
 

@@ -31,16 +31,16 @@ fi
 
 touch $filename
 
-# service/v1/admin/rpc/**/*.go {
-#     prep: go build -o build/admin-rpc/admin-rpc -v service/v1/admin/rpc/admin.go
-#     daemon +sigkill: build/admin-rpc/admin-rpc -f service/v1/admin/rpc/etc/admin.yaml
+# services/v1/admin/rpc/**/*.go {
+#     prep: go build -o build/admin-rpc/admin-rpc -v services/v1/admin/rpc/admin.go
+#     daemon +sigkill: build/admin-rpc/admin-rpc -f services/v1/admin/rpc/etc/admin.yaml
 # }
-# service/v1/admin/api/**/*.go {
-#     prep: go build -o build/admin-api/admin-api -v service/v1/admin/api/admin.go
-#     daemon +sigkill: build/admin-api/admin-api -f service/v1/admin/api/etc/admin-api.yaml -root=service/v1/admin/api
+# services/v1/admin/api/**/*.go {
+#     prep: go build -o build/admin-api/admin-api -v services/v1/admin/api/admin.go
+#     daemon +sigkill: build/admin-api/admin-api -f services/v1/admin/api/etc/admin-api.yaml -root=services/v1/admin/api
 # }
 
-base_path="service/v1"
+base_path="services/v1"
 common_path="common/**/*.go"
 build_dir="build"
 for service in ${service_list[*]}; do

@@ -23,7 +23,7 @@ build_go() {
         exit
     fi
 
-    service_path="${project_root}/service/v1/${name}/${micro}"
+    service_path="${project_root}/services/v1/${name}/${micro}"
     if [ ! -d $service_path ]; then
         #如果不存在，说明没有这个服务，直接返回
         return

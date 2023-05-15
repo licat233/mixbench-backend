@@ -49,4 +49,4 @@ admin-api
 # Go workspace file
 go.work
 
-service/v1/admin/api/logs
+services/v1/admin/api/logs

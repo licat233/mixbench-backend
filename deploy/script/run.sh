@@ -78,7 +78,7 @@ fi
 for name in ${all_services[*]}; do
     for micro in ${all_micros[*]}; do
         filename="${name}-${micro}"
-        service_path="${project_root}/service/v1/${name}/${micro}"
+        service_path="${project_root}/services/v1/${name}/${micro}"
         run $filename $service_path
     done
 done
