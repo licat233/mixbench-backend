@@ -28,7 +28,7 @@ type project_model interface {
 func (m *defaultProjectModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -108,7 +108,7 @@ func (m *defaultProjectModel) TableName() string {
 func (m *defaultProjectModel) FindByUuid(ctx context.Context, uuid string) (*Project, error) {
 	var resp Project
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", projectRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -122,7 +122,7 @@ func (m *defaultProjectModel) FindByUuid(ctx context.Context, uuid string) (*Pro
 func (m *defaultProjectModel) FindByName(ctx context.Context, name string) (*Project, error) {
 	var resp Project
 	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", projectRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -136,7 +136,7 @@ func (m *defaultProjectModel) FindByName(ctx context.Context, name string) (*Pro
 func (m *defaultProjectModel) FindByStatus(ctx context.Context, status int64) (*Project, error) {
 	var resp Project
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", projectRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil

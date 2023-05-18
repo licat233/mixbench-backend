@@ -25,7 +25,7 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext) *TestLogic {
 
 // 预留的调试端口
 func (l *TestLogic) Test(in *admin_pb.TestReq) (*admin_pb.TestResp, error) {
-	// todo: add your logic here and delete this line
-
-	return &admin_pb.TestResp{}, nil
+	return &admin_pb.TestResp{
+		Data: in.Data,
+	}, nil
 }

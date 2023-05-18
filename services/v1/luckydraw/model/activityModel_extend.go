@@ -35,7 +35,7 @@ type activity_model interface {
 func (m *defaultActivityModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -133,7 +133,7 @@ func (m *defaultActivityModel) TableName() string {
 func (m *defaultActivityModel) FindByUuid(ctx context.Context, uuid string) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -147,7 +147,7 @@ func (m *defaultActivityModel) FindByUuid(ctx context.Context, uuid string) (*Ac
 func (m *defaultActivityModel) FindByName(ctx context.Context, name string) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -161,7 +161,7 @@ func (m *defaultActivityModel) FindByName(ctx context.Context, name string) (*Ac
 func (m *defaultActivityModel) FindByProjectId(ctx context.Context, projectId int64) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `project_id` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, projectId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -175,7 +175,7 @@ func (m *defaultActivityModel) FindByProjectId(ctx context.Context, projectId in
 func (m *defaultActivityModel) FindByStatus(ctx context.Context, status int64) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -189,7 +189,7 @@ func (m *defaultActivityModel) FindByStatus(ctx context.Context, status int64) (
 func (m *defaultActivityModel) FindByPattern(ctx context.Context, pattern int64) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `pattern` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, pattern)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, pattern)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -203,7 +203,7 @@ func (m *defaultActivityModel) FindByPattern(ctx context.Context, pattern int64)
 func (m *defaultActivityModel) FindByMaxCount(ctx context.Context, maxCount int64) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `max_count` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxCount)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, maxCount)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -217,7 +217,7 @@ func (m *defaultActivityModel) FindByMaxCount(ctx context.Context, maxCount int6
 func (m *defaultActivityModel) FindByMaxPrizes(ctx context.Context, maxPrizes int64) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `max_prizes` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxPrizes)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, maxPrizes)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -231,7 +231,7 @@ func (m *defaultActivityModel) FindByMaxPrizes(ctx context.Context, maxPrizes in
 func (m *defaultActivityModel) FindByStartTime(ctx context.Context, startTime time.Time) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `start_time` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, startTime.Format("2006-01-02 15:04:05"))
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, startTime.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
 		return &resp, nil
@@ -245,7 +245,7 @@ func (m *defaultActivityModel) FindByStartTime(ctx context.Context, startTime ti
 func (m *defaultActivityModel) FindByEndTime(ctx context.Context, endTime time.Time) (*Activity, error) {
 	var resp Activity
 	query := fmt.Sprintf("select %s from %s where `end_time` = ? limit 1", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, endTime.Format("2006-01-02 15:04:05"))
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, endTime.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
 		return &resp, nil

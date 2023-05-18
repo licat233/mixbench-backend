@@ -18,7 +18,7 @@ func testHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewTestLogic(r.Context(), svcCtx)
+		l := logic.NewTestLogic(r.Context(), svcCtx, w, r)
 		resp, err := l.Test(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

@@ -6,6 +6,61 @@ import (
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
 )
 
+func PbEnumToApiEnum(in *luckydraw_pb.Enum) *types.Enum {
+	if in == nil {
+		return nil
+	}
+	return &types.Enum{
+		Label: in.Label,
+		Value: in.Value,
+	}
+}
+
+func PbEnumsToApiEnums(list []*luckydraw_pb.Enum) []*types.Enum {
+	res := []*types.Enum{}
+	for _, v := range list {
+		res = append(res, PbEnumToApiEnum(v))
+	}
+	return res
+}
+
+func PbOptionToApiOption(in *luckydraw_pb.Option) *types.Option {
+	if in == nil {
+		return nil
+	}
+	return &types.Option{
+		Title: in.Title,
+		Value: in.Value,
+	}
+}
+
+func PbOptionsToApiOptions(list []*luckydraw_pb.Option) []*types.Option {
+	res := []*types.Option{}
+	for _, v := range list {
+		res = append(res, PbOptionToApiOption(v))
+	}
+	return res
+}
+
+func PbTreeOptionToApiTreeOption(in *luckydraw_pb.TreeOption) *types.TreeOption {
+	if in == nil {
+		return nil
+	}
+	return &types.TreeOption{
+		Title:    in.Title,
+		Value:    in.Value,
+		Children: PbTreeOptionsToApiTreeOptions(in.Children),
+	}
+}
+
+func PbTreeOptionsToApiTreeOptions(list []*luckydraw_pb.TreeOption) []types.TreeOption {
+	res := []types.TreeOption{}
+	for _, v := range list {
+		res = append(res, *PbTreeOptionToApiTreeOption(v))
+	}
+	return res
+}
+
 func MdActivityToApiActivity(md *model.Activity) *types.Activity {
 	if md == nil {
 		return nil

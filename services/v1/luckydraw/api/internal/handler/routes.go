@@ -107,6 +107,37 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodGet,
+				Path:    "/detail",
+				Handler: activity.ActivityDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/details",
+				Handler: activity.ActivityDetailsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/projectActivities",
+				Handler: activity.ProjectActivitiesHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/userActivities",
+				Handler: activity.UserActivitiesHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/patternEnumList",
+				Handler: activity.ActivityPatternEnumListHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/activity"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
 				Method:  http.MethodPost,
 				Path:    "/",
 				Handler: lucky.AddLuckyHandler(serverCtx),
@@ -135,6 +166,22 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/enums",
 				Handler: lucky.GetLuckyEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/lucky"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/details",
+				Handler: lucky.LuckyDetailsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/putLuckyByPrize",
+				Handler: lucky.PutLuckyByPrizeHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/api/luckydraw/lucky"),
@@ -287,6 +334,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodGet,
+				Path:    "/projectDetails",
+				Handler: project.ProjectDetailsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/projectDetail",
+				Handler: project.ProjectDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/projectTreeOptions",
+				Handler: project.ProjectTreeOptionsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/project"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
 				Method:  http.MethodPost,
 				Path:    "/",
 				Handler: user.AddUserHandler(serverCtx),
@@ -315,6 +383,22 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/enums",
 				Handler: user.GetUserEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/user"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/detail",
+				Handler: user.UserDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/details",
+				Handler: user.UserDetailsHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/api/luckydraw/user"),

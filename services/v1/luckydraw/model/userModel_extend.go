@@ -33,7 +33,7 @@ type user_model interface {
 func (m *defaultUserModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -128,7 +128,7 @@ func (m *defaultUserModel) TableName() string {
 func (m *defaultUserModel) FindByUuid(ctx context.Context, uuid string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -142,7 +142,7 @@ func (m *defaultUserModel) FindByUuid(ctx context.Context, uuid string) (*User, 
 func (m *defaultUserModel) FindByPassport(ctx context.Context, passport string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `passport` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passport)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, passport)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -156,7 +156,7 @@ func (m *defaultUserModel) FindByPassport(ctx context.Context, passport string) 
 func (m *defaultUserModel) FindByEmail(ctx context.Context, email string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `email` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, email)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, email)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -170,7 +170,7 @@ func (m *defaultUserModel) FindByEmail(ctx context.Context, email string) (*User
 func (m *defaultUserModel) FindByPhone(ctx context.Context, phone string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `phone` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, phone)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, phone)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -184,7 +184,7 @@ func (m *defaultUserModel) FindByPhone(ctx context.Context, phone string) (*User
 func (m *defaultUserModel) FindByName(ctx context.Context, name string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -198,7 +198,7 @@ func (m *defaultUserModel) FindByName(ctx context.Context, name string) (*User, 
 func (m *defaultUserModel) FindByAddress(ctx context.Context, address string) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `address` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, address)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, address)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -212,7 +212,7 @@ func (m *defaultUserModel) FindByAddress(ctx context.Context, address string) (*
 func (m *defaultUserModel) FindByScore(ctx context.Context, score int64) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `score` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, score)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, score)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -226,7 +226,7 @@ func (m *defaultUserModel) FindByScore(ctx context.Context, score int64) (*User,
 func (m *defaultUserModel) FindByStatus(ctx context.Context, status int64) (*User, error) {
 	var resp User
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil

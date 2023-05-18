@@ -33,7 +33,7 @@ type prizePool_model interface {
 func (m *defaultPrizePoolModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -123,7 +123,7 @@ func (m *defaultPrizePoolModel) TableName() string {
 func (m *defaultPrizePoolModel) FindByUuid(ctx context.Context, uuid string) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -137,7 +137,7 @@ func (m *defaultPrizePoolModel) FindByUuid(ctx context.Context, uuid string) (*P
 func (m *defaultPrizePoolModel) FindByActivityId(ctx context.Context, activityId int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `activity_id` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, activityId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -151,7 +151,7 @@ func (m *defaultPrizePoolModel) FindByActivityId(ctx context.Context, activityId
 func (m *defaultPrizePoolModel) FindByPrizeId(ctx context.Context, prizeId int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `prize_id` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizeId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, prizeId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -165,7 +165,7 @@ func (m *defaultPrizePoolModel) FindByPrizeId(ctx context.Context, prizeId int64
 func (m *defaultPrizePoolModel) FindByGradeId(ctx context.Context, gradeId int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `grade_id` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, gradeId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, gradeId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -179,7 +179,7 @@ func (m *defaultPrizePoolModel) FindByGradeId(ctx context.Context, gradeId int64
 func (m *defaultPrizePoolModel) FindByLuckValue(ctx context.Context, luckValue int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `luck_value` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckValue)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, luckValue)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -193,7 +193,7 @@ func (m *defaultPrizePoolModel) FindByLuckValue(ctx context.Context, luckValue i
 func (m *defaultPrizePoolModel) FindByStatus(ctx context.Context, status int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -207,7 +207,7 @@ func (m *defaultPrizePoolModel) FindByStatus(ctx context.Context, status int64) 
 func (m *defaultPrizePoolModel) FindByTotal(ctx context.Context, total int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `total` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, total)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, total)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -221,7 +221,7 @@ func (m *defaultPrizePoolModel) FindByTotal(ctx context.Context, total int64) (*
 func (m *defaultPrizePoolModel) FindByRemainder(ctx context.Context, remainder int64) (*PrizePool, error) {
 	var resp PrizePool
 	query := fmt.Sprintf("select %s from %s where `remainder` = ? limit 1", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, remainder)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, remainder)
 	switch err {
 	case nil:
 		return &resp, nil

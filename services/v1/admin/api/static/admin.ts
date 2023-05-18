@@ -10,20 +10,6 @@ export function auth() {
 }
 
 /**
- * @description "注销登录"
- */
-export function logout() {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/logout`)
-}
-
-/**
- * @description "获取当前用户信息"
- */
-export function currentUser() {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/currentUser`)
-}
-
-/**
  * @description "登录"
  * @param req
  */
@@ -69,6 +55,20 @@ export function bindEmailCaptcha(req: components.BindEmailCaptchaReq) {
  */
 export function test(params: components.TestReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/test`, params)
+}
+
+/**
+ * @description "注销登录"
+ */
+export function logout() {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/logout`)
+}
+
+/**
+ * @description "获取当前用户信息"
+ */
+export function currentUser() {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/currentUser`)
 }
 
 /**
@@ -148,4 +148,25 @@ export function currentInfo() {
  */
 export function putPassword(req: components.PutPasswordReq) {
 	return webapi.post<components.BaseResp>(`/v1/api/admin/adminer/putPassword`, req)
+}
+
+/**
+ * @description "上传头像"
+ */
+export function uploadAvatar() {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/upload/avatar`)
+}
+
+/**
+ * @description "上传logo"
+ */
+export function uploadLogo() {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/upload/logo`)
+}
+
+/**
+ * @description "上传图片"
+ */
+export function uploadImg() {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/upload/image`)
 }

@@ -28,7 +28,7 @@ type prizeGrade_model interface {
 func (m *defaultPrizeGradeModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -108,7 +108,7 @@ func (m *defaultPrizeGradeModel) TableName() string {
 func (m *defaultPrizeGradeModel) FindByUuid(ctx context.Context, uuid string) (*PrizeGrade, error) {
 	var resp PrizeGrade
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -122,7 +122,7 @@ func (m *defaultPrizeGradeModel) FindByUuid(ctx context.Context, uuid string) (*
 func (m *defaultPrizeGradeModel) FindByName(ctx context.Context, name string) (*PrizeGrade, error) {
 	var resp PrizeGrade
 	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -136,7 +136,7 @@ func (m *defaultPrizeGradeModel) FindByName(ctx context.Context, name string) (*
 func (m *defaultPrizeGradeModel) FindByIsWin(ctx context.Context, isWin int64) (*PrizeGrade, error) {
 	var resp PrizeGrade
 	query := fmt.Sprintf("select %s from %s where `is_win` = ? limit 1", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isWin)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, isWin)
 	switch err {
 	case nil:
 		return &resp, nil

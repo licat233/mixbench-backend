@@ -84,18 +84,18 @@ type UserIdentifyReq struct {
 }
 
 type ActivityPrizesReq struct {
-	ActivityUUID string `json:"activity_uuid"` //活动uuid，用于校验，id是否正确
+	ActivityUUID string `json:"activityUuid"` //活动uuid，用于校验，id是否正确
 }
 
 type GetALuckyListReq struct {
-	ActivityUUID string `json:"activity_uuid"`                      //活动uuid
+	ActivityUUID string `json:"activityUuid"`                       //活动uuid
 	PageSize     int64  `json:"pageSize,default=20,range=[1:1000]"` //页面大小
 	Page         int64  `json:"current,default=1,range=[1:]"`       //当前页码
 }
 
 type LuckydrawReq struct {
-	ActivityId   int64  `json:"activity_id"`   // 活动id，需要传入活动id，用于查询redis缓存
-	ActivityUUID string `json:"activity_uuid"` //活动uuid
+	ActivityId   int64  `json:"activityId"`   // 活动id，需要传入活动id，用于查询redis缓存
+	ActivityUUID string `json:"activityUuid"` //活动uuid
 }
 
 type SearchLuckyReq struct {
@@ -103,9 +103,9 @@ type SearchLuckyReq struct {
 }
 
 type SelectPrizesReq struct {
-	ActivityId    int64    `json:"activity_id"`     // 活动id，需要传入活动id，用于查询redis缓存
-	ActivityUUID  string   `json:"activity_uuid"`   //活动uuid
-	LuckyUuidList []string `json:"lucky_uuid_list"` //中奖名单UUID
+	ActivityId    int64    `json:"activityId"`    // 活动id，需要传入活动id，用于查询redis缓存
+	ActivityUUID  string   `json:"activityUuid"`  //活动uuid
+	LuckyUuidList []string `json:"luckyUuidList"` //中奖名单UUID
 }
 
 type TestReq struct {
@@ -178,6 +178,32 @@ type GetActivityEnumsReq struct {
 	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
 }
 
+type ActivityDetailReq struct {
+	Id int64 `form:"id"` //活动id
+}
+
+type ProjectActivitiesReq struct {
+	ProjectId int64 `form:"projectId,optional,default=-1"` //所属项目id，-1表示无限制
+}
+
+type UserActivitiesReq struct {
+	UserId int64 `form:"userId,optional,default=-1"` //所属用户id，-1表示无限制
+}
+
+type ActivityDetail struct {
+	Activity       Activity        `json:"activity"`
+	ActivityPrizes []ActivityPrize `json:"activityPrizes"`
+}
+
+type ActivityDetails struct {
+	ActivityDetails []ActivityDetail `json:"ActivityDetails"`
+}
+
+type UserActivity struct {
+	Activity Activity `json:"activity"` //活动信息
+	UserPool UserPool `json:"userPool"` //活动用户池信息
+}
+
 type Lucky struct {
 	Id          int64  `json:"id"`          //表主键
 	Uuid        string `json:"uuid"`        //UUID
@@ -232,6 +258,45 @@ type GetLuckyEnumsReq struct {
 	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
 }
 
+type LuckyPutByPrizeReq struct {
+	Id         int64  `json:"id"`          // 表主键
+	Uuid       string `json:"uuid"`        // 唯一识别码
+	UserId     int64  `json:"userId"`      // 中奖用户id
+	PrizeId    int64  `json:"prizeId"`     // 奖品id
+	ActivityId int64  `json:"activityId"`  // 活动id
+	Status     int64  `json:"status"`      // 状态: 0未领奖，1已领奖，2放弃领奖
+	LuckDate   int64  `json:"luckDate"`    // 抽奖时间
+	Ip         string `json:"ip,optional"` // IP地址
+}
+
+type LuckyDetail struct {
+	Lucky      Lucky      `json:"lucky"`      //中奖信息
+	User       User       `json:"user"`       //中奖用户信息
+	PrizePool  PrizePool  `json:"prizePool"`  //奖品池信息，奖品池信息
+	Prize      Prize      `json:"prize"`      //奖品信息，中奖产品
+	PrizeGrade PrizeGrade `json:"prizeGrade"` //奖品级别，中奖级别
+	Activity   Activity   `json:"activity"`   //活动信息，中奖活动，
+	Project    Project    `json:"project"`    //项目信息，中奖项目，
+}
+
+type LuckyDetailsReq struct {
+	PageSize     int64  `json:"pageSize,optional,default=20,range=[1:1000]"` //页面大小
+	Page         int64  `json:"current,optional,default=1,range=[1:]"`       //当前页码
+	Keyword      string `json:"keyword,optional"`                            //关键词，可选
+	UserId       int64  `json:"userId,optional,default=-1"`                  //用户id
+	UserName     string `json:"userName,optional"`                           //用户名
+	ProjectId    int64  `json:"projectId,optional,default=-1"`               //项目id
+	ActivityId   int64  `json:"activityId,optional,default=-1"`              //活动id
+	ActivityName string `json:"activityName,optional"`                       //活动id
+	PrizePoolId  int64  `json:"prizes_poolId,optional,default=-1"`           //奖品池id
+	PeizeId      int64  `json:"prizeId,optional,default=-1"`                 //奖品id
+	PrizeName    string `json:"prizeName,optional"`                          //奖品名
+	PeizeGradeId int64  `json:"prizeGradeId,optional,default=-1"`            //奖品等级id
+	Status       int64  `json:"status,optional,default=-1"`                  //状态
+	LuckDate     int64  `json:"luckDate,optional,default=-1"`                //抽奖时间
+	Ip           string `json:"ip,optional"`                                 //IP地址
+}
+
 type Prize struct {
 	Id     int64   `json:"id"`     //表主键
 	Uuid   string  `json:"uuid"`   //UUID
@@ -280,6 +345,12 @@ type GetPrizeListReq struct {
 
 type GetPrizeEnumsReq struct {
 	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+}
+
+type ActivityPrize struct {
+	Prize      Prize      `json:"prize"`
+	PrizePool  PrizePool  `json:"prizePool"`
+	PrizeGrade PrizeGrade `json:"prizeGrade"`
 }
 
 type PrizeGrade struct {
@@ -428,6 +499,19 @@ type GetProjectEnumsReq struct {
 	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
 }
 
+type ProjectDetailReq struct {
+	Id int64 `form:"id"` //项目id
+}
+
+type ProjectDtail struct {
+	Project    Project    `json:"project"`
+	Activities []Activity `json:"activities"`
+}
+
+type ProjectDtails struct {
+	ProjectDetails []ProjectDtail `json:"projectDetails"`
+}
+
 type User struct {
 	Id       int64  `json:"id"`       //表主键
 	Uuid     string `json:"uuid"`     //UUID
@@ -488,6 +572,19 @@ type GetUserListReq struct {
 
 type GetUserEnumsReq struct {
 	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+}
+
+type UserDetailReq struct {
+	Id int64 `form:"id"`
+}
+
+type UserDetail struct {
+	User           User           `json:"user"`
+	UserActivities []UserActivity `json:"userActivities"`
+}
+
+type UserDetails struct {
+	UserDetails []UserDetail `json:"userDetails"`
 }
 
 type UserPool struct {

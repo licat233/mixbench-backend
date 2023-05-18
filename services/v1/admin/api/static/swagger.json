@@ -618,6 +618,60 @@
           "admin"
         ]
       }
+    },
+    "/v1/api/admin/upload/avatar": {
+      "post": {
+        "summary": "上传头像",
+        "operationId": "uploadAvatar",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "upload"
+        ]
+      }
+    },
+    "/v1/api/admin/upload/image": {
+      "post": {
+        "summary": "上传图片",
+        "operationId": "uploadImg",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "upload"
+        ]
+      }
+    },
+    "/v1/api/admin/upload/logo": {
+      "post": {
+        "summary": "上传logo",
+        "operationId": "uploadLogo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "upload"
+        ]
+      }
     }
   },
   "definitions": {

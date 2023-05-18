@@ -1,4 +1,4 @@
-# generator time: 2023-05-15
+# generator time: 2023-05-16
 
 server {
     listen 80;
@@ -10,40 +10,7 @@ server {
     proxy_set_header Host $host; #设置真实客户端地址，默认值是 $proxy_host;
     proxy_set_header permissions-policy interest-cohort=(); # 不希望加入谷歌的 FLoC
 
-    error_page 401 /401.html;
-    location = /401.html {
-        root /www/common;
-    }
-
-    error_page 403 /403.html;
-    location = /403.html {
-        root /www/common;
-    }
-
-    error_page 404 /404.html;
-    location = /404.html {
-        root /www/common;
-    }
-
-    error_page 500 /500.html;
-    location = /500.html {
-        root /www/common;
-    }
-
-    error_page 502 /502.html;
-    location = /502.html {
-        root /www/common;
-    }
-
-    error_page 503 /503.html;
-    location = /503.html {
-        root /www/common;
-    }
-
-    error_page 504 /50x.html;
-    location = /50x.html {
-        root /www/common;
-    }
+    include /etc/nginx/conf.d/component/err_page.conf;
 
     #禁止访问的文件或目录
     location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md) {

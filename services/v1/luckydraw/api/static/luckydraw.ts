@@ -107,6 +107,45 @@ export function getActivityEnums(params: components.GetActivityEnumsReqParams) {
 }
 
 /**
+ * @description 
+ * @param params
+ */
+export function activityDetail(params: components.ActivityDetailReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/detail`, params)
+}
+
+/**
+ * @description 
+ * @param req
+ */
+export function activityDetails(req: components.GetActivityListReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/activity/details`, req)
+}
+
+/**
+ * @description "指定项目的活动"
+ * @param params
+ */
+export function projectActivities(params: components.ProjectActivitiesReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/projectActivities`, params)
+}
+
+/**
+ * @description "获取某用户参与的活动"
+ * @param params
+ */
+export function userActivities(params: components.UserActivitiesReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/userActivities`, params)
+}
+
+/**
+ * @description 获取活动模式枚举列表
+ */
+export function activityPatternEnumList() {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/patternEnumList`)
+}
+
+/**
  * @description "添加中奖名单 基础API"
  * @param req
  */
@@ -152,6 +191,22 @@ export function getLuckyList(req: components.GetLuckyListReq) {
  */
 export function getLuckyEnums(params: components.GetLuckyEnumsReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky/enums`, params)
+}
+
+/**
+ * @description "获取抽奖单详细列表"
+ * @param req
+ */
+export function luckyDetails(req: components.LuckyDetailsReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/lucky/details`, req)
+}
+
+/**
+ * @description "编辑抽奖单by prize"
+ * @param req
+ */
+export function putLuckyByPrize(req: components.LuckyPutByPrizeReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/luckydraw/lucky/putLuckyByPrize`, req)
 }
 
 /**
@@ -347,6 +402,29 @@ export function getProjectEnums(params: components.GetProjectEnumsReqParams) {
 }
 
 /**
+ * @description "获取项目详细列表"
+ * @param req
+ */
+export function projectDetails(req: components.GetProjectListReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/projectDetails`, req)
+}
+
+/**
+ * @description "获取项目详细"
+ * @param params
+ */
+export function projectDetail(params: components.ProjectDetailReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/projectDetail`, params)
+}
+
+/**
+ * @description "获取项目树形枚举数据 []TreeOptions"
+ */
+export function projectTreeOptions() {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/projectTreeOptions`)
+}
+
+/**
  * @description "添加用户名单 基础API"
  * @param req
  */
@@ -392,6 +470,22 @@ export function getUserList(req: components.GetUserListReq) {
  */
 export function getUserEnums(params: components.GetUserEnumsReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/enums`, params)
+}
+
+/**
+ * @description "获取用户详情"
+ * @param params
+ */
+export function userDetail(params: components.UserDetailReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/detail`, params)
+}
+
+/**
+ * @description "获取用户详情列表"
+ * @param req
+ */
+export function userDetails(req: components.GetUserListReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/details`, req)
 }
 
 /**

@@ -30,7 +30,7 @@ type prize_model interface {
 func (m *defaultPrizeModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -116,7 +116,7 @@ func (m *defaultPrizeModel) TableName() string {
 func (m *defaultPrizeModel) FindByUuid(ctx context.Context, uuid string) (*Prize, error) {
 	var resp Prize
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", prizeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -130,7 +130,7 @@ func (m *defaultPrizeModel) FindByUuid(ctx context.Context, uuid string) (*Prize
 func (m *defaultPrizeModel) FindByName(ctx context.Context, name string) (*Prize, error) {
 	var resp Prize
 	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", prizeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -144,7 +144,7 @@ func (m *defaultPrizeModel) FindByName(ctx context.Context, name string) (*Prize
 func (m *defaultPrizeModel) FindByImage(ctx context.Context, image string) (*Prize, error) {
 	var resp Prize
 	query := fmt.Sprintf("select %s from %s where `image` = ? limit 1", prizeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, image)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, image)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -158,7 +158,7 @@ func (m *defaultPrizeModel) FindByImage(ctx context.Context, image string) (*Pri
 func (m *defaultPrizeModel) FindByPrice(ctx context.Context, price float64) (*Prize, error) {
 	var resp Prize
 	query := fmt.Sprintf("select %s from %s where `price` = ? limit 1", prizeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, price)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, price)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -172,7 +172,7 @@ func (m *defaultPrizeModel) FindByPrice(ctx context.Context, price float64) (*Pr
 func (m *defaultPrizeModel) FindByStatus(ctx context.Context, status int64) (*Prize, error) {
 	var resp Prize
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", prizeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil

@@ -68,6 +68,7 @@ type (
 	GetActivityPrizesResp     = luckydraw_pb.GetActivityPrizesResp
 	GetActivityReq            = luckydraw_pb.GetActivityReq
 	GetActivityResp           = luckydraw_pb.GetActivityResp
+	GetLuckyDetailsResp       = luckydraw_pb.GetLuckyDetailsResp
 	GetLuckyEnumsReq          = luckydraw_pb.GetLuckyEnumsReq
 	GetLuckyListReq           = luckydraw_pb.GetLuckyListReq
 	GetLuckyListResp          = luckydraw_pb.GetLuckyListResp
@@ -129,6 +130,7 @@ type (
 	ListReq                   = luckydraw_pb.ListReq
 	Lucky                     = luckydraw_pb.Lucky
 	LuckyDetail               = luckydraw_pb.LuckyDetail
+	LuckyDetailsReq           = luckydraw_pb.LuckyDetailsReq
 	LuckydrawReq              = luckydraw_pb.LuckydrawReq
 	LuckydrawResp             = luckydraw_pb.LuckydrawResp
 	NilReq                    = luckydraw_pb.NilReq
@@ -208,6 +210,8 @@ type (
 		GetUserByKeyword(ctx context.Context, in *GetUserByKeywordReq, opts ...grpc.CallOption) (*GetUserByKeywordResp, error)
 		// 通过关键词查找用户【模糊查找】，关键词可以是电话、邮箱、账号、姓名等等
 		GetUsersByKeyword(ctx context.Context, in *GetUsersByKeywordReq, opts ...grpc.CallOption) (*GetUsersByKeywordResp, error)
+		// 获取中奖详情名单
+		GetLuckyDetailsList(ctx context.Context, in *LuckyDetailsReq, opts ...grpc.CallOption) (*GetLuckyDetailsResp, error)
 		// 获取某活动的中奖详细列表
 		GetALuckyDetails(ctx context.Context, in *GetALuckyDetailsReq, opts ...grpc.CallOption) (*GetALuckyDetailsResp, error)
 		// 获取某用户在某活动中的中奖详细列表
@@ -341,6 +345,12 @@ func (m *defaultLuckydraw) GetUserByKeyword(ctx context.Context, in *GetUserByKe
 func (m *defaultLuckydraw) GetUsersByKeyword(ctx context.Context, in *GetUsersByKeywordReq, opts ...grpc.CallOption) (*GetUsersByKeywordResp, error) {
 	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
 	return client.GetUsersByKeyword(ctx, in, opts...)
+}
+
+// 获取中奖详情名单
+func (m *defaultLuckydraw) GetLuckyDetailsList(ctx context.Context, in *LuckyDetailsReq, opts ...grpc.CallOption) (*GetLuckyDetailsResp, error) {
+	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
+	return client.GetLuckyDetailsList(ctx, in, opts...)
 }
 
 // 获取某活动的中奖详细列表

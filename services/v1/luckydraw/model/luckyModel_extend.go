@@ -32,7 +32,7 @@ type lucky_model interface {
 func (m *defaultLuckyModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -116,7 +116,7 @@ func (m *defaultLuckyModel) TableName() string {
 func (m *defaultLuckyModel) FindByUuid(ctx context.Context, uuid string) (*Lucky, error) {
 	var resp Lucky
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -130,7 +130,7 @@ func (m *defaultLuckyModel) FindByUuid(ctx context.Context, uuid string) (*Lucky
 func (m *defaultLuckyModel) FindByUserId(ctx context.Context, userId int64) (*Lucky, error) {
 	var resp Lucky
 	query := fmt.Sprintf("select %s from %s where `user_id` = ? limit 1", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -144,7 +144,7 @@ func (m *defaultLuckyModel) FindByUserId(ctx context.Context, userId int64) (*Lu
 func (m *defaultLuckyModel) FindByPrizePoolId(ctx context.Context, prizePoolId int64) (*Lucky, error) {
 	var resp Lucky
 	query := fmt.Sprintf("select %s from %s where `prize_pool_id` = ? limit 1", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizePoolId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, prizePoolId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -158,7 +158,7 @@ func (m *defaultLuckyModel) FindByPrizePoolId(ctx context.Context, prizePoolId i
 func (m *defaultLuckyModel) FindByStatus(ctx context.Context, status int64) (*Lucky, error) {
 	var resp Lucky
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -172,7 +172,7 @@ func (m *defaultLuckyModel) FindByStatus(ctx context.Context, status int64) (*Lu
 func (m *defaultLuckyModel) FindByLuckDate(ctx context.Context, luckDate time.Time) (*Lucky, error) {
 	var resp Lucky
 	query := fmt.Sprintf("select %s from %s where `luck_date` = ? limit 1", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckDate.Format("2006-01-02 15:04:05"))
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, luckDate.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
 		return &resp, nil
@@ -186,7 +186,7 @@ func (m *defaultLuckyModel) FindByLuckDate(ctx context.Context, luckDate time.Ti
 func (m *defaultLuckyModel) FindByIp(ctx context.Context, ip string) (*Lucky, error) {
 	var resp Lucky
 	query := fmt.Sprintf("select %s from %s where `ip` = ? limit 1", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ip)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, ip)
 	switch err {
 	case nil:
 		return &resp, nil

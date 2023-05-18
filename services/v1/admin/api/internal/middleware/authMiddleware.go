@@ -108,13 +108,13 @@ func AuthLogic(ctx context.Context, r *http.Request, config config.Config, admin
 	}
 
 	// 校验token是否已被加入黑名单
-	_, err = jwtBlacklistsModel.FindOneByToken(ctx, jwtToken)
+	exists, err := jwtBlacklistsModel.ExistsByToken(ctx, jwtToken)
 	if err != nil {
 		logx.WithContext(ctx).Error(err)
 		return errorx.InternalError(err)
 	}
-	if err == model.ErrNotFound { //不存在该黑名单
-		return nil
+	if exists {
+		return errorx.ErrAuth
 	}
-	return errorx.ErrAuth
+	return nil
 }

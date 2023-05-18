@@ -136,6 +136,12 @@ func (s *LuckydrawServer) GetUsersByKeyword(ctx context.Context, in *luckydraw_p
 	return l.GetUsersByKeyword(in)
 }
 
+// 获取中奖详情名单
+func (s *LuckydrawServer) GetLuckyDetailsList(ctx context.Context, in *luckydraw_pb.LuckyDetailsReq) (*luckydraw_pb.GetLuckyDetailsResp, error) {
+	l := luckydrawlogic.NewGetLuckyDetailsListLogic(ctx, s.svcCtx)
+	return l.GetLuckyDetailsList(in)
+}
+
 // 获取某活动的中奖详细列表
 func (s *LuckydrawServer) GetALuckyDetails(ctx context.Context, in *luckydraw_pb.GetALuckyDetailsReq) (*luckydraw_pb.GetALuckyDetailsResp, error) {
 	l := luckydrawlogic.NewGetALuckyDetailsLogic(ctx, s.svcCtx)

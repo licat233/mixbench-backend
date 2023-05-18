@@ -14,8 +14,7 @@ func authHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := logic.NewAuthLogic(r.Context(), svcCtx, w, r)
 		err := l.Auth()
 		if err != nil {
-			w.WriteHeader(http.StatusForbidden)
-			// httpx.ErrorCtx(r.Context(), w, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
 			httpx.Ok(w)
 		}

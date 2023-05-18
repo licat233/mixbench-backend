@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	adminer "mixbench/services/v1/admin/api/internal/handler/adminer"
+	upload "mixbench/services/v1/admin/api/internal/handler/upload"
 	"mixbench/services/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -19,26 +20,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: authHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/v1/api/admin"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/logout",
-					Handler: logoutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/currentUser",
-					Handler: currentUserHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin"),
 	)
 
@@ -75,6 +56,26 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: testHandler(serverCtx),
 			},
 		},
+		rest.WithPrefix("/v1/api/admin"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/logout",
+					Handler: logoutHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/currentUser",
+					Handler: currentUserHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin"),
 	)
 
@@ -146,5 +147,30 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/adminer"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/avatar",
+					Handler: upload.UploadAvatarHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/logo",
+					Handler: upload.UploadLogoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/image",
+					Handler: upload.UploadImgHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/upload"),
 	)
 }

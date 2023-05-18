@@ -85,18 +85,18 @@ export interface UserIdentifyReq {
 }
 
 export interface ActivityPrizesReq {
-	activity_uuid: string // 活动uuid，用于校验，id是否正确
+	activityUuid: string // 活动uuid，用于校验，id是否正确
 }
 
 export interface GetALuckyListReq {
-	activity_uuid: string // 活动uuid
+	activityUuid: string // 活动uuid
 	pageSize: number // 页面大小
 	current: number // 当前页码
 }
 
 export interface LuckydrawReq {
-	activity_id: number // 活动id，需要传入活动id，用于查询redis缓存
-	activity_uuid: string // 活动uuid
+	activityId: number // 活动id，需要传入活动id，用于查询redis缓存
+	activityUuid: string // 活动uuid
 }
 
 export interface SearchLuckyReq {
@@ -104,9 +104,9 @@ export interface SearchLuckyReq {
 }
 
 export interface SelectPrizesReq {
-	activity_id: number // 活动id，需要传入活动id，用于查询redis缓存
-	activity_uuid: string // 活动uuid
-	lucky_uuid_list: Array<string> // 中奖名单UUID
+	activityId: number // 活动id，需要传入活动id，用于查询redis缓存
+	activityUuid: string // 活动uuid
+	luckyUuidList: Array<string> // 中奖名单UUID
 }
 
 export interface TestReq {
@@ -185,6 +185,38 @@ export interface GetActivityEnumsReqParams {
 	parentId: number // 父级ID
 }
 
+export interface ActivityDetailReq {
+}
+export interface ActivityDetailReqParams {
+	id: number // 活动id
+}
+
+export interface ProjectActivitiesReq {
+}
+export interface ProjectActivitiesReqParams {
+	projectId: number // 所属项目id，-1表示无限制
+}
+
+export interface UserActivitiesReq {
+}
+export interface UserActivitiesReqParams {
+	userId: number // 所属用户id，-1表示无限制
+}
+
+export interface ActivityDetail {
+	activity: Activity
+	activityPrizes: Array<ActivityPrize>
+}
+
+export interface ActivityDetails {
+	ActivityDetails: Array<ActivityDetail>
+}
+
+export interface UserActivity {
+	activity: Activity // 活动信息
+	userPool: UserPool // 活动用户池信息
+}
+
 export interface Lucky {
 	id: number // 表主键
 	uuid: string // UUID
@@ -243,6 +275,46 @@ export interface GetLuckyEnumsReqParams {
 	parentId: number // 父级ID
 }
 
+export interface LuckyPutByPrizeReq {
+	id: number // 表主键
+	uuid: string // 唯一识别码
+	userId: number // 中奖用户id
+	prizeId: number // 奖品id
+	activityId: number // 活动id
+	status: number // 状态: 0未领奖，1已领奖，2放弃领奖
+	luckDate: number // 抽奖时间
+	ip?: string // IP地址
+}
+
+export interface LuckyDetail {
+	lucky: Lucky // 中奖信息
+	user: User // 中奖用户信息
+	prizePool: PrizePool // 奖品池信息，奖品池信息
+	prize: Prize // 奖品信息，中奖产品
+	prizeGrade: PrizeGrade // 奖品级别，中奖级别
+	activity: Activity // 活动信息，中奖活动，
+	project: Project // 项目信息，中奖项目，
+}
+
+export interface LuckyDetailsReq {
+	pageSize?: number // 页面大小
+	current?: number // 当前页码
+	keyword?: string // 关键词，可选
+	//字段搜索
+	userId?: number // 用户id
+	userName?: string // 用户名
+	projectId?: number // 项目id
+	activityId?: number // 活动id
+	activityName?: string // 活动id
+	prizes_poolId?: number // 奖品池id
+	prizeId?: number // 奖品id
+	prizeName?: string // 奖品名
+	prizeGradeId?: number // 奖品等级id
+	status?: number // 状态
+	luckDate?: number // 抽奖时间
+	ip?: string // IP地址
+}
+
 export interface Prize {
 	id: number // 表主键
 	uuid: string // UUID
@@ -295,6 +367,12 @@ export interface GetPrizeEnumsReq {
 }
 export interface GetPrizeEnumsReqParams {
 	parentId: number // 父级ID
+}
+
+export interface ActivityPrize {
+	prize: Prize
+	prizePool: PrizePool
+	prizeGrade: PrizeGrade
 }
 
 export interface PrizeGrade {
@@ -455,6 +533,21 @@ export interface GetProjectEnumsReqParams {
 	parentId: number // 父级ID
 }
 
+export interface ProjectDetailReq {
+}
+export interface ProjectDetailReqParams {
+	id: number // 项目id
+}
+
+export interface ProjectDtail {
+	project: Project
+	activities: Array<Activity>
+}
+
+export interface ProjectDtails {
+	projectDetails: Array<ProjectDtail>
+}
+
 export interface User {
 	id: number // 表主键
 	uuid: string // UUID
@@ -519,6 +612,21 @@ export interface GetUserEnumsReq {
 }
 export interface GetUserEnumsReqParams {
 	parentId: number // 父级ID
+}
+
+export interface UserDetailReq {
+}
+export interface UserDetailReqParams {
+	id: number
+}
+
+export interface UserDetail {
+	user: User
+	userActivities: Array<UserActivity>
+}
+
+export interface UserDetails {
+	userDetails: Array<UserDetail>
 }
 
 export interface UserPool {

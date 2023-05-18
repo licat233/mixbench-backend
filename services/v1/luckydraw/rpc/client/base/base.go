@@ -68,6 +68,7 @@ type (
 	GetActivityPrizesResp     = luckydraw_pb.GetActivityPrizesResp
 	GetActivityReq            = luckydraw_pb.GetActivityReq
 	GetActivityResp           = luckydraw_pb.GetActivityResp
+	GetLuckyDetailsResp       = luckydraw_pb.GetLuckyDetailsResp
 	GetLuckyEnumsReq          = luckydraw_pb.GetLuckyEnumsReq
 	GetLuckyListReq           = luckydraw_pb.GetLuckyListReq
 	GetLuckyListResp          = luckydraw_pb.GetLuckyListResp
@@ -129,6 +130,7 @@ type (
 	ListReq                   = luckydraw_pb.ListReq
 	Lucky                     = luckydraw_pb.Lucky
 	LuckyDetail               = luckydraw_pb.LuckyDetail
+	LuckyDetailsReq           = luckydraw_pb.LuckyDetailsReq
 	LuckydrawReq              = luckydraw_pb.LuckydrawReq
 	LuckydrawResp             = luckydraw_pb.LuckydrawResp
 	NilReq                    = luckydraw_pb.NilReq

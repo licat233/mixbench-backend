@@ -1934,6 +1934,8 @@ type LuckydrawClient interface {
 	GetUserByKeyword(ctx context.Context, in *GetUserByKeywordReq, opts ...grpc.CallOption) (*GetUserByKeywordResp, error)
 	// 通过关键词查找用户【模糊查找】，关键词可以是电话、邮箱、账号、姓名等等
 	GetUsersByKeyword(ctx context.Context, in *GetUsersByKeywordReq, opts ...grpc.CallOption) (*GetUsersByKeywordResp, error)
+	// 获取中奖详情名单
+	GetLuckyDetailsList(ctx context.Context, in *LuckyDetailsReq, opts ...grpc.CallOption) (*GetLuckyDetailsResp, error)
 	// 获取某活动的中奖详细列表
 	GetALuckyDetails(ctx context.Context, in *GetALuckyDetailsReq, opts ...grpc.CallOption) (*GetALuckyDetailsResp, error)
 	// 获取某用户在某活动中的中奖详细列表
@@ -2123,6 +2125,15 @@ func (c *luckydrawClient) GetUsersByKeyword(ctx context.Context, in *GetUsersByK
 	return out, nil
 }
 
+func (c *luckydrawClient) GetLuckyDetailsList(ctx context.Context, in *LuckyDetailsReq, opts ...grpc.CallOption) (*GetLuckyDetailsResp, error) {
+	out := new(GetLuckyDetailsResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetLuckyDetailsList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *luckydrawClient) GetALuckyDetails(ctx context.Context, in *GetALuckyDetailsReq, opts ...grpc.CallOption) (*GetALuckyDetailsResp, error) {
 	out := new(GetALuckyDetailsResp)
 	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GetALuckyDetails", in, out, opts...)
@@ -2201,6 +2212,8 @@ type LuckydrawServer interface {
 	GetUserByKeyword(context.Context, *GetUserByKeywordReq) (*GetUserByKeywordResp, error)
 	// 通过关键词查找用户【模糊查找】，关键词可以是电话、邮箱、账号、姓名等等
 	GetUsersByKeyword(context.Context, *GetUsersByKeywordReq) (*GetUsersByKeywordResp, error)
+	// 获取中奖详情名单
+	GetLuckyDetailsList(context.Context, *LuckyDetailsReq) (*GetLuckyDetailsResp, error)
 	// 获取某活动的中奖详细列表
 	GetALuckyDetails(context.Context, *GetALuckyDetailsReq) (*GetALuckyDetailsResp, error)
 	// 获取某用户在某活动中的中奖详细列表
@@ -2272,6 +2285,9 @@ func (UnimplementedLuckydrawServer) GetUserByKeyword(context.Context, *GetUserBy
 }
 func (UnimplementedLuckydrawServer) GetUsersByKeyword(context.Context, *GetUsersByKeywordReq) (*GetUsersByKeywordResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersByKeyword not implemented")
+}
+func (UnimplementedLuckydrawServer) GetLuckyDetailsList(context.Context, *LuckyDetailsReq) (*GetLuckyDetailsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLuckyDetailsList not implemented")
 }
 func (UnimplementedLuckydrawServer) GetALuckyDetails(context.Context, *GetALuckyDetailsReq) (*GetALuckyDetailsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetALuckyDetails not implemented")
@@ -2640,6 +2656,24 @@ func _Luckydraw_GetUsersByKeyword_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Luckydraw_GetLuckyDetailsList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LuckyDetailsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LuckydrawServer).GetLuckyDetailsList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Luckydraw/GetLuckyDetailsList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LuckydrawServer).GetLuckyDetailsList(ctx, req.(*LuckyDetailsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Luckydraw_GetALuckyDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetALuckyDetailsReq)
 	if err := dec(in); err != nil {
@@ -2794,6 +2828,10 @@ var Luckydraw_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUsersByKeyword",
 			Handler:    _Luckydraw_GetUsersByKeyword_Handler,
+		},
+		{
+			MethodName: "GetLuckyDetailsList",
+			Handler:    _Luckydraw_GetLuckyDetailsList_Handler,
 		},
 		{
 			MethodName: "GetALuckyDetails",

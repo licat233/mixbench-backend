@@ -2,8 +2,10 @@ package adminer
 
 import (
 	"context"
+	"errors"
 
 	"mixbench/common/ctxdata"
+	"mixbench/common/errorx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
@@ -27,6 +29,10 @@ func NewPutCurrentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutCur
 }
 
 func (l *PutCurrentLogic) PutCurrent(req *types.PutCurrentReq) (any, error) {
+	if len(req.Avatar) > 250 {
+		return nil, errorx.ExternalError(errors.New("the value length of the 'avatar' field is too long"))
+	}
+
 	userId := ctxdata.GetUidFromCtx(l.ctx)
 	resp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{
 		Id: userId,

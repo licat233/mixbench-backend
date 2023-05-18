@@ -37,7 +37,7 @@ type adminer_model interface {
 func (m *defaultAdminerModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -141,7 +141,7 @@ func (m *defaultAdminerModel) TableName() string {
 func (m *defaultAdminerModel) FindByUuid(ctx context.Context, uuid string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -155,7 +155,7 @@ func (m *defaultAdminerModel) FindByUuid(ctx context.Context, uuid string) (*Adm
 func (m *defaultAdminerModel) FindByName(ctx context.Context, name string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -169,7 +169,7 @@ func (m *defaultAdminerModel) FindByName(ctx context.Context, name string) (*Adm
 func (m *defaultAdminerModel) FindByAvatar(ctx context.Context, avatar string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `avatar` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, avatar)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, avatar)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -183,7 +183,7 @@ func (m *defaultAdminerModel) FindByAvatar(ctx context.Context, avatar string) (
 func (m *defaultAdminerModel) FindByAccess(ctx context.Context, access string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `access` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, access)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, access)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -197,7 +197,7 @@ func (m *defaultAdminerModel) FindByAccess(ctx context.Context, access string) (
 func (m *defaultAdminerModel) FindByPassport(ctx context.Context, passport string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `passport` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passport)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, passport)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -211,7 +211,7 @@ func (m *defaultAdminerModel) FindByPassport(ctx context.Context, passport strin
 func (m *defaultAdminerModel) FindByPassword(ctx context.Context, password string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `password` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, password)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, password)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -225,7 +225,7 @@ func (m *defaultAdminerModel) FindByPassword(ctx context.Context, password strin
 func (m *defaultAdminerModel) FindByEmail(ctx context.Context, email string) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `email` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, email)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, email)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -239,7 +239,7 @@ func (m *defaultAdminerModel) FindByEmail(ctx context.Context, email string) (*A
 func (m *defaultAdminerModel) FindByStatus(ctx context.Context, status int64) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -253,7 +253,7 @@ func (m *defaultAdminerModel) FindByStatus(ctx context.Context, status int64) (*
 func (m *defaultAdminerModel) FindByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `is_super_admin` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isSuperAdmin)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, isSuperAdmin)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -267,7 +267,7 @@ func (m *defaultAdminerModel) FindByIsSuperAdmin(ctx context.Context, isSuperAdm
 func (m *defaultAdminerModel) FindByLoginCount(ctx context.Context, loginCount int64) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `login_count` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, loginCount)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, loginCount)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -281,7 +281,7 @@ func (m *defaultAdminerModel) FindByLoginCount(ctx context.Context, loginCount i
 func (m *defaultAdminerModel) FindByLastLogin(ctx context.Context, lastLogin time.Time) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `last_login` = ? limit 1", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLogin.Format("2006-01-02 15:04:05"))
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, lastLogin.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
 		return &resp, nil

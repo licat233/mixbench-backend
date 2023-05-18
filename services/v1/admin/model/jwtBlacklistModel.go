@@ -25,7 +25,7 @@ type (
 		FindCount(ctx context.Context) (int64, error)
 		Exist(ctx context.Context, id int64) (bool, error)
 		FindOneByToken(ctx context.Context, token string) (*JwtBlacklist, error)
-		ExistByToken(ctx context.Context, token string) (bool, error)
+		ExistsByToken(ctx context.Context, token string) (bool, error)
 	}
 
 	customJwtBlacklistModel struct {
@@ -113,10 +113,12 @@ func (m *customJwtBlacklistModel) FindOneByToken(ctx context.Context, token stri
 	}
 }
 
-func (m *customJwtBlacklistModel) ExistByToken(ctx context.Context, token string) (bool, error) {
-	_, err := m.FindOneByToken(ctx, token)
-	if err != nil && err != ErrNotFound {
-		return false, err
-	}
-	return err != ErrNotFound, nil
+func (m *customJwtBlacklistModel) ExistsByToken(ctx context.Context, token string) (bool, error) {
+	jwtBlacklistTokenKey := m.formatTokenKey(token)
+	var count int64
+	err := m.QueryRowCtx(ctx, &count, jwtBlacklistTokenKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
+		query := fmt.Sprintf("select count(*) as count from %s where `token` = ? limit 1", m.table)
+		return conn.QueryRowCtx(ctx, v, query, token)
+	})
+	return count > 0, err
 }

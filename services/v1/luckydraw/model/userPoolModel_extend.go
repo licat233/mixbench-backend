@@ -30,7 +30,7 @@ type userPool_model interface {
 func (m *defaultUserPoolModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -111,7 +111,7 @@ func (m *defaultUserPoolModel) TableName() string {
 func (m *defaultUserPoolModel) FindByUuid(ctx context.Context, uuid string) (*UserPool, error) {
 	var resp UserPool
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", userPoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -125,7 +125,7 @@ func (m *defaultUserPoolModel) FindByUuid(ctx context.Context, uuid string) (*Us
 func (m *defaultUserPoolModel) FindByActivityId(ctx context.Context, activityId int64) (*UserPool, error) {
 	var resp UserPool
 	query := fmt.Sprintf("select %s from %s where `activity_id` = ? limit 1", userPoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, activityId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -139,7 +139,7 @@ func (m *defaultUserPoolModel) FindByActivityId(ctx context.Context, activityId 
 func (m *defaultUserPoolModel) FindByUserId(ctx context.Context, userId int64) (*UserPool, error) {
 	var resp UserPool
 	query := fmt.Sprintf("select %s from %s where `user_id` = ? limit 1", userPoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -153,7 +153,7 @@ func (m *defaultUserPoolModel) FindByUserId(ctx context.Context, userId int64) (
 func (m *defaultUserPoolModel) FindByStatus(ctx context.Context, status int64) (*UserPool, error) {
 	var resp UserPool
 	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", userPoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -167,7 +167,7 @@ func (m *defaultUserPoolModel) FindByStatus(ctx context.Context, status int64) (
 func (m *defaultUserPoolModel) FindByScore(ctx context.Context, score int64) (*UserPool, error) {
 	var resp UserPool
 	query := fmt.Sprintf("select %s from %s where `score` = ? limit 1", userPoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, score)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, score)
 	switch err {
 	case nil:
 		return &resp, nil

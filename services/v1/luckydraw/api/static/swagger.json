@@ -124,6 +124,61 @@
         ]
       }
     },
+    "/v1/api/luckydraw/activity/detail": {
+      "get": {
+        "operationId": "ActivityDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "活动id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/activity/details": {
+      "post": {
+        "operationId": "ActivityDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "获取活动列表请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetActivityListReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
     "/v1/api/luckydraw/activity/enums": {
       "get": {
         "summary": "获取活动枚举列表 基础API",
@@ -277,6 +332,82 @@
             "required": true,
             "type": "integer",
             "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/activity/patternEnumList": {
+      "get": {
+        "summary": "获取活动模式枚举列表",
+        "operationId": "ActivityPatternEnumList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/activity/projectActivities": {
+      "get": {
+        "summary": "指定项目的活动",
+        "operationId": "projectActivities",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "description": "所属项目id，-1表示无限制",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "activity"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/activity/userActivities": {
+      "get": {
+        "summary": "获取某用户参与的活动",
+        "operationId": "UserActivities",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "所属用户id，-1表示无限制",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -450,6 +581,34 @@
         ]
       }
     },
+    "/v1/api/luckydraw/lucky/details": {
+      "post": {
+        "summary": "获取抽奖单详细列表",
+        "operationId": "LuckyDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LuckyDetailsReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "lucky"
+        ]
+      }
+    },
     "/v1/api/luckydraw/lucky/enums": {
       "get": {
         "summary": "获取中奖名单枚举列表 基础API",
@@ -579,6 +738,35 @@
             "in": "query",
             "required": true,
             "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "lucky"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/lucky/putLuckyByPrize": {
+      "put": {
+        "summary": "编辑抽奖单by prize",
+        "operationId": "PutLuckyByPrize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start]",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LuckyPutByPrizeReq"
+            }
           }
         ],
         "requestBody": {},
@@ -1559,6 +1747,136 @@
         ]
       }
     },
+    "/v1/api/luckydraw/project/projectDetail": {
+      "get": {
+        "summary": "获取项目详细",
+        "operationId": "ProjectDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "项目id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "project"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/project/projectDetails": {
+      "get": {
+        "summary": "获取项目详细列表",
+        "operationId": "ProjectDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "项目名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "项目状态",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "project"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/project/projectTreeOptions": {
+      "get": {
+        "summary": "获取项目树形枚举数据 []TreeOptions",
+        "operationId": "projectTreeOptions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "requestBody": {},
+        "tags": [
+          "project"
+        ]
+      }
+    },
     "/v1/api/luckydraw/searchLucky": {
       "post": {
         "summary": "查询中奖信息",
@@ -1743,6 +2061,153 @@
             "schema": {
               "$ref": "#/definitions/PutUserReq"
             }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/user/detail": {
+      "get": {
+        "summary": "获取用户详情",
+        "operationId": "UserDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/user/details": {
+      "get": {
+        "summary": "获取用户详情列表",
+        "operationId": "UserDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "passport",
+            "description": "凭证，可以是手机号或者社交账号，一般是由客户填入",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "邮箱",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "description": "手机号",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "用户名",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "description": "收货地址",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "score",
+            "description": "积分",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "status",
+            "description": "状态:0未授权，1正常，2已冻结",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "requestBody": {},
@@ -2236,17 +2701,85 @@
         "endTime"
       ]
     },
+    "ActivityDetail": {
+      "type": "object",
+      "properties": {
+        "activity": {
+          "$ref": "#/definitions/Activity"
+        },
+        "activityPrizes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ActivityPrize"
+          }
+        }
+      },
+      "title": "ActivityDetail",
+      "required": [
+        "activity",
+        "activityPrizes"
+      ]
+    },
+    "ActivityDetailReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动id"
+        }
+      },
+      "title": "ActivityDetailReq",
+      "required": [
+        "id"
+      ]
+    },
+    "ActivityDetails": {
+      "type": "object",
+      "properties": {
+        "ActivityDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ActivityDetail"
+          }
+        }
+      },
+      "title": "ActivityDetails",
+      "required": [
+        "ActivityDetails"
+      ]
+    },
+    "ActivityPrize": {
+      "type": "object",
+      "properties": {
+        "prize": {
+          "$ref": "#/definitions/Prize"
+        },
+        "prizePool": {
+          "$ref": "#/definitions/PrizePool"
+        },
+        "prizeGrade": {
+          "$ref": "#/definitions/PrizeGrade"
+        }
+      },
+      "title": "ActivityPrize",
+      "required": [
+        "prize",
+        "prizePool",
+        "prizeGrade"
+      ]
+    },
     "ActivityPrizesReq": {
       "type": "object",
       "properties": {
-        "activity_uuid": {
+        "activityUuid": {
           "type": "string",
           "description": "活动uuid，用于校验，id是否正确"
         }
       },
       "title": "ActivityPrizesReq",
       "required": [
-        "activity_uuid"
+        "activityUuid"
       ]
     },
     "AddActivityReq": {
@@ -2810,7 +3343,7 @@
     "GetALuckyListReq": {
       "type": "object",
       "properties": {
-        "activity_uuid": {
+        "activityUuid": {
           "type": "string",
           "description": "活动uuid"
         },
@@ -2829,7 +3362,7 @@
       },
       "title": "GetALuckyListReq",
       "required": [
-        "activity_uuid",
+        "activityUuid",
         "pageSize",
         "current"
       ]
@@ -3747,6 +4280,200 @@
         "ip"
       ]
     },
+    "LuckyDetail": {
+      "type": "object",
+      "properties": {
+        "lucky": {
+          "$ref": "#/definitions/Lucky",
+          "description": "中奖信息"
+        },
+        "user": {
+          "$ref": "#/definitions/User",
+          "description": "中奖用户信息"
+        },
+        "prizePool": {
+          "$ref": "#/definitions/PrizePool",
+          "description": "奖品池信息，奖品池信息"
+        },
+        "prize": {
+          "$ref": "#/definitions/Prize",
+          "description": "奖品信息，中奖产品"
+        },
+        "prizeGrade": {
+          "$ref": "#/definitions/PrizeGrade",
+          "description": "奖品级别，中奖级别"
+        },
+        "activity": {
+          "$ref": "#/definitions/Activity",
+          "description": "活动信息，中奖活动，"
+        },
+        "project": {
+          "$ref": "#/definitions/Project",
+          "description": "项目信息，中奖项目，"
+        }
+      },
+      "title": "LuckyDetail",
+      "required": [
+        "lucky",
+        "user",
+        "prizePool",
+        "prize",
+        "prizeGrade",
+        "activity",
+        "project"
+      ]
+    },
+    "LuckyDetailsReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面大小"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "用户id"
+        },
+        "userName": {
+          "type": "string",
+          "description": "用户名"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
+        },
+        "activityId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "活动id"
+        },
+        "activityName": {
+          "type": "string",
+          "description": "活动id"
+        },
+        "prizes_poolId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "奖品池id"
+        },
+        "prizeId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "奖品id"
+        },
+        "prizeName": {
+          "type": "string",
+          "description": "奖品名"
+        },
+        "prizeGradeId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "奖品等级id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "状态"
+        },
+        "luckDate": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP地址"
+        }
+      },
+      "title": "LuckyDetailsReq",
+      "required": [
+        "pageSize",
+        "current",
+        "userId",
+        "projectId",
+        "activityId",
+        "prizes_poolId",
+        "prizeId",
+        "prizeGradeId",
+        "status",
+        "luckDate"
+      ]
+    },
+    "LuckyPutByPrizeReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": " 唯一识别码"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 中奖用户id"
+        },
+        "prizeId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 奖品id"
+        },
+        "activityId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 状态: 0未领奖，1已领奖，2放弃领奖"
+        },
+        "luckDate": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 抽奖时间"
+        },
+        "ip": {
+          "type": "string",
+          "description": " IP地址"
+        }
+      },
+      "title": "LuckyPutByPrizeReq",
+      "required": [
+        "id",
+        "uuid",
+        "userId",
+        "prizeId",
+        "activityId",
+        "status",
+        "luckDate"
+      ]
+    },
     "NilReq": {
       "type": "object",
       "title": "NilReq"
@@ -3950,6 +4677,54 @@
         "uuid",
         "name",
         "status"
+      ]
+    },
+    "ProjectDetailReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        }
+      },
+      "title": "ProjectDetailReq",
+      "required": [
+        "id"
+      ]
+    },
+    "ProjectDtail": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "$ref": "#/definitions/Project"
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Activity"
+          }
+        }
+      },
+      "title": "ProjectDtail",
+      "required": [
+        "project",
+        "activities"
+      ]
+    },
+    "ProjectDtails": {
+      "type": "object",
+      "properties": {
+        "projectDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProjectDtail"
+          }
+        }
+      },
+      "title": "ProjectDtails",
+      "required": [
+        "projectDetails"
       ]
     },
     "PutActivityReq": {
@@ -4438,6 +5213,86 @@
         "status"
       ]
     },
+    "UserActivitiesReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "所属用户id，-1表示无限制"
+        }
+      },
+      "title": "UserActivitiesReq",
+      "required": [
+        "userId"
+      ]
+    },
+    "UserActivity": {
+      "type": "object",
+      "properties": {
+        "activity": {
+          "$ref": "#/definitions/Activity",
+          "description": "活动信息"
+        },
+        "userPool": {
+          "$ref": "#/definitions/UserPool",
+          "description": "活动用户池信息"
+        }
+      },
+      "title": "UserActivity",
+      "required": [
+        "activity",
+        "userPool"
+      ]
+    },
+    "UserDetail": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userActivities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserActivity"
+          }
+        }
+      },
+      "title": "UserDetail",
+      "required": [
+        "user",
+        "userActivities"
+      ]
+    },
+    "UserDetailReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "UserDetailReq",
+      "required": [
+        "id"
+      ]
+    },
+    "UserDetails": {
+      "type": "object",
+      "properties": {
+        "userDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDetail"
+          }
+        }
+      },
+      "title": "UserDetails",
+      "required": [
+        "userDetails"
+      ]
+    },
     "UserIdentifyReq": {
       "type": "object",
       "properties": {
@@ -4497,20 +5352,35 @@
     "luckydrawReq": {
       "type": "object",
       "properties": {
-        "activity_id": {
+        "activityId": {
           "type": "integer",
           "format": "int64",
           "description": " 活动id，需要传入活动id，用于查询redis缓存"
         },
-        "activity_uuid": {
+        "activityUuid": {
           "type": "string",
           "description": "活动uuid"
         }
       },
       "title": "luckydrawReq",
       "required": [
-        "activity_id",
-        "activity_uuid"
+        "activityId",
+        "activityUuid"
+      ]
+    },
+    "projectActivitiesReq": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "所属项目id，-1表示无限制"
+        }
+      },
+      "title": "projectActivitiesReq",
+      "required": [
+        "projectId"
       ]
     },
     "searchLuckyReq": {
@@ -4529,16 +5399,16 @@
     "selectPrizesReq": {
       "type": "object",
       "properties": {
-        "activity_id": {
+        "activityId": {
           "type": "integer",
           "format": "int64",
           "description": " 活动id，需要传入活动id，用于查询redis缓存"
         },
-        "activity_uuid": {
+        "activityUuid": {
           "type": "string",
           "description": "活动uuid"
         },
-        "lucky_uuid_list": {
+        "luckyUuidList": {
           "type": "array",
           "items": {
             "type": "string"
@@ -4548,9 +5418,9 @@
       },
       "title": "selectPrizesReq",
       "required": [
-        "activity_id",
-        "activity_uuid",
-        "lucky_uuid_list"
+        "activityId",
+        "activityUuid",
+        "luckyUuidList"
       ]
     },
     "testReq": {

@@ -29,7 +29,7 @@ type jwtBlacklist_model interface {
 func (m *defaultJwtBlacklistModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
@@ -107,7 +107,7 @@ func (m *defaultJwtBlacklistModel) TableName() string {
 func (m *defaultJwtBlacklistModel) FindByToken(ctx context.Context, token string) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
 	query := fmt.Sprintf("select %s from %s where `token` = ? limit 1", jwtBlacklistRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, token)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, token)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -121,7 +121,7 @@ func (m *defaultJwtBlacklistModel) FindByToken(ctx context.Context, token string
 func (m *defaultJwtBlacklistModel) FindByPlatform(ctx context.Context, platform string) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
 	query := fmt.Sprintf("select %s from %s where `platform` = ? limit 1", jwtBlacklistRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, platform)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, platform)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -135,7 +135,7 @@ func (m *defaultJwtBlacklistModel) FindByPlatform(ctx context.Context, platform 
 func (m *defaultJwtBlacklistModel) FindByIp(ctx context.Context, ip string) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
 	query := fmt.Sprintf("select %s from %s where `ip` = ? limit 1", jwtBlacklistRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ip)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, ip)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -149,7 +149,7 @@ func (m *defaultJwtBlacklistModel) FindByIp(ctx context.Context, ip string) (*Jw
 func (m *defaultJwtBlacklistModel) FindByExpireAt(ctx context.Context, expireAt time.Time) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
 	query := fmt.Sprintf("select %s from %s where `expire_at` = ? limit 1", jwtBlacklistRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, expireAt.Format("2006-01-02 15:04:05"))
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, expireAt.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
 		return &resp, nil
