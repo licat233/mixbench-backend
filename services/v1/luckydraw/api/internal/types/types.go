@@ -36,10 +36,10 @@ type JwtToken struct {
 }
 
 type ListReq struct {
-	PageSize int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `json:"keyword,optional"`             //关键词，可选
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
 }
 
 type ByIdReq struct {
@@ -154,28 +154,28 @@ type DelActivityReq struct {
 }
 
 type GetActivityReq struct {
-	Id int64 `form:"id"` //活动 ID
+	Id int64 `json:"id"` //活动 ID
 }
 
 type GetActivityListReq struct {
-	PageSize  int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page      int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current   int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword   string `json:"keyword,optional"`             //关键词，可选
-	Id        int64  `json:"id"`                           //表主键
-	Uuid      string `json:"uuid"`                         //UUID
-	Name      string `json:"name"`                         //活动名称
-	ProjectId int64  `json:"projectId"`                    //项目id
-	Status    int64  `json:"status"`                       //活动状态，是否在举办，默认关闭，需手动开启
-	Pattern   int64  `json:"pattern"`                      //方案: 0会员制，1公开制，2会员需授权
-	MaxCount  int64  `json:"maxCount"`                     //最大抽奖次数：-1表示无限制，0表示不可抽奖
-	MaxPrizes int64  `json:"maxPrizes"`                    //最大抽奖次数：-1表示无限制，0表示不可中奖
-	StartTime int64  `json:"startTime"`                    //活动开始时间
-	EndTime   int64  `json:"endTime"`                      //活动结束时间
+	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
+	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
+	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
+	Keyword   string `form:"keyword,optional"`              //关键词，可选
+	Id        int64  `form:"id,optional,default=-1"`        //表主键
+	Uuid      string `form:"uuid,optional"`                 //UUID
+	Name      string `form:"name,optional"`                 //活动名称
+	ProjectId int64  `form:"projectId,optional,default=-1"` //项目id
+	Status    int64  `form:"status,optional,default=-1"`    //活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64  `form:"pattern,optional,default=-1"`   //方案: 0会员制，1公开制，2会员需授权
+	MaxCount  int64  `form:"maxCount,optional,default=-1"`  //最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `form:"maxPrizes,optional,default=-1"` //最大抽奖次数：-1表示无限制，0表示不可中奖
+	StartTime int64  `form:"startTime,optional,default=-1"` //活动开始时间
+	EndTime   int64  `form:"endTime,optional,default=-1"`   //活动结束时间
 }
 
 type GetActivityEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type ActivityDetailReq struct {
@@ -237,25 +237,25 @@ type DelLuckyReq struct {
 }
 
 type GetLuckyReq struct {
-	Id int64 `form:"id"` //中奖名单 ID
+	Id int64 `json:"id"` //中奖名单 ID
 }
 
 type GetLuckyListReq struct {
-	PageSize    int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page        int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current     int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword     string `json:"keyword,optional"`             //关键词，可选
-	Id          int64  `json:"id"`                           //表主键
-	Uuid        string `json:"uuid"`                         //UUID
-	UserId      int64  `json:"userId"`                       //中奖用户id
-	PrizePoolId int64  `json:"prizePoolId"`                  //所属奖品池id
-	Status      int64  `json:"status"`                       //状态: 0未领奖，1已领奖，2弃领
-	LuckDate    int64  `json:"luckDate"`                     //抽奖时间
-	Ip          string `json:"ip"`                           //ip地址
+	PageSize    int64  `form:"pageSize,optional,default=20"`    //页面容量，默认20，可选
+	Page        int64  `form:"page,optional,default=1"`         //当前页码，默认1，可选
+	Current     int64  `form:"current,optional,default=1"`      //当前页码，默认1，用于对接umijs，可选
+	Keyword     string `form:"keyword,optional"`                //关键词，可选
+	Id          int64  `form:"id,optional,default=-1"`          //表主键
+	Uuid        string `form:"uuid,optional"`                   //UUID
+	UserId      int64  `form:"userId,optional,default=-1"`      //中奖用户id
+	PrizePoolId int64  `form:"prizePoolId,optional,default=-1"` //所属奖品池id
+	Status      int64  `form:"status,optional,default=-1"`      //状态: 0未领奖，1已领奖，2弃领
+	LuckDate    int64  `form:"luckDate,optional,default=-1"`    //抽奖时间
+	Ip          string `form:"ip,optional"`                     //ip地址
 }
 
 type GetLuckyEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type LuckyPutByPrizeReq struct {
@@ -288,7 +288,7 @@ type LuckyDetailsReq struct {
 	ProjectId    int64  `json:"projectId,optional,default=-1"`               //项目id
 	ActivityId   int64  `json:"activityId,optional,default=-1"`              //活动id
 	ActivityName string `json:"activityName,optional"`                       //活动id
-	PrizePoolId  int64  `json:"prizes_poolId,optional,default=-1"`           //奖品池id
+	PrizePoolId  int64  `json:"prizePoolId,optional,default=-1"`             //奖品池id
 	PeizeId      int64  `json:"prizeId,optional,default=-1"`                 //奖品id
 	PrizeName    string `json:"prizeName,optional"`                          //奖品名
 	PeizeGradeId int64  `json:"prizeGradeId,optional,default=-1"`            //奖品等级id
@@ -327,24 +327,24 @@ type DelPrizeReq struct {
 }
 
 type GetPrizeReq struct {
-	Id int64 `form:"id"` //奖品名单 ID
+	Id int64 `json:"id"` //奖品名单 ID
 }
 
 type GetPrizeListReq struct {
-	PageSize int64   `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64   `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64   `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string  `json:"keyword,optional"`             //关键词，可选
-	Id       int64   `json:"id"`                           //表主键
-	Uuid     string  `json:"uuid"`                         //UUID
-	Name     string  `json:"name"`                         //奖品名称
-	Image    string  `json:"image"`                        //奖品图片
-	Price    float64 `json:"price"`                        //奖品价格
-	Status   int64   `json:"status"`                       //是否可用
+	PageSize int64   `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64   `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64   `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string  `form:"keyword,optional"`             //关键词，可选
+	Id       int64   `form:"id,optional,default=-1"`       //表主键
+	Uuid     string  `form:"uuid,optional"`                //UUID
+	Name     string  `form:"name,optional"`                //奖品名称
+	Image    string  `form:"image,optional"`               //奖品图片
+	Price    float64 `form:"price,optional,default=-1"`    //奖品价格
+	Status   int64   `form:"status,optional,default=-1"`   //是否可用
 }
 
 type GetPrizeEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type ActivityPrize struct {
@@ -377,22 +377,22 @@ type DelPrizeGradeReq struct {
 }
 
 type GetPrizeGradeReq struct {
-	Id int64 `form:"id"` //奖品级别 ID
+	Id int64 `json:"id"` //奖品级别 ID
 }
 
 type GetPrizeGradeListReq struct {
-	PageSize int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `json:"keyword,optional"`             //关键词，可选
-	Id       int64  `json:"id"`                           //表主键
-	Uuid     string `json:"uuid"`                         //UUID
-	Name     string `json:"name"`                         //级别名称
-	IsWin    int64  `json:"isWin"`                        //是否中奖
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Name     string `form:"name,optional"`                //级别名称
+	IsWin    int64  `form:"isWin,optional,default=-1"`    //是否中奖
 }
 
 type GetPrizeGradeEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type PrizePool struct {
@@ -434,27 +434,32 @@ type DelPrizePoolReq struct {
 }
 
 type GetPrizePoolReq struct {
-	Id int64 `form:"id"` //活动奖品池，某活动中的奖品信息 ID
+	Id int64 `json:"id"` //活动奖品池，某活动中的奖品信息 ID
 }
 
 type GetPrizePoolListReq struct {
-	PageSize   int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page       int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current    int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword    string `json:"keyword,optional"`             //关键词，可选
-	Id         int64  `json:"id"`                           //表主键
-	Uuid       string `json:"uuid"`                         //UUID
-	ActivityId int64  `json:"activityId"`                   //活动id
-	PrizeId    int64  `json:"prizeId"`                      //奖品id
-	GradeId    int64  `json:"gradeId"`                      //奖品等级
-	LuckValue  int64  `json:"luckValue"`                    //幸运值
-	Status     int64  `json:"status"`                       //是否可用，0不可用，1可用
-	Total      int64  `json:"total"`                        //奖品总数量
-	Remainder  int64  `json:"remainder"`                    //奖品剩余数量
+	PageSize   int64  `form:"pageSize,optional,default=20"`   //页面容量，默认20，可选
+	Page       int64  `form:"page,optional,default=1"`        //当前页码，默认1，可选
+	Current    int64  `form:"current,optional,default=1"`     //当前页码，默认1，用于对接umijs，可选
+	Keyword    string `form:"keyword,optional"`               //关键词，可选
+	Id         int64  `form:"id,optional,default=-1"`         //表主键
+	Uuid       string `form:"uuid,optional"`                  //UUID
+	ActivityId int64  `form:"activityId,optional,default=-1"` //活动id
+	PrizeId    int64  `form:"prizeId,optional,default=-1"`    //奖品id
+	GradeId    int64  `form:"gradeId,optional,default=-1"`    //奖品等级
+	LuckValue  int64  `form:"luckValue,optional,default=-1"`  //幸运值
+	Status     int64  `form:"status,optional,default=-1"`     //是否可用，0不可用，1可用
+	Total      int64  `form:"total,optional,default=-1"`      //奖品总数量
+	Remainder  int64  `form:"remainder,optional,default=-1"`  //奖品剩余数量
 }
 
 type GetPrizePoolEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
+type ResetLuckValueReq struct {
+	ActivityId   int64  `json:"activityId"`   // 表主键
+	ActivityUuid string `json:"activityUuid"` // 保险起见，加入uuid做验证
 }
 
 type Project struct {
@@ -481,22 +486,22 @@ type DelProjectReq struct {
 }
 
 type GetProjectReq struct {
-	Id int64 `form:"id"` //项目 ID
+	Id int64 `json:"id"` //项目 ID
 }
 
 type GetProjectListReq struct {
-	PageSize int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `json:"keyword,optional"`             //关键词，可选
-	Id       int64  `json:"id"`                           //表主键
-	Uuid     string `json:"uuid"`                         //UUID
-	Name     string `json:"name"`                         //项目名称
-	Status   int64  `json:"status"`                       //项目状态
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Name     string `form:"name,optional"`                //项目名称
+	Status   int64  `form:"status,optional,default=-1"`   //项目状态
 }
 
 type GetProjectEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type ProjectDetailReq struct {
@@ -551,27 +556,27 @@ type DelUserReq struct {
 }
 
 type GetUserReq struct {
-	Id int64 `form:"id"` //用户名单 ID
+	Id int64 `json:"id"` //用户名单 ID
 }
 
 type GetUserListReq struct {
-	PageSize int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `json:"keyword,optional"`             //关键词，可选
-	Id       int64  `json:"id"`                           //表主键
-	Uuid     string `json:"uuid"`                         //UUID
-	Passport string `json:"passport"`                     //凭证，可以是手机号或者社交账号，一般是由客户填入
-	Email    string `json:"email"`                        //邮箱
-	Phone    string `json:"phone"`                        //手机号
-	Name     string `json:"name"`                         //用户名
-	Address  string `json:"address"`                      //收货地址
-	Score    int64  `json:"score"`                        //积分
-	Status   int64  `json:"status"`                       //状态:0未授权，1正常，2已冻结
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Passport string `form:"passport,optional"`            //凭证，可以是手机号或者社交账号，一般是由客户填入
+	Email    string `form:"email,optional"`               //邮箱
+	Phone    string `form:"phone,optional"`               //手机号
+	Name     string `form:"name,optional"`                //用户名
+	Address  string `form:"address,optional"`             //收货地址
+	Score    int64  `form:"score,optional,default=-1"`    //积分
+	Status   int64  `form:"status,optional,default=-1"`   //状态:0未授权，1正常，2已冻结
 }
 
 type GetUserEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type UserDetailReq struct {
@@ -617,22 +622,22 @@ type DelUserPoolReq struct {
 }
 
 type GetUserPoolReq struct {
-	Id int64 `form:"id"` //活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 ID
+	Id int64 `json:"id"` //活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 ID
 }
 
 type GetUserPoolListReq struct {
-	PageSize   int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page       int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current    int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword    string `json:"keyword,optional"`             //关键词，可选
-	Id         int64  `json:"id"`                           //表主键
-	Uuid       string `json:"uuid"`                         //UUID
-	ActivityId int64  `json:"activityId"`                   //活动id
-	UserId     int64  `json:"userId"`                       //用户id
-	Status     int64  `json:"status"`                       //状态:0未授权，1正常，2已冻结
-	Score      int64  `json:"score"`                        //用户在当前活动的积分
+	PageSize   int64  `form:"pageSize,optional,default=20"`   //页面容量，默认20，可选
+	Page       int64  `form:"page,optional,default=1"`        //当前页码，默认1，可选
+	Current    int64  `form:"current,optional,default=1"`     //当前页码，默认1，用于对接umijs，可选
+	Keyword    string `form:"keyword,optional"`               //关键词，可选
+	Id         int64  `form:"id,optional,default=-1"`         //表主键
+	Uuid       string `form:"uuid,optional"`                  //UUID
+	ActivityId int64  `form:"activityId,optional,default=-1"` //活动id
+	UserId     int64  `form:"userId,optional,default=-1"`     //用户id
+	Status     int64  `form:"status,optional,default=-1"`     //状态:0未授权，1正常，2已冻结
+	Score      int64  `form:"score,optional,default=-1"`      //用户在当前活动的积分
 }
 
 type GetUserPoolEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }

@@ -38,5 +38,5 @@ func (l *AddUserPoolLogic) AddUserPool(req *types.AddUserPoolReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

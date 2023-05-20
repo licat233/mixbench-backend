@@ -36,7 +36,7 @@ func (l *ProcessCaptchaLogic) ProcessCaptcha(req *types.ProcessCaptchaReq) (any,
 		return nil, err
 	}
 	if resp.Success {
-		return respx.StateResp("Captcha verification Success", true), nil
+		return respx.StatusResp("Captcha verification Success", true), nil
 	}
 	return nil, errorx.New("Captcha verification failed")
 }

@@ -222,90 +222,95 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "管理员名称",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "avatar",
             "description": "头像",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "access",
             "description": "身份",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "passport",
             "description": "账号",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "password",
             "description": "密码",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "email",
             "description": "邮箱",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "status",
             "description": "账号状态，是否可用",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "isSuperAdmin",
             "description": "是否为超级管理员",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "loginCount",
             "description": "登录次数",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "lastLogin",
             "description": "最后一次登录时间",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -1026,6 +1031,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -1059,21 +1065,25 @@
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "账号状态，是否可用"
         },
         "isSuperAdmin": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "是否为超级管理员"
         },
         "loginCount": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "登录次数"
         },
         "lastLogin": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "最后一次登录时间"
         }
       },
@@ -1083,13 +1093,6 @@
         "page",
         "current",
         "id",
-        "uuid",
-        "name",
-        "avatar",
-        "access",
-        "passport",
-        "password",
-        "email",
         "status",
         "isSuperAdmin",
         "loginCount",

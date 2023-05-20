@@ -52,5 +52,5 @@ func (l *PutPasswordLogic) PutPassword(req *types.PutPasswordReq) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	return respx.StateResp("", true), nil
+	return respx.StatusResp("", true), nil
 }

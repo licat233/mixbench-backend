@@ -36,10 +36,10 @@ type JwtToken struct {
 }
 
 type ListReq struct {
-	PageSize int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `json:"keyword,optional"`             //关键词，可选
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
 }
 
 type ByIdReq struct {
@@ -164,30 +164,30 @@ type DelAdminerReq struct {
 }
 
 type GetAdminerReq struct {
-	Id int64 `form:"id"` //管理员 ID
+	Id int64 `json:"id"` //管理员 ID
 }
 
 type GetAdminerListReq struct {
-	PageSize     int64  `json:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page         int64  `json:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current      int64  `json:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword      string `json:"keyword,optional"`             //关键词，可选
-	Id           int64  `json:"id"`                           //表主键
-	Uuid         string `json:"uuid"`                         //UUID
-	Name         string `json:"name"`                         //管理员名称
-	Avatar       string `json:"avatar"`                       //头像
-	Access       string `json:"access"`                       //身份
-	Passport     string `json:"passport"`                     //账号
-	Password     string `json:"password"`                     //密码
-	Email        string `json:"email"`                        //邮箱
-	Status       int64  `json:"status"`                       //账号状态，是否可用
-	IsSuperAdmin int64  `json:"isSuperAdmin"`                 //是否为超级管理员
-	LoginCount   int64  `json:"loginCount"`                   //登录次数
-	LastLogin    int64  `json:"lastLogin"`                    //最后一次登录时间
+	PageSize     int64  `form:"pageSize,optional,default=20"`     //页面容量，默认20，可选
+	Page         int64  `form:"page,optional,default=1"`          //当前页码，默认1，可选
+	Current      int64  `form:"current,optional,default=1"`       //当前页码，默认1，用于对接umijs，可选
+	Keyword      string `form:"keyword,optional"`                 //关键词，可选
+	Id           int64  `form:"id,optional,default=-1"`           //表主键
+	Uuid         string `form:"uuid,optional"`                    //UUID
+	Name         string `form:"name,optional"`                    //管理员名称
+	Avatar       string `form:"avatar,optional"`                  //头像
+	Access       string `form:"access,optional"`                  //身份
+	Passport     string `form:"passport,optional"`                //账号
+	Password     string `form:"password,optional"`                //密码
+	Email        string `form:"email,optional"`                   //邮箱
+	Status       int64  `form:"status,optional,default=-1"`       //账号状态，是否可用
+	IsSuperAdmin int64  `form:"isSuperAdmin,optional,default=-1"` //是否为超级管理员
+	LoginCount   int64  `form:"loginCount,optional,default=-1"`   //登录次数
+	LastLogin    int64  `form:"lastLogin,optional,default=-1"`    //最后一次登录时间
 }
 
 type GetAdminerEnumsReq struct {
-	ParentId int64 `form:"parentId,optional,default=-1"` //父级ID
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type PutCurrentReq struct {

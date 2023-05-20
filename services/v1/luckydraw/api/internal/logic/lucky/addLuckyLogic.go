@@ -39,5 +39,5 @@ func (l *AddLuckyLogic) AddLucky(req *types.AddLuckyReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

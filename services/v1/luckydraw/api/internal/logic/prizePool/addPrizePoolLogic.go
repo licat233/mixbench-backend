@@ -41,5 +41,5 @@ func (l *AddPrizePoolLogic) AddPrizePool(req *types.AddPrizePoolReq) (any, error
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

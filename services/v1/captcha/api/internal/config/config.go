@@ -14,7 +14,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Mode       string
 	Debug      bool
 	CaptchaRpc zrpc.RpcClientConf
 	AdminRpc   zrpc.RpcClientConf

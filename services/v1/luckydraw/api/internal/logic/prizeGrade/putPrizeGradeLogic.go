@@ -38,5 +38,5 @@ func (l *PutPrizeGradeLogic) PutPrizeGrade(req *types.PutPrizeGradeReq) (any, er
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

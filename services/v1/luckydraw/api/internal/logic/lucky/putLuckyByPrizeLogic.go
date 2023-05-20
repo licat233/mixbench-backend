@@ -47,5 +47,5 @@ func (l *PutLuckyByPrizeLogic) PutLuckyByPrize(req *types.LuckyPutByPrizeReq) (a
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultStateResp(err)
+	return respx.DefaultStatusResp(err)
 }

@@ -36,5 +36,5 @@ func (l *VerifyPasswordLogic) VerifyPassword(req *types.VerifyPasswordReq) (any,
 	if err != nil {
 		return nil, err
 	}
-	return respx.StateResp("", resp.Ok), nil
+	return respx.StatusResp("", resp.Ok), nil
 }

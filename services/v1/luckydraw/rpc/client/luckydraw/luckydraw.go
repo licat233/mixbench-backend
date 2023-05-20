@@ -160,6 +160,7 @@ type (
 	PutUserReq                = luckydraw_pb.PutUserReq
 	PutUserResp               = luckydraw_pb.PutUserResp
 	ResetActivityLuckValueReq = luckydraw_pb.ResetActivityLuckValueReq
+	ResetLuckValueReq         = luckydraw_pb.ResetLuckValueReq
 	SelectPrizesReq           = luckydraw_pb.SelectPrizesReq
 	SelectPrizesResp          = luckydraw_pb.SelectPrizesResp
 	StatusResp                = luckydraw_pb.StatusResp
@@ -220,6 +221,8 @@ type (
 		GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error)
 		// 通过奖品更新幸运单
 		PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
+		// 重置奖品幸运值
+		ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 	}
 
 	defaultLuckydraw struct {
@@ -375,4 +378,10 @@ func (m *defaultLuckydraw) GetUserLuckyDetail(ctx context.Context, in *GetUserLu
 func (m *defaultLuckydraw) PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
 	return client.PutLuckyByPrize(ctx, in, opts...)
+}
+
+// 重置奖品幸运值
+func (m *defaultLuckydraw) ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
+	return client.ResetLuckValue(ctx, in, opts...)
 }

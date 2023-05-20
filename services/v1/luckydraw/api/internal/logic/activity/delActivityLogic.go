@@ -34,5 +34,5 @@ func (l *DelActivityLogic) DelActivity(req *types.DelActivityReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

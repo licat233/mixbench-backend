@@ -43,5 +43,5 @@ func (l *PutUserLogic) PutUser(req *types.PutUserReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

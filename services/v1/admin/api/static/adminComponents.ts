@@ -35,10 +35,12 @@ export interface JwtToken {
 }
 
 export interface ListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface ListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 }
 
 export interface ByIdReq {
@@ -167,16 +169,16 @@ export interface DelAdminerReq {
 }
 
 export interface GetAdminerReq {
-}
-export interface GetAdminerReqParams {
 	id: number // 管理员 ID
 }
 
 export interface GetAdminerListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetAdminerListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 管理员名称
@@ -192,9 +194,7 @@ export interface GetAdminerListReq {
 }
 
 export interface GetAdminerEnumsReq {
-}
-export interface GetAdminerEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface PutCurrentReq {

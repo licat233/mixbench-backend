@@ -46,7 +46,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 	//错误处理
-	httpx.SetErrorHandler(errorx.ResponseErrorHandler)
+	httpx.SetErrorHandlerCtx(errorx.ResponseErrorHandlerCtx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()

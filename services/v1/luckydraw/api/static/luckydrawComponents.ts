@@ -35,10 +35,12 @@ export interface JwtToken {
 }
 
 export interface ListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface ListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 }
 
 export interface ByIdReq {
@@ -157,16 +159,16 @@ export interface DelActivityReq {
 }
 
 export interface GetActivityReq {
-}
-export interface GetActivityReqParams {
 	id: number // 活动 ID
 }
 
 export interface GetActivityListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetActivityListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 活动名称
@@ -180,9 +182,7 @@ export interface GetActivityListReq {
 }
 
 export interface GetActivityEnumsReq {
-}
-export interface GetActivityEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface ActivityDetailReq {
@@ -250,16 +250,16 @@ export interface DelLuckyReq {
 }
 
 export interface GetLuckyReq {
-}
-export interface GetLuckyReqParams {
 	id: number // 中奖名单 ID
 }
 
 export interface GetLuckyListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetLuckyListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	userId: number // 中奖用户id
@@ -270,9 +270,7 @@ export interface GetLuckyListReq {
 }
 
 export interface GetLuckyEnumsReq {
-}
-export interface GetLuckyEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface LuckyPutByPrizeReq {
@@ -306,7 +304,7 @@ export interface LuckyDetailsReq {
 	projectId?: number // 项目id
 	activityId?: number // 活动id
 	activityName?: string // 活动id
-	prizes_poolId?: number // 奖品池id
+	prizePoolId?: number // 奖品池id
 	prizeId?: number // 奖品id
 	prizeName?: string // 奖品名
 	prizeGradeId?: number // 奖品等级id
@@ -345,16 +343,16 @@ export interface DelPrizeReq {
 }
 
 export interface GetPrizeReq {
-}
-export interface GetPrizeReqParams {
 	id: number // 奖品名单 ID
 }
 
 export interface GetPrizeListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetPrizeListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 奖品名称
@@ -364,9 +362,7 @@ export interface GetPrizeListReq {
 }
 
 export interface GetPrizeEnumsReq {
-}
-export interface GetPrizeEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface ActivityPrize {
@@ -399,16 +395,16 @@ export interface DelPrizeGradeReq {
 }
 
 export interface GetPrizeGradeReq {
-}
-export interface GetPrizeGradeReqParams {
 	id: number // 奖品级别 ID
 }
 
 export interface GetPrizeGradeListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetPrizeGradeListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 级别名称
@@ -416,9 +412,7 @@ export interface GetPrizeGradeListReq {
 }
 
 export interface GetPrizeGradeEnumsReq {
-}
-export interface GetPrizeGradeEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface PrizePool {
@@ -460,16 +454,16 @@ export interface DelPrizePoolReq {
 }
 
 export interface GetPrizePoolReq {
-}
-export interface GetPrizePoolReqParams {
 	id: number // 活动奖品池，某活动中的奖品信息 ID
 }
 
 export interface GetPrizePoolListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetPrizePoolListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	activityId: number // 活动id
@@ -482,9 +476,12 @@ export interface GetPrizePoolListReq {
 }
 
 export interface GetPrizePoolEnumsReq {
+	parentId?: number // 父级ID
 }
-export interface GetPrizePoolEnumsReqParams {
-	parentId: number // 父级ID
+
+export interface ResetLuckValueReq {
+	activityId: number // 表主键
+	activityUuid: string // 保险起见，加入uuid做验证
 }
 
 export interface Project {
@@ -511,16 +508,16 @@ export interface DelProjectReq {
 }
 
 export interface GetProjectReq {
-}
-export interface GetProjectReqParams {
 	id: number // 项目 ID
 }
 
 export interface GetProjectListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetProjectListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 项目名称
@@ -528,9 +525,7 @@ export interface GetProjectListReq {
 }
 
 export interface GetProjectEnumsReq {
-}
-export interface GetProjectEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface ProjectDetailReq {
@@ -587,16 +582,16 @@ export interface DelUserReq {
 }
 
 export interface GetUserReq {
-}
-export interface GetUserReqParams {
 	id: number // 用户名单 ID
 }
 
 export interface GetUserListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetUserListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	passport: string // 凭证，可以是手机号或者社交账号，一般是由客户填入
@@ -609,9 +604,7 @@ export interface GetUserListReq {
 }
 
 export interface GetUserEnumsReq {
-}
-export interface GetUserEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 
 export interface UserDetailReq {
@@ -659,16 +652,16 @@ export interface DelUserPoolReq {
 }
 
 export interface GetUserPoolReq {
-}
-export interface GetUserPoolReqParams {
 	id: number // 活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 ID
 }
 
 export interface GetUserPoolListReq {
-	pageSize?: number // 页面容量，默认20，可选
-	page?: number // 当前页码，默认1，可选
-	current?: number // 当前页码，默认1，用于对接umijs，可选
-	keyword?: string // 关键词，可选
+}
+export interface GetUserPoolListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
 	activityId: number // 活动id
@@ -678,8 +671,6 @@ export interface GetUserPoolListReq {
 }
 
 export interface GetUserPoolEnumsReq {
-}
-export interface GetUserPoolEnumsReqParams {
-	parentId: number // 父级ID
+	parentId?: number // 父级ID
 }
 

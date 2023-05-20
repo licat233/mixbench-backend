@@ -36,5 +36,5 @@ func (l *AddPrizeGradeLogic) AddPrizeGrade(req *types.AddPrizeGradeReq) (any, er
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

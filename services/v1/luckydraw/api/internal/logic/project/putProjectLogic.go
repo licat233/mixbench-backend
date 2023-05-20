@@ -38,5 +38,5 @@ func (l *PutProjectLogic) PutProject(req *types.PutProjectReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

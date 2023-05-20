@@ -34,5 +34,5 @@ func (l *DelPrizeGradeLogic) DelPrizeGrade(req *types.DelPrizeGradeReq) (any, er
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

@@ -41,5 +41,5 @@ func (l *AddUserLogic) AddUser(req *types.AddUserReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

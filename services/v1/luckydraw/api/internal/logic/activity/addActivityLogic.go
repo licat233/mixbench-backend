@@ -42,5 +42,5 @@ func (l *AddActivityLogic) AddActivity(req *types.AddActivityReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

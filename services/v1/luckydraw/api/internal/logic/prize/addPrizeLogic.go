@@ -38,5 +38,5 @@ func (l *AddPrizeLogic) AddPrize(req *types.AddPrizeReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

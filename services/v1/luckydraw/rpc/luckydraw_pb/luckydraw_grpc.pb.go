@@ -1944,6 +1944,8 @@ type LuckydrawClient interface {
 	GetUserLuckyDetail(ctx context.Context, in *GetUserLuckyDetailReq, opts ...grpc.CallOption) (*GetUserLuckyDetailResp, error)
 	// 通过奖品更新幸运单
 	PutLuckyByPrize(ctx context.Context, in *PutLuckyByPrizeReq, opts ...grpc.CallOption) (*StatusResp, error)
+	// 重置奖品幸运值
+	ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error)
 }
 
 type luckydrawClient struct {
@@ -2170,6 +2172,15 @@ func (c *luckydrawClient) PutLuckyByPrize(ctx context.Context, in *PutLuckyByPri
 	return out, nil
 }
 
+func (c *luckydrawClient) ResetLuckValue(ctx context.Context, in *ResetLuckValueReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/ResetLuckValue", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LuckydrawServer is the server API for Luckydraw service.
 // All implementations must embed UnimplementedLuckydrawServer
 // for forward compatibility
@@ -2222,6 +2233,8 @@ type LuckydrawServer interface {
 	GetUserLuckyDetail(context.Context, *GetUserLuckyDetailReq) (*GetUserLuckyDetailResp, error)
 	// 通过奖品更新幸运单
 	PutLuckyByPrize(context.Context, *PutLuckyByPrizeReq) (*StatusResp, error)
+	// 重置奖品幸运值
+	ResetLuckValue(context.Context, *ResetLuckValueReq) (*StatusResp, error)
 	mustEmbedUnimplementedLuckydrawServer()
 }
 
@@ -2300,6 +2313,9 @@ func (UnimplementedLuckydrawServer) GetUserLuckyDetail(context.Context, *GetUser
 }
 func (UnimplementedLuckydrawServer) PutLuckyByPrize(context.Context, *PutLuckyByPrizeReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutLuckyByPrize not implemented")
+}
+func (UnimplementedLuckydrawServer) ResetLuckValue(context.Context, *ResetLuckValueReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetLuckValue not implemented")
 }
 func (UnimplementedLuckydrawServer) mustEmbedUnimplementedLuckydrawServer() {}
 
@@ -2746,6 +2762,24 @@ func _Luckydraw_PutLuckyByPrize_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Luckydraw_ResetLuckValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetLuckValueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LuckydrawServer).ResetLuckValue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/luckydraw_proto.Luckydraw/ResetLuckValue",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LuckydrawServer).ResetLuckValue(ctx, req.(*ResetLuckValueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Luckydraw_ServiceDesc is the grpc.ServiceDesc for Luckydraw service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2848,6 +2882,10 @@ var Luckydraw_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PutLuckyByPrize",
 			Handler:    _Luckydraw_PutLuckyByPrize_Handler,
+		},
+		{
+			MethodName: "ResetLuckValue",
+			Handler:    _Luckydraw_ResetLuckValue_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

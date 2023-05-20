@@ -165,3 +165,9 @@ func (s *LuckydrawServer) PutLuckyByPrize(ctx context.Context, in *luckydraw_pb.
 	l := luckydrawlogic.NewPutLuckyByPrizeLogic(ctx, s.svcCtx)
 	return l.PutLuckyByPrize(in)
 }
+
+// 重置奖品幸运值
+func (s *LuckydrawServer) ResetLuckValue(ctx context.Context, in *luckydraw_pb.ResetLuckValueReq) (*luckydraw_pb.StatusResp, error) {
+	l := luckydrawlogic.NewResetLuckValueLogic(ctx, s.svcCtx)
+	return l.ResetLuckValue(in)
+}

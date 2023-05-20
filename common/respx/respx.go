@@ -10,33 +10,38 @@ var (
 	SUCCESS_MSG = "request success"
 )
 
-// StateData 状态响应结构体
-type StateData struct {
-	Status  bool   `json:"success"` // 请求状态。
+// StatusData 状态响应结构体
+type StatusData struct {
+	Status  bool   `json:"status"`  // 响应状态
+	Success bool   `json:"success"` // 响应状态，用于对接umijs
 	Message string `json:"message"` // 响应消息
 }
 
 // SingleData 单数据响应结构体
 type SingleData struct {
-	Status  bool   `json:"success"` // 请求状态。可有可无
+	Status  bool   `json:"status"`  // 响应状态
+	Success bool   `json:"success"` // 响应状态，用于对接umijs
 	Message string `json:"message"` // 响应消息
 	Data    any    `json:"data"`    // 返回数据
 }
 
 // ListData 列表响应数据结构体
 type ListData struct {
-	Status    bool        `json:"success"`   //【响应状态】
+	Status    bool        `json:"status"`    // 响应状态
+	Success   bool        `json:"success"`   // 响应状态，用于对接umijs
 	Message   string      `json:"message"`   //【给予的提示信息】
 	Data      interface{} `json:"data"`      //【选填】响应的业务数据
-	Total     int64       `json:"total"`     // 【选填】数据总个数
-	PageSize  int64       `json:"pageSize"`  // 【选填】单页数量
-	Page      int64       `json:"current"`   // 【选填】当前页码
-	TotalPage int64       `json:"totalPage"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
+	Total     int64       `json:"total"`     //【选填】数据总个数
+	PageSize  int64       `json:"pageSize"`  //【选填】单页数量
+	Page      int64       `json:"page"`      //【选填】当前页码
+	Current   int64       `json:"current"`   //【选填】当前页码，用于对接umijs
+	TotalPage int64       `json:"totalPage"` //【自己加上去的】总共有多少页，根据前端的pageSize来计算
 }
 
 func NewData(data any) *SingleData {
 	return &SingleData{
 		Status:  true,
+		Success: true,
 		Message: SUCCESS_MSG,
 		Data:    data,
 	}
@@ -56,32 +61,35 @@ func NewListData(listData any, totalRecord, pageSize, Page int64) *ListData {
 	}
 	return &ListData{
 		Status:    true,
+		Success:   true,
 		Message:   SUCCESS_MSG,
 		Data:      data,
 		Total:     totalRecord,
 		PageSize:  pageSize,
 		Page:      Page,
+		Current:   Page,
 		TotalPage: (totalRecord + pageSize - 1) / pageSize,
 	}
 }
 
-// StateResp 返回响应状态
-func StateResp(alertMsg string, status bool) *StateData {
+// StatusResp 返回响应状态
+func StatusResp(alertMsg string, status bool) *StatusData {
 	if alertMsg == "" {
 		alertMsg = SUCCESS_MSG
 	}
-	return &StateData{
+	return &StatusData{
 		Status:  status,
+		Success: status,
 		Message: alertMsg,
 	}
 }
 
-// DefaultStateResp 默认返回响应状态，主要用于对接go-zero
-func DefaultStateResp(err error) (*StateData, error) {
+// DefaultStatusResp 默认返回响应状态，主要用于对接go-zero
+func DefaultStatusResp(err error) (*StatusData, error) {
 	if err != nil {
 		return nil, errorx.Convert(err)
 	}
-	return StateResp(SUCCESS_MSG, true), nil
+	return StatusResp(SUCCESS_MSG, true), nil
 }
 
 // SingleResp 返回单数据响应
@@ -91,6 +99,7 @@ func SingleResp(alertMsg string, data any) *SingleData {
 	}
 	return &SingleData{
 		Status:  true,
+		Success: true,
 		Message: alertMsg,
 		Data:    data,
 	}
@@ -131,11 +140,13 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) 
 	}
 	return &ListData{
 		Status:    true,
+		Success:   true,
 		Message:   alertMsg,
 		Data:      listData,
 		Total:     totalRecord,
 		PageSize:  pageSize,
 		Page:      Page,
+		Current:   Page,
 		TotalPage: (totalRecord + pageSize - 1) / pageSize,
 	}
 }
@@ -163,10 +174,11 @@ func Msg(data any, err error, successMsg, failedMsg string) (any, error) {
 }
 
 // DefaultBoolResp 默认返回响应状态，主要用于对接go-zero
-func DefaultBoolResp(ok bool, err error) (*StateData, error) {
+func DefaultBoolResp(ok bool, err error) (*StatusData, error) {
 	if ok {
-		return &StateData{
+		return &StatusData{
 			Status:  true,
+			Success: true,
 			Message: SUCCESS_MSG,
 		}, nil
 	}

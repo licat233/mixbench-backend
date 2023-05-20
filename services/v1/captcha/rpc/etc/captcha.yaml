@@ -13,6 +13,7 @@ Redis:
   Host: ${REDIS_HOST}:${REDIS_PORT}
   Pass: ${REDIS_PASSWORD}
   Type: node
+  Key: ""
 
 Log:
   ServiceName: captcha-rpc
@@ -31,12 +32,11 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 
-Email: 
+Email:
   Username: licat233@sina.com
   Secret: 5e8bc93914101e81
   Host: smtp.sina.com
   Port: 465
   Subject: 系统邮件
-  Receiver: 
+  Receiver:
     - "1697470538@qq.com"
-

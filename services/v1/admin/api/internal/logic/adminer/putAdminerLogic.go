@@ -46,5 +46,5 @@ func (l *PutAdminerLogic) PutAdminer(req *types.PutAdminerReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

@@ -34,5 +34,5 @@ func (l *DelProjectLogic) DelProject(req *types.DelProjectReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

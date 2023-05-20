@@ -89,10 +89,10 @@ export function putAdminer(req: components.PutAdminerReq) {
 
 /**
  * @description "获取管理员 基础API"
- * @param params
+ * @param req
  */
-export function getAdminer(params: components.GetAdminerReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer`, params)
+export function getAdminer(req: components.GetAdminerReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer`, req)
 }
 
 /**
@@ -105,18 +105,18 @@ export function delAdminer(req: components.DelAdminerReq) {
 
 /**
  * @description "获取管理员列表 基础API"
- * @param req
+ * @param params
  */
-export function getAdminerList(req: components.GetAdminerListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer/list`, req)
+export function getAdminerList(params: components.GetAdminerListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer/list`, params)
 }
 
 /**
  * @description "获取管理员枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getAdminerEnums(params: components.GetAdminerEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer/enums`, params)
+export function getAdminerEnums(req: components.GetAdminerEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer/enums`, req)
 }
 
 /**

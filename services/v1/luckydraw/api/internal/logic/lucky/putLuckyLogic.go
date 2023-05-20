@@ -41,5 +41,5 @@ func (l *PutLuckyLogic) PutLucky(req *types.PutLuckyReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

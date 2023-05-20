@@ -46,5 +46,5 @@ func (l *LogoutLogic) Logout() (any, error) {
 		Platform: platform,
 		Ip:       reqIp,
 	})
-	return respx.DefaultStateResp(err)
+	return respx.DefaultStatusResp(err)
 }

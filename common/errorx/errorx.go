@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"mixbench/common/uniqueid"
+	"mixbench/common/utils"
 	"net/http"
 	"os"
 	"strings"
@@ -16,7 +18,8 @@ import (
 /** Errorx 对接前端antpro框架的接口格式规范，用于实现error接口
  */
 type Errorx struct {
-	Status       bool   `json:"success"`      // 【必需】请求状态
+	Status       bool   `json:"status"`       // 响应状态
+	Success      bool   `json:"success"`      // 响应状态，用于对接umijs
 	ErrorCode    int    `json:"errorCode"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	ErrorMessage string `json:"errorMessage"` // 【选填】向用户显示消息
 	TraceMessage string `json:"traceMessage"` // 【选填】自己加上去的，调试错误信息，请勿在生产环境下使用，可有可无
@@ -28,7 +31,8 @@ type Errorx struct {
 /** ResponseError 对接前端antpro框架的接口格式规范，用于实现展现错误
  */
 type ResponseError struct {
-	Status       bool   `json:"success"`      // 【必需】请求状态
+	Status       bool   `json:"status"`       // 响应状态
+	Success      bool   `json:"success"`      // 响应状态，用于对接umijs
 	ErrorCode    int    `json:"errorCode"`    // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
 	ErrorMessage string `json:"errorMessage"` // 【选填】向用户显示消息
 	TraceMessage string `json:"traceMessage"` // 【选填】自己加上去的，调试错误信息，请勿在生产环境下使用，可有可无
@@ -58,6 +62,12 @@ var AuthErrorMsg = "permission denied"
 var RequestSuccessMsg = "request successful"
 var RequestFailedMsg = "request failed"
 
+var Ip = "0.0.0.0"
+
+func init() {
+	Ip, _ = utils.LocalIP()
+}
+
 // Error 返回错误信息，主要用于实现原生error接口，
 // 注意：打印errorx的时候，会调用该函数值，所以返回errorx，等于返回该Error()的结果
 func (e *Errorx) Error() string {
@@ -70,6 +80,7 @@ func (e *Errorx) Error() string {
 func (e *Errorx) Data() *ResponseError {
 	return &ResponseError{
 		Status:       e.Status,
+		Success:      e.Status,
 		ErrorCode:    e.ErrorCode,
 		ErrorMessage: e.ErrorMessage,
 		TraceMessage: e.TraceMessage,
@@ -144,12 +155,13 @@ func Alert(msg string) error {
 	}
 	return &Errorx{
 		Status:       false,
+		Success:      false,
 		ErrorCode:    ERROR_CODE_EXTERNAL,
 		ErrorMessage: msg,
 		TraceMessage: "",
 		ShowType:     SHOW_TYPE,
-		TraceId:      "",
-		Host:         "",
+		TraceId:      uniqueid.NewUUID(),
+		Host:         Ip,
 	}
 }
 
@@ -210,12 +222,13 @@ func newErrorx(alertMsg string, traceErr error) *Errorx {
 	}
 	errorx := &Errorx{
 		Status:       false,
+		Success:      false,
 		ErrorCode:    ERROR_CODE_EXTERNAL,
 		ErrorMessage: alertMsg,
 		TraceMessage: traceMsg,
 		ShowType:     SHOW_TYPE,
-		TraceId:      "",
-		Host:         "",
+		TraceId:      uniqueid.NewUUID(),
+		Host:         Ip,
 	}
 	return errorx
 }
@@ -275,9 +288,11 @@ func ResponseErrorHandler(err error) (int, interface{}) {
 	if err == nil {
 		//没有错误，应该正常返回
 		return http.StatusOK, &struct {
-			Success bool   `json:"success"` // 请求状态。
-			Message string `json:"message"` // 响应消息
+			Status  bool   `json:"status"`
+			Success bool   `json:"success"`
+			Message string `json:"message"`
 		}{
+			Status:  true,
 			Success: true,
 			Message: RequestSuccessMsg,
 		}
@@ -302,6 +317,10 @@ func ResponseErrorHandler(err error) (int, interface{}) {
 	 */
 
 	return http.StatusOK, externalError(RequestErrorMsg, err).Data()
+}
+
+func ResponseErrorHandlerCtx(ctx context.Context, err error) (int, interface{}) {
+	return ResponseErrorHandler(err)
 }
 
 /**需要注意的是：rpc中返回的status.Error Internael错误没有traceMessage，只有一个message**/

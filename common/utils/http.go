@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"net"
 	"net/http"
 	"regexp"
 	"strings"
@@ -9,7 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-//GetReqFormValue 获取请求form字段值
+// GetReqFormValue 获取请求form字段值
 func GetReqFormValue(r *http.Request, Key string) string {
 	//r.Form 类型为 map[string][]string
 	if r.Form.Has(Key) {
@@ -71,4 +72,20 @@ func RemotePlatform(r *http.Request) (string, error) {
 		return "ubuntu", nil
 	}
 	return u, errors.New("未知设备的请求")
+}
+
+// 获取本地服务器的ip
+func LocalIP() (string, error) {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return "0.0.0.0", err
+	}
+	for _, addr := range addrs {
+		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP.String(), nil
+			}
+		}
+	}
+	return "0.0.0.0", nil
 }

@@ -44,5 +44,5 @@ func (l *PutActivityLogic) PutActivity(req *types.PutActivityReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

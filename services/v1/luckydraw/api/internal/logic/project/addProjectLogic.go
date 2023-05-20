@@ -36,5 +36,5 @@ func (l *AddProjectLogic) AddProject(req *types.AddProjectReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

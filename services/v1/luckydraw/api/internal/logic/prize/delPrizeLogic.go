@@ -34,5 +34,5 @@ func (l *DelPrizeLogic) DelPrize(req *types.DelPrizeReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.DefaultStateResp(nil)
+	return respx.DefaultStatusResp(nil)
 }

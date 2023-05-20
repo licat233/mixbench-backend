@@ -15,7 +15,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Mode  string
 	Debug bool
 	Mysql struct {
 		DataSource string

@@ -259,79 +259,87 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "活动名称",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "projectId",
             "description": "项目id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "活动状态，是否在举办，默认关闭，需手动开启",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "pattern",
             "description": "方案: 0会员制，1公开制，2会员需授权",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "maxCount",
             "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "maxPrizes",
             "description": "最大抽奖次数：-1表示无限制，0表示不可中奖",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "startTime",
             "description": "活动开始时间",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "endTime",
             "description": "活动结束时间",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -689,54 +697,59 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "userId",
             "description": "中奖用户id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "prizePoolId",
             "description": "所属奖品池id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "状态: 0未领奖，1已领奖，2弃领",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "luckDate",
             "description": "抽奖时间",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "ip",
             "description": "ip地址",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           }
         ],
@@ -992,46 +1005,49 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "奖品名称",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "image",
             "description": "奖品图片",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "price",
             "description": "奖品价格",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "是否可用",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -1229,31 +1245,33 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "级别名称",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "isWin",
             "description": "是否中奖",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -1451,72 +1469,109 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "activityId",
             "description": "活动id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "prizeId",
             "description": "奖品id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "gradeId",
             "description": "奖品等级",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "luckValue",
             "description": "幸运值",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "是否可用，0不可用，1可用",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "total",
             "description": "奖品总数量",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "remainder",
             "description": "奖品剩余数量",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "prizePool"
+        ]
+      }
+    },
+    "/v1/api/luckydraw/prizePool/resetLuckValue": {
+      "post": {
+        "summary": "重置某活动的奖品池概率",
+        "operationId": "ResetLuckValue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start],重置奖品幸运值请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetLuckValueReq"
+            }
           }
         ],
         "requestBody": {},
@@ -1714,31 +1769,33 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "项目名称",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "status",
             "description": "项目状态",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -1826,31 +1883,33 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "项目名称",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "status",
             "description": "项目状态",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -2147,67 +2206,70 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "passport",
             "description": "凭证，可以是手机号或者社交账号，一般是由客户填入",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "email",
             "description": "邮箱",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "phone",
             "description": "手机号",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "用户名",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "address",
             "description": "收货地址",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "score",
             "description": "积分",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "状态:0未授权，1正常，2已冻结",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -2296,67 +2358,70 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "passport",
             "description": "凭证，可以是手机号或者社交账号，一般是由客户填入",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "email",
             "description": "邮箱",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "phone",
             "description": "手机号",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "name",
             "description": "用户名",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "address",
             "description": "收货地址",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "score",
             "description": "积分",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "状态:0未授权，1正常，2已冻结",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -2583,48 +2648,53 @@
             "name": "id",
             "description": "表主键",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "uuid",
             "description": "UUID",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string"
           },
           {
             "name": "activityId",
             "description": "活动id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "userId",
             "description": "用户id",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "status",
             "description": "状态:0未授权，1正常，2已冻结",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "score",
             "description": "用户在当前活动的积分",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "default": "-1"
           }
         ],
         "requestBody": {},
@@ -3410,6 +3480,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -3423,36 +3494,43 @@
         "projectId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "项目id"
         },
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "活动状态，是否在举办，默认关闭，需手动开启"
         },
         "pattern": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "方案: 0会员制，1公开制，2会员需授权"
         },
         "maxCount": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖"
         },
         "maxPrizes": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "最大抽奖次数：-1表示无限制，0表示不可中奖"
         },
         "startTime": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "活动开始时间"
         },
         "endTime": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "活动结束时间"
         }
       },
@@ -3462,8 +3540,6 @@
         "page",
         "current",
         "id",
-        "uuid",
-        "name",
         "projectId",
         "status",
         "pattern",
@@ -3530,6 +3606,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -3539,21 +3616,25 @@
         "userId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "中奖用户id"
         },
         "prizePoolId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "所属奖品池id"
         },
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "状态: 0未领奖，1已领奖，2弃领"
         },
         "luckDate": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "抽奖时间"
         },
         "ip": {
@@ -3567,12 +3648,10 @@
         "page",
         "current",
         "id",
-        "uuid",
         "userId",
         "prizePoolId",
         "status",
-        "luckDate",
-        "ip"
+        "luckDate"
       ]
     },
     "GetLuckyReq": {
@@ -3647,6 +3726,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -3660,6 +3740,7 @@
         "isWin": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "是否中奖"
         }
       },
@@ -3669,8 +3750,6 @@
         "page",
         "current",
         "id",
-        "uuid",
-        "name",
         "isWin"
       ]
     },
@@ -3716,6 +3795,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -3733,11 +3813,13 @@
         "price": {
           "type": "number",
           "format": "double",
+          "default": "-1",
           "description": "奖品价格"
         },
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "是否可用"
         }
       },
@@ -3747,9 +3829,6 @@
         "page",
         "current",
         "id",
-        "uuid",
-        "name",
-        "image",
         "price",
         "status"
       ]
@@ -3797,6 +3876,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -3806,36 +3886,43 @@
         "activityId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "活动id"
         },
         "prizeId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "奖品id"
         },
         "gradeId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "奖品等级"
         },
         "luckValue": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "幸运值"
         },
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "是否可用，0不可用，1可用"
         },
         "total": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "奖品总数量"
         },
         "remainder": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "奖品剩余数量"
         }
       },
@@ -3845,7 +3932,6 @@
         "page",
         "current",
         "id",
-        "uuid",
         "activityId",
         "prizeId",
         "gradeId",
@@ -3926,6 +4012,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -3939,6 +4026,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "项目状态"
         }
       },
@@ -3948,8 +4036,6 @@
         "page",
         "current",
         "id",
-        "uuid",
-        "name",
         "status"
       ]
     },
@@ -4010,6 +4096,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -4039,11 +4126,13 @@
         "score": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "积分"
         },
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "状态:0未授权，1正常，2已冻结"
         }
       },
@@ -4053,12 +4142,6 @@
         "page",
         "current",
         "id",
-        "uuid",
-        "passport",
-        "email",
-        "phone",
-        "name",
-        "address",
         "score",
         "status"
       ]
@@ -4106,6 +4189,7 @@
         "id": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "表主键"
         },
         "uuid": {
@@ -4115,21 +4199,25 @@
         "activityId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "活动id"
         },
         "userId": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "用户id"
         },
         "status": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "状态:0未授权，1正常，2已冻结"
         },
         "score": {
           "type": "integer",
           "format": "int64",
+          "default": "-1",
           "description": "用户在当前活动的积分"
         }
       },
@@ -4139,7 +4227,6 @@
         "page",
         "current",
         "id",
-        "uuid",
         "activityId",
         "userId",
         "status",
@@ -4368,7 +4455,7 @@
           "type": "string",
           "description": "活动id"
         },
-        "prizes_poolId": {
+        "prizePoolId": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
@@ -4414,7 +4501,7 @@
         "userId",
         "projectId",
         "activityId",
-        "prizes_poolId",
+        "prizePoolId",
         "prizeId",
         "prizeGradeId",
         "status",
@@ -5100,6 +5187,25 @@
         "address",
         "score",
         "status"
+      ]
+    },
+    "ResetLuckValueReq": {
+      "type": "object",
+      "properties": {
+        "activityId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 表主键"
+        },
+        "activityUuid": {
+          "type": "string",
+          "description": " 保险起见，加入uuid做验证"
+        }
+      },
+      "title": "ResetLuckValueReq",
+      "required": [
+        "activityId",
+        "activityUuid"
       ]
     },
     "Resp": {

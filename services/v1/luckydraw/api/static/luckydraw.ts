@@ -76,10 +76,10 @@ export function putActivity(req: components.PutActivityReq) {
 
 /**
  * @description "获取活动 基础API"
- * @param params
+ * @param req
  */
-export function getActivity(params: components.GetActivityReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity`, params)
+export function getActivity(req: components.GetActivityReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity`, req)
 }
 
 /**
@@ -92,18 +92,18 @@ export function delActivity(req: components.DelActivityReq) {
 
 /**
  * @description "获取活动列表 基础API"
- * @param req
+ * @param params
  */
-export function getActivityList(req: components.GetActivityListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/list`, req)
+export function getActivityList(params: components.GetActivityListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/list`, params)
 }
 
 /**
  * @description "获取活动枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getActivityEnums(params: components.GetActivityEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/enums`, params)
+export function getActivityEnums(req: components.GetActivityEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/activity/enums`, req)
 }
 
 /**
@@ -116,10 +116,10 @@ export function activityDetail(params: components.ActivityDetailReqParams) {
 
 /**
  * @description 
- * @param req
+ * @param params
  */
-export function activityDetails(req: components.GetActivityListReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/activity/details`, req)
+export function activityDetails(params: components.GetActivityListReqParams) {
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/activity/details`, params)
 }
 
 /**
@@ -163,10 +163,10 @@ export function putLucky(req: components.PutLuckyReq) {
 
 /**
  * @description "获取中奖名单 基础API"
- * @param params
+ * @param req
  */
-export function getLucky(params: components.GetLuckyReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky`, params)
+export function getLucky(req: components.GetLuckyReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky`, req)
 }
 
 /**
@@ -179,18 +179,18 @@ export function delLucky(req: components.DelLuckyReq) {
 
 /**
  * @description "获取中奖名单列表 基础API"
- * @param req
+ * @param params
  */
-export function getLuckyList(req: components.GetLuckyListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky/list`, req)
+export function getLuckyList(params: components.GetLuckyListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky/list`, params)
 }
 
 /**
  * @description "获取中奖名单枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getLuckyEnums(params: components.GetLuckyEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky/enums`, params)
+export function getLuckyEnums(req: components.GetLuckyEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/lucky/enums`, req)
 }
 
 /**
@@ -227,10 +227,10 @@ export function putPrize(req: components.PutPrizeReq) {
 
 /**
  * @description "获取奖品名单 基础API"
- * @param params
+ * @param req
  */
-export function getPrize(params: components.GetPrizeReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize`, params)
+export function getPrize(req: components.GetPrizeReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize`, req)
 }
 
 /**
@@ -243,18 +243,18 @@ export function delPrize(req: components.DelPrizeReq) {
 
 /**
  * @description "获取奖品名单列表 基础API"
- * @param req
+ * @param params
  */
-export function getPrizeList(req: components.GetPrizeListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize/list`, req)
+export function getPrizeList(params: components.GetPrizeListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize/list`, params)
 }
 
 /**
  * @description "获取奖品名单枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getPrizeEnums(params: components.GetPrizeEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize/enums`, params)
+export function getPrizeEnums(req: components.GetPrizeEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize/enums`, req)
 }
 
 /**
@@ -275,10 +275,10 @@ export function putPrizeGrade(req: components.PutPrizeGradeReq) {
 
 /**
  * @description "获取奖品级别 基础API"
- * @param params
+ * @param req
  */
-export function getPrizeGrade(params: components.GetPrizeGradeReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizeGrade`, params)
+export function getPrizeGrade(req: components.GetPrizeGradeReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizeGrade`, req)
 }
 
 /**
@@ -291,18 +291,18 @@ export function delPrizeGrade(req: components.DelPrizeGradeReq) {
 
 /**
  * @description "获取奖品级别列表 基础API"
- * @param req
+ * @param params
  */
-export function getPrizeGradeList(req: components.GetPrizeGradeListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizeGrade/list`, req)
+export function getPrizeGradeList(params: components.GetPrizeGradeListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizeGrade/list`, params)
 }
 
 /**
  * @description "获取奖品级别枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getPrizeGradeEnums(params: components.GetPrizeGradeEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizeGrade/enums`, params)
+export function getPrizeGradeEnums(req: components.GetPrizeGradeEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizeGrade/enums`, req)
 }
 
 /**
@@ -323,10 +323,10 @@ export function putPrizePool(req: components.PutPrizePoolReq) {
 
 /**
  * @description "获取活动奖品池，某活动中的奖品信息 基础API"
- * @param params
+ * @param req
  */
-export function getPrizePool(params: components.GetPrizePoolReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizePool`, params)
+export function getPrizePool(req: components.GetPrizePoolReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizePool`, req)
 }
 
 /**
@@ -339,18 +339,26 @@ export function delPrizePool(req: components.DelPrizePoolReq) {
 
 /**
  * @description "获取活动奖品池，某活动中的奖品信息列表 基础API"
- * @param req
+ * @param params
  */
-export function getPrizePoolList(req: components.GetPrizePoolListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizePool/list`, req)
+export function getPrizePoolList(params: components.GetPrizePoolListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizePool/list`, params)
 }
 
 /**
  * @description "获取活动奖品池，某活动中的奖品信息枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getPrizePoolEnums(params: components.GetPrizePoolEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizePool/enums`, params)
+export function getPrizePoolEnums(req: components.GetPrizePoolEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prizePool/enums`, req)
+}
+
+/**
+ * @description "重置某活动的奖品池概率"
+ * @param req
+ */
+export function resetLuckValue(req: components.ResetLuckValueReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/luckydraw/prizePool/resetLuckValue`, req)
 }
 
 /**
@@ -371,10 +379,10 @@ export function putProject(req: components.PutProjectReq) {
 
 /**
  * @description "获取项目 基础API"
- * @param params
+ * @param req
  */
-export function getProject(params: components.GetProjectReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project`, params)
+export function getProject(req: components.GetProjectReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project`, req)
 }
 
 /**
@@ -387,26 +395,26 @@ export function delProject(req: components.DelProjectReq) {
 
 /**
  * @description "获取项目列表 基础API"
- * @param req
+ * @param params
  */
-export function getProjectList(req: components.GetProjectListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/list`, req)
+export function getProjectList(params: components.GetProjectListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/list`, params)
 }
 
 /**
  * @description "获取项目枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getProjectEnums(params: components.GetProjectEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/enums`, params)
+export function getProjectEnums(req: components.GetProjectEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/enums`, req)
 }
 
 /**
  * @description "获取项目详细列表"
- * @param req
+ * @param params
  */
-export function projectDetails(req: components.GetProjectListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/projectDetails`, req)
+export function projectDetails(params: components.GetProjectListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/project/projectDetails`, params)
 }
 
 /**
@@ -442,10 +450,10 @@ export function putUser(req: components.PutUserReq) {
 
 /**
  * @description "获取用户名单 基础API"
- * @param params
+ * @param req
  */
-export function getUser(params: components.GetUserReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user`, params)
+export function getUser(req: components.GetUserReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user`, req)
 }
 
 /**
@@ -458,18 +466,18 @@ export function delUser(req: components.DelUserReq) {
 
 /**
  * @description "获取用户名单列表 基础API"
- * @param req
+ * @param params
  */
-export function getUserList(req: components.GetUserListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/list`, req)
+export function getUserList(params: components.GetUserListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/list`, params)
 }
 
 /**
  * @description "获取用户名单枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getUserEnums(params: components.GetUserEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/enums`, params)
+export function getUserEnums(req: components.GetUserEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/enums`, req)
 }
 
 /**
@@ -482,10 +490,10 @@ export function userDetail(params: components.UserDetailReqParams) {
 
 /**
  * @description "获取用户详情列表"
- * @param req
+ * @param params
  */
-export function userDetails(req: components.GetUserListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/details`, req)
+export function userDetails(params: components.GetUserListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/user/details`, params)
 }
 
 /**
@@ -506,10 +514,10 @@ export function putUserPool(req: components.PutUserPoolReq) {
 
 /**
  * @description "获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 基础API"
- * @param params
+ * @param req
  */
-export function getUserPool(params: components.GetUserPoolReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/userPool`, params)
+export function getUserPool(req: components.GetUserPoolReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/userPool`, req)
 }
 
 /**
@@ -522,16 +530,16 @@ export function delUserPool(req: components.DelUserPoolReq) {
 
 /**
  * @description "获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理列表 基础API"
- * @param req
+ * @param params
  */
-export function getUserPoolList(req: components.GetUserPoolListReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/userPool/list`, req)
+export function getUserPoolList(params: components.GetUserPoolListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/userPool/list`, params)
 }
 
 /**
  * @description "获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理枚举列表 基础API"
- * @param params
+ * @param req
  */
-export function getUserPoolEnums(params: components.GetUserPoolEnumsReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/userPool/enums`, params)
+export function getUserPoolEnums(req: components.GetUserPoolEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/userPool/enums`, req)
 }

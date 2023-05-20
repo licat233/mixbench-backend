@@ -160,6 +160,7 @@ type (
 	PutUserReq                = luckydraw_pb.PutUserReq
 	PutUserResp               = luckydraw_pb.PutUserResp
 	ResetActivityLuckValueReq = luckydraw_pb.ResetActivityLuckValueReq
+	ResetLuckValueReq         = luckydraw_pb.ResetLuckValueReq
 	SelectPrizesReq           = luckydraw_pb.SelectPrizesReq
 	SelectPrizesResp          = luckydraw_pb.SelectPrizesResp
 	StatusResp                = luckydraw_pb.StatusResp

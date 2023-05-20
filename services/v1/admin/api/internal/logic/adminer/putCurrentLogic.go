@@ -63,5 +63,5 @@ func (l *PutCurrentLogic) PutCurrent(req *types.PutCurrentReq) (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultStateResp(err)
+	return respx.DefaultStatusResp(err)
 }
