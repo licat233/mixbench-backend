@@ -138,8 +138,8 @@ func (m *CommonModel) FindsLuckyDetails(ctx context.Context, options *LuckyDetai
 		diyLuckyRowsArr[i] = fmt.Sprintf("l.%s", diyLuckyRowsArr[i])
 	}
 	diyLuckyRows := strings.Join(diyLuckyRowsArr, ",")
-	luckyQuery := sq.Select(diyLuckyRows).From(from).Where("l.is_deleted = 0")
-	luckyCount := sq.Select("COUNT(*)").From(from).Where("l.is_deleted = 0")
+	luckyQuery := sq.Select(diyLuckyRows).From(from)
+	luckyCount := sq.Select("COUNT(*)").From(from)
 
 	var eq = make(sq.Eq)
 	if options == nil {
@@ -203,18 +203,18 @@ func (m *CommonModel) FindsLuckyDetails(ctx context.Context, options *LuckyDetai
 		//other表的条件查询构造-start：project_id、activity_id、prize_id、prize_grade_id
 		if utils.IdValid(options.ProjectId) || utils.IdValid(options.ActivityId) || utils.IdValid(options.PrizeId) || utils.IdValid(options.PrizeGradeId) || options.PrizeName != "" || options.ActivityName != "" {
 			joinPrizePool := fmt.Sprintf("%s AS pp ON l.prize_pool_id = pp.id", m.PrizePoolModel.TableName())
-			luckyQuery = luckyQuery.LeftJoin(joinPrizePool).Where("pp.is_deleted = 0")
-			luckyCount = luckyCount.LeftJoin(joinPrizePool).Where("pp.is_deleted = 0")
+			luckyQuery = luckyQuery.LeftJoin(joinPrizePool)
+			luckyCount = luckyCount.LeftJoin(joinPrizePool)
 
 			options.ActivityName = strings.TrimSpace(options.ActivityName)
 			if utils.IdValid(options.ProjectId) || utils.IdValid(options.ActivityId) || options.ActivityName != "" {
 				joinActivity := fmt.Sprintf("%s AS act ON pp.activity_id = act.id", m.ActivityModel.TableName())
-				luckyQuery = luckyQuery.LeftJoin(joinActivity).Where("act.is_deleted = 0")
-				luckyCount = luckyCount.LeftJoin(joinActivity).Where("act.is_deleted = 0")
+				luckyQuery = luckyQuery.LeftJoin(joinActivity)
+				luckyCount = luckyCount.LeftJoin(joinActivity)
 				if utils.IdValid(options.ProjectId) { //某项目下
 					joinProject := fmt.Sprintf("%s AS pjt ON act.project_id = pjt.id", m.ProjectModel.TableName())
-					luckyQuery = luckyQuery.LeftJoin(joinProject).Where("pjt.is_deleted = 0")
-					luckyCount = luckyCount.LeftJoin(joinProject).Where("pjt.is_deleted = 0")
+					luckyQuery = luckyQuery.LeftJoin(joinProject)
+					luckyCount = luckyCount.LeftJoin(joinProject)
 					eq["pjt.id"] = options.ProjectId
 				}
 				if utils.IdValid(options.ActivityId) { //某活动下
@@ -228,8 +228,8 @@ func (m *CommonModel) FindsLuckyDetails(ctx context.Context, options *LuckyDetai
 			options.PrizeName = strings.TrimSpace(options.PrizeName)
 			if utils.IdValid(options.PrizeId) || options.PrizeName != "" {
 				joinPrize := fmt.Sprintf("%s AS pz ON pp.prize_id = pz.id", m.PrizeModel.TableName())
-				luckyQuery = luckyQuery.LeftJoin(joinPrize).Where("pz.is_deleted = 0")
-				luckyCount = luckyCount.LeftJoin(joinPrize).Where("pz.is_deleted = 0")
+				luckyQuery = luckyQuery.LeftJoin(joinPrize)
+				luckyCount = luckyCount.LeftJoin(joinPrize)
 				if utils.IdValid(options.PrizeId) {
 					eq["pz.id"] = options.PrizeId
 				} else if options.PrizeName != "" {
@@ -240,8 +240,8 @@ func (m *CommonModel) FindsLuckyDetails(ctx context.Context, options *LuckyDetai
 
 			if utils.IdValid(options.PrizeGradeId) {
 				joinPrizeGrade := fmt.Sprintf("%s AS pg ON pp.grade_id = pg.id", m.PrizeGradeModel.TableName())
-				luckyQuery = luckyQuery.LeftJoin(joinPrizeGrade).Where("pg.is_deleted = 0")
-				luckyCount = luckyCount.LeftJoin(joinPrizeGrade).Where("pg.is_deleted = 0")
+				luckyQuery = luckyQuery.LeftJoin(joinPrizeGrade)
+				luckyCount = luckyCount.LeftJoin(joinPrizeGrade)
 				eq["pg.id"] = options.PrizeGradeId
 			}
 		}

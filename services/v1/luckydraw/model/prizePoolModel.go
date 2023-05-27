@@ -48,7 +48,7 @@ func NewPrizePoolModel(conn sqlx.SqlConn, c cache.CacheConf) PrizePoolModel {
 // TODO：为了避免复杂性，一般先依据activityUUID查询到activity_id，再根据activity_id进行查询
 // TODO：但在此处，我们直接使用关联查询，一劳永逸
 func (m *customPrizePoolModel) FindByActivityUuid(ctx context.Context, activityUuid string) ([]*PrizePool, error) {
-	query := fmt.Sprintf("SELECT pp.* FROM %s AS pp LEFT JOIN %s AS a ON pp.activity_id = a.id WHERE a.uuid = ? AND pp.is_deleted = 0 AND a.is_deleted = 0;", m.table, ActivityTableName)
+	query := fmt.Sprintf("SELECT pp.* FROM %s AS pp LEFT JOIN %s AS a ON pp.activity_id = a.id WHERE a.uuid = ? ;", m.table, ActivityTableName)
 	var resp []*PrizePool
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityUuid)
 	switch err {
@@ -64,14 +64,14 @@ func (m *customPrizePoolModel) FindByActivityUuid(ctx context.Context, activityU
 func (m *customPrizePoolModel) FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*PrizePool, error) {
 	var resp []*PrizePool
 	where := utils.SliceIntToString(activityIds, ",")
-	query := fmt.Sprintf("select %s from %s where `activity_id` in(%s) and `is_deleted` = '0'", prizePoolRows, m.table, where)
+	query := fmt.Sprintf("select %s from %s where `activity_id` in(%s) ", prizePoolRows, m.table, where)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	return resp, err
 }
 
 func (m *customPrizePoolModel) FindsByActivityAndPrize(ctx context.Context, activityId, prizeId int64) ([]*PrizePool, error) {
 	var resp []*PrizePool
-	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `prize_id` = ? and `is_deleted` = '0'", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `prize_id` = ? ", prizePoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId, prizeId)
 	return resp, err
 }

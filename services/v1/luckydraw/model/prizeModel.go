@@ -43,7 +43,7 @@ func NewPrizeModel(conn sqlx.SqlConn, c cache.CacheConf) PrizeModel {
 
 func (m *customPrizeModel) FindPrizesByActivityUuid(ctx context.Context, activityUuid string) ([]*Prize, error) {
 	// newPrizeRows := resetTableRows(prizeFieldNames, "p")
-	query := fmt.Sprintf("select p.* from %s as p left join %s as pp on p.id = pp.prize_id left join %s as a on pp.activity_id = a.id where p.is_deleted = 0 and pp.is_deleted = 0 and a.is_deleted = 0 and a.uuid = ?", PrizeTableName, PrizePoolTableName, ActivityTableName)
+	query := fmt.Sprintf("select p.* from %s as p left join %s as pp on p.id = pp.prize_id left join %s as a on pp.activity_id = a.id where a.uuid = ?", PrizeTableName, PrizePoolTableName, ActivityTableName)
 	var resp []*Prize
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityUuid)
 	switch err {
@@ -58,9 +58,9 @@ func (m *customPrizeModel) FindPrizesByActivityUuid(ctx context.Context, activit
 
 // FindsByUserAndActivity 查找某用户在某活动中的奖品
 func (m *customPrizeModel) FindsByUserAndActivity(ctx context.Context, userId, activityId int64) ([]*Prize, error) {
-	//select * from prize as p left join prize_pool as pp ON pp.prize_id = p.id LEFT JOIN lucky as l ON l.prize_pool_id = pp.id WHERE pp.activity_id = 1 AND p.is_deleted = 0 AND pp.is_deleted = 0 AND l.is_deleted = 0;
+	//select * from prize as p left join prize_pool as pp ON pp.prize_id = p.id LEFT JOIN lucky as l ON l.prize_pool_id = pp.id WHERE pp.activity_id = 1 ;
 	// newPrizeRows := resetTableRows(prizeFieldNames, "p")
-	query := fmt.Sprintf("select p.* from %s as p left join %s as pp on pp.prize_id = p.id left join %s as l on l.prize_pool_id = pp.id where l.user_id = ? and pp.activity_id = ? AND p.is_deleted = 0 AND pp.is_deleted = 0 AND l.is_deleted = 0", m.table, PrizePoolTableName, PrizeTableName)
+	query := fmt.Sprintf("select p.* from %s as p left join %s as pp on pp.prize_id = p.id left join %s as l on l.prize_pool_id = pp.id where l.user_id = ? and pp.activity_id = ? ", m.table, PrizePoolTableName, PrizeTableName)
 	var resp []*Prize
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId, activityId)
 	switch err {
@@ -75,9 +75,9 @@ func (m *customPrizeModel) FindsByUserAndActivity(ctx context.Context, userId, a
 
 // FindsByUserAndActivityAndStatus 查找某用户在某活动中的奖品
 func (m *customPrizeModel) FindsByUserAndActivityAndStatus(ctx context.Context, userId, activityId, Status int64) ([]*Prize, error) {
-	//select * from prize as p left join prize_pool as pp ON pp.prize_id = p.id LEFT JOIN lucky as l ON l.prize_pool_id = pp.id WHERE pp.activity_id = 1 AND p.is_deleted = 0 AND pp.is_deleted = 0 AND l.is_deleted = 0;
+	//select * from prize as p left join prize_pool as pp ON pp.prize_id = p.id LEFT JOIN lucky as l ON l.prize_pool_id = pp.id WHERE pp.activity_id = 1 ;
 	// newPrizeRows := resetTableRows(prizeFieldNames, "p")
-	query := fmt.Sprintf("select p.* from %s as p left join %s as pp on pp.prize_id = p.id left join %s as l on l.prize_pool_id = pp.id where l.user_id = ? and pp.activity_id = ? and l.status = ? AND p.is_deleted = 0 AND pp.is_deleted = 0 AND l.is_deleted = 0", m.table, PrizePoolTableName, PrizeTableName)
+	query := fmt.Sprintf("select p.* from %s as p left join %s as pp on pp.prize_id = p.id left join %s as l on l.prize_pool_id = pp.id where l.user_id = ? and pp.activity_id = ? and l.status = ? ", m.table, PrizePoolTableName, PrizeTableName)
 	var resp []*Prize
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId, activityId, Status)
 	switch err {

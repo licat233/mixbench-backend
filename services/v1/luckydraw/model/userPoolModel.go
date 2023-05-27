@@ -40,7 +40,7 @@ func NewUserPoolModel(conn sqlx.SqlConn, c cache.CacheConf) UserPoolModel {
 
 func (m *customUserPoolModel) FindByUidAndAid(ctx context.Context, userId, activityId int64) ([]*UserPool, error) {
 	var resp []*UserPool
-	query := fmt.Sprintf("select %s from %s `activity_id` = ? and `user_id` = ?  and `is_deleted` = '0'", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s `activity_id` = ? and `user_id` = ? ", userPoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
 	return resp, err
 }

@@ -41,7 +41,7 @@ func NewUserModel(conn sqlx.SqlConn, c cache.CacheConf) UserModel {
 
 func (m *customUserModel) FindsByName(ctx context.Context, name string) ([]*User, error) {
 	var resp []*User
-	query := fmt.Sprintf("select %s from %s where `name` like '%%%s%%' and `is_deleted` = '0'", userRows, m.table, name)
+	query := fmt.Sprintf("select %s from %s where `name` like '%%%s%%' ", userRows, m.table, name)
 	fmt.Println(query)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
