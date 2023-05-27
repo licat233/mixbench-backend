@@ -371,6 +371,11 @@ export interface ActivityPrize {
 	prizeGrade: PrizeGrade
 }
 
+export interface GetActivityPrizesReq {
+	activityUuid: string // 活动uuid，备用
+	activityId: number // 活动id。 当前方案
+}
+
 export interface PrizeGrade {
 	id: number // 表主键
 	uuid: string // UUID

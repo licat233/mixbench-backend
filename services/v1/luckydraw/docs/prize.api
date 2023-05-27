@@ -85,6 +85,11 @@ type ActivityPrize {
   PrizeGrade PrizeGrade `json:"prizeGrade"`
 }
 
+type GetActivityPrizesReq {
+  ActivityUuid string `json:"activityUuid"` // 活动uuid，备用
+  ActivityId int64  `json:"activityId"` // 活动id。 当前方案
+}
+
 //[custom struct end]
 
 // ------------------------------ Struct End ------------------------------
@@ -124,5 +129,17 @@ service luckydraw {
 // The content in this block will not be updated
 // 此区块内的内容不会被更新
 //[custom service start]
+
+@server(
+  group: prize
+  prefix: /v1/api/luckydraw/prize
+)
+service luckydraw {
+
+  @doc "获取活动的奖品"
+  @handler GetActivityPrizes
+  get /activityPrizes(GetActivityPrizesReq) returns(BaseResp)
+
+}
 
 //[custom service end]

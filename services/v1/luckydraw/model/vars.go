@@ -10,7 +10,7 @@ var (
 	//插入时omit的字段
 	BaseInsertOmitField = []string{"`id`", "`create_at`", "`update_at`", "`is_deleted`", "`delete_at`"}
 	//更新时omit的字段
-	BaseUpdateOmitField = []string{"`id`", "`uuid`", "`create_at`", "`update_at`", "`is_deleted`", "`delete_at`"}
+	BaseUpdateOmitField = []string{"`id`", "`create_at`", "`update_at`", "`is_deleted`", "`delete_at`"}
 )
 
 type ListReq struct {

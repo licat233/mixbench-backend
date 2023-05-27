@@ -226,6 +226,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodGet,
+				Path:    "/activityPrizes",
+				Handler: prize.GetActivityPrizesHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/luckydraw/prize"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
 				Method:  http.MethodPost,
 				Path:    "/",
 				Handler: prizeGrade.AddPrizeGradeHandler(serverCtx),

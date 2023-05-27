@@ -925,6 +925,41 @@
         ]
       }
     },
+    "/v1/api/luckydraw/prize/activityPrizes": {
+      "get": {
+        "summary": "获取活动的奖品",
+        "operationId": "GetActivityPrizes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "activityUuid",
+            "description": " 活动uuid，备用",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "activityId",
+            "description": " 活动id。 当前方案",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "prize"
+        ]
+      }
+    },
     "/v1/api/luckydraw/prize/enums": {
       "get": {
         "summary": "获取奖品名单枚举列表 基础API",
@@ -3547,6 +3582,25 @@
         "maxPrizes",
         "startTime",
         "endTime"
+      ]
+    },
+    "GetActivityPrizesReq": {
+      "type": "object",
+      "properties": {
+        "activityUuid": {
+          "type": "string",
+          "description": " 活动uuid，备用"
+        },
+        "activityId": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 活动id。 当前方案"
+        }
+      },
+      "title": "GetActivityPrizesReq",
+      "required": [
+        "activityUuid",
+        "activityId"
       ]
     },
     "GetActivityReq": {

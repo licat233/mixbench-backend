@@ -258,6 +258,14 @@ export function getPrizeEnums(req: components.GetPrizeEnumsReq) {
 }
 
 /**
+ * @description "获取活动的奖品"
+ * @param req
+ */
+export function getActivityPrizes(req: components.GetActivityPrizesReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/luckydraw/prize/activityPrizes`, req)
+}
+
+/**
  * @description "添加奖品级别 基础API"
  * @param req
  */

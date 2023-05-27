@@ -353,6 +353,11 @@ type ActivityPrize struct {
 	PrizeGrade PrizeGrade `json:"prizeGrade"`
 }
 
+type GetActivityPrizesReq struct {
+	ActivityUuid string `json:"activityUuid"` // 活动uuid，备用
+	ActivityId   int64  `json:"activityId"`   // 活动id。 当前方案
+}
+
 type PrizeGrade struct {
 	Id    int64  `json:"id"`    //表主键
 	Uuid  string `json:"uuid"`  //UUID
