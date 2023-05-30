@@ -47,6 +47,7 @@ type (
 		Score      int64     `db:"score"`       // 用户在当前活动的积分
 		CreateAt   time.Time `db:"create_at"`   // 创建时间
 		UpdateAt   time.Time `db:"update_at"`   // 更新时间
+		IsDeleted  int64     `db:"is_deleted"`  // 是否已删除
 	}
 )
 
@@ -86,8 +87,8 @@ func (m *defaultUserPoolModel) FindOne(ctx context.Context, id int64) (*UserPool
 func (m *defaultUserPoolModel) Insert(ctx context.Context, data *UserPool) (sql.Result, error) {
 	userPoolIdKey := fmt.Sprintf("%s%v", cacheUserPoolIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, userPoolRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, userPoolRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.IsDeleted)
 	}, userPoolIdKey)
 	return ret, err
 }
@@ -96,7 +97,7 @@ func (m *defaultUserPoolModel) Update(ctx context.Context, data *UserPool) error
 	userPoolIdKey := fmt.Sprintf("%s%v", cacheUserPoolIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userPoolRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.UserId, data.Status, data.Score, data.IsDeleted, data.Id)
 	}, userPoolIdKey)
 	return err
 }

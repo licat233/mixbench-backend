@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/respx"
+	"mixbench/services/v1/luckydraw/api/internal/logic/dataconv"
 	"mixbench/services/v1/luckydraw/api/internal/svc"
 	"mixbench/services/v1/luckydraw/api/internal/types"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
@@ -53,5 +54,18 @@ func (l *LuckyDetailsLogic) LuckyDetails(req *types.LuckyDetailsReq) (any, error
 	if err != nil {
 		return nil, err
 	}
-	return respx.ListResp("", resp.Data, resp.Total, req.PageSize, req.Page), nil
+	data := []*types.LuckyDetail{}
+	for _, pbdetail := range resp.Data {
+		apidetail := &types.LuckyDetail{
+			Lucky:      *dataconv.PbLuckyToApiLucky(pbdetail.Lucky),
+			User:       *dataconv.PbUserToApiUser(pbdetail.User),
+			PrizePool:  *dataconv.PbPrizePoolToApiPrizePool(pbdetail.PrizePool),
+			Prize:      *dataconv.PbPrizeToApiPrize(pbdetail.Prize),
+			PrizeGrade: *dataconv.PbPrizeGradeToApiPrizeGrade(pbdetail.PrizeGrade),
+			Activity:   *dataconv.PbActivityToApiActivity(pbdetail.Activity),
+			Project:    *dataconv.PbProjectToApiProject(pbdetail.Project),
+		}
+		data = append(data, apidetail)
+	}
+	return respx.ListResp("", data, resp.Total, req.PageSize, req.Page), nil
 }

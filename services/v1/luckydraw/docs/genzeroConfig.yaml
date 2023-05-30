@@ -1,14 +1,14 @@
 api:
     dir: ""
     ignoreColumns: []
-    ignoreTables:
-    jwt:
-    middleware:
+    ignoreTables: []
+    jsonStyle: genZero
+    jwt: null
+    middleware: null
     multiple: true
     prefix: /v1/api/luckydraw
     serviceName: luckydraw
     status: true
-    style: genZero
     tables: []
 database:
     dsn: ""
@@ -19,18 +19,18 @@ database:
 logic:
     api:
         dir: ../api/internal/logic
+        fileStyle: genZero
         ignoreTables: []
         rpcMultiple: true
         status: true
-        style: genZero
         tables: []
         useRpc: true
     rpc:
         dir: ../rpc/internal/logic
+        fileStyle: genZero
         ignoreTables: []
         multiple: true
         status: true
-        style: genZero
         tables: []
     status: true
 model:
@@ -41,12 +41,12 @@ model:
     tables: []
 proto:
     dir: ""
+    fileStyle: genZero
     goPackage: ""
     ignoreColumns: []
-    ignoreTables:
+    ignoreTables: null
     multiple: true
     package: ""
     serviceName: luckydraw
     status: true
-    style: genZero
     tables: []

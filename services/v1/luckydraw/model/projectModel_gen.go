@@ -39,12 +39,13 @@ type (
 	}
 
 	Project struct {
-		Id       int64     `db:"id"`        // 表主键
-		Uuid     string    `db:"uuid"`      // UUID
-		Name     string    `db:"name"`      // 项目名称
-		Status   int64     `db:"status"`    // 项目状态
-		CreateAt time.Time `db:"create_at"` // 创建日期
-		UpdateAt time.Time `db:"update_at"` // 更新时间
+		Id        int64     `db:"id"`         // 表主键
+		Uuid      string    `db:"uuid"`       // UUID
+		Name      string    `db:"name"`       // 项目名称
+		Status    int64     `db:"status"`     // 项目状态
+		CreateAt  time.Time `db:"create_at"`  // 创建日期
+		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -84,8 +85,8 @@ func (m *defaultProjectModel) FindOne(ctx context.Context, id int64) (*Project, 
 func (m *defaultProjectModel) Insert(ctx context.Context, data *Project) (sql.Result, error) {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, projectRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, projectRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.IsDeleted)
 	}, projectIdKey)
 	return ret, err
 }
@@ -94,7 +95,7 @@ func (m *defaultProjectModel) Update(ctx context.Context, data *Project) error {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, projectRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Status, data.IsDeleted, data.Id)
 	}, projectIdKey)
 	return err
 }

@@ -51,6 +51,7 @@ type (
 		EndTime   time.Time `db:"end_time"`   // 活动结束时间
 		CreateAt  time.Time `db:"create_at"`  // 创建时间
 		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -90,8 +91,8 @@ func (m *defaultActivityModel) FindOne(ctx context.Context, id int64) (*Activity
 func (m *defaultActivityModel) Insert(ctx context.Context, data *Activity) (sql.Result, error) {
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.IsDeleted)
 	}, activityIdKey)
 	return ret, err
 }
@@ -100,7 +101,7 @@ func (m *defaultActivityModel) Update(ctx context.Context, data *Activity) error
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, activityRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.IsDeleted, data.Id)
 	}, activityIdKey)
 	return err
 }

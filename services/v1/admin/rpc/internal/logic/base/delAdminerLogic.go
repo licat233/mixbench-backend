@@ -26,7 +26,7 @@ func NewDelAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAdm
 
 // 删除管理员
 func (l *DelAdminerLogic) DelAdminer(in *admin_pb.DelAdminerReq) (*admin_pb.DelAdminerResp, error) {
-	err := l.svcCtx.AdminerModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.AdminerModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -26,7 +26,7 @@ func NewDelUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelUs
 
 // 删除活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
 func (l *DelUserPoolLogic) DelUserPool(in *luckydraw_pb.DelUserPoolReq) (*luckydraw_pb.DelUserPoolResp, error) {
-	err := l.svcCtx.UserPoolModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.UserPoolModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

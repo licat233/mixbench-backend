@@ -87,3 +87,9 @@ func (s *AdminServer) PutPassword(ctx context.Context, in *admin_pb.PutPasswordR
 	l := adminlogic.NewPutPasswordLogic(ctx, s.svcCtx)
 	return l.PutPassword(in)
 }
+
+// 忘记密码，通过邮箱重置密码
+func (s *AdminServer) ForgotPassword(ctx context.Context, in *admin_pb.ForgotPasswordReq) (*admin_pb.StatusResp, error) {
+	l := adminlogic.NewForgotPasswordLogic(ctx, s.svcCtx)
+	return l.ForgotPassword(in)
+}

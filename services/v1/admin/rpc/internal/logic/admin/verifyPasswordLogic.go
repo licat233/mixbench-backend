@@ -12,6 +12,7 @@ import (
 	"errors"
 
 	"mixbench/common/errorx"
+	"mixbench/common/xcrypt"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
@@ -44,6 +45,6 @@ func (l *VerifyPasswordLogic) VerifyPassword(in *admin_pb.VerifyPasswordReq) (*a
 		return nil, errorx.ExtRpcErr(errors.New("this administrator cannot be found"))
 	}
 	return &admin_pb.VerifyPasswordResp{
-		Ok: adminer.Password == in.Password,
+		Ok: xcrypt.CheckPassword(in.Password, adminer.Password),
 	}, nil
 }

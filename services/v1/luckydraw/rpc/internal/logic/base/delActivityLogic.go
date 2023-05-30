@@ -26,7 +26,7 @@ func NewDelActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelAc
 
 // 删除活动
 func (l *DelActivityLogic) DelActivity(in *luckydraw_pb.DelActivityReq) (*luckydraw_pb.DelActivityResp, error) {
-	err := l.svcCtx.ActivityModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.ActivityModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -26,7 +26,7 @@ func NewDelPrizeGradeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 
 // 删除奖品级别
 func (l *DelPrizeGradeLogic) DelPrizeGrade(in *luckydraw_pb.DelPrizeGradeReq) (*luckydraw_pb.DelPrizeGradeResp, error) {
-	err := l.svcCtx.PrizeGradeModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.PrizeGradeModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

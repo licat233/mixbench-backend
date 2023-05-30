@@ -23,18 +23,19 @@ type project_model interface {
 	FindByName(ctx context.Context, name string) (*Project, error)
 	FindByStatus(ctx context.Context, status int64) (*Project, error)
 	formatUuidKey(uuid string) string
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultProjectModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultProjectModel) FindAll(ctx context.Context) ([]*Project, error) {
 	var resp = make([]*Project, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", projectRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", projectRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -48,7 +49,7 @@ func (m *defaultProjectModel) FindAll(ctx context.Context) ([]*Project, error) {
 
 func (m *defaultProjectModel) FindList(ctx context.Context, pageSize, page int64, keyword string, project *Project) (resp []*Project, total int64, err error) {
 	hasName := false
-	sq := squirrel.Select(projectRows).From(m.table)
+	sq := squirrel.Select(projectRows).From(m.table).Where("`is_deleted`= '0'")
 	if project != nil {
 		if project.Id >= 0 {
 			sq = sq.Where("id = ?", project.Id)
@@ -96,7 +97,7 @@ func (m *defaultProjectModel) FindsByIds(ctx context.Context, ids []int64) ([]*P
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) ", projectRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", projectRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -107,7 +108,7 @@ func (m *defaultProjectModel) TableName() string {
 
 func (m *defaultProjectModel) FindByUuid(ctx context.Context, uuid string) (*Project, error) {
 	var resp Project
-	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", projectRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", projectRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
@@ -121,7 +122,7 @@ func (m *defaultProjectModel) FindByUuid(ctx context.Context, uuid string) (*Pro
 
 func (m *defaultProjectModel) FindByName(ctx context.Context, name string) (*Project, error) {
 	var resp Project
-	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", projectRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' limit 1", projectRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
@@ -135,7 +136,7 @@ func (m *defaultProjectModel) FindByName(ctx context.Context, name string) (*Pro
 
 func (m *defaultProjectModel) FindByStatus(ctx context.Context, status int64) (*Project, error) {
 	var resp Project
-	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", projectRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' limit 1", projectRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
@@ -149,4 +150,16 @@ func (m *defaultProjectModel) FindByStatus(ctx context.Context, status int64) (*
 
 func (m *defaultProjectModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("cache:project:uuid:%v", uuid)
+}
+
+func (m *defaultProjectModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }

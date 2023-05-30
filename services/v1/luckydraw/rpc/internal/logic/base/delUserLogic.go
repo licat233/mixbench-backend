@@ -26,7 +26,7 @@ func NewDelUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelUserLo
 
 // 删除用户名单
 func (l *DelUserLogic) DelUser(in *luckydraw_pb.DelUserReq) (*luckydraw_pb.DelUserResp, error) {
-	err := l.svcCtx.UserModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.UserModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

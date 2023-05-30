@@ -39,12 +39,13 @@ type (
 	}
 
 	PrizeGrade struct {
-		Id       int64     `db:"id"`        // 表主键
-		Uuid     string    `db:"uuid"`      // UUID
-		Name     string    `db:"name"`      // 级别名称
-		IsWin    int64     `db:"is_win"`    // 是否中奖
-		CreateAt time.Time `db:"create_at"` // 创建时间
-		UpdateAt time.Time `db:"update_at"` // 更新时间
+		Id        int64     `db:"id"`         // 表主键
+		Uuid      string    `db:"uuid"`       // UUID
+		Name      string    `db:"name"`       // 级别名称
+		IsWin     int64     `db:"is_win"`     // 是否中奖
+		CreateAt  time.Time `db:"create_at"`  // 创建时间
+		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -84,8 +85,8 @@ func (m *defaultPrizeGradeModel) FindOne(ctx context.Context, id int64) (*PrizeG
 func (m *defaultPrizeGradeModel) Insert(ctx context.Context, data *PrizeGrade) (sql.Result, error) {
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, prizeGradeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, prizeGradeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.IsDeleted)
 	}, prizeGradeIdKey)
 	return ret, err
 }
@@ -94,7 +95,7 @@ func (m *defaultPrizeGradeModel) Update(ctx context.Context, data *PrizeGrade) e
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeGradeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.IsDeleted, data.Id)
 	}, prizeGradeIdKey)
 	return err
 }

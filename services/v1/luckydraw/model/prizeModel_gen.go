@@ -39,14 +39,15 @@ type (
 	}
 
 	Prize struct {
-		Id       int64     `db:"id"`        // 表主键
-		Uuid     string    `db:"uuid"`      // UUID
-		Name     string    `db:"name"`      // 奖品名称
-		Image    string    `db:"image"`     // 奖品图片
-		Price    float64   `db:"price"`     // 奖品价格
-		Status   int64     `db:"status"`    // 是否可用
-		CreateAt time.Time `db:"create_at"` // 创建时间
-		UpdateAt time.Time `db:"update_at"` // 更新时间
+		Id        int64     `db:"id"`         // 表主键
+		Uuid      string    `db:"uuid"`       // UUID
+		Name      string    `db:"name"`       // 奖品名称
+		Image     string    `db:"image"`      // 奖品图片
+		Price     float64   `db:"price"`      // 奖品价格
+		Status    int64     `db:"status"`     // 是否可用
+		CreateAt  time.Time `db:"create_at"`  // 创建时间
+		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -86,8 +87,8 @@ func (m *defaultPrizeModel) FindOne(ctx context.Context, id int64) (*Prize, erro
 func (m *defaultPrizeModel) Insert(ctx context.Context, data *Prize) (sql.Result, error) {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted)
 	}, prizeIdKey)
 	return ret, err
 }
@@ -96,7 +97,7 @@ func (m *defaultPrizeModel) Update(ctx context.Context, data *Prize) error {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted, data.Id)
 	}, prizeIdKey)
 	return err
 }

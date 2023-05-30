@@ -33,5 +33,7 @@ func (l *UserDetailLogic) UserDetail(req *types.UserDetailReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.NewData(resp.UserDetail), nil
+	data := PbUserDetailToApiUserDetail(resp.UserDetail)
+
+	return respx.NewData(data), nil
 }

@@ -216,3 +216,10 @@ export interface PutPasswordReq {
 	solution: string // 验证码答案
 }
 
+export interface ForgotPasswordReq {
+	email: string // 邮箱
+	//附加的验证码
+	captcha_id: string // 验证码ID
+	solution: string // 验证码答案
+}
+

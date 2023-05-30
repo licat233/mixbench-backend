@@ -46,5 +46,11 @@ func (l *UserDetailsLogic) UserDetails(req *types.GetUserListReq) (any, error) {
 		return nil, err
 	}
 
-	return respx.ListResp("", resp.UserDetails, resp.Total, req.PageSize, req.Page), nil
+	data := []*types.UserDetail{}
+
+	for _, item := range resp.UserDetails {
+		data = append(data, PbUserDetailToApiUserDetail(item))
+	}
+
+	return respx.ListResp("", data, resp.Total, req.PageSize, req.Page), nil
 }

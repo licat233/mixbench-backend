@@ -39,17 +39,18 @@ type (
 	}
 
 	User struct {
-		Id       int64     `db:"id"`        // 表主键
-		Uuid     string    `db:"uuid"`      // UUID
-		Passport string    `db:"passport"`  // 凭证，可以是手机号或者社交账号，一般是由客户填入
-		Email    string    `db:"email"`     // 邮箱
-		Phone    string    `db:"phone"`     // 手机号
-		Name     string    `db:"name"`      // 用户名
-		Address  string    `db:"address"`   // 收货地址
-		Score    int64     `db:"score"`     // 积分
-		Status   int64     `db:"status"`    // 状态:0未授权，1正常，2已冻结
-		CreateAt time.Time `db:"create_at"` // 创建时间
-		UpdateAt time.Time `db:"update_at"` // 更新时间
+		Id        int64     `db:"id"`         // 表主键
+		Uuid      string    `db:"uuid"`       // UUID
+		Passport  string    `db:"passport"`   // 凭证，可以是手机号或者社交账号，一般是由客户填入
+		Email     string    `db:"email"`      // 邮箱
+		Phone     string    `db:"phone"`      // 手机号
+		Name      string    `db:"name"`       // 用户名
+		Address   string    `db:"address"`    // 收货地址
+		Score     int64     `db:"score"`      // 积分
+		Status    int64     `db:"status"`     // 状态:0未授权，1正常，2已冻结
+		CreateAt  time.Time `db:"create_at"`  // 创建时间
+		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -89,8 +90,8 @@ func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error)
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
 	userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.IsDeleted)
 	}, userIdKey)
 	return ret, err
 }
@@ -99,7 +100,7 @@ func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
 	userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Email, data.Phone, data.Name, data.Address, data.Score, data.Status, data.IsDeleted, data.Id)
 	}, userIdKey)
 	return err
 }

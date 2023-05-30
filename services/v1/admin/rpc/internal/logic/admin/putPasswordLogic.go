@@ -12,6 +12,7 @@ import (
 	"errors"
 
 	"mixbench/common/errorx"
+	"mixbench/common/xcrypt"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
@@ -35,6 +36,10 @@ func NewPutPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPa
 
 // 修改密码
 func (l *PutPasswordLogic) PutPassword(in *admin_pb.PutPasswordReq) (*admin_pb.StatusResp, error) {
+	err := xcrypt.PasswordValidator(in.NewPassword)
+	if err != nil {
+		return nil, errorx.ExtRpcErr(err)
+	}
 	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.AdminerId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
@@ -43,10 +48,17 @@ func (l *PutPasswordLogic) PutPassword(in *admin_pb.PutPasswordReq) (*admin_pb.S
 	if err == model.ErrNotFound {
 		return nil, errorx.ExtRpcErr(errors.New("this adminer cannot be found"))
 	}
-	if adminer.Password != in.OldPassword {
-		return nil, errorx.ExtRpcErr(errors.New("原密码错误"))
+
+	if !xcrypt.CheckPassword(in.OldPassword, adminer.Password) {
+		return nil, errorx.ExtRpcErr(errors.New("old password error"))
 	}
-	adminer.Password = in.NewPassword
+
+	pw, err := xcrypt.HashPassword(in.NewPassword)
+	if err != nil {
+		return nil, errorx.ExtRpcErr(errors.New(""))
+	}
+
+	adminer.Password = pw
 	err = l.svcCtx.AdminerModel.Update(l.ctx, adminer)
 	if err != nil {
 		l.Logger.Error(err)

@@ -23,18 +23,19 @@ type prizeGrade_model interface {
 	FindByName(ctx context.Context, name string) (*PrizeGrade, error)
 	FindByIsWin(ctx context.Context, isWin int64) (*PrizeGrade, error)
 	formatUuidKey(uuid string) string
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultPrizeGradeModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultPrizeGradeModel) FindAll(ctx context.Context) ([]*PrizeGrade, error) {
 	var resp = make([]*PrizeGrade, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", prizeGradeRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", prizeGradeRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -48,7 +49,7 @@ func (m *defaultPrizeGradeModel) FindAll(ctx context.Context) ([]*PrizeGrade, er
 
 func (m *defaultPrizeGradeModel) FindList(ctx context.Context, pageSize, page int64, keyword string, prizeGrade *PrizeGrade) (resp []*PrizeGrade, total int64, err error) {
 	hasName := false
-	sq := squirrel.Select(prizeGradeRows).From(m.table)
+	sq := squirrel.Select(prizeGradeRows).From(m.table).Where("`is_deleted`= '0'")
 	if prizeGrade != nil {
 		if prizeGrade.Id >= 0 {
 			sq = sq.Where("id = ?", prizeGrade.Id)
@@ -96,7 +97,7 @@ func (m *defaultPrizeGradeModel) FindsByIds(ctx context.Context, ids []int64) ([
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) ", prizeGradeRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -107,7 +108,7 @@ func (m *defaultPrizeGradeModel) TableName() string {
 
 func (m *defaultPrizeGradeModel) FindByUuid(ctx context.Context, uuid string) (*PrizeGrade, error) {
 	var resp PrizeGrade
-	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", prizeGradeRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", prizeGradeRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
@@ -121,7 +122,7 @@ func (m *defaultPrizeGradeModel) FindByUuid(ctx context.Context, uuid string) (*
 
 func (m *defaultPrizeGradeModel) FindByName(ctx context.Context, name string) (*PrizeGrade, error) {
 	var resp PrizeGrade
-	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", prizeGradeRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' limit 1", prizeGradeRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
@@ -135,7 +136,7 @@ func (m *defaultPrizeGradeModel) FindByName(ctx context.Context, name string) (*
 
 func (m *defaultPrizeGradeModel) FindByIsWin(ctx context.Context, isWin int64) (*PrizeGrade, error) {
 	var resp PrizeGrade
-	query := fmt.Sprintf("select %s from %s where `is_win` = ? limit 1", prizeGradeRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_win` = ? and `is_deleted` = '0' limit 1", prizeGradeRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, isWin)
 	switch err {
 	case nil:
@@ -149,4 +150,16 @@ func (m *defaultPrizeGradeModel) FindByIsWin(ctx context.Context, isWin int64) (
 
 func (m *defaultPrizeGradeModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("cache:prizeGrade:uuid:%v", uuid)
+}
+
+func (m *defaultPrizeGradeModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }

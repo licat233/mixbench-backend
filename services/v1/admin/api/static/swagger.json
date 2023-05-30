@@ -171,6 +171,34 @@
         ]
       }
     },
+    "/v1/api/admin/adminer/forgotPassword": {
+      "post": {
+        "summary": "忘记密码，通过邮箱重置密码",
+        "operationId": "ForgotPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ForgotPasswordReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "adminer"
+        ]
+      }
+    },
     "/v1/api/admin/adminer/list": {
       "get": {
         "summary": "获取管理员列表 基础API",
@@ -366,7 +394,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/putPasswordReq"
+              "$ref": "#/definitions/PutPasswordReq"
             }
           }
         ],
@@ -988,6 +1016,29 @@
         "list"
       ]
     },
+    "ForgotPasswordReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "ForgotPasswordReq",
+      "required": [
+        "email",
+        "captcha_id",
+        "solution"
+      ]
+    },
     "GetAdminerEnumsReq": {
       "type": "object",
       "properties": {
@@ -1315,6 +1366,34 @@
         "email"
       ]
     },
+    "PutPasswordReq": {
+      "type": "object",
+      "properties": {
+        "old_password": {
+          "type": "string",
+          "description": " 旧密码"
+        },
+        "new_password": {
+          "type": "string",
+          "description": " 新密码"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "PutPasswordReq",
+      "required": [
+        "old_password",
+        "new_password",
+        "captcha_id",
+        "solution"
+      ]
+    },
     "Resp": {
       "type": "object",
       "properties": {
@@ -1484,34 +1563,6 @@
         "passport",
         "password",
         "autoLogin",
-        "captcha_id",
-        "solution"
-      ]
-    },
-    "putPasswordReq": {
-      "type": "object",
-      "properties": {
-        "old_password": {
-          "type": "string",
-          "description": " 旧密码"
-        },
-        "new_password": {
-          "type": "string",
-          "description": " 新密码"
-        },
-        "captcha_id": {
-          "type": "string",
-          "description": "验证码ID"
-        },
-        "solution": {
-          "type": "string",
-          "description": "验证码答案"
-        }
-      },
-      "title": "putPasswordReq",
-      "required": [
-        "old_password",
-        "new_password",
         "captcha_id",
         "solution"
       ]

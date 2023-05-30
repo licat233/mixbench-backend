@@ -14,6 +14,7 @@ CREATE TABLE `goods_category` (
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0下架，1上架，2预售',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `status` (`status`)
@@ -30,6 +31,7 @@ CREATE TABLE `goods_tag` (
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0不可用，1可用',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `status` (`status`)
@@ -68,6 +70,7 @@ CREATE TABLE `goods` (
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态:0下架，1上架，2预售',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `category_id` (`category_id`),

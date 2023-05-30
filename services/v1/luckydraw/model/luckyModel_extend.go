@@ -27,18 +27,19 @@ type lucky_model interface {
 	FindByLuckDate(ctx context.Context, luckDate time.Time) (*Lucky, error)
 	FindByIp(ctx context.Context, ip string) (*Lucky, error)
 	formatUuidKey(uuid string) string
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultLuckyModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultLuckyModel) FindAll(ctx context.Context) ([]*Lucky, error) {
 	var resp = make([]*Lucky, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", luckyRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -51,7 +52,7 @@ func (m *defaultLuckyModel) FindAll(ctx context.Context) ([]*Lucky, error) {
 }
 
 func (m *defaultLuckyModel) FindList(ctx context.Context, pageSize, page int64, keyword string, lucky *Lucky) (resp []*Lucky, total int64, err error) {
-	sq := squirrel.Select(luckyRows).From(m.table)
+	sq := squirrel.Select(luckyRows).From(m.table).Where("`is_deleted`= '0'")
 	if lucky != nil {
 		if lucky.Id >= 0 {
 			sq = sq.Where("id = ?", lucky.Id)
@@ -104,7 +105,7 @@ func (m *defaultLuckyModel) FindsByIds(ctx context.Context, ids []int64) ([]*Luc
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) ", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", luckyRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -115,7 +116,7 @@ func (m *defaultLuckyModel) TableName() string {
 
 func (m *defaultLuckyModel) FindByUuid(ctx context.Context, uuid string) (*Lucky, error) {
 	var resp Lucky
-	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
@@ -129,7 +130,7 @@ func (m *defaultLuckyModel) FindByUuid(ctx context.Context, uuid string) (*Lucky
 
 func (m *defaultLuckyModel) FindByUserId(ctx context.Context, userId int64) (*Lucky, error) {
 	var resp Lucky
-	query := fmt.Sprintf("select %s from %s where `user_id` = ? limit 1", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userId)
 	switch err {
 	case nil:
@@ -143,7 +144,7 @@ func (m *defaultLuckyModel) FindByUserId(ctx context.Context, userId int64) (*Lu
 
 func (m *defaultLuckyModel) FindByPrizePoolId(ctx context.Context, prizePoolId int64) (*Lucky, error) {
 	var resp Lucky
-	query := fmt.Sprintf("select %s from %s where `prize_pool_id` = ? limit 1", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `prize_pool_id` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, prizePoolId)
 	switch err {
 	case nil:
@@ -157,7 +158,7 @@ func (m *defaultLuckyModel) FindByPrizePoolId(ctx context.Context, prizePoolId i
 
 func (m *defaultLuckyModel) FindByStatus(ctx context.Context, status int64) (*Lucky, error) {
 	var resp Lucky
-	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
@@ -171,7 +172,7 @@ func (m *defaultLuckyModel) FindByStatus(ctx context.Context, status int64) (*Lu
 
 func (m *defaultLuckyModel) FindByLuckDate(ctx context.Context, luckDate time.Time) (*Lucky, error) {
 	var resp Lucky
-	query := fmt.Sprintf("select %s from %s where `luck_date` = ? limit 1", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `luck_date` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, luckDate.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
@@ -185,7 +186,7 @@ func (m *defaultLuckyModel) FindByLuckDate(ctx context.Context, luckDate time.Ti
 
 func (m *defaultLuckyModel) FindByIp(ctx context.Context, ip string) (*Lucky, error) {
 	var resp Lucky
-	query := fmt.Sprintf("select %s from %s where `ip` = ? limit 1", luckyRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, ip)
 	switch err {
 	case nil:
@@ -199,4 +200,16 @@ func (m *defaultLuckyModel) FindByIp(ctx context.Context, ip string) (*Lucky, er
 
 func (m *defaultLuckyModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("cache:lucky:uuid:%v", uuid)
+}
+
+func (m *defaultLuckyModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }

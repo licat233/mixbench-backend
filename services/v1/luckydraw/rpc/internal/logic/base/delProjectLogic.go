@@ -26,7 +26,7 @@ func NewDelProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelPro
 
 // 删除项目
 func (l *DelProjectLogic) DelProject(in *luckydraw_pb.DelProjectReq) (*luckydraw_pb.DelProjectResp, error) {
-	err := l.svcCtx.ProjectModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.ProjectModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

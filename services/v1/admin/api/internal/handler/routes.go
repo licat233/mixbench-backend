@@ -143,6 +143,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Path:    "/putPassword",
 					Handler: adminer.PutPasswordHandler(serverCtx),
 				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/forgotPassword",
+					Handler: adminer.ForgotPasswordHandler(serverCtx),
+				},
 			}...,
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

@@ -26,7 +26,7 @@ func NewDelLuckyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelLucky
 
 // 删除中奖名单
 func (l *DelLuckyLogic) DelLucky(in *luckydraw_pb.DelLuckyReq) (*luckydraw_pb.DelLuckyResp, error) {
-	err := l.svcCtx.LuckyModel.Delete(l.ctx, in.Id)
+	err := l.svcCtx.LuckyModel.SoftDelete(l.ctx, in.Id)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

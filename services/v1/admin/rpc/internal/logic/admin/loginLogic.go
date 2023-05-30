@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"mixbench/common/errorx"
+	"mixbench/common/xcrypt"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
@@ -40,6 +41,10 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	if len(in.Passport) == 0 {
 		return nil, errorx.ExtRpcErr(errorx.New("passport is empty"))
 	}
+	err := xcrypt.PasswordValidator(in.Password)
+	if err != nil {
+		return nil, errorx.ExtRpcErr(err)
+	}
 	//根据账户查找用户
 	//passport也可能是邮箱
 	if govalidator.IsEmail(in.Passport) {
@@ -63,7 +68,7 @@ func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 		return nil, errorx.ExtRpcErr(errors.New("account does not exist"))
 	}
 
-	if adminer.Passport != in.Passport {
+	if !xcrypt.CheckPassword(in.Password, adminer.Password) {
 		return nil, errorx.ExtRpcErr(errors.New("account and password do not match"))
 	}
 

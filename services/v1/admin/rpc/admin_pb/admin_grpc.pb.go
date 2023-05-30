@@ -322,6 +322,8 @@ type AdminClient interface {
 	VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error)
 	// 修改密码
 	PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
+	// 忘记密码，通过邮箱重置密码
+	ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
 }
 
 type adminClient struct {
@@ -431,6 +433,15 @@ func (c *adminClient) PutPassword(ctx context.Context, in *PutPasswordReq, opts 
 	return out, nil
 }
 
+func (c *adminClient) ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	out := new(StatusResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ForgotPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServer is the server API for Admin service.
 // All implementations must embed UnimplementedAdminServer
 // for forward compatibility
@@ -457,6 +468,8 @@ type AdminServer interface {
 	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordResp, error)
 	// 修改密码
 	PutPassword(context.Context, *PutPasswordReq) (*StatusResp, error)
+	// 忘记密码，通过邮箱重置密码
+	ForgotPassword(context.Context, *ForgotPasswordReq) (*StatusResp, error)
 	mustEmbedUnimplementedAdminServer()
 }
 
@@ -496,6 +509,9 @@ func (UnimplementedAdminServer) VerifyPassword(context.Context, *VerifyPasswordR
 }
 func (UnimplementedAdminServer) PutPassword(context.Context, *PutPasswordReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutPassword not implemented")
+}
+func (UnimplementedAdminServer) ForgotPassword(context.Context, *ForgotPasswordReq) (*StatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForgotPassword not implemented")
 }
 func (UnimplementedAdminServer) mustEmbedUnimplementedAdminServer() {}
 
@@ -708,6 +724,24 @@ func _Admin_PutPassword_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_ForgotPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForgotPasswordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).ForgotPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/ForgotPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).ForgotPassword(ctx, req.(*ForgotPasswordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Admin_ServiceDesc is the grpc.ServiceDesc for Admin service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -758,6 +792,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PutPassword",
 			Handler:    _Admin_PutPassword_Handler,
+		},
+		{
+			MethodName: "ForgotPassword",
+			Handler:    _Admin_ForgotPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

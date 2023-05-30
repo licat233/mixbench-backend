@@ -28,18 +28,19 @@ type prizePool_model interface {
 	FindByTotal(ctx context.Context, total int64) (*PrizePool, error)
 	FindByRemainder(ctx context.Context, remainder int64) (*PrizePool, error)
 	formatUuidKey(uuid string) string
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultPrizePoolModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultPrizePoolModel) FindAll(ctx context.Context) ([]*PrizePool, error) {
 	var resp = make([]*PrizePool, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", prizePoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -52,7 +53,7 @@ func (m *defaultPrizePoolModel) FindAll(ctx context.Context) ([]*PrizePool, erro
 }
 
 func (m *defaultPrizePoolModel) FindList(ctx context.Context, pageSize, page int64, keyword string, prizePool *PrizePool) (resp []*PrizePool, total int64, err error) {
-	sq := squirrel.Select(prizePoolRows).From(m.table)
+	sq := squirrel.Select(prizePoolRows).From(m.table).Where("`is_deleted`= '0'")
 	if prizePool != nil {
 		if prizePool.Id >= 0 {
 			sq = sq.Where("id = ?", prizePool.Id)
@@ -111,7 +112,7 @@ func (m *defaultPrizePoolModel) FindsByIds(ctx context.Context, ids []int64) ([]
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) ", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", prizePoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -122,7 +123,7 @@ func (m *defaultPrizePoolModel) TableName() string {
 
 func (m *defaultPrizePoolModel) FindByUuid(ctx context.Context, uuid string) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
@@ -136,7 +137,7 @@ func (m *defaultPrizePoolModel) FindByUuid(ctx context.Context, uuid string) (*P
 
 func (m *defaultPrizePoolModel) FindByActivityId(ctx context.Context, activityId int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `activity_id` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, activityId)
 	switch err {
 	case nil:
@@ -150,7 +151,7 @@ func (m *defaultPrizePoolModel) FindByActivityId(ctx context.Context, activityId
 
 func (m *defaultPrizePoolModel) FindByPrizeId(ctx context.Context, prizeId int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `prize_id` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `prize_id` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, prizeId)
 	switch err {
 	case nil:
@@ -164,7 +165,7 @@ func (m *defaultPrizePoolModel) FindByPrizeId(ctx context.Context, prizeId int64
 
 func (m *defaultPrizePoolModel) FindByGradeId(ctx context.Context, gradeId int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `grade_id` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `grade_id` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, gradeId)
 	switch err {
 	case nil:
@@ -178,7 +179,7 @@ func (m *defaultPrizePoolModel) FindByGradeId(ctx context.Context, gradeId int64
 
 func (m *defaultPrizePoolModel) FindByLuckValue(ctx context.Context, luckValue int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `luck_value` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `luck_value` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, luckValue)
 	switch err {
 	case nil:
@@ -192,7 +193,7 @@ func (m *defaultPrizePoolModel) FindByLuckValue(ctx context.Context, luckValue i
 
 func (m *defaultPrizePoolModel) FindByStatus(ctx context.Context, status int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
@@ -206,7 +207,7 @@ func (m *defaultPrizePoolModel) FindByStatus(ctx context.Context, status int64) 
 
 func (m *defaultPrizePoolModel) FindByTotal(ctx context.Context, total int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `total` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `total` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, total)
 	switch err {
 	case nil:
@@ -220,7 +221,7 @@ func (m *defaultPrizePoolModel) FindByTotal(ctx context.Context, total int64) (*
 
 func (m *defaultPrizePoolModel) FindByRemainder(ctx context.Context, remainder int64) (*PrizePool, error) {
 	var resp PrizePool
-	query := fmt.Sprintf("select %s from %s where `remainder` = ? limit 1", prizePoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `remainder` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, remainder)
 	switch err {
 	case nil:
@@ -234,4 +235,16 @@ func (m *defaultPrizePoolModel) FindByRemainder(ctx context.Context, remainder i
 
 func (m *defaultPrizePoolModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("cache:prizePool:uuid:%v", uuid)
+}
+
+func (m *defaultPrizePoolModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }

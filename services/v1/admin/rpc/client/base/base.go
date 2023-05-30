@@ -25,6 +25,7 @@ type (
 	ExistsEmailResp    = admin_pb.ExistsEmailResp
 	FindByEmailReq     = admin_pb.FindByEmailReq
 	FindByEmailResp    = admin_pb.FindByEmailResp
+	ForgotPasswordReq  = admin_pb.ForgotPasswordReq
 	GenerateTokenReq   = admin_pb.GenerateTokenReq
 	GenerateTokenResp  = admin_pb.GenerateTokenResp
 	GetAdminerEnumsReq = admin_pb.GetAdminerEnumsReq

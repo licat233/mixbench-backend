@@ -207,3 +207,9 @@ type PutPasswordReq struct {
 	CaptchaId   string `json:"captcha_id"`   //验证码ID
 	Solution    string `json:"solution"`     //验证码答案
 }
+
+type ForgotPasswordReq struct {
+	Email     string `json:"email"`      // 邮箱
+	CaptchaId string `json:"captcha_id"` //验证码ID
+	Solution  string `json:"solution"`   //验证码答案
+}

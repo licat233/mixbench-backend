@@ -151,6 +151,14 @@ export function putPassword(req: components.PutPasswordReq) {
 }
 
 /**
+ * @description "忘记密码，通过邮箱重置密码"
+ * @param req
+ */
+export function forgotPassword(req: components.ForgotPasswordReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/adminer/forgotPassword`, req)
+}
+
+/**
  * @description "上传头像"
  */
 export function uploadAvatar() {

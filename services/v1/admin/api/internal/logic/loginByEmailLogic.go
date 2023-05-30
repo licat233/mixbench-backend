@@ -41,7 +41,7 @@ func NewLoginByEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *ht
 }
 
 func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq) (any, error) {
-	//验证邮箱
+	//邮箱格式验证
 	if !govalidator.IsEmail(req.Email) {
 		return nil, errorx.ErrInvalidEmail
 	}

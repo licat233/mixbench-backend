@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/respx"
+	"mixbench/services/v1/luckydraw/api/internal/logic/dataconv"
 	"mixbench/services/v1/luckydraw/api/internal/svc"
 	"mixbench/services/v1/luckydraw/api/internal/types"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
@@ -34,5 +35,15 @@ func (l *GetActivityPrizesLogic) GetActivityPrizes(req *types.GetActivityPrizesR
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(res.ActivityPrizes, err)
+	data := []*types.ActivityPrize{}
+	for _, item := range res.ActivityPrizes {
+		ap := &types.ActivityPrize{
+			Prize:      *dataconv.PbPrizeToApiPrize(item.Prize),
+			PrizePool:  *dataconv.PbPrizePoolToApiPrizePool(item.PrizePool),
+			PrizeGrade: *dataconv.PbPrizeGradeToApiPrizeGrade(item.PrizeGrade),
+		}
+		data = append(data, ap)
+	}
+
+	return respx.DefaultSingleResp(data, err)
 }

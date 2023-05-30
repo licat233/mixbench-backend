@@ -39,13 +39,14 @@ type (
 	}
 
 	JwtBlacklist struct {
-		Id       int64     `db:"id"`        // 表主键
-		Token    string    `db:"token"`     // jwt-token
-		Platform string    `db:"platform"`  // 绑定平台
-		Ip       string    `db:"ip"`        // 绑定ip
-		ExpireAt time.Time `db:"expire_at"` // 过期时间
-		CreateAt time.Time `db:"create_at"` // 创建时间
-		UpdateAt time.Time `db:"update_at"` // 更新时间
+		Id        int64     `db:"id"`         // 表主键
+		Token     string    `db:"token"`      // jwt-token
+		Platform  string    `db:"platform"`   // 绑定平台
+		Ip        string    `db:"ip"`         // 绑定ip
+		ExpireAt  time.Time `db:"expire_at"`  // 过期时间
+		CreateAt  time.Time `db:"create_at"`  // 创建时间
+		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -85,8 +86,8 @@ func (m *defaultJwtBlacklistModel) FindOne(ctx context.Context, id int64) (*JwtB
 func (m *defaultJwtBlacklistModel) Insert(ctx context.Context, data *JwtBlacklist) (sql.Result, error) {
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, jwtBlacklistRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Token, data.Platform, data.Ip, data.ExpireAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, jwtBlacklistRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Token, data.Platform, data.Ip, data.ExpireAt, data.IsDeleted)
 	}, jwtBlacklistIdKey)
 	return ret, err
 }
@@ -95,7 +96,7 @@ func (m *defaultJwtBlacklistModel) Update(ctx context.Context, data *JwtBlacklis
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, jwtBlacklistRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Token, data.Platform, data.Ip, data.ExpireAt, data.Id)
+		return conn.ExecCtx(ctx, query, data.Token, data.Platform, data.Ip, data.ExpireAt, data.IsDeleted, data.Id)
 	}, jwtBlacklistIdKey)
 	return err
 }

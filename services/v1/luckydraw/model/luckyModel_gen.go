@@ -48,6 +48,7 @@ type (
 		Ip          string    `db:"ip"`            // ip地址
 		CreateAt    time.Time `db:"create_at"`     // 创建时间
 		UpdateAt    time.Time `db:"update_at"`     // 更新时间
+		IsDeleted   int64     `db:"is_deleted"`    // 是否已删除
 	}
 )
 
@@ -87,8 +88,8 @@ func (m *defaultLuckyModel) FindOne(ctx context.Context, id int64) (*Lucky, erro
 func (m *defaultLuckyModel) Insert(ctx context.Context, data *Lucky) (sql.Result, error) {
 	luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, luckyRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, luckyRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip, data.IsDeleted)
 	}, luckyIdKey)
 	return ret, err
 }
@@ -97,7 +98,7 @@ func (m *defaultLuckyModel) Update(ctx context.Context, data *Lucky) error {
 	luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, luckyRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip, data.IsDeleted, data.Id)
 	}, luckyIdKey)
 	return err
 }

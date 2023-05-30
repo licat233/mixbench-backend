@@ -25,18 +25,19 @@ type userPool_model interface {
 	FindByStatus(ctx context.Context, status int64) (*UserPool, error)
 	FindByScore(ctx context.Context, score int64) (*UserPool, error)
 	formatUuidKey(uuid string) string
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultUserPoolModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultUserPoolModel) FindAll(ctx context.Context) ([]*UserPool, error) {
 	var resp = make([]*UserPool, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", userPoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -49,7 +50,7 @@ func (m *defaultUserPoolModel) FindAll(ctx context.Context) ([]*UserPool, error)
 }
 
 func (m *defaultUserPoolModel) FindList(ctx context.Context, pageSize, page int64, keyword string, userPool *UserPool) (resp []*UserPool, total int64, err error) {
-	sq := squirrel.Select(userPoolRows).From(m.table)
+	sq := squirrel.Select(userPoolRows).From(m.table).Where("`is_deleted`= '0'")
 	if userPool != nil {
 		if userPool.Id >= 0 {
 			sq = sq.Where("id = ?", userPool.Id)
@@ -99,7 +100,7 @@ func (m *defaultUserPoolModel) FindsByIds(ctx context.Context, ids []int64) ([]*
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) ", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", userPoolRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -110,7 +111,7 @@ func (m *defaultUserPoolModel) TableName() string {
 
 func (m *defaultUserPoolModel) FindByUuid(ctx context.Context, uuid string) (*UserPool, error) {
 	var resp UserPool
-	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", userPoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
@@ -124,7 +125,7 @@ func (m *defaultUserPoolModel) FindByUuid(ctx context.Context, uuid string) (*Us
 
 func (m *defaultUserPoolModel) FindByActivityId(ctx context.Context, activityId int64) (*UserPool, error) {
 	var resp UserPool
-	query := fmt.Sprintf("select %s from %s where `activity_id` = ? limit 1", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `is_deleted` = '0' limit 1", userPoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, activityId)
 	switch err {
 	case nil:
@@ -138,7 +139,7 @@ func (m *defaultUserPoolModel) FindByActivityId(ctx context.Context, activityId 
 
 func (m *defaultUserPoolModel) FindByUserId(ctx context.Context, userId int64) (*UserPool, error) {
 	var resp UserPool
-	query := fmt.Sprintf("select %s from %s where `user_id` = ? limit 1", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `is_deleted` = '0' limit 1", userPoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, userId)
 	switch err {
 	case nil:
@@ -152,7 +153,7 @@ func (m *defaultUserPoolModel) FindByUserId(ctx context.Context, userId int64) (
 
 func (m *defaultUserPoolModel) FindByStatus(ctx context.Context, status int64) (*UserPool, error) {
 	var resp UserPool
-	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' limit 1", userPoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
@@ -166,7 +167,7 @@ func (m *defaultUserPoolModel) FindByStatus(ctx context.Context, status int64) (
 
 func (m *defaultUserPoolModel) FindByScore(ctx context.Context, score int64) (*UserPool, error) {
 	var resp UserPool
-	query := fmt.Sprintf("select %s from %s where `score` = ? limit 1", userPoolRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `score` = ? and `is_deleted` = '0' limit 1", userPoolRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, score)
 	switch err {
 	case nil:
@@ -180,4 +181,16 @@ func (m *defaultUserPoolModel) FindByScore(ctx context.Context, score int64) (*U
 
 func (m *defaultUserPoolModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("cache:userPool:uuid:%v", uuid)
+}
+
+func (m *defaultUserPoolModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }

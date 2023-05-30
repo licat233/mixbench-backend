@@ -25,6 +25,7 @@ type (
 	ExistsEmailResp    = admin_pb.ExistsEmailResp
 	FindByEmailReq     = admin_pb.FindByEmailReq
 	FindByEmailResp    = admin_pb.FindByEmailResp
+	ForgotPasswordReq  = admin_pb.ForgotPasswordReq
 	GenerateTokenReq   = admin_pb.GenerateTokenReq
 	GenerateTokenResp  = admin_pb.GenerateTokenResp
 	GetAdminerEnumsReq = admin_pb.GetAdminerEnumsReq
@@ -83,6 +84,8 @@ type (
 		VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error)
 		// 修改密码
 		PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
+		// 忘记密码，通过邮箱重置密码
+		ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
 	}
 
 	defaultAdmin struct {
@@ -160,4 +163,10 @@ func (m *defaultAdmin) VerifyPassword(ctx context.Context, in *VerifyPasswordReq
 func (m *defaultAdmin) PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.PutPassword(ctx, in, opts...)
+}
+
+// 忘记密码，通过邮箱重置密码
+func (m *defaultAdmin) ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.ForgotPassword(ctx, in, opts...)
 }

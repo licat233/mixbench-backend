@@ -28,18 +28,19 @@ type user_model interface {
 	FindByScore(ctx context.Context, score int64) (*User, error)
 	FindByStatus(ctx context.Context, status int64) (*User, error)
 	formatUuidKey(uuid string) string
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultUserModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultUserModel) FindAll(ctx context.Context) ([]*User, error) {
 	var resp = make([]*User, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", userRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -53,7 +54,7 @@ func (m *defaultUserModel) FindAll(ctx context.Context) ([]*User, error) {
 
 func (m *defaultUserModel) FindList(ctx context.Context, pageSize, page int64, keyword string, user *User) (resp []*User, total int64, err error) {
 	hasName := false
-	sq := squirrel.Select(userRows).From(m.table)
+	sq := squirrel.Select(userRows).From(m.table).Where("`is_deleted`= '0'")
 	if user != nil {
 		if user.Id >= 0 {
 			sq = sq.Where("id = ?", user.Id)
@@ -116,7 +117,7 @@ func (m *defaultUserModel) FindsByIds(ctx context.Context, ids []int64) ([]*User
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) ", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", userRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -127,7 +128,7 @@ func (m *defaultUserModel) TableName() string {
 
 func (m *defaultUserModel) FindByUuid(ctx context.Context, uuid string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `uuid` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
 	switch err {
 	case nil:
@@ -141,7 +142,7 @@ func (m *defaultUserModel) FindByUuid(ctx context.Context, uuid string) (*User, 
 
 func (m *defaultUserModel) FindByPassport(ctx context.Context, passport string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `passport` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `passport` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, passport)
 	switch err {
 	case nil:
@@ -155,7 +156,7 @@ func (m *defaultUserModel) FindByPassport(ctx context.Context, passport string) 
 
 func (m *defaultUserModel) FindByEmail(ctx context.Context, email string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `email` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `email` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, email)
 	switch err {
 	case nil:
@@ -169,7 +170,7 @@ func (m *defaultUserModel) FindByEmail(ctx context.Context, email string) (*User
 
 func (m *defaultUserModel) FindByPhone(ctx context.Context, phone string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `phone` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `phone` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, phone)
 	switch err {
 	case nil:
@@ -183,7 +184,7 @@ func (m *defaultUserModel) FindByPhone(ctx context.Context, phone string) (*User
 
 func (m *defaultUserModel) FindByName(ctx context.Context, name string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `name` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
 	switch err {
 	case nil:
@@ -197,7 +198,7 @@ func (m *defaultUserModel) FindByName(ctx context.Context, name string) (*User, 
 
 func (m *defaultUserModel) FindByAddress(ctx context.Context, address string) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `address` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `address` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, address)
 	switch err {
 	case nil:
@@ -211,7 +212,7 @@ func (m *defaultUserModel) FindByAddress(ctx context.Context, address string) (*
 
 func (m *defaultUserModel) FindByScore(ctx context.Context, score int64) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `score` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `score` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, score)
 	switch err {
 	case nil:
@@ -225,7 +226,7 @@ func (m *defaultUserModel) FindByScore(ctx context.Context, score int64) (*User,
 
 func (m *defaultUserModel) FindByStatus(ctx context.Context, status int64) (*User, error) {
 	var resp User
-	query := fmt.Sprintf("select %s from %s where `status` = ? limit 1", userRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, status)
 	switch err {
 	case nil:
@@ -239,4 +240,16 @@ func (m *defaultUserModel) FindByStatus(ctx context.Context, status int64) (*Use
 
 func (m *defaultUserModel) formatUuidKey(uuid string) string {
 	return fmt.Sprintf("cache:user:uuid:%v", uuid)
+}
+
+func (m *defaultUserModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }
