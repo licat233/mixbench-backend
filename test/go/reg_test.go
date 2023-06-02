@@ -37,3 +37,9 @@ func Test_reg(t *testing.T) {
 
 	fmt.Printf("%v", match)
 }
+
+func Test_pwd(t *testing.T) {
+	password := "Pwd123@qqqwq"
+	re := regexp.MustCompile(`^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$`)
+	fmt.Println(re.MatchString(password))
+}

@@ -19,6 +19,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/auth",
 				Handler: authHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/superAdminAuth",
+				Handler: superAdminAuthHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/v1/api/admin"),
 	)
@@ -54,6 +59,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/test",
 				Handler: testHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/pwdEncryption",
+				Handler: pwdEncryptionHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/pwdCompare",
+				Handler: pwdCompareHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/api/admin"),

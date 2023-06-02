@@ -59,7 +59,7 @@ VALUES
     '//mixbench.net/static/avatar/avatar_1_1663575200688027000.jpg',
     'superAdmin',
     'licat',
-    '',
+    '$2a$10$9ZGoeKcUplsVsqUsXNNDBeF4KI35yz4w4BK4H8gX0O3Dm9mc64cAW',
     '1697470538@qq.com',
     1,
     1,
@@ -85,7 +85,6 @@ CREATE TABLE `jwt_blacklist` (
   `expire_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '过期时间',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = 'jwt黑名单';
 

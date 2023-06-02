@@ -39,3 +39,12 @@ func GetAidFromCtx(ctx context.Context) int64 {
 	}
 	return activity_id
 }
+
+// 获取过期时间戳
+func GetExpFromCtx(ctx context.Context) int64 {
+	if exp, ok := ctx.Value("exp").(int64); ok {
+		return exp
+	}
+	logx.WithContext(ctx).Error("GetExpFromCtx err")
+	return 0
+}

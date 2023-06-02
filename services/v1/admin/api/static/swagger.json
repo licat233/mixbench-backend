@@ -597,6 +597,67 @@
         ]
       }
     },
+    "/v1/api/admin/pwdCompare": {
+      "get": {
+        "summary": "密码比较端口",
+        "operationId": "pwdCompare",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "password",
+            "description": "明文",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "hash",
+            "description": "密文",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/pwdEncryption": {
+      "get": {
+        "summary": "密码加密端口",
+        "operationId": "pwdEncryption",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "password",
+            "description": "密码明文",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
     "/v1/api/admin/registerEmailCaptcha": {
       "post": {
         "summary": "给注册邮箱发送验证码",
@@ -619,6 +680,22 @@
             }
           }
         ],
+        "requestBody": {},
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/superAdminAuth": {
+      "get": {
+        "summary": "superAdmin鉴权接口",
+        "operationId": "superAdminAuth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
         "requestBody": {},
         "tags": [
           "admin"
@@ -1565,6 +1642,37 @@
         "autoLogin",
         "captcha_id",
         "solution"
+      ]
+    },
+    "pwdCompareReq": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "明文"
+        },
+        "hash": {
+          "type": "string",
+          "description": "密文"
+        }
+      },
+      "title": "pwdCompareReq",
+      "required": [
+        "password",
+        "hash"
+      ]
+    },
+    "pwdEncryptionReq": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "密码明文"
+        }
+      },
+      "title": "pwdEncryptionReq",
+      "required": [
+        "password"
       ]
     },
     "registerEmailCaptchaReq": {

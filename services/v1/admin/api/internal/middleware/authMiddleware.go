@@ -41,7 +41,7 @@ func NewAuthMiddleware(c config.Config, jwtModel model.JwtBlacklistModel, admine
 
 func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := AuthLogic(m.ctx, r, m.Config, m.AdminerModel, m.JwtBlacklistsModel)
+		_, err := AuthLogic(m.ctx, r, m.Config, m.AdminerModel, m.JwtBlacklistsModel)
 		if err != nil {
 			httpx.ErrorCtx(m.ctx, w, err)
 			return
@@ -52,28 +52,28 @@ func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func AuthLogic(ctx context.Context, r *http.Request, config config.Config, adminerModel model.AdminerModel, jwtBlacklistsModel model.JwtBlacklistModel) error {
+func AuthLogic(ctx context.Context, r *http.Request, config config.Config, adminerModel model.AdminerModel, jwtBlacklistsModel model.JwtBlacklistModel) (*model.Adminer, error) {
 	jwtToken := r.Header.Get(jwtx.ReqHeaderKey)
 	if jwtToken == "" {
-		return errorx.ErrAuth
+		return nil, errorx.ErrAuth
 	}
 
 	//解析 token
 	claims, err := jwtx.ParseToken(jwtToken, config.Auth.AccessSecret)
 	if err != nil {
-		return errorx.InternalError(err)
+		return nil, errorx.InternalError(err)
 	}
 
 	//获取请求设备
 	reqPlatform, err := utils.RemotePlatform(r)
 	if err != nil {
-		return errorx.ErrPlatform
+		return nil, errorx.ErrPlatform
 	}
 
 	jwtPlatform := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtPlatform, *claims)
 	//设备 校验
 	if reqPlatform != jwtPlatform {
-		return errorx.ErrPlatform
+		return nil, errorx.ErrPlatform
 	}
 
 	jwtIp := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtIp, *claims)
@@ -81,40 +81,40 @@ func AuthLogic(ctx context.Context, r *http.Request, config config.Config, admin
 	reqIp := utils.RemoteIp(r)
 	//ip 校验
 	if reqIp != jwtIp {
-		return errorx.ErrIp
+		return nil, errorx.ErrIp
 	}
 
 	//检查用户状态
 	uidValue := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtUserId, *claims)
 	if uidValue == "" {
-		return errorx.ErrAuth
+		return nil, errorx.ErrAuth
 	}
 	uid, err := strconv.Atoi(uidValue)
 	if err != nil {
 		logx.WithContext(ctx).Error(err)
-		return errorx.ErrAuth
+		return nil, errorx.ErrAuth
 	}
 
 	adminer, err := adminerModel.FindOne(ctx, int64(uid))
 	if err != nil && err != model.ErrNotFound {
 		logx.WithContext(ctx).Error(err)
-		return errorx.InternalError(err)
+		return nil, errorx.InternalError(err)
 	}
 	if err == model.ErrNotFound {
-		return errorx.ErrAuth
+		return nil, errorx.ErrAuth
 	}
 	if adminer.Status == 0 {
-		return errorx.AuthError(errors.New("当前用户不可用"))
+		return adminer, errorx.AuthError(errors.New("当前用户不可用"))
 	}
 
 	// 校验token是否已被加入黑名单
 	exists, err := jwtBlacklistsModel.ExistsByToken(ctx, jwtToken)
 	if err != nil {
 		logx.WithContext(ctx).Error(err)
-		return errorx.InternalError(err)
+		return adminer, errorx.InternalError(err)
 	}
 	if exists {
-		return errorx.ErrAuth
+		return adminer, errorx.ErrAuth
 	}
-	return nil
+	return adminer, nil
 }

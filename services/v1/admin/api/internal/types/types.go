@@ -116,6 +116,15 @@ type TestReq struct {
 	Data string `form:"data,optional"` //数据
 }
 
+type PwdEncryptionReq struct {
+	Password string `form:"password"` //密码明文
+}
+
+type PwdCompareReq struct {
+	Password string `form:"password"` //明文
+	Hash     string `form:"hash"`     //密文
+}
+
 type Adminer struct {
 	Id           int64  `json:"id"`           //表主键
 	Uuid         string `json:"uuid"`         //UUID

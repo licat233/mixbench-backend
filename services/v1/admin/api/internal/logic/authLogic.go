@@ -32,7 +32,7 @@ func NewAuthLogic(ctx context.Context, svcCtx *svc.ServiceContext, w http.Respon
 }
 
 func (l *AuthLogic) Auth() error {
-	err := middleware.AuthLogic(l.ctx, l.req, l.svcCtx.Config, l.svcCtx.AdminerModel, l.svcCtx.JwtBlacklistModel)
+	_, err := middleware.AuthLogic(l.ctx, l.req, l.svcCtx.Config, l.svcCtx.AdminerModel, l.svcCtx.JwtBlacklistModel)
 	if err != nil {
 		return l.err
 	}

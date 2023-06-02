@@ -4,7 +4,6 @@ import (
 	"mixbench/services/v1/admin/api/internal/types"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
 )
 
 func PbEnumToApiEnum(in *admin_pb.Enum) *types.Enum {
@@ -43,7 +42,7 @@ func PbOptionsToApiOptions(list []*admin_pb.Option) []*types.Option {
 	return res
 }
 
-func PbTreeOptionToApiTreeOption(in *luckydraw_pb.TreeOption) *types.TreeOption {
+func PbTreeOptionToApiTreeOption(in *admin_pb.TreeOption) *types.TreeOption {
 	if in == nil {
 		return nil
 	}
@@ -54,7 +53,7 @@ func PbTreeOptionToApiTreeOption(in *luckydraw_pb.TreeOption) *types.TreeOption 
 	}
 }
 
-func PbTreeOptionsToApiTreeOptions(list []*luckydraw_pb.TreeOption) []types.TreeOption {
+func PbTreeOptionsToApiTreeOptions(list []*admin_pb.TreeOption) []types.TreeOption {
 	res := []types.TreeOption{}
 	for _, v := range list {
 		res = append(res, *PbTreeOptionToApiTreeOption(v))

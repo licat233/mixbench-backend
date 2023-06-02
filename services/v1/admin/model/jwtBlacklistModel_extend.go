@@ -24,19 +24,18 @@ type jwtBlacklist_model interface {
 	FindByPlatform(ctx context.Context, platform string) (*JwtBlacklist, error)
 	FindByIp(ctx context.Context, ip string) (*JwtBlacklist, error)
 	FindByExpireAt(ctx context.Context, expireAt time.Time) (*JwtBlacklist, error)
-	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultJwtBlacklistModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultJwtBlacklistModel) FindAll(ctx context.Context) ([]*JwtBlacklist, error) {
 	var resp = make([]*JwtBlacklist, 0)
-	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s limit 99999", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -49,7 +48,7 @@ func (m *defaultJwtBlacklistModel) FindAll(ctx context.Context) ([]*JwtBlacklist
 }
 
 func (m *defaultJwtBlacklistModel) FindList(ctx context.Context, pageSize, page int64, keyword string, jwtBlacklist *JwtBlacklist) (resp []*JwtBlacklist, total int64, err error) {
-	sq := squirrel.Select(jwtBlacklistRows).From(m.table).Where("`is_deleted`= '0'")
+	sq := squirrel.Select(jwtBlacklistRows).From(m.table)
 	if jwtBlacklist != nil {
 		if jwtBlacklist.Id >= 0 {
 			sq = sq.Where("id = ?", jwtBlacklist.Id)
@@ -96,7 +95,7 @@ func (m *defaultJwtBlacklistModel) FindsByIds(ctx context.Context, ids []int64) 
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in(?) ", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -107,7 +106,7 @@ func (m *defaultJwtBlacklistModel) TableName() string {
 
 func (m *defaultJwtBlacklistModel) FindByToken(ctx context.Context, token string) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
-	query := fmt.Sprintf("select %s from %s where `token` = ? and `is_deleted` = '0' limit 1", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `token` = ? limit 1", jwtBlacklistRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, token)
 	switch err {
 	case nil:
@@ -121,7 +120,7 @@ func (m *defaultJwtBlacklistModel) FindByToken(ctx context.Context, token string
 
 func (m *defaultJwtBlacklistModel) FindByPlatform(ctx context.Context, platform string) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
-	query := fmt.Sprintf("select %s from %s where `platform` = ? and `is_deleted` = '0' limit 1", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `platform` = ? limit 1", jwtBlacklistRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, platform)
 	switch err {
 	case nil:
@@ -135,7 +134,7 @@ func (m *defaultJwtBlacklistModel) FindByPlatform(ctx context.Context, platform 
 
 func (m *defaultJwtBlacklistModel) FindByIp(ctx context.Context, ip string) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
-	query := fmt.Sprintf("select %s from %s where `ip` = ? and `is_deleted` = '0' limit 1", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? limit 1", jwtBlacklistRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, ip)
 	switch err {
 	case nil:
@@ -149,7 +148,7 @@ func (m *defaultJwtBlacklistModel) FindByIp(ctx context.Context, ip string) (*Jw
 
 func (m *defaultJwtBlacklistModel) FindByExpireAt(ctx context.Context, expireAt time.Time) (*JwtBlacklist, error) {
 	var resp JwtBlacklist
-	query := fmt.Sprintf("select %s from %s where `expire_at` = ? and `is_deleted` = '0' limit 1", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `expire_at` = ? limit 1", jwtBlacklistRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, expireAt.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
@@ -159,16 +158,4 @@ func (m *defaultJwtBlacklistModel) FindByExpireAt(ctx context.Context, expireAt 
 	default:
 		return nil, err
 	}
-}
-
-func (m *defaultJwtBlacklistModel) SoftDelete(ctx context.Context, id int64) error {
-	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
-	_, err := m.ExecNoCacheCtx(ctx, query, id)
-	if err != nil {
-		return err
-	}
-
-	// 删除缓存
-	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
-	return err
 }

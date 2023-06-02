@@ -121,6 +121,19 @@ export interface TestReqParams {
 	data: string // 数据
 }
 
+export interface PwdEncryptionReq {
+}
+export interface PwdEncryptionReqParams {
+	password: string // 密码明文
+}
+
+export interface PwdCompareReq {
+}
+export interface PwdCompareReqParams {
+	password: string // 明文
+	hash: string // 密文
+}
+
 export interface Adminer {
 	id: number // 表主键
 	uuid: string // UUID

@@ -41,7 +41,7 @@ func NewJwtBlacklistModel(conn sqlx.SqlConn, c cache.CacheConf) JwtBlacklistMode
 }
 
 func (m *customJwtBlacklistModel) Insert(ctx context.Context, data *JwtBlacklist) (sql.Result, error) {
-	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, data.Id)
+	jwtBlacklistIdKey := m.formatPrimary(data.Id)
 	jwtBlacklistTokenKey := m.formatTokenKey(data.Token)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, jwtBlacklistRowsExpectAutoSet)
@@ -51,7 +51,7 @@ func (m *customJwtBlacklistModel) Insert(ctx context.Context, data *JwtBlacklist
 }
 
 func (m *customJwtBlacklistModel) Update(ctx context.Context, data *JwtBlacklist) error {
-	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, data.Id)
+	jwtBlacklistIdKey := m.formatPrimary(data.Id)
 	jwtBlacklistTokenKey := m.formatTokenKey(data.Token)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, jwtBlacklistRowsWithPlaceHolder)

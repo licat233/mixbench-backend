@@ -10,6 +10,13 @@ export function auth() {
 }
 
 /**
+ * @description "superAdmin鉴权接口"
+ */
+export function superAdminAuth() {
+	return webapi.get<null>(`/v1/api/admin/superAdminAuth`)
+}
+
+/**
  * @description "登录"
  * @param req
  */
@@ -55,6 +62,22 @@ export function bindEmailCaptcha(req: components.BindEmailCaptchaReq) {
  */
 export function test(params: components.TestReqParams) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/test`, params)
+}
+
+/**
+ * @description "密码加密端口"
+ * @param params
+ */
+export function pwdEncryption(params: components.PwdEncryptionReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/pwdEncryption`, params)
+}
+
+/**
+ * @description "密码比较端口"
+ * @param params
+ */
+export function pwdCompare(params: components.PwdCompareReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/pwdCompare`, params)
 }
 
 /**
