@@ -20,25 +20,25 @@ info (
 
 //消息配置
 type MessageConfig {
-  Id int64 `json:"id"` //
-  ConfName string `json:"confName"` //
-  ConfKey string `json:"confKey"` //
-  ConfValue string `json:"confValue"` //
+  Id int64 `json:"id"` //主键
+  Name string `json:"name"` //名字
+  Key string `json:"key"` //密匙
+  Content string `json:"content"` //消息内容
 }
 
 //添加消息配置请求
 type AddMessageConfigReq {
-  ConfName string `json:"confName"` //
-  ConfKey string `json:"confKey"` //
-  ConfValue string `json:"confValue"` //
+  Name string `json:"name"` //名字
+  Key string `json:"key"` //密匙
+  Content string `json:"content"` //消息内容
 }
 
 //更新消息配置请求
 type PutMessageConfigReq {
-  Id int64 `json:"id"` //
-  ConfName string `json:"confName"` //
-  ConfKey string `json:"confKey"` //
-  ConfValue string `json:"confValue"` //
+  Id int64 `json:"id"` //主键
+  Name string `json:"name"` //名字
+  Key string `json:"key"` //密匙
+  Content string `json:"content"` //消息内容
 }
 
 //删除消息配置请求
@@ -57,10 +57,10 @@ type GetMessageConfigListReq {
   Page int64 `form:"page,optional,default=1"` //当前页码，默认1，可选
   Current int64 `form:"current,optional,default=1"` //当前页码，默认1，用于对接umijs，可选
   Keyword string `form:"keyword,optional"` //关键词，可选
-  Id int64 `form:"id,optional,default=-1"` //
-  ConfName string `form:"confName,optional"` //
-  ConfKey string `form:"confKey,optional"` //
-  ConfValue string `form:"confValue,optional"` //
+  Id int64 `form:"id,optional,default=-1"` //主键
+  Name string `form:"name,optional"` //名字
+  Key string `form:"key,optional"` //密匙
+  Content string `form:"content,optional"` //消息内容
 }
 
 //获取消息配置枚举请求

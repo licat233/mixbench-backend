@@ -206,7 +206,7 @@ goctl api ts -api captcha.api -dir .
 genzero -h
 ```
 
-## bug处理
+## k8s库存在的bug处理
 
 务必使用：k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65 // indirect
 
@@ -214,7 +214,7 @@ genzero -h
 
 1. 定义消息格式：确定客户与客服之间传递的消息格式，包括消息内容、发送者、接收者、时间戳等信息。
 
-2. 选择消息队列技术：根据需求选择合适的消息队列技术。常见的消息队列技术有 RabbitMQ、Apache Kafka、ActiveMQ 等。（当前采用基于redis的Asynq）
+2. 选择消息队列技术：根据需求选择合适的消息队列技术。常见的消息队列技术有 RabbitMQ、Apache Kafka、ActiveMQ 等。
 
 3. 创建消息队列：在选定的消息队列技术上创建一个消息队列或主题，用于存储客户和客服之间的消息。
 

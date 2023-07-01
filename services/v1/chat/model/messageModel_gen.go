@@ -44,7 +44,7 @@ type (
 		Content    string    `db:"content"`     // 消息内容
 		VisitorId  int64     `db:"visitor_id"`  // 游客id
 		KefuId     int64     `db:"kefu_id"`     // 客服id
-		MsgType    int64     `db:"msg_type"`    // 0游客消息，1客服消息, 2公告消息
+		MsgType    int64     `db:"msg_type"`    // 0游客消息，1客服消息，2公告消息，3系统消息
 		Status     int64     `db:"status"`      // 状态:0合法，1违规
 		IsRead     int64     `db:"is_read"`     // 状态:0未读，1已读
 		IsSend     int64     `db:"is_send"`     // 状态:0未发送，1已发送

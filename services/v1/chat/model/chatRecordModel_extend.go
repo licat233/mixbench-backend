@@ -20,16 +20,20 @@ type chatRecord_model interface {
 	FindList(ctx context.Context, pageSize, page int64, keyword string, chatRecord *ChatRecord) (resp []*ChatRecord, total int64, err error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*ChatRecord, error)
+	FindByContent(ctx context.Context, content string) (*ChatRecord, error)
 	FindByVisitorId(ctx context.Context, visitorId int64) (*ChatRecord, error)
 	FindByKefuId(ctx context.Context, kefuId int64) (*ChatRecord, error)
+	FindByMsgType(ctx context.Context, msgType int64) (*ChatRecord, error)
 	FindByStatus(ctx context.Context, status int64) (*ChatRecord, error)
 	FindByIsRead(ctx context.Context, isRead int64) (*ChatRecord, error)
 	FindByIsSend(ctx context.Context, isSend int64) (*ChatRecord, error)
 	FindBySendTime(ctx context.Context, sendTime time.Time) (*ChatRecord, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*ChatRecord, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*ChatRecord, error)
+	FindsByContents(ctx context.Context, contents []string) ([]*ChatRecord, error)
 	FindsByVisitorIds(ctx context.Context, visitorIds []int64) ([]*ChatRecord, error)
 	FindsByKefuIds(ctx context.Context, kefuIds []int64) ([]*ChatRecord, error)
+	FindsByMsgTypes(ctx context.Context, msgTypes []int64) ([]*ChatRecord, error)
 	FindsByStatus(ctx context.Context, status []int64) ([]*ChatRecord, error)
 	FindsByIsReads(ctx context.Context, isReads []int64) ([]*ChatRecord, error)
 	FindsByIsSends(ctx context.Context, isSends []int64) ([]*ChatRecord, error)
@@ -69,11 +73,17 @@ func (m *defaultChatRecordModel) FindList(ctx context.Context, pageSize, page in
 		if chatRecord.Uuid != "" {
 			sq = sq.Where("uuid = ?", chatRecord.Uuid)
 		}
+		if chatRecord.Content != "" {
+			sq = sq.Where("content = ?", chatRecord.Content)
+		}
 		if chatRecord.VisitorId > 0 {
 			sq = sq.Where("visitor_id = ?", chatRecord.VisitorId)
 		}
 		if chatRecord.KefuId > 0 {
 			sq = sq.Where("kefu_id = ?", chatRecord.KefuId)
+		}
+		if chatRecord.MsgType >= 0 {
+			sq = sq.Where("msg_type = ?", chatRecord.MsgType)
 		}
 		if chatRecord.Status >= 0 {
 			sq = sq.Where("status = ?", chatRecord.Status)
@@ -130,6 +140,20 @@ func (m *defaultChatRecordModel) FindByUuid(ctx context.Context, uuid string) (*
 	}
 }
 
+func (m *defaultChatRecordModel) FindByContent(ctx context.Context, content string) (*ChatRecord, error) {
+	var resp ChatRecord
+	query := fmt.Sprintf("select %s from %s where `content` = ? and `is_deleted` = '0' limit 1", chatRecordRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, content)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultChatRecordModel) FindByVisitorId(ctx context.Context, visitorId int64) (*ChatRecord, error) {
 	var resp ChatRecord
 	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `is_deleted` = '0' limit 1", chatRecordRows, m.table)
@@ -148,6 +172,20 @@ func (m *defaultChatRecordModel) FindByKefuId(ctx context.Context, kefuId int64)
 	var resp ChatRecord
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `is_deleted` = '0' limit 1", chatRecordRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, kefuId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultChatRecordModel) FindByMsgType(ctx context.Context, msgType int64) (*ChatRecord, error) {
+	var resp ChatRecord
+	query := fmt.Sprintf("select %s from %s where `msg_type` = ? and `is_deleted` = '0' limit 1", chatRecordRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, msgType)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -234,6 +272,16 @@ func (m *defaultChatRecordModel) FindsByUuids(ctx context.Context, uuids []strin
 	return resp, err
 }
 
+func (m *defaultChatRecordModel) FindsByContents(ctx context.Context, contents []string) ([]*ChatRecord, error) {
+	var resp = make([]*ChatRecord, 0)
+	if len(contents) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `content` in (?) and `is_deleted` = '0' ", chatRecordRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contents)
+	return resp, err
+}
+
 func (m *defaultChatRecordModel) FindsByVisitorIds(ctx context.Context, visitorIds []int64) ([]*ChatRecord, error) {
 	var resp = make([]*ChatRecord, 0)
 	if len(visitorIds) == 0 {
@@ -251,6 +299,16 @@ func (m *defaultChatRecordModel) FindsByKefuIds(ctx context.Context, kefuIds []i
 	}
 	query := fmt.Sprintf("select %s from %s where `kefu_id` in (?) and `is_deleted` = '0' ", chatRecordRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
+	return resp, err
+}
+
+func (m *defaultChatRecordModel) FindsByMsgTypes(ctx context.Context, msgTypes []int64) ([]*ChatRecord, error) {
+	var resp = make([]*ChatRecord, 0)
+	if len(msgTypes) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `msg_type` in (?) and `is_deleted` = '0' ", chatRecordRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgTypes)
 	return resp, err
 }
 

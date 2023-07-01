@@ -226,8 +226,10 @@ type GetKefuEnumsReq struct {
 type ChatRecord struct {
 	Id        int64  `json:"id"`        //表主键
 	Uuid      string `json:"uuid"`      //UUID
+	Content   string `json:"content"`   //消息内容
 	VisitorId int64  `json:"visitorId"` //游客id
 	KefuId    int64  `json:"kefuId"`    //客服id
+	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `json:"status"`    //状态:0合法，1违规
 	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
 	IsSend    int64  `json:"isSend"`    //状态:0未发送，1已发送
@@ -235,19 +237,23 @@ type ChatRecord struct {
 }
 
 type AddChatRecordReq struct {
-	VisitorId int64 `json:"visitorId"` //游客id
-	KefuId    int64 `json:"kefuId"`    //客服id
-	Status    int64 `json:"status"`    //状态:0合法，1违规
-	IsRead    int64 `json:"isRead"`    //状态:0未读，1已读
-	IsSend    int64 `json:"isSend"`    //状态:0未发送，1已发送
-	SendTime  int64 `json:"sendTime"`  //发送时间
+	Content   string `json:"content"`   //消息内容
+	VisitorId int64  `json:"visitorId"` //游客id
+	KefuId    int64  `json:"kefuId"`    //客服id
+	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
+	Status    int64  `json:"status"`    //状态:0合法，1违规
+	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
+	IsSend    int64  `json:"isSend"`    //状态:0未发送，1已发送
+	SendTime  int64  `json:"sendTime"`  //发送时间
 }
 
 type PutChatRecordReq struct {
 	Id        int64  `json:"id"`        //表主键
 	Uuid      string `json:"uuid"`      //UUID
+	Content   string `json:"content"`   //消息内容
 	VisitorId int64  `json:"visitorId"` //游客id
 	KefuId    int64  `json:"kefuId"`    //客服id
+	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `json:"status"`    //状态:0合法，1违规
 	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
 	IsSend    int64  `json:"isSend"`    //状态:0未发送，1已发送
@@ -269,8 +275,10 @@ type GetChatRecordListReq struct {
 	Keyword   string `form:"keyword,optional"`              //关键词，可选
 	Id        int64  `form:"id,optional,default=-1"`        //表主键
 	Uuid      string `form:"uuid,optional"`                 //UUID
+	Content   string `form:"content,optional"`              //消息内容
 	VisitorId int64  `form:"visitorId,optional,default=-1"` //游客id
 	KefuId    int64  `form:"kefuId,optional,default=-1"`    //客服id
+	MsgType   int64  `form:"msgType,optional,default=-1"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `form:"status,optional,default=-1"`    //状态:0合法，1违规
 	IsRead    int64  `form:"isRead,optional,default=-1"`    //状态:0未读，1已读
 	IsSend    int64  `form:"isSend,optional,default=-1"`    //状态:0未发送，1已发送
@@ -287,7 +295,7 @@ type Message struct {
 	Content    string `json:"content"`    //消息内容
 	VisitorId  int64  `json:"visitorId"`  //游客id
 	KefuId     int64  `json:"kefuId"`     //客服id
-	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息, 2公告消息
+	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息，2公告消息，3系统消息
 	Status     int64  `json:"status"`     //状态:0合法，1违规
 	IsRead     int64  `json:"isRead"`     //状态:0未读，1已读
 	IsSend     int64  `json:"isSend"`     //状态:0未发送，1已发送
@@ -299,7 +307,7 @@ type AddMessageReq struct {
 	Content    string `json:"content"`    //消息内容
 	VisitorId  int64  `json:"visitorId"`  //游客id
 	KefuId     int64  `json:"kefuId"`     //客服id
-	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息, 2公告消息
+	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息，2公告消息，3系统消息
 	Status     int64  `json:"status"`     //状态:0合法，1违规
 	IsRead     int64  `json:"isRead"`     //状态:0未读，1已读
 	IsSend     int64  `json:"isSend"`     //状态:0未发送，1已发送
@@ -313,7 +321,7 @@ type PutMessageReq struct {
 	Content    string `json:"content"`    //消息内容
 	VisitorId  int64  `json:"visitorId"`  //游客id
 	KefuId     int64  `json:"kefuId"`     //客服id
-	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息, 2公告消息
+	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息，2公告消息，3系统消息
 	Status     int64  `json:"status"`     //状态:0合法，1违规
 	IsRead     int64  `json:"isRead"`     //状态:0未读，1已读
 	IsSend     int64  `json:"isSend"`     //状态:0未发送，1已发送
@@ -339,7 +347,7 @@ type GetMessageListReq struct {
 	Content    string `form:"content,optional"`               //消息内容
 	VisitorId  int64  `form:"visitorId,optional,default=-1"`  //游客id
 	KefuId     int64  `form:"kefuId,optional,default=-1"`     //客服id
-	MsgType    int64  `form:"msgType,optional,default=-1"`    //0游客消息，1客服消息, 2公告消息
+	MsgType    int64  `form:"msgType,optional,default=-1"`    //0游客消息，1客服消息，2公告消息，3系统消息
 	Status     int64  `form:"status,optional,default=-1"`     //状态:0合法，1违规
 	IsRead     int64  `form:"isRead,optional,default=-1"`     //状态:0未读，1已读
 	IsSend     int64  `form:"isSend,optional,default=-1"`     //状态:0未发送，1已发送
@@ -391,23 +399,23 @@ type GetIpblackEnumsReq struct {
 }
 
 type MessageConfig struct {
-	Id        int64  `json:"id"`        //
-	ConfName  string `json:"confName"`  //
-	ConfKey   string `json:"confKey"`   //
-	ConfValue string `json:"confValue"` //
+	Id      int64  `json:"id"`      //主键
+	Name    string `json:"name"`    //名字
+	Key     string `json:"key"`     //密匙
+	Content string `json:"content"` //消息内容
 }
 
 type AddMessageConfigReq struct {
-	ConfName  string `json:"confName"`  //
-	ConfKey   string `json:"confKey"`   //
-	ConfValue string `json:"confValue"` //
+	Name    string `json:"name"`    //名字
+	Key     string `json:"key"`     //密匙
+	Content string `json:"content"` //消息内容
 }
 
 type PutMessageConfigReq struct {
-	Id        int64  `json:"id"`        //
-	ConfName  string `json:"confName"`  //
-	ConfKey   string `json:"confKey"`   //
-	ConfValue string `json:"confValue"` //
+	Id      int64  `json:"id"`      //主键
+	Name    string `json:"name"`    //名字
+	Key     string `json:"key"`     //密匙
+	Content string `json:"content"` //消息内容
 }
 
 type DelMessageConfigReq struct {
@@ -419,14 +427,14 @@ type GetMessageConfigReq struct {
 }
 
 type GetMessageConfigListReq struct {
-	PageSize  int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page      int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current   int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword   string `form:"keyword,optional"`             //关键词，可选
-	Id        int64  `form:"id,optional,default=-1"`       //
-	ConfName  string `form:"confName,optional"`            //
-	ConfKey   string `form:"confKey,optional"`             //
-	ConfValue string `form:"confValue,optional"`           //
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //主键
+	Name     string `form:"name,optional"`                //名字
+	Key      string `form:"key,optional"`                 //密匙
+	Content  string `form:"content,optional"`             //消息内容
 }
 
 type GetMessageConfigEnumsReq struct {

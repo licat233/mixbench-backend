@@ -1,6 +1,7 @@
 package client
 
 import (
+	"errors"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -21,6 +22,17 @@ const (
 
 	// send buffer size
 	// bufSize = 256
+
+	// welcome key
+	WelcomeKey = "welcome"
+
+	// public key
+	PublicKey = "public"
+
+	visitorType = 0
+	kefuType    = 1
+	publicType  = 2
+	systemType  = 3
 )
 
 var (
@@ -32,3 +44,5 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
+
+var ErrSystem = errors.New("server internal error! 伺服器故障! ")

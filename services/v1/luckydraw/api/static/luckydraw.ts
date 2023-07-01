@@ -1,5 +1,5 @@
 import webapi from "./gocliRequest"
-import * as components from "./luckydrawComponents"
+import type * as components from "./luckydrawComponents"
 export * from "./luckydrawComponents"
 
 /**

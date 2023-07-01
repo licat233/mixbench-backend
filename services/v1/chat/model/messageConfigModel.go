@@ -15,7 +15,7 @@ type (
 	MessageConfigModel interface {
 		messageConfigModel  // extended interface by gozero
 		messageConfig_model // extended interface by genzero
-		UpdateConfValue(ctx context.Context, Id int64, confValue string) error
+		UpdateContent(ctx context.Context, Id int64, content string) error
 	}
 
 	customMessageConfigModel struct {
@@ -30,11 +30,11 @@ func NewMessageConfigModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.O
 	}
 }
 
-func (m *customMessageConfigModel) UpdateConfValue(ctx context.Context, Id int64, confValue string) error {
+func (m *customMessageConfigModel) UpdateContent(ctx context.Context, Id int64, content string) error {
 	data, err := m.FindOne(ctx, Id)
 	if err != nil {
 		return err
 	}
-	data.ConfValue = confValue
+	data.Content = content
 	return m.Update(ctx, data)
 }

@@ -31,7 +31,7 @@ func (l *SaveMsgConfLogic) SaveMsgConf(req *types.SaveMsgConfReq) (any, error) {
 		return respx.DefaultStatusResp(nil)
 	}
 	for _, item := range req.ConfData {
-		err := l.svcCtx.MessageConfigModel.UpdateConfValue(l.ctx, item.Id, item.ConfValue)
+		err := l.svcCtx.MessageConfigModel.UpdateContent(l.ctx, item.Id, item.ConfValue)
 		if err != nil && err != model.ErrNotFound {
 			l.Logger.Error(err)
 			return nil, errorx.InternalError(err)

@@ -1,5 +1,5 @@
 import webapi from "./gocliRequest"
-import * as components from "./chatComponents"
+import type * as components from "./chatComponents"
 export * from "./chatComponents"
 
 /**

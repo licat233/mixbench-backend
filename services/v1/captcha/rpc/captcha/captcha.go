@@ -20,6 +20,8 @@ type (
 	GetCaptchaResp       = captcha_pb.GetCaptchaResp
 	GetEmailCaptchaReq   = captcha_pb.GetEmailCaptchaReq
 	GetEmailCaptchaResp  = captcha_pb.GetEmailCaptchaResp
+	SendEmailReq         = captcha_pb.SendEmailReq
+	SendEmailResp        = captcha_pb.SendEmailResp
 	VerifyCaptchaReq     = captcha_pb.VerifyCaptchaReq
 	VerifyCaptchaResp    = captcha_pb.VerifyCaptchaResp
 

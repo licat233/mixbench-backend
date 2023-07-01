@@ -217,6 +217,13 @@
             "type": "string"
           },
           {
+            "name": "content",
+            "description": "消息内容",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "visitorId",
             "description": "游客id",
             "in": "query",
@@ -228,6 +235,15 @@
           {
             "name": "kefuId",
             "description": "客服id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "msgType",
+            "description": "0游客消息，1客服消息，2公告消息，3系统消息",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -985,7 +1001,7 @@
           },
           {
             "name": "msgType",
-            "description": "0游客消息，1客服消息, 2公告消息",
+            "description": "0游客消息，1客服消息，2公告消息，3系统消息",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1231,6 +1247,7 @@
           },
           {
             "name": "id",
+            "description": "主键",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1238,19 +1255,22 @@
             "default": "-1"
           },
           {
-            "name": "confName",
+            "name": "name",
+            "description": "名字",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "confKey",
+            "name": "key",
+            "description": "密匙",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "confValue",
+            "name": "content",
+            "description": "消息内容",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1671,6 +1691,10 @@
     "AddChatRecordReq": {
       "type": "object",
       "properties": {
+        "content": {
+          "type": "string",
+          "description": "消息内容"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -1680,6 +1704,11 @@
           "type": "integer",
           "format": "int64",
           "description": "客服id"
+        },
+        "msgType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -1704,8 +1733,10 @@
       },
       "title": "AddChatRecordReq",
       "required": [
+        "content",
         "visitorId",
         "kefuId",
+        "msgType",
         "status",
         "isRead",
         "isSend",
@@ -1762,21 +1793,24 @@
     "AddMessageConfigReq": {
       "type": "object",
       "properties": {
-        "confName": {
-          "type": "string"
+        "name": {
+          "type": "string",
+          "description": "名字"
         },
-        "confKey": {
-          "type": "string"
+        "key": {
+          "type": "string",
+          "description": "密匙"
         },
-        "confValue": {
-          "type": "string"
+        "content": {
+          "type": "string",
+          "description": "消息内容"
         }
       },
       "title": "AddMessageConfigReq",
       "required": [
-        "confName",
-        "confKey",
-        "confValue"
+        "name",
+        "key",
+        "content"
       ]
     },
     "AddMessageReq": {
@@ -1799,7 +1833,7 @@
         "msgType": {
           "type": "integer",
           "format": "int64",
-          "description": "0游客消息，1客服消息, 2公告消息"
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -2022,6 +2056,10 @@
           "type": "string",
           "description": "UUID"
         },
+        "content": {
+          "type": "string",
+          "description": "消息内容"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -2031,6 +2069,11 @@
           "type": "integer",
           "format": "int64",
           "description": "客服id"
+        },
+        "msgType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -2057,8 +2100,10 @@
       "required": [
         "id",
         "uuid",
+        "content",
         "visitorId",
         "kefuId",
+        "msgType",
         "status",
         "isRead",
         "isSend",
@@ -2233,6 +2278,10 @@
           "type": "string",
           "description": "UUID"
         },
+        "content": {
+          "type": "string",
+          "description": "消息内容"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -2244,6 +2293,12 @@
           "format": "int64",
           "default": "-1",
           "description": "客服id"
+        },
+        "msgType": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -2278,6 +2333,7 @@
         "id",
         "visitorId",
         "kefuId",
+        "msgType",
         "status",
         "isRead",
         "isSend",
@@ -2509,16 +2565,20 @@
         "id": {
           "type": "integer",
           "format": "int64",
-          "default": "-1"
+          "default": "-1",
+          "description": "主键"
         },
-        "confName": {
-          "type": "string"
+        "name": {
+          "type": "string",
+          "description": "名字"
         },
-        "confKey": {
-          "type": "string"
+        "key": {
+          "type": "string",
+          "description": "密匙"
         },
-        "confValue": {
-          "type": "string"
+        "content": {
+          "type": "string",
+          "description": "消息内容"
         }
       },
       "title": "GetMessageConfigListReq",
@@ -2613,7 +2673,7 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "0游客消息，1客服消息, 2公告消息"
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -2965,7 +3025,7 @@
         "msgType": {
           "type": "integer",
           "format": "int64",
-          "description": "0游客消息，1客服消息, 2公告消息"
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -3013,24 +3073,28 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": "主键"
         },
-        "confName": {
-          "type": "string"
+        "name": {
+          "type": "string",
+          "description": "名字"
         },
-        "confKey": {
-          "type": "string"
+        "key": {
+          "type": "string",
+          "description": "密匙"
         },
-        "confValue": {
-          "type": "string"
+        "content": {
+          "type": "string",
+          "description": "消息内容"
         }
       },
       "title": "MessageConfig",
       "required": [
         "id",
-        "confName",
-        "confKey",
-        "confValue"
+        "name",
+        "key",
+        "content"
       ]
     },
     "MsgConfItem": {
@@ -3105,6 +3169,10 @@
           "type": "string",
           "description": "UUID"
         },
+        "content": {
+          "type": "string",
+          "description": "消息内容"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -3114,6 +3182,11 @@
           "type": "integer",
           "format": "int64",
           "description": "客服id"
+        },
+        "msgType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",
@@ -3140,8 +3213,10 @@
       "required": [
         "id",
         "uuid",
+        "content",
         "visitorId",
         "kefuId",
+        "msgType",
         "status",
         "isRead",
         "isSend",
@@ -3216,24 +3291,28 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "description": "主键"
         },
-        "confName": {
-          "type": "string"
+        "name": {
+          "type": "string",
+          "description": "名字"
         },
-        "confKey": {
-          "type": "string"
+        "key": {
+          "type": "string",
+          "description": "密匙"
         },
-        "confValue": {
-          "type": "string"
+        "content": {
+          "type": "string",
+          "description": "消息内容"
         }
       },
       "title": "PutMessageConfigReq",
       "required": [
         "id",
-        "confName",
-        "confKey",
-        "confValue"
+        "name",
+        "key",
+        "content"
       ]
     },
     "PutMessageReq": {
@@ -3265,7 +3344,7 @@
         "msgType": {
           "type": "integer",
           "format": "int64",
-          "description": "0游客消息，1客服消息, 2公告消息"
+          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
         },
         "status": {
           "type": "integer",

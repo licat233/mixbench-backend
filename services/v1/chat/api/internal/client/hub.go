@@ -27,26 +27,29 @@ type Hub struct {
 	VisitorClients *visitorClientMap
 	MessageList    chan *types.Message
 
-	MessageModel    model.MessageModel
-	ChatRecordModel model.ChatRecordModel
+	MessageModel       model.MessageModel
+	ChatRecordModel    model.ChatRecordModel
+	MessageConfigModel model.MessageConfigModel
 
 	hasSendBeforeHandlerErr bool
 	hasSendAfterHandlerErr  bool
 	hasDbErr                bool
 }
 
-func NewHub(messageModel model.MessageModel, chatRecordModel model.ChatRecordModel) *Hub {
+func NewHub(messageModel model.MessageModel, chatRecordModel model.ChatRecordModel, messageConfigModel model.MessageConfigModel) *Hub {
 	ctx := context.Background()
 	return &Hub{
 		Logger:                  logx.WithContext(ctx),
 		ctx:                     ctx,
 		Timer:                   timer.NewTimerTask(),
+		StopCh:                  make(chan bool),
 		Upgrader:                upgrader,
 		KefuClients:             newKefuClientMap(),
 		VisitorClients:          newVisitorClientMap(),
 		MessageList:             make(chan *types.Message, 4000),
 		MessageModel:            messageModel,
 		ChatRecordModel:         chatRecordModel,
+		MessageConfigModel:      messageConfigModel,
 		hasSendBeforeHandlerErr: false,
 		hasSendAfterHandlerErr:  false,
 		hasDbErr:                false,
@@ -188,6 +191,10 @@ func (h *Hub) AssignMessage(message *types.Message) {
 }
 
 func (h *Hub) SendBeforeHandler(message *types.Message) error {
+	// 如果不是客服或者游客的消息，不用保存
+	if message.MsgType != 0 && message.MsgType != 1 {
+		return nil
+	}
 	if h.hasSendBeforeHandlerErr {
 		return nil
 	}
@@ -220,6 +227,10 @@ func (h *Hub) SendBeforeHandler(message *types.Message) error {
 
 // 消息发送成功后的回调，确保已经发送给前端了之后，再调用
 func (h *Hub) SendAfterHandler(message *types.Message) error {
+	// 如果不是客服或者游客的消息，不用保存
+	if message.MsgType != 0 && message.MsgType != 1 {
+		return nil
+	}
 	if h.hasSendAfterHandlerErr {
 		return nil
 	}

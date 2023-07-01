@@ -21,15 +21,15 @@ var (
 	messageConfigRowsExpectAutoSet   = strings.Join(stringx.Remove(messageConfigFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	messageConfigRowsWithPlaceHolder = strings.Join(stringx.Remove(messageConfigFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheMessageConfigIdPrefix      = "cache:messageConfig:id:"
-	cacheMessageConfigConfKeyPrefix = "cache:messageConfig:confKey:"
+	cacheMessageConfigIdPrefix  = "cache:messageConfig:id:"
+	cacheMessageConfigKeyPrefix = "cache:messageConfig:key:"
 )
 
 type (
 	messageConfigModel interface {
 		Insert(ctx context.Context, data *MessageConfig) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*MessageConfig, error)
-		FindOneByConfKey(ctx context.Context, confKey string) (*MessageConfig, error)
+		FindOneByKey(ctx context.Context, key string) (*MessageConfig, error)
 		Update(ctx context.Context, data *MessageConfig) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -40,10 +40,10 @@ type (
 	}
 
 	MessageConfig struct {
-		Id        int64  `db:"id"`
-		ConfName  string `db:"conf_name"`
-		ConfKey   string `db:"conf_key"`
-		ConfValue string `db:"conf_value"`
+		Id      int64  `db:"id"`      // 主键
+		Name    string `db:"name"`    // 名字
+		Key     string `db:"key"`     // 密匙
+		Content string `db:"content"` // 消息内容
 	}
 )
 
@@ -67,12 +67,12 @@ func (m *defaultMessageConfigModel) Delete(ctx context.Context, id int64) error 
 		return err
 	}
 
-	messageConfigConfKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigConfKeyPrefix, data.ConfKey)
 	messageConfigIdKey := fmt.Sprintf("%s%v", cacheMessageConfigIdPrefix, id)
+	messageConfigKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigKeyPrefix, data.Key)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, id)
-	}, messageConfigConfKeyKey, messageConfigIdKey)
+	}, messageConfigIdKey, messageConfigKeyKey)
 	return err
 }
 
@@ -93,12 +93,12 @@ func (m *defaultMessageConfigModel) FindOne(ctx context.Context, id int64) (*Mes
 	}
 }
 
-func (m *defaultMessageConfigModel) FindOneByConfKey(ctx context.Context, confKey string) (*MessageConfig, error) {
-	messageConfigConfKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigConfKeyPrefix, confKey)
+func (m *defaultMessageConfigModel) FindOneByKey(ctx context.Context, key string) (*MessageConfig, error) {
+	messageConfigKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigKeyPrefix, key)
 	var resp MessageConfig
-	err := m.QueryRowIndexCtx(ctx, &resp, messageConfigConfKeyKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where `conf_key` = ? limit 1", messageConfigRows, m.table)
-		if err := conn.QueryRowCtx(ctx, &resp, query, confKey); err != nil {
+	err := m.QueryRowIndexCtx(ctx, &resp, messageConfigKeyKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
+		query := fmt.Sprintf("select %s from %s where `key` = ? limit 1", messageConfigRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, key); err != nil {
 			return nil, err
 		}
 		return resp.Id, nil
@@ -114,12 +114,12 @@ func (m *defaultMessageConfigModel) FindOneByConfKey(ctx context.Context, confKe
 }
 
 func (m *defaultMessageConfigModel) Insert(ctx context.Context, data *MessageConfig) (sql.Result, error) {
-	messageConfigConfKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigConfKeyPrefix, data.ConfKey)
 	messageConfigIdKey := fmt.Sprintf("%s%v", cacheMessageConfigIdPrefix, data.Id)
+	messageConfigKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigKeyPrefix, data.Key)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, messageConfigRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.ConfName, data.ConfKey, data.ConfValue)
-	}, messageConfigConfKeyKey, messageConfigIdKey)
+		return conn.ExecCtx(ctx, query, data.Name, data.Key, data.Content)
+	}, messageConfigIdKey, messageConfigKeyKey)
 	return ret, err
 }
 
@@ -129,12 +129,12 @@ func (m *defaultMessageConfigModel) Update(ctx context.Context, newData *Message
 		return err
 	}
 
-	messageConfigConfKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigConfKeyPrefix, data.ConfKey)
 	messageConfigIdKey := fmt.Sprintf("%s%v", cacheMessageConfigIdPrefix, data.Id)
+	messageConfigKeyKey := fmt.Sprintf("%s%v", cacheMessageConfigKeyPrefix, data.Key)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, messageConfigRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.ConfName, newData.ConfKey, newData.ConfValue, newData.Id)
-	}, messageConfigConfKeyKey, messageConfigIdKey)
+		return conn.ExecCtx(ctx, query, newData.Name, newData.Key, newData.Content, newData.Id)
+	}, messageConfigIdKey, messageConfigKeyKey)
 	return err
 }
 

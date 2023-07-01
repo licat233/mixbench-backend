@@ -26,20 +26,20 @@ gen_api() {
     if [ "$micro" != "api" ]; then
         return
     fi
-    service_path="${project_root}/services/v1/${name}/docs"
-    if [ ! -d "$service_path" ]; then
+    docs_path="${project_root}/services/v1/${name}/docs"
+    if [ ! -d "$docs_path" ]; then
         #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
+        echo "提示: 目录${docs_path} 不存在"
         return
     fi
-    cd $service_path || exit 1
+    cd $docs_path || exit 1
     filename="${name}.api"
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
-        echo "文件: ${filename} 不存在"
+        echo "提示: 文件${filename} 不存在"
         return
     fi
-    nohup=$(goctl api go --api="$filename" --dir="../" --style="goZero")
+    nohup=$(goctl api go --api="$filename" --dir="../api" --style="goZero")
     if [ $? -ne 0 ]; then
         exit 1
     fi
@@ -47,18 +47,20 @@ gen_api() {
     #生成接口文档swagger.json
     nohup=$(goctl api plugin -plugin goctl-swagger="swagger -filename ../api/static/swagger.json" -api "${name}.api" -dir .)
     if [ $? -ne 0 ]; then
+        echo "开始生成${name}-${micro}的swagger.json文件失败！！"
         exit 1
     fi
     echo "已生成${name}-${micro}服务swagger.json文件"
     #生成typescript调用文件
-    nohup=$(goctl api ts -api "${name}.api" -dir ../static)
+    nohup=$(goctl api ts -api "${name}.api" -dir ../api/static)
     if [ $? -ne 0 ]; then
+        echo "错误：生成ts文件失败"
         exit 1
     fi
-    cd ../static || exit 1
+    cd ../api/static || exit 1
     mdfile="${name}.ts"
     if [ ! -f $mdfile ]; then
-        echo "文件 $mdfile 不存在!"
+        echo "提示: 文件 $mdfile 不存在!"
         return
     fi
     oldstr="* as components"
@@ -84,20 +86,28 @@ gen_rpc() {
     if [ "$micro" != "rpc" ]; then
         return
     fi
-    service_path="${project_root}/services/v1/${name}/docs"
-    if [ ! -d $service_path ]; then
+    docs_path="${project_root}/services/v1/${name}/docs"
+    if [ ! -d $docs_path ]; then
         #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
+        echo "目录: ${docs_path} 不存在"
         return
     fi
-    cd $service_path
+    cd $docs_path
     filename="${name}.proto"
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
-        echo "文件: ${filename} 不存在"
+        echo -e "\n提示: 文件${filename} 不存在, 无需生成${name}-rpc服务"
         return
     fi
-    nohup=$(goctl rpc protoc $filename --go_out=../rpc --go-grpc_out=../rpc --zrpc_out=../rpc --style=goZero)
+    # 判断该rpc服务是否为 multiple
+    count=$(grep -c '^service.*{$' "$docs_path/$filename")
+    if [ $count -gt 1 ]; then
+        # 如果大于1，说明是 multiple
+        nohup=$(goctl rpc protoc $filename --go_out=../rpc --go-grpc_out=../rpc --zrpc_out=../rpc --style=goZero --multiple=true)
+    else
+        nohup=$(goctl rpc protoc $filename --go_out=../rpc --go-grpc_out=../rpc --zrpc_out=../rpc --style=goZero)
+    fi
+
     if [ $? -ne 0 ]; then
         exit 1
     fi
@@ -114,6 +124,9 @@ gen_rpc() {
     if [ $? -ne 0 ]; then
         sed -i 's/,omitempty//g' "${name}.pb.go"
     fi
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
 
     echo -e "\n已生成${name}-${micro}服务相关文件!"
     # cd ../
@@ -122,17 +135,18 @@ gen_rpc() {
     # echo "生成${name} RPC服务的Dockerfile"
 }
 
-gen() {
+gen_model() {
     name=$1
-    service_path="${project_root}/services/v1/${name}/docs"
-    if [ ! -d $service_path ]; then
-        #如果目录不存在，则退出
-        echo "目录: ${service_path} 不存在"
+    sql_file="${project_root}/deploy/mysql/${name}.sql"
+    if [ ! -f $sql_file ]; then
+        #如果文件不存在，则退出
+        echo -e "\n提示: 文件 ${name}.sql 不存在, 无需生成$name-model文件"
         return
     fi
-    cd $service_path
-    nohup=$(./gen.sh)
-    echo -e "已生成${name}服务相关文件!"
+    cd "${project_root}/services/v1/${name}/docs" || exit
+    if ! goctl model mysql ddl --src "$sql_file" -dir ../model --cache --style goZero; then
+        exit
+    fi
 }
 
 source ./data.sh
@@ -153,13 +167,75 @@ if [ -z $all_micros ]; then
     exit 1
 fi
 
+has_sql_file() {
+    name=$1
+    sql_dir="${project_root}/deploy/mysql"
+    sql_path="${sql_dir}/${name}.sql"
+    if [ ! -f "$sql_path" ]; then
+        return 1
+    fi
+    return 0
+}
+
+gen() {
+    name=$1
+    # ①根据 genzero 配置文件，使用 genzero 工具生成相关的 .api和.proto 文件
+    # ②根据 .api 和 .proto 文件，使用 goctl 工具生成相关的 gozero 微服务文件
+    # ③根据 genzero 配置文件，使用 genzero 工具修改相关的 gozero 微服务文件
+    # 注意：在某服务没有 mysql 文件的时候，不需要使用 genzero 生成该服务的 .api和.proto 文件
+    docs_path="${project_root}/services/v1/${name}/docs"
+    if [ ! -d $docs_path ]; then
+        #如果目录不存在，则退出
+        echo "目录: ${docs_path} 不存在"
+        return
+    fi
+
+    has_sql_file $name
+
+    use_genzero=$? # 0 表示存在，1 表示不存在
+
+    echo -e "\n开始生成${name}服务文件"
+
+    cd "$docs_path" || exit
+    # 使用 use_genzero
+    if [ $use_genzero -eq 0 ]; then
+        # 如果不存在 genzero.yaml 文件，则生成
+        if [ ! -f "./genzero.yaml" ]; then
+            if ! genzero init config; then
+                echo "${docs_path}目录下缺少 genzero.yaml 文件，已经生成，请先配置!"
+                exit 1
+            fi
+        fi
+
+        # ①根据yaml配置文件来生成微服务的配置文件
+        if ! genzero start; then
+            exit 1
+        fi
+    fi
+
+    # ②使用 goctl 生成微服务文件
+    for micro in ${all_micros[*]}; do
+        gen_model $name
+        gen_rpc $name $micro
+        gen_api $name $micro
+    done
+
+    go mod tidy
+
+    # 使用 use_genzero
+    if [ $use_genzero -eq 0 ]; then
+        # ③使用 genzero 修改微服务文件
+        cd "$docs_path" || exit
+        if ! genzero start; then
+            exit 1
+        fi
+    fi
+
+    echo -e "已生成${name}服务相关文件!"
+}
+
 #开始遍历编译
 for name in ${all_services[*]}; do
-    echo -e "\n开始生成${name}服务文件"
-    # for micro in ${all_micros[*]}; do
-    # gen_rpc $name $micro
-    # gen_api $name $micro
-    # done
     gen $name
 done
 

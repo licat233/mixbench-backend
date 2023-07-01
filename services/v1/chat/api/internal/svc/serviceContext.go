@@ -45,6 +45,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 		Hub: nil,
 	}
-	svc.Hub = client.NewHub(svc.MessageModel, svc.ChatRecordModel)
+	svc.Hub = client.NewHub(svc.MessageModel, svc.ChatRecordModel, svc.MessageConfigModel)
 	return svc
 }

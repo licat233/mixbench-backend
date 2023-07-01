@@ -21,6 +21,8 @@ current_path=$(
     pwd
 )
 
+chmod +x *.sh
+
 # 从 string 字符串最后一次出现 *chars 的位置开始，截取 *chars 左边的所有字符
 # project_root="${current_path%%mixbench-backend*}mixbench-backend"
 # script_path="${project_root}/deploy/script/mac"

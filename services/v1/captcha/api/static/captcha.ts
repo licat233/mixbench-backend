@@ -1,5 +1,5 @@
 import webapi from "./gocliRequest"
-import * as components from "./captchaComponents"
+import type * as components from "./captchaComponents"
 export * from "./captchaComponents"
 
 /**

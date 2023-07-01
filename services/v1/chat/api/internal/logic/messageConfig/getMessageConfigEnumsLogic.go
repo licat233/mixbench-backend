@@ -3,6 +3,8 @@ package messageConfig
 import (
 	"context"
 
+	"mixbench/common/errorx"
+	"mixbench/common/respx"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
 
@@ -23,8 +25,19 @@ func NewGetMessageConfigEnumsLogic(ctx context.Context, svcCtx *svc.ServiceConte
 	}
 }
 
-func (l *GetMessageConfigEnumsLogic) GetMessageConfigEnums(req *types.GetMessageConfigEnumsReq) (resp *types.BaseResp, err error) {
-	// todo: add your logic here and delete this line
+func (l *GetMessageConfigEnumsLogic) GetMessageConfigEnums(req *types.GetMessageConfigEnumsReq) (any, error) {
+	mdMessageConfigList, err := l.svcCtx.MessageConfigModel.FindAll(l.ctx)
+	if err != nil {
+		l.Logger.Error("failed to query messageConfig list, error: ", err)
+		return nil, errorx.InternalError(err)
+	}
+	data := make([]*types.Enum, 0)
+	for _, v := range mdMessageConfigList {
+		data = append(data, &types.Enum{
+			Label: v.Name,
+			Value: v.Id,
+		})
+	}
 
-	return
+	return respx.DefaultSingleResp(data, nil)
 }

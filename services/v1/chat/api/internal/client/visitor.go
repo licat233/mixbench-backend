@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"encoding/json"
 	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/api/internal/types"
 	"net/http"
@@ -40,7 +41,7 @@ func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *h
 
 func (c *VisitorClient) Run() {
 	// 开始收发ws信息
-	go c.WritePump(c.logout)
+	go c.WritePump()
 	go c.ReadPump()
 	//等待关闭信号
 	<-c.Stop
@@ -60,7 +61,8 @@ func (c *VisitorClient) ReadPump() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				c.Logger.Error("websocket conn.close error: %v", err)
 			}
-			break
+			c.Client.SystemErrorHandler()
+			return
 		}
 		// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
 		messageContent = preprocessMessageContent(messageContent)
@@ -83,8 +85,47 @@ func (c *VisitorClient) ReadPump() {
 	}
 }
 
-func (c *VisitorClient) logout() {
-	c.hub.VisitorClients.Del(c.Visitor.Id)
+// 给游客的ws写入消息
+func (c *VisitorClient) WritePump() {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
+		c.hub.VisitorClients.Del(c.Visitor.Id)
+	}()
+
+	// 发送欢迎信息
+	if c.Client.SendWelcomeMessage() != nil {
+		return
+	}
+
+	for {
+		select {
+		case message, ok := <-c.send:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				// The hub closed the channel.
+				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
+					c.Logger.Error(err)
+				}
+				c.Client.SystemErrorHandler()
+				return
+			}
+			body, _ := json.Marshal(*message)
+			if err := c.conn.WriteMessage(websocket.TextMessage, body); err != nil {
+				c.Logger.Error(err)
+				c.Client.SystemErrorHandler()
+				return
+			}
+			_ = c.hub.SendAfterHandler(message)
+		case <-ticker.C:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				c.Logger.Error(err)
+				c.Client.SystemErrorHandler()
+				return
+			}
+		}
+	}
 }
 
 type visitorClientMap struct {

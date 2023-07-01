@@ -9,7 +9,7 @@ CREATE TABLE `visitor` (
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '游客名',
   `ip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP',
-  `kefu_id` int(11) NOT NULL DEFAULT '-1' COMMENT '客服id，-1表示没有客服接待',
+  `kefu_id` int NOT NULL DEFAULT '-1' COMMENT '客服id，-1表示没有客服接待',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0离线，1在线，2拉黑',
   `referer` varchar(500) NOT NULL DEFAULT '' COMMENT '来源，从哪个网址发起的聊天',
   `city` varchar(100) NOT NULL DEFAULT '' COMMENT '城市或地区',
@@ -46,8 +46,10 @@ DROP TABLE IF EXISTS `chat_record`;
 CREATE TABLE `chat_record` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
-  `visitor_id` int(11) NOT NULL COMMENT '游客id',
-  `kefu_id` int(11) NOT NULL COMMENT '客服id',
+  `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
+  `visitor_id` int NOT NULL DEFAULT '0' COMMENT '游客id',
+  `kefu_id` int NOT NULL DEFAULT '0' COMMENT '客服id',
+  `msg_type` tinyint NOT NULL DEFAULT '0' COMMENT '0游客消息，1客服消息，2公告消息，3系统消息',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0合法，1违规',
   `is_read` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0未读，1已读',
   `is_send` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0未发送，1已发送',
@@ -59,6 +61,7 @@ CREATE TABLE `chat_record` (
   KEY `uuid` (`uuid`),
   KEY `visitor_id` (`visitor_id`),
   KEY `kefu_id` (`kefu_id`),
+  KEY `msg_type` (`msg_type`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='聊天记录';
 
@@ -67,9 +70,9 @@ CREATE TABLE `message` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
-  `visitor_id` int(11) NOT NULL COMMENT '游客id',
-  `kefu_id` int(11) NOT NULL COMMENT '客服id',
-  `msg_type` tinyint NOT NULL DEFAULT '0' COMMENT '0游客消息，1客服消息, 2公告消息',
+  `visitor_id` int NOT NULL DEFAULT '0' COMMENT '游客id',
+  `kefu_id` int NOT NULL DEFAULT '0' COMMENT '客服id',
+  `msg_type` tinyint NOT NULL DEFAULT '0' COMMENT '0游客消息，1客服消息，2公告消息，3系统消息',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0合法，1违规',
   `is_read` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0未读，1已读',
   `is_send` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0未发送，1已发送',
@@ -82,6 +85,8 @@ CREATE TABLE `message` (
   KEY `uuid` (`uuid`),
   KEY `visitor_id` (`visitor_id`),
   KEY `kefu_id` (`kefu_id`),
+  KEY `msg_type` (`msg_type`),
+  KEY `expire_time` (`expire_time`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='消息, 主要用于缓存未发送成功的消息';
 
@@ -97,10 +102,10 @@ CREATE TABLE `ipblack` (
 
 DROP TABLE IF EXISTS `message_config`;
 CREATE TABLE `message_config` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `conf_name` varchar(255) NOT NULL DEFAULT '',
-  `conf_key` varchar(255) NOT NULL DEFAULT '',
-  `conf_value` varchar(255) NOT NULL DEFAULT '',
+  `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT '主键',
+  `name` varchar(255) NOT NULL DEFAULT ''  COMMENT '名字',
+  `key` varchar(255) NOT NULL DEFAULT '' COMMENT '密匙',
+  `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `conf_key` (`conf_key`)
+  UNIQUE KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='消息配置';

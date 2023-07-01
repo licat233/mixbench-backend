@@ -41,8 +41,10 @@ type (
 	ChatRecord struct {
 		Id        int64     `db:"id"`         // 表主键
 		Uuid      string    `db:"uuid"`       // UUID
+		Content   string    `db:"content"`    // 消息内容
 		VisitorId int64     `db:"visitor_id"` // 游客id
 		KefuId    int64     `db:"kefu_id"`    // 客服id
+		MsgType   int64     `db:"msg_type"`   // 0游客消息，1客服消息，2公告消息，3系统消息
 		Status    int64     `db:"status"`     // 状态:0合法，1违规
 		IsRead    int64     `db:"is_read"`    // 状态:0未读，1已读
 		IsSend    int64     `db:"is_send"`    // 状态:0未发送，1已发送
@@ -96,8 +98,8 @@ func (m *defaultChatRecordModel) FindOne(ctx context.Context, id int64) (*ChatRe
 func (m *defaultChatRecordModel) Insert(ctx context.Context, data *ChatRecord) (sql.Result, error) {
 	chatRecordIdKey := fmt.Sprintf("%s%v", cacheChatRecordIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, chatRecordRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.VisitorId, data.KefuId, data.Status, data.IsRead, data.IsSend, data.SendTime, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, chatRecordRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.VisitorId, data.KefuId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.IsDeleted)
 	}, chatRecordIdKey)
 	return ret, err
 }
@@ -106,7 +108,7 @@ func (m *defaultChatRecordModel) Update(ctx context.Context, data *ChatRecord) e
 	chatRecordIdKey := fmt.Sprintf("%s%v", cacheChatRecordIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, chatRecordRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.VisitorId, data.KefuId, data.Status, data.IsRead, data.IsSend, data.SendTime, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.VisitorId, data.KefuId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.IsDeleted, data.Id)
 	}, chatRecordIdKey)
 	return err
 }

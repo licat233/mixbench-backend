@@ -235,8 +235,10 @@ export interface GetKefuEnumsReq {
 export interface ChatRecord {
 	id: number // 表主键
 	uuid: string // UUID
+	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -244,8 +246,10 @@ export interface ChatRecord {
 }
 
 export interface AddChatRecordReq {
+	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -255,8 +259,10 @@ export interface AddChatRecordReq {
 export interface PutChatRecordReq {
 	id: number // 表主键
 	uuid: string // UUID
+	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -280,8 +286,10 @@ export interface GetChatRecordListReqParams {
 	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
+	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -298,7 +306,7 @@ export interface Message {
 	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
-	msgType: number // 0游客消息，1客服消息, 2公告消息
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -310,7 +318,7 @@ export interface AddMessageReq {
 	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
-	msgType: number // 0游客消息，1客服消息, 2公告消息
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -324,7 +332,7 @@ export interface PutMessageReq {
 	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
-	msgType: number // 0游客消息，1客服消息, 2公告消息
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -352,7 +360,7 @@ export interface GetMessageListReqParams {
 	content: string // 消息内容
 	visitorId: number // 游客id
 	kefuId: number // 客服id
-	msgType: number // 0游客消息，1客服消息, 2公告消息
+	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
 	isSend: number // 状态:0未发送，1已发送
@@ -406,23 +414,23 @@ export interface GetIpblackEnumsReq {
 }
 
 export interface MessageConfig {
-	id: number // 
-	confName: string // 
-	confKey: string // 
-	confValue: string // 
+	id: number // 主键
+	name: string // 名字
+	key: string // 密匙
+	content: string // 消息内容
 }
 
 export interface AddMessageConfigReq {
-	confName: string // 
-	confKey: string // 
-	confValue: string // 
+	name: string // 名字
+	key: string // 密匙
+	content: string // 消息内容
 }
 
 export interface PutMessageConfigReq {
-	id: number // 
-	confName: string // 
-	confKey: string // 
-	confValue: string // 
+	id: number // 主键
+	name: string // 名字
+	key: string // 密匙
+	content: string // 消息内容
 }
 
 export interface DelMessageConfigReq {
@@ -440,10 +448,10 @@ export interface GetMessageConfigListReqParams {
 	page: number // 当前页码，默认1，可选
 	current: number // 当前页码，默认1，用于对接umijs，可选
 	keyword: string // 关键词，可选
-	id: number // 
-	confName: string // 
-	confKey: string // 
-	confValue: string // 
+	id: number // 主键
+	name: string // 名字
+	key: string // 密匙
+	content: string // 消息内容
 }
 
 export interface GetMessageConfigEnumsReq {

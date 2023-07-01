@@ -65,8 +65,10 @@ func MdChatRecordToApiChatRecord(md *model.ChatRecord) *types.ChatRecord {
 	return &types.ChatRecord{
 		Id:        md.Id,
 		Uuid:      md.Uuid,
+		Content:   md.Content,
 		VisitorId: md.VisitorId,
 		KefuId:    md.KefuId,
+		MsgType:   md.MsgType,
 		Status:    md.Status,
 		IsRead:    md.IsRead,
 		IsSend:    md.IsSend,
@@ -142,10 +144,10 @@ func MdMessageConfigToApiMessageConfig(md *model.MessageConfig) *types.MessageCo
 		return nil
 	}
 	return &types.MessageConfig{
-		Id:        md.Id,
-		ConfName:  md.ConfName,
-		ConfKey:   md.ConfKey,
-		ConfValue: md.ConfValue,
+		Id:      md.Id,
+		Name:    md.Name,
+		Key:     md.Key,
+		Content: md.Content,
 	}
 }
 

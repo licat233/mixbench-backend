@@ -28,10 +28,10 @@ func NewPutMessageConfigLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *PutMessageConfigLogic) PutMessageConfig(req *types.PutMessageConfigReq) (any, error) {
 	in := &model.MessageConfig{
-		Id:        req.Id,
-		ConfName:  req.ConfName,
-		ConfKey:   req.ConfKey,
-		ConfValue: req.ConfValue,
+		Id:      req.Id,
+		Name:    req.Name,
+		Key:     req.Key,
+		Content: req.Content,
 	}
 	if err := l.svcCtx.MessageConfigModel.Update(l.ctx, in); err != nil {
 		l.Logger.Error("failed to update messageConfig, error: ", err)

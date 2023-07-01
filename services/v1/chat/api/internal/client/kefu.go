@@ -41,7 +41,7 @@ func NewKefuClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http
 
 func (c *KefuClient) Run() {
 	// 开始收发ws信息
-	go c.WritePump(c.logout)
+	go c.WritePump()
 	go c.ReadPump()
 	//等待关闭信号
 	<-c.Stop
@@ -61,7 +61,8 @@ func (c *KefuClient) ReadPump() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				c.Logger.Error("websocket conn.close error: %v", err)
 			}
-			break
+			c.Client.SystemErrorHandler()
+			return
 		}
 		// messageBody 为一个完整的 message 的 json 数据
 		var message types.Message
@@ -81,8 +82,44 @@ func (c *KefuClient) ReadPump() {
 	}
 }
 
-func (c *KefuClient) logout() {
-	c.hub.KefuClients.Del(c.Kefu.Id)
+// 给客服的ws写入消息
+func (c *KefuClient) WritePump() {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
+		c.hub.KefuClients.Del(c.Kefu.Id)
+	}()
+
+	//发送公告信息
+	if c.Client.SendPublicMessage() != nil {
+		return
+	}
+
+	for {
+		select {
+		case message, ok := <-c.send:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				// The hub closed the channel.
+				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
+					c.Logger.Error(err)
+				}
+				return
+			}
+			body, _ := json.Marshal(*message)
+			if err := c.conn.WriteMessage(websocket.TextMessage, body); err != nil {
+				c.Logger.Error(err)
+				return
+			}
+			_ = c.hub.SendAfterHandler(message)
+		case <-ticker.C:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				c.Logger.Error(err)
+				return
+			}
+		}
+	}
 }
 
 type kefuClientMap struct {
