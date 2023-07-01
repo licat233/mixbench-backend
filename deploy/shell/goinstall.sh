@@ -10,7 +10,7 @@
 version="$1"
 if [ -z $version ]; then
     echo "请输入要下载的go版本号"
-    exit
+    exit 1
 fi
 
 update_version="go${version}"
@@ -23,7 +23,7 @@ backupshell() {
     )
     #如果处于data中，那就不需要备份
     if [ $basepath = "/data" ]; then
-        exit
+        exit 0
     fi
     #如果存在，则备份
     if [ -f /data/goinstall.sh ]; then
@@ -39,7 +39,7 @@ if command -v go >/dev/null 2>&1; then
     if [ $version = $update_version ]; then
         echo "---------- 当前go版本已经是 ${version} ，无需重复安装---------"
         backupshell
-        exit
+        exit 0
     fi
 fi
 
@@ -59,7 +59,7 @@ if [ ! -f $filepath ]; then
     if [ $curl_code != "200" ]; then
         echo "下载失败: $gourl"
         rm -f $filepath
-        exit
+        exit 1
     fi
     echo "下载成功"
 fi
@@ -113,7 +113,7 @@ mv /data/go $goroot
 if ! command -v go >/dev/null 2>&1; then
     echo "---------- go 环境配置失败 ---------"
     echo "---------- go version 升级失败 ---------"
-    exit
+    exit 1
 fi
 
 backupshell
@@ -122,7 +122,7 @@ source ~/.bash_profile
 version=$(go env GOVERSION)
 if [ ! $version -eq $update_version ]; then
     echo "---------- ${version} -> ${update_version} 升级失败  ---------"
-    exit
+    exit 1
 fi
 
 echo "---------- 成功安装升级 ${version} ---------"

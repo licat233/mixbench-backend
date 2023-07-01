@@ -10,8 +10,8 @@ current_path=$(
 
 cd "$current_path" || exit
 
-if [ ! -f "./genzeroConfig.yaml" ]; then
-    if ! ../genzero init config; then
+if [ ! -f "./genzero.yaml" ]; then
+    if ! genzero init config; then
         exit 1
     fi
 fi

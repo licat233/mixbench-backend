@@ -61,6 +61,13 @@ func newPrizePoolModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Optio
 	}
 }
 
+func (m *defaultPrizePoolModel) withSession(session sqlx.Session) *defaultPrizePoolModel {
+	return &defaultPrizePoolModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`prize_pool`",
+	}
+}
+
 func (m *defaultPrizePoolModel) Delete(ctx context.Context, id int64) error {
 	prizePoolIdKey := fmt.Sprintf("%s%v", cachePrizePoolIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

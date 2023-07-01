@@ -58,6 +58,13 @@ func newUserPoolModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option
 	}
 }
 
+func (m *defaultUserPoolModel) withSession(session sqlx.Session) *defaultUserPoolModel {
+	return &defaultUserPoolModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`user_pool`",
+	}
+}
+
 func (m *defaultUserPoolModel) Delete(ctx context.Context, id int64) error {
 	userPoolIdKey := fmt.Sprintf("%s%v", cacheUserPoolIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

@@ -54,6 +54,14 @@ message AuthEmailCaptchaResp {
   bool success = 1;
 }
 
+message SendEmailReq {
+
+}
+
+message SendEmailResp {
+
+}
+
 service Captcha {
   //获取数学验证码
   rpc GetMathCaptcha (GetCaptchaReq) returns (GetCaptchaResp);
@@ -66,5 +74,4 @@ service Captcha {
 
   //校验邮箱验证码
   rpc AuthEmailCaptcha (AuthEmailCaptchaReq) returns (AuthEmailCaptchaResp);
-
 }

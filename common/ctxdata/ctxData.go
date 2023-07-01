@@ -15,6 +15,19 @@ var (
 )
 
 // 获取用户id
+func GetInt64FromCtx(ctx context.Context, key string) int64 {
+	var value int64
+	if jsonValue, ok := ctx.Value(key).(json.Number); ok {
+		if number, err := jsonValue.Int64(); err == nil {
+			value = number
+		} else {
+			logx.WithContext(ctx).Errorf("GetInt64FromCtx err: %+v", err)
+		}
+	}
+	return value
+}
+
+// 获取用户id
 func GetUidFromCtx(ctx context.Context) int64 {
 	var user_id int64
 	if jsonUid, ok := ctx.Value(CtxKeyJwtUserId).(json.Number); ok {

@@ -59,6 +59,13 @@ func newLuckyModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *
 	}
 }
 
+func (m *defaultLuckyModel) withSession(session sqlx.Session) *defaultLuckyModel {
+	return &defaultLuckyModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`lucky`",
+	}
+}
+
 func (m *defaultLuckyModel) Delete(ctx context.Context, id int64) error {
 	luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

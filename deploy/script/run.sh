@@ -36,7 +36,7 @@ run() {
         if [ ! $? -eq 0 ]; then
             #kill失败
             echo "提示: ${filename}: [ kill -9 $pid ] 失败"
-            exit
+            exit 1
             return
         fi
         echo "已终止进程：${filename} $pid"
@@ -63,7 +63,7 @@ service_name=$1
 all_services=($(filter_service $service_name))
 if [ -z $all_services ]; then
     echo "unknown service_name: ${service_name}"
-    exit
+    exit 1
 fi
 
 #选择要构建的子服务
@@ -71,7 +71,7 @@ micro_name=$2
 all_micros=($(filter_micro $micro_name))
 if [ -z $all_micros ]; then
     echo "unknown micro_name: ${micro_name}"
-    exit
+    exit 1
 fi
 
 #开始遍历运行

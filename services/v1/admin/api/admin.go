@@ -18,7 +18,7 @@ import (
 )
 
 var configFile = flag.String("f", "etc/admin.yaml", "the config file")
-var rootDir = flag.String("root", "./", "the project root path")
+var rootDir = flag.String("d", "./", "the project root path")
 
 func main() {
 	flag.Parse()
@@ -29,6 +29,11 @@ func main() {
 	c.RootDir = *rootDir
 	//配置debug模式
 	errorx.Debug = c.Debug
+
+	//jwt认证错误处理
+	// jwtErrHandler := rest.WithUnauthorizedCallback(func(w http.ResponseWriter, r *http.Request, err error) {
+	// 	// 自定义处理返回
+	// })
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
@@ -45,6 +50,7 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
+
 	//错误处理
 	httpx.SetErrorHandlerCtx(errorx.ResponseErrorHandlerCtx)
 

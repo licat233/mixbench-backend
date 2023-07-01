@@ -79,6 +79,17 @@ func MdActivityToApiActivity(md *model.Activity) *types.Activity {
 	}
 }
 
+func MdActivities2ApiActivities(mdList []*model.Activity) []*types.Activity {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Activity, 0)
+	for _, v := range mdList {
+		data = append(data, MdActivityToApiActivity(v))
+	}
+	return data
+}
+
 func PbActivityToApiActivity(pb *luckydraw_pb.Activity) *types.Activity {
 	if pb == nil {
 		return nil
@@ -95,17 +106,6 @@ func PbActivityToApiActivity(pb *luckydraw_pb.Activity) *types.Activity {
 		StartTime: pb.StartTime,
 		EndTime:   pb.EndTime,
 	}
-}
-
-func MdActivities2ApiActivities(mdList []*model.Activity) []*types.Activity {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Activity, 0)
-	for _, v := range mdList {
-		data = append(data, MdActivityToApiActivity(v))
-	}
-	return data
 }
 
 func PbActivities2ApiActivities(pbList []*luckydraw_pb.Activity) []*types.Activity {
@@ -134,6 +134,17 @@ func MdLuckyToApiLucky(md *model.Lucky) *types.Lucky {
 	}
 }
 
+func MdLuckies2ApiLuckies(mdList []*model.Lucky) []*types.Lucky {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Lucky, 0)
+	for _, v := range mdList {
+		data = append(data, MdLuckyToApiLucky(v))
+	}
+	return data
+}
+
 func PbLuckyToApiLucky(pb *luckydraw_pb.Lucky) *types.Lucky {
 	if pb == nil {
 		return nil
@@ -147,17 +158,6 @@ func PbLuckyToApiLucky(pb *luckydraw_pb.Lucky) *types.Lucky {
 		LuckDate:    pb.LuckDate,
 		Ip:          pb.Ip,
 	}
-}
-
-func MdLuckies2ApiLuckies(mdList []*model.Lucky) []*types.Lucky {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Lucky, 0)
-	for _, v := range mdList {
-		data = append(data, MdLuckyToApiLucky(v))
-	}
-	return data
 }
 
 func PbLuckies2ApiLuckies(pbList []*luckydraw_pb.Lucky) []*types.Lucky {
@@ -185,6 +185,17 @@ func MdPrizeToApiPrize(md *model.Prize) *types.Prize {
 	}
 }
 
+func MdPrizes2ApiPrizes(mdList []*model.Prize) []*types.Prize {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Prize, 0)
+	for _, v := range mdList {
+		data = append(data, MdPrizeToApiPrize(v))
+	}
+	return data
+}
+
 func PbPrizeToApiPrize(pb *luckydraw_pb.Prize) *types.Prize {
 	if pb == nil {
 		return nil
@@ -197,17 +208,6 @@ func PbPrizeToApiPrize(pb *luckydraw_pb.Prize) *types.Prize {
 		Price:  pb.Price,
 		Status: pb.Status,
 	}
-}
-
-func MdPrizes2ApiPrizes(mdList []*model.Prize) []*types.Prize {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Prize, 0)
-	for _, v := range mdList {
-		data = append(data, MdPrizeToApiPrize(v))
-	}
-	return data
 }
 
 func PbPrizes2ApiPrizes(pbList []*luckydraw_pb.Prize) []*types.Prize {
@@ -233,6 +233,17 @@ func MdPrizeGradeToApiPrizeGrade(md *model.PrizeGrade) *types.PrizeGrade {
 	}
 }
 
+func MdPrizeGrades2ApiPrizeGrades(mdList []*model.PrizeGrade) []*types.PrizeGrade {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.PrizeGrade, 0)
+	for _, v := range mdList {
+		data = append(data, MdPrizeGradeToApiPrizeGrade(v))
+	}
+	return data
+}
+
 func PbPrizeGradeToApiPrizeGrade(pb *luckydraw_pb.PrizeGrade) *types.PrizeGrade {
 	if pb == nil {
 		return nil
@@ -243,17 +254,6 @@ func PbPrizeGradeToApiPrizeGrade(pb *luckydraw_pb.PrizeGrade) *types.PrizeGrade 
 		Name:  pb.Name,
 		IsWin: pb.IsWin,
 	}
-}
-
-func MdPrizeGrades2ApiPrizeGrades(mdList []*model.PrizeGrade) []*types.PrizeGrade {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.PrizeGrade, 0)
-	for _, v := range mdList {
-		data = append(data, MdPrizeGradeToApiPrizeGrade(v))
-	}
-	return data
 }
 
 func PbPrizeGrades2ApiPrizeGrades(pbList []*luckydraw_pb.PrizeGrade) []*types.PrizeGrade {
@@ -284,6 +284,17 @@ func MdPrizePoolToApiPrizePool(md *model.PrizePool) *types.PrizePool {
 	}
 }
 
+func MdPrizePools2ApiPrizePools(mdList []*model.PrizePool) []*types.PrizePool {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.PrizePool, 0)
+	for _, v := range mdList {
+		data = append(data, MdPrizePoolToApiPrizePool(v))
+	}
+	return data
+}
+
 func PbPrizePoolToApiPrizePool(pb *luckydraw_pb.PrizePool) *types.PrizePool {
 	if pb == nil {
 		return nil
@@ -299,17 +310,6 @@ func PbPrizePoolToApiPrizePool(pb *luckydraw_pb.PrizePool) *types.PrizePool {
 		Total:      pb.Total,
 		Remainder:  pb.Remainder,
 	}
-}
-
-func MdPrizePools2ApiPrizePools(mdList []*model.PrizePool) []*types.PrizePool {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.PrizePool, 0)
-	for _, v := range mdList {
-		data = append(data, MdPrizePoolToApiPrizePool(v))
-	}
-	return data
 }
 
 func PbPrizePools2ApiPrizePools(pbList []*luckydraw_pb.PrizePool) []*types.PrizePool {
@@ -335,6 +335,17 @@ func MdProjectToApiProject(md *model.Project) *types.Project {
 	}
 }
 
+func MdProjects2ApiProjects(mdList []*model.Project) []*types.Project {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Project, 0)
+	for _, v := range mdList {
+		data = append(data, MdProjectToApiProject(v))
+	}
+	return data
+}
+
 func PbProjectToApiProject(pb *luckydraw_pb.Project) *types.Project {
 	if pb == nil {
 		return nil
@@ -345,17 +356,6 @@ func PbProjectToApiProject(pb *luckydraw_pb.Project) *types.Project {
 		Name:   pb.Name,
 		Status: pb.Status,
 	}
-}
-
-func MdProjects2ApiProjects(mdList []*model.Project) []*types.Project {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Project, 0)
-	for _, v := range mdList {
-		data = append(data, MdProjectToApiProject(v))
-	}
-	return data
 }
 
 func PbProjects2ApiProjects(pbList []*luckydraw_pb.Project) []*types.Project {
@@ -386,6 +386,17 @@ func MdUserToApiUser(md *model.User) *types.User {
 	}
 }
 
+func MdUsers2ApiUsers(mdList []*model.User) []*types.User {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.User, 0)
+	for _, v := range mdList {
+		data = append(data, MdUserToApiUser(v))
+	}
+	return data
+}
+
 func PbUserToApiUser(pb *luckydraw_pb.User) *types.User {
 	if pb == nil {
 		return nil
@@ -401,17 +412,6 @@ func PbUserToApiUser(pb *luckydraw_pb.User) *types.User {
 		Score:    pb.Score,
 		Status:   pb.Status,
 	}
-}
-
-func MdUsers2ApiUsers(mdList []*model.User) []*types.User {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.User, 0)
-	for _, v := range mdList {
-		data = append(data, MdUserToApiUser(v))
-	}
-	return data
 }
 
 func PbUsers2ApiUsers(pbList []*luckydraw_pb.User) []*types.User {
@@ -439,6 +439,17 @@ func MdUserPoolToApiUserPool(md *model.UserPool) *types.UserPool {
 	}
 }
 
+func MdUserPools2ApiUserPools(mdList []*model.UserPool) []*types.UserPool {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.UserPool, 0)
+	for _, v := range mdList {
+		data = append(data, MdUserPoolToApiUserPool(v))
+	}
+	return data
+}
+
 func PbUserPoolToApiUserPool(pb *luckydraw_pb.UserPool) *types.UserPool {
 	if pb == nil {
 		return nil
@@ -451,17 +462,6 @@ func PbUserPoolToApiUserPool(pb *luckydraw_pb.UserPool) *types.UserPool {
 		Status:     pb.Status,
 		Score:      pb.Score,
 	}
-}
-
-func MdUserPools2ApiUserPools(mdList []*model.UserPool) []*types.UserPool {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.UserPool, 0)
-	for _, v := range mdList {
-		data = append(data, MdUserPoolToApiUserPool(v))
-	}
-	return data
 }
 
 func PbUserPools2ApiUserPools(pbList []*luckydraw_pb.UserPool) []*types.UserPool {

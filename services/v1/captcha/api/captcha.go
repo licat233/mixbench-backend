@@ -18,7 +18,7 @@ import (
 )
 
 var configFile = flag.String("f", "etc/captcha.yaml", "the config file")
-var rootDir = flag.String("root", "./", "the project root path")
+var rootDir = flag.String("d", "./", "the project root path")
 
 func main() {
 	flag.Parse()

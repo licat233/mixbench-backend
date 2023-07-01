@@ -1,0 +1,50 @@
+Name: chat
+Host: 0.0.0.0
+Port: ${CHAT_API_PORT}
+
+Mode: ${SERVICE_MODE}
+Debug: ${SERVICE_DEBUG}
+
+Mysql:
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE_PREFIX}_chat?${MYSQL_CONN_OPTIONS}
+
+Auth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400
+
+VisitorAuthSecret: qweqwdasaxasdqweqwdqwdwe
+
+Log:
+  ServiceName: chat-api
+  Level: error
+
+# 单服务根目录
+RootDir: ./
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_CHAT_API_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: chat-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+#静态资源服务配置
+StaticConfig:
+  Domain: ${STATIC_HOST}
+  Root: ${STATIC_ROOT}
+
+CaptchaRpc:
+  Endpoints:
+    - 127.0.0.1:${CAPTCHA_RPC_PORT}
+  NonBlock: true

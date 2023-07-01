@@ -17,7 +17,7 @@ import (
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

@@ -38,7 +38,7 @@ splitstr() {
     num=${#arr[@]}
     if [ $num -ne 2 ]; then
         echo "split error: ${web}"
-        exit
+        exit 1
     fi
     echo ${arr[@]}
 }
@@ -79,7 +79,7 @@ replace() {
     if [ $? -ne 0 ]; then
         recover $file
         echo "panic:replace error,file=${file},oldstr=${oldstr},newstr=${newstr}"
-        exit
+        exit 1
     fi
 }
 

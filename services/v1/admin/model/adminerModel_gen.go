@@ -64,6 +64,13 @@ func newAdminerModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option)
 	}
 }
 
+func (m *defaultAdminerModel) withSession(session sqlx.Session) *defaultAdminerModel {
+	return &defaultAdminerModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`adminer`",
+	}
+}
+
 func (m *defaultAdminerModel) Delete(ctx context.Context, id int64) error {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

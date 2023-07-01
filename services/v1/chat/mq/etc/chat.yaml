@@ -1,0 +1,46 @@
+Name: chat-mq
+Host: 0.0.0.0
+Port: ${CHAT_MQ_PORT}
+Mode: ${SERVICE_MODE}
+Debug: ${SERVICE_DEBUG}
+
+Log:
+  ServiceName: chat-mq
+  Level: error
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_LUCKDRAW_MQ_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: chat-mq
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Mysql:
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE_PREFIX}_luckydraw?${MYSQL_CONN_OPTIONS}
+
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+#kafka配置
+KqConf:
+    Name: ChatKq
+    Brokers:
+      - kafka:${KAFKA_PORT}
+    Group: chat-group
+    Topic: chat-topic
+    Offset: first
+    Consumers: 1
+    Processors: 1

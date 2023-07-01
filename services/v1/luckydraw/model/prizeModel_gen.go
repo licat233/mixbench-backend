@@ -58,6 +58,13 @@ func newPrizeModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *
 	}
 }
 
+func (m *defaultPrizeModel) withSession(session sqlx.Session) *defaultPrizeModel {
+	return &defaultPrizeModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`prize`",
+	}
+}
+
 func (m *defaultPrizeModel) Delete(ctx context.Context, id int64) error {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

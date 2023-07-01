@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 	// uuid "github.com/satori/go.uuid"
 )
@@ -38,18 +38,22 @@ func ParseToken(tokenString string, secret string) (*jwt.MapClaims, error) {
 	})
 
 	if err != nil {
-		if ve, ok := err.(*jwt.ValidationError); ok {
-			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, ErrTokenMalformed
-			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				return nil, ErrTokenExpired
-			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, ErrTokenNotValidYet
-			} else {
-				return nil, ErrTokenInvalid
-			}
-		}
+		return nil, err
 	}
+
+	// if err != nil {
+	// 	if ve, ok := err.(*jwt.ValidationError); ok {
+	// 		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
+	// 			return nil, ErrTokenMalformed
+	// 		} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
+	// 			return nil, ErrTokenExpired
+	// 		} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
+	// 			return nil, ErrTokenNotValidYet
+	// 		} else {
+	// 			return nil, ErrTokenInvalid
+	// 		}
+	// 	}
+	// }
 
 	if token != nil {
 		if claims, ok := token.Claims.(*jwt.MapClaims); ok && token.Valid {

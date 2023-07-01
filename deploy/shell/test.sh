@@ -7,14 +7,14 @@ if [ ! -z $pid ]; then
     if [ ! $? -eq 0 ]; then
         #kill失败
         echo "${name}-rpc: [ kill -9 $pid ] 失败"
-        exit
+        exit 1
     fi
 fi
 service_path="/www/wwwroot/mixbench/services/v1/${name}/rpc"
 cd $service_path
 
 "./${name}-rpc" &
-exit
+exit 1
 
 name=admin
 service_path="/www/wwwroot/mixbench/services/v1/${name}"
@@ -24,7 +24,7 @@ else
     echo "存在"
 fi
 
-exit
+exit 1
 
 output=$(ps -ef | grep admin-rpc | grep -v grep | awk '{print $2}')
 echo $output
@@ -32,7 +32,7 @@ if [ ! -z $output ]; then
     echo "空"
 fi
 
-exit
+exit 1
 
 loading_show=""
 loading_index=0
@@ -79,35 +79,35 @@ loading 20
 loading 50
 loading 80
 loading 100
-exit
+exit 1
 
 all_services=("captcha" "luckydraw" "admin")
 for name in ${all_services[@]}; do
     echo $name
 done
 
-exit
+exit 1
 
 echo $0
-exit
+exit 1
 
 fun() {
     echo "hello"
 }
 fun
-exit
+exit 1
 
 touch demo.txt
 path=./demo.txt
 rm -f $path
-exit
+exit 1
 
 path=~/.bash_profile
 if [ -f $path ]; then
     echo "存在"
 fi
 
-exit
+exit 1
 
 basepath=$(
     cd $(dirname $0)
@@ -115,7 +115,7 @@ basepath=$(
 )
 readonly basepath
 echo $basepath
-exit
+exit 1
 
 chmod a+x goupdate.sh
 /data/goupdate.sh 1.19
@@ -131,24 +131,24 @@ fi
 # 在~/.bash_profile最后一行行后添加字符串
 echo $content >>$profile
 
-exit
+exit 1
 
 goroot="default path"
 if command -v go >/dev/null 2>&1; then
     goroot=$(go env GOROOT)
 fi
 echo $goroot
-exit
+exit 1
 
 version="$1"
 if [ -z $version ]; then
     echo "请输入要下载的go版本号"
-    exit
+    exit 1
 fi
 
 curl_code=$(curl -# -O --insecure -s -w %{http_code} https://sscpic1.chinaz.net/Files/pic/pic9/202208/apic42541_s.jpg)
 if [ $curl_code != "200" ]; then
     echo "下载失败"
-    exit
+    exit 1
 fi
 echo "下载成功"

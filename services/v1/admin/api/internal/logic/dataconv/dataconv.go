@@ -81,6 +81,17 @@ func MdAdminerToApiAdminer(md *model.Adminer) *types.Adminer {
 	}
 }
 
+func MdAdminers2ApiAdminers(mdList []*model.Adminer) []*types.Adminer {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Adminer, 0)
+	for _, v := range mdList {
+		data = append(data, MdAdminerToApiAdminer(v))
+	}
+	return data
+}
+
 func PbAdminerToApiAdminer(pb *admin_pb.Adminer) *types.Adminer {
 	if pb == nil {
 		return nil
@@ -99,17 +110,6 @@ func PbAdminerToApiAdminer(pb *admin_pb.Adminer) *types.Adminer {
 		LoginCount:   pb.LoginCount,
 		LastLogin:    pb.LastLogin,
 	}
-}
-
-func MdAdminers2ApiAdminers(mdList []*model.Adminer) []*types.Adminer {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Adminer, 0)
-	for _, v := range mdList {
-		data = append(data, MdAdminerToApiAdminer(v))
-	}
-	return data
 }
 
 func PbAdminers2ApiAdminers(pbList []*admin_pb.Adminer) []*types.Adminer {

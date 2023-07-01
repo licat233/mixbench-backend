@@ -33,7 +33,7 @@ func RemotePlatform(r *http.Request) (string, error) {
 	if len(u) == 0 {
 		u = r.Header.Get("user-agent")
 		if len(u) == 0 {
-			return u, errors.New("未知设备的请求！")
+			return u, errors.New("未知设备")
 		}
 	}
 	//ipad
@@ -71,7 +71,7 @@ func RemotePlatform(r *http.Request) (string, error) {
 	if ubuntuR.MatchString(u) {
 		return "ubuntu", nil
 	}
-	return u, errors.New("未知设备的请求")
+	return u, errors.New("未知设备")
 }
 
 // 获取本地服务器的ip

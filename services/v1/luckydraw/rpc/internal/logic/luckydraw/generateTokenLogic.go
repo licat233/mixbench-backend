@@ -18,7 +18,7 @@ import (
 	"mixbench/services/v1/luckydraw/rpc/internal/svc"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

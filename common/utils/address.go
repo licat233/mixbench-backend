@@ -8,6 +8,7 @@
 package utils
 
 import (
+	"bytes"
 	"log"
 	"net"
 	"path"
@@ -23,6 +24,15 @@ type AddressInfo struct {
 	TimeZone  string  // 时区
 	Latitude  float64 // 纬度
 	Longitude float64 // 经度
+}
+
+func (a *AddressInfo) ToString() string {
+	buf := bytes.Buffer{}
+	buf.WriteString("Continent:" + a.Continent + "\n")
+	buf.WriteString("Country:" + a.Country + "\n")
+	buf.WriteString("Provinces:" + a.Provinces + "\n")
+	buf.WriteString("City:" + a.City + "\n")
+	return buf.String()
 }
 
 func QueryAddress(ipAddress string) *AddressInfo {

@@ -56,6 +56,13 @@ func newJwtBlacklistModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Op
 	}
 }
 
+func (m *defaultJwtBlacklistModel) withSession(session sqlx.Session) *defaultJwtBlacklistModel {
+	return &defaultJwtBlacklistModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`jwt_blacklist`",
+	}
+}
+
 func (m *defaultJwtBlacklistModel) Delete(ctx context.Context, id int64) error {
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

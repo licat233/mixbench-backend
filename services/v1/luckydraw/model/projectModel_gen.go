@@ -56,6 +56,13 @@ func newProjectModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option)
 	}
 }
 
+func (m *defaultProjectModel) withSession(session sqlx.Session) *defaultProjectModel {
+	return &defaultProjectModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`project`",
+	}
+}
+
 func (m *defaultProjectModel) Delete(ctx context.Context, id int64) error {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

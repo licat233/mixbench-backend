@@ -1,0 +1,51 @@
+api:
+    dir: ""
+    ignoreColumns: []
+    ignoreTables: []
+    jsonStyle: genZero
+    jwt: ""
+    middleware: []
+    multiple: true
+    prefix: /v1/api/chat
+    serviceName: chat
+    status: true
+    tables: []
+database:
+    dsn: ""
+    ignoreColumns: []
+    ignoreTables: []
+    src: ../../../../deploy/mysql/chat.sql
+    tables: []
+logic:
+    api:
+        dir: ../api/internal/logic
+        fileStyle: genZero
+        ignoreTables: []
+        status: true
+        tables: []
+        useRpc: false
+    rpc:
+        dir: ../rpc/internal/logic
+        fileStyle: genZero
+        ignoreTables: []
+        multiple: true
+        status: false
+        tables: []
+    status: true
+model:
+    dir: ../model
+    ignoreColumns: []
+    ignoreTables: []
+    status: true
+    tables: []
+proto:
+    dir: ""
+    fileStyle: genZero
+    goPackage: ""
+    ignoreColumns: []
+    ignoreTables: []
+    multiple: false
+    package: ""
+    serviceName: chat
+    status: false
+    tables: []

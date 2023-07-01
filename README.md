@@ -37,11 +37,14 @@
 | 核心业务 | luckydraw-api | 7031     | -           | 抽奖API服务                                      |
 | 核心业务 | luckydraw-rpc | 7032     | -           | 抽奖RPC服务                                      |
 | 核心业务 | luckydraw-mq  | 7033     | -           | 抽奖mq服务(kafka或asynq)                         |
+| 核心业务 | chat-api  | 7041     | -           | 客服系统API服务                         |
+| 核心业务 | chat-mq  | 7043     | -           | 客服系统mq服务(asynq)                         |
 
 ## 说明
 
 外部访问所有的服务均通过nginx反向代理: SEVER_NAME.mixbench.net
 所有数据存储在datacenter数据卷容器中
+默认使用 Nginx的 auth 模块做鉴权：auth_request /v1/api/admin/auth;
 
 ## 注意事项
 
@@ -55,25 +58,32 @@ docker-compose
 > docker-compose up -d
 >```
 
-## shell脚本管理服务使用说明
+## 运行方法
+
+为了简化繁琐的启动，运行该脚本一键编译构建启动
+
+```bash
+./cmd.sh
+```
+
+### shell脚本管理服务使用说明
 
 主要分为：生成(gen)、构建(build)、运行(run)、清理(clear)
 
-入口文件: cmd.sh
+项目启动脚本: cmd.sh
 
 使用说明:
 
 ```shell
 ./cmd.sh -h
-```
-
 command:
-
-> gen [service-name] [micro-name]
-> build [service-name] [micro-name]
-> run [service-name] [micro-name]
-> clear [service-name] [micro-name]
-> [service-name] [micro-name]
+gen [service-name] [micro-name]
+build [service-name] [micro-name]
+run [service-name] [micro-name]
+rebuild [service-name] [micro-name]
+clear [service-name] [micro-name]
+[service-name] [micro-name]
+```
 
 ## prometheus生态架构
 
@@ -195,3 +205,29 @@ goctl api ts -api captcha.api -dir .
 ```shell
 genzero -h
 ```
+
+## bug处理
+
+务必使用：k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65 // indirect
+
+## 关于chat聊天系统架构
+
+1. 定义消息格式：确定客户与客服之间传递的消息格式，包括消息内容、发送者、接收者、时间戳等信息。
+
+2. 选择消息队列技术：根据需求选择合适的消息队列技术。常见的消息队列技术有 RabbitMQ、Apache Kafka、ActiveMQ 等。（当前采用基于redis的Asynq）
+
+3. 创建消息队列：在选定的消息队列技术上创建一个消息队列或主题，用于存储客户和客服之间的消息。
+
+4. 客户端集成：客户端应用程序需要集成消息队列的客户端库，以便能够连接到消息队列并发送和接收消息。
+
+5. 服务端集成：客服端应用程序也需要集成消息队列的客户端库，以便能够订阅客户发送的消息并进行处理。
+
+6. 消息传递：当客户发送消息时，将消息发送到消息队列中。客服端应用程序监听消息队列，并即时接收到新消息。
+
+7. 消息处理：客服端应用程序接收到新消息后，可以对消息进行解析、处理、生成回复，然后将回复消息发送到消息队列中。
+
+8. 回复传递：客户端应用程序监听消息队列，并即时接收到客服的回复消息，展示给用户。
+
+9. 错误处理：处理消息过程中可能会出现错误，例如网络连接中断或消息处理失败。需要考虑如何处理这些错误情况，例如进行重试、记录错误日志等。
+
+10. 扩展性和负载均衡：在高并发场景下，可以通过增加客户端和客服端的实例数来提高系统的处理能力，并使用负载均衡技术将消息分发到不同的实例上。

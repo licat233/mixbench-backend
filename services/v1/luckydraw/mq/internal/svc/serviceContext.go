@@ -9,8 +9,8 @@ package svc
 
 import (
 	"mixbench/services/v1/luckydraw"
-	"mixbench/services/v1/luckydraw/asynqmq"
 	"mixbench/services/v1/luckydraw/model"
+	"mixbench/services/v1/luckydraw/mq/asynqmq"
 	"mixbench/services/v1/luckydraw/mq/internal/config"
 
 	"github.com/hibiken/asynq"

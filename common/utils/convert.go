@@ -120,3 +120,15 @@ func StrFirstToUpper(str string) string {
 	}
 	return upperStr
 }
+
+func StringToInt64(s string) (int64, error) {
+	s = strings.TrimSpace(s)
+	if len(s) == 0 {
+		return 0, errors.New("string == nil")
+	}
+	i, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	return i, err
+}

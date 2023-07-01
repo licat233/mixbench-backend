@@ -95,31 +95,31 @@ service captcha {
 	)
 	@handler mathCaptcha
 	post /math(CaptchaReq) returns(BaseResp)
-	
+
 	@doc(
 		summary: "验证码图片"
 	)
 	@handler showCaptcha
 	get /show
-	
+
 	@doc(
 		summary: "验证码校验"
 	)
 	@handler processCaptcha
 	post /process(ProcessCaptchaReq) returns(BaseResp)
-	
+
 	@doc(
 		summary: "向邮箱发送验证码"
 	)
 	@handler emailCaptcha
 	post /email(EmailCaptchaReq) returns(BaseResp)
-	
+
 	@doc(
 		summary: "邮箱验证码校验"
 	)
 	@handler emailCaptchaVerify
 	post /email/process (EmailCaptchaVerifyReq) returns(EmailCaptchaResp)
-	
+
 	@doc(
 		summary: '预留的调试端口'
 	)

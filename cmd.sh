@@ -24,11 +24,11 @@ if false && command -v brew >/dev/null 2>&1; then
 fi
 
 current_path=$(
-    cd $(dirname $0) || exit
+    cd $(dirname $0) || exit 1
     pwd
 )
 
-cd "$current_path/deploy/script" || exit
+cd "$current_path/deploy/script" || exit 1
 
 chmod a+x ./gen.sh
 chmod a+x ./build.sh

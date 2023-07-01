@@ -1,6 +1,25 @@
 #!/bin/bash
+#进入monitor mode
+set -m
 
-service_list=("admin" "captcha" "luckydraw")
+current_path=$(
+    cd $(dirname $0)
+    pwd
+)
+
+cd $current_path
+
+project_root="${current_path%%deploy*}"
+
+services_path="${project_root}/services/v1"
+
+cd $services_path
+
+service_list=$(ls -d *)
+
+cd $current_path
+
+# service_list=("admin" "captcha" "luckydraw" "chat")
 
 micro_list=("rpc" "api" "mq")
 

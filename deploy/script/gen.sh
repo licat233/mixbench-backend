@@ -4,12 +4,12 @@
 set -m
 
 current_path=$(
-    cd $(dirname $0) || exit
+    cd $(dirname $0) || exit 1
     pwd
 )
 
-# project_root="${current_path%%deploy*}"
-project_root="${current_path%%mixbench-backend*}mixbench-backend"
+# project_root="${current_path%%mixbench-backend*}mixbench-backend"
+project_root="${current_path%%deploy*}"
 
 # 创建build目录
 if [ ! -d "${project_root}/build" ]; then
@@ -18,7 +18,7 @@ fi
 
 script_path=$current_path
 
-cd $script_path || exit
+cd $script_path || exit 1
 
 gen_api() {
     name=$1
@@ -32,21 +32,30 @@ gen_api() {
         echo "目录: ${service_path} 不存在"
         return
     fi
-    cd $service_path || exit
+    cd $service_path || exit 1
     filename="${name}.api"
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
         echo "文件: ${filename} 不存在"
         return
     fi
-    nohup=$(goctl api go -api "$filename" -dir=../ -style goZero)
+    nohup=$(goctl api go --api="$filename" --dir="../" --style="goZero")
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     echo "已生成${name}-${micro}服务相关文件!"
     #生成接口文档swagger.json
     nohup=$(goctl api plugin -plugin goctl-swagger="swagger -filename ../api/static/swagger.json" -api "${name}.api" -dir .)
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     echo "已生成${name}-${micro}服务swagger.json文件"
     #生成typescript调用文件
     nohup=$(goctl api ts -api "${name}.api" -dir ../static)
-    cd ../static || exit
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+    cd ../static || exit 1
     mdfile="${name}.ts"
     if [ ! -f $mdfile ]; then
         echo "文件 $mdfile 不存在!"
@@ -60,7 +69,7 @@ gen_api() {
         sed -i "s/${oldstr}/${newstr}/g" $mdfile
     fi
     if [ $? -ne 0 ]; then
-        exit
+        exit 1
     fi
     echo "已生成${name}-${micro}服务typescript接口文件"
     # cd ../
@@ -88,7 +97,10 @@ gen_rpc() {
         echo "文件: ${filename} 不存在"
         return
     fi
-    nohup=$(goctl rpc protoc $filename --go_out=../rpc --go-grpc_out=../rpc --zrpc_out=../rpc -style goZero)
+    nohup=$(goctl rpc protoc $filename --go_out=../rpc --go-grpc_out=../rpc --zrpc_out=../rpc --style=goZero)
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
     pb_path="${project_root}/services/v1/${name}/rpc/${name}_pb"
     if [ ! -d $pb_path ]; then
         #如果目录不存在，则退出
@@ -110,7 +122,6 @@ gen_rpc() {
     # echo "生成${name} RPC服务的Dockerfile"
 }
 
-
 gen() {
     name=$1
     service_path="${project_root}/services/v1/${name}/docs"
@@ -121,7 +132,7 @@ gen() {
     fi
     cd $service_path
     nohup=$(./gen.sh)
-    echo -e "\n已生成${name}服务相关文件!"
+    echo -e "已生成${name}服务相关文件!"
 }
 
 source ./data.sh
@@ -131,7 +142,7 @@ service_name=$1
 all_services=($(filter_service $service_name))
 if [ -z $all_services ]; then
     echo "unknown service_name: ${service_name}"
-    exit
+    exit 1
 fi
 
 #选择要构建的子服务
@@ -139,18 +150,17 @@ micro_name=$2
 all_micros=($(filter_micro $micro_name))
 if [ -z $all_micros ]; then
     echo "unknown micro_name: ${micro_name}"
-    exit
+    exit 1
 fi
 
-echo "开始生成各服务文件"
-echo "↓"
 #开始遍历编译
 for name in ${all_services[*]}; do
+    echo -e "\n开始生成${name}服务文件"
     # for micro in ${all_micros[*]}; do
-        # gen_rpc $name $micro
-        # gen_api $name $micro
+    # gen_rpc $name $micro
+    # gen_api $name $micro
     # done
     gen $name
 done
-echo "↑"
+
 echo "----------- generator successful -----------"

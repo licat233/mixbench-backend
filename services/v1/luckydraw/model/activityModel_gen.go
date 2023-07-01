@@ -62,6 +62,13 @@ func newActivityModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option
 	}
 }
 
+func (m *defaultActivityModel) withSession(session sqlx.Session) *defaultActivityModel {
+	return &defaultActivityModel{
+		CachedConn: m.CachedConn.WithSession(session),
+		table:      "`activity`",
+	}
+}
+
 func (m *defaultActivityModel) Delete(ctx context.Context, id int64) error {
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
