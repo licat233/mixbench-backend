@@ -24,16 +24,19 @@ const (
 	// send buffer size
 	// bufSize = 256
 
-	// welcome key
-	WelcomeKey = "welcome"
+	// 欢迎信息 key，务必保持与 数据库 中的key一致
+	WelcomeMessageKey = "welcome_message"
 
-	// public key
-	PublicKey = "public"
+	// 留言信息 key，务必保持与 数据库 中的key一致
+	LeaveMessageKey = "leave_message"
 
-	visitorType = 0
-	kefuType    = 1
-	publicType  = 2
-	systemType  = 3
+	// 公告信息 key，务必保持与 数据库 中的key一致
+	PublicMessageKey = "public_message"
+
+	VisitorMsgType = 0
+	KefuMsgType    = 1
+	PublicMsgType  = 2
+	SystemMsgType  = 3
 )
 
 var (

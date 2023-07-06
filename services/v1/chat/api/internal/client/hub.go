@@ -62,13 +62,18 @@ func (h *Hub) WithContext(ctx context.Context) *Hub {
 	return h
 }
 
-func (h *Hub) Run() {
+func (h *Hub) Run() (err error) {
 	h.DeleteExpiredMessages()
-	go h.AssignChanMessage()
-	go h.AssignDBMessage()
+	go func() {
+		err = h.AssignChanMessage()
+	}()
+	go func() {
+		h.AssignDBMessage()
+	}()
 	h.Timer.Start()
 	// 锁住服务，防止服务退出
 	h.Block()
+	return nil
 }
 
 func (h *Hub) Block() {
@@ -116,16 +121,19 @@ func (h *Hub) AssignKefu() *KefuClient {
 }
 
 // 通道消息的接收与分发
-func (h *Hub) AssignChanMessage() {
+func (h *Hub) AssignChanMessage() error {
 	for {
 		select {
 		case <-h.StopCh:
 			// 当接收到 stop 信号时，停止循环任务
-			return
+			return nil
 		case message := <-h.MessageList:
-			h.AssignMessage(message)
+			if err := h.AssignMessage(message); err != nil {
+				return err
+			}
 		}
 	}
+	// return nil
 }
 
 // 数据库消息的接收与分发
@@ -167,6 +175,10 @@ func (h *Hub) AssignDBMessage() {
 			mdMessages := append(kefuMessages, visitorMessages...)
 			messages := dataconv.MdMessages2ApiMessages(mdMessages)
 			for i := range messages {
+				//如果不是客服或者游客发送的消息，则跳过
+				if messages[i].MsgType != KefuMsgType && messages[i].MsgType != VisitorMsgType {
+					continue
+				}
 				select {
 				case h.MessageList <- messages[i]:
 					// 发送成功
@@ -179,24 +191,31 @@ func (h *Hub) AssignDBMessage() {
 	}
 }
 
-func (h *Hub) AssignMessage(message *types.Message) {
+func (h *Hub) AssignMessage(message *types.Message) error {
 	switch message.MsgType {
 	case 0:
 		// 游客消息，转发给客服
 		if cli := h.KefuClients.Get(message.KefuId); cli != nil {
-			cli.Send(message)
+			//可能会存在数据库查找错误
+			if err := cli.Send(message); err != nil {
+				return err
+			}
 		}
 	case 1, 2:
 		// 客服消息,公告消息，转发给游客
 		if cli := h.VisitorClients.Get(message.VisitorId); cli != nil {
-			cli.Send(message)
+			//可能会存在数据库查找错误
+			if err := cli.Send(message); err != nil {
+				return err
+			}
 		}
 	}
+	return nil
 }
 
 func (h *Hub) SendBeforeHandler(message *types.Message) error {
 	// 如果不是客服或者游客的消息，不用保存
-	if message.MsgType != 0 && message.MsgType != 1 {
+	if message.MsgType != KefuMsgType && message.MsgType != VisitorMsgType {
 		return nil
 	}
 	if h.hasSendBeforeHandlerErr {

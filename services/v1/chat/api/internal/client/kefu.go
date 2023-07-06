@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"mixbench/common/uniqueid"
+	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/types"
+	"mixbench/services/v1/chat/model"
 	"net/http"
 	"sync"
 	"time"
@@ -122,9 +124,25 @@ func (c *KefuClient) WritePump() error {
 	}()
 
 	//发送公告信息
-	if err := c.Client.SendPublicMessage(); err != nil {
+	if err := c.Client.SendPresetMessage(PublicMessageKey); err != nil {
 		c.Logger.Error(err)
-		return fmt.Errorf("SendPublicMessage error: %s", err)
+		return fmt.Errorf("send public message error: %s", err)
+	}
+
+	//已经准备好接收信息了，那就把缓存的游客消息全部发送
+	mdMsgList, _, err := c.hub.MessageModel.FindList(c.ctx, -1, -1, "", &model.Message{
+		KefuId:  c.Kefu.Id,
+		MsgType: VisitorMsgType,
+	})
+	if err != nil {
+		c.Logger.Error(err)
+		return err
+	}
+	msgList := dataconv.MdMessages2ApiMessages(mdMsgList)
+	for _, msg := range msgList {
+		if err := c.WriteMessage(msg); err != nil {
+			return err
+		}
 	}
 
 	for {

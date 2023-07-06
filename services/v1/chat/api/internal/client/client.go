@@ -34,13 +34,28 @@ func (c *Client) Close() {
 }
 
 // 主要用来防止阻塞，用于其它逻辑，请注意区分消息类型
-func (c *Client) Send(message *types.Message) {
+func (c *Client) Send(message *types.Message) error {
+	//发送前，需要校验，该游客信息是否已经被修改了客服号
+	if message.MsgType == VisitorMsgType {
+		msg, err := c.hub.MessageModel.FindOne(c.ctx, message.Id)
+		if err != nil && err != model.ErrNotFound {
+			c.Logger.Error(err)
+			return err
+		}
+		if err == nil {
+			if msg.KefuId != message.KefuId {
+				//已经被修改，需要即使修改
+				message.KefuId = msg.KefuId
+			}
+		}
+	}
 	select {
 	case c.send <- message:
 		// 消息成功发送
 	default:
 		// 连接忙碌，无法发送消息
 	}
+	return nil
 }
 
 // 给send chan发送系统错误消息，如果涉及写入和chan的错误，请勿使用
@@ -48,35 +63,24 @@ func (c *Client) SystemErrorHandler() {
 	c.Send(NewSystemMessage(ErrSystem))
 }
 
-func (c *Client) SendWelcomeMessage() error {
-	mc, err := c.hub.MessageConfigModel.FindByKey(c.ctx, WelcomeKey)
-	if err != nil && err != model.ErrNotFound {
+// 发送预设的消息
+func (c *Client) SendPresetMessage(messageKey string) error {
+	if messageKey = strings.TrimSpace(messageKey); messageKey == "" {
+		return nil
+	}
+	msgList, _, err := c.hub.MessageConfigModel.FindList(c.ctx, -1, -1, "", &model.MessageConfig{
+		Key: messageKey,
+	})
+	if err != nil {
 		c.Logger.Error(err)
 		c.SystemErrorHandler()
 		return err
 	}
-	// 如果有欢迎信息，则发送欢迎信息
-	if err == nil {
-		if content := strings.TrimSpace(mc.Content); content != "" {
+	// 如果存在，则发送
+	for _, msg := range msgList {
+		if content := strings.TrimSpace(msg.Content); content != "" {
 			welcomeMsg := NewPublicMessage(content)
 			c.Send(welcomeMsg)
-		}
-	}
-	return nil
-}
-
-func (c *Client) SendPublicMessage() error {
-	mc, err := c.hub.MessageConfigModel.FindByKey(c.ctx, PublicKey)
-	if err != nil && err != model.ErrNotFound {
-		c.Logger.Error(err)
-		c.SystemErrorHandler()
-		return err
-	}
-	// 如果有公告，则发送公告信息
-	if err == nil {
-		if content := strings.TrimSpace(mc.Content); content != "" {
-			publicMsg := NewPublicMessage(content)
-			c.Send(publicMsg)
 		}
 	}
 	return nil

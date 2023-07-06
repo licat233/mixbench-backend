@@ -86,8 +86,8 @@ type KefuLoginReq struct {
 	Passport  string `json:"passport"`
 	Password  string `json:"password"`
 	AutoLogin bool   `json:"autoLogin,default=false"`
-	CaptchaId string `json:"captcha_id"` //验证码ID
-	Solution  string `json:"solution"`   //验证码答案
+	CaptchaId string `json:"captchaId"` //验证码ID
+	Solution  string `json:"solution"`  //验证码答案
 }
 
 type MsgConfItem struct {
@@ -110,12 +110,17 @@ type VisitorListReq struct {
 	Keyword  string `form:"keyword,optional"`             //关键词，可选
 }
 
+type TransferVisitorReq struct {
+	VisitorId int64 `json:"visitorId,optional"` //转移的游客id
+	KefuId    int64 `json:"kefuId,optional"`    //接待游客的客服id
+}
+
 type ChatRecord struct {
 	Id        int64  `json:"id"`        //表主键
 	Uuid      string `json:"uuid"`      //UUID
 	Content   string `json:"content"`   //消息内容
 	VisitorId int64  `json:"visitorId"` //游客id
-	KefuId    int64  `json:"kefuId"`    //客服id
+	KefuId    int64  `json:"kefuId"`    //客服id， -1表示没有分配到客服
 	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `json:"status"`    //状态:0合法，1违规
 	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
@@ -126,7 +131,7 @@ type ChatRecord struct {
 type AddChatRecordReq struct {
 	Content   string `json:"content"`   //消息内容
 	VisitorId int64  `json:"visitorId"` //游客id
-	KefuId    int64  `json:"kefuId"`    //客服id
+	KefuId    int64  `json:"kefuId"`    //客服id， -1表示没有分配到客服
 	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `json:"status"`    //状态:0合法，1违规
 	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
@@ -139,7 +144,7 @@ type PutChatRecordReq struct {
 	Uuid      string `json:"uuid"`      //UUID
 	Content   string `json:"content"`   //消息内容
 	VisitorId int64  `json:"visitorId"` //游客id
-	KefuId    int64  `json:"kefuId"`    //客服id
+	KefuId    int64  `json:"kefuId"`    //客服id， -1表示没有分配到客服
 	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `json:"status"`    //状态:0合法，1违规
 	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
@@ -164,7 +169,7 @@ type GetChatRecordListReq struct {
 	Uuid      string `form:"uuid,optional"`                 //UUID
 	Content   string `form:"content,optional"`              //消息内容
 	VisitorId int64  `form:"visitorId,optional,default=-1"` //游客id
-	KefuId    int64  `form:"kefuId,optional,default=-1"`    //客服id
+	KefuId    int64  `form:"kefuId,optional,default=-1"`    //客服id， -1表示没有分配到客服
 	MsgType   int64  `form:"msgType,optional,default=-1"`   //0游客消息，1客服消息，2公告消息，3系统消息
 	Status    int64  `form:"status,optional,default=-1"`    //状态:0合法，1违规
 	IsRead    int64  `form:"isRead,optional,default=-1"`    //状态:0未读，1已读

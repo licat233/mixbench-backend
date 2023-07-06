@@ -74,6 +74,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/visitorList",
 				Handler: VisitorListHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/transferVisitor",
+				Handler: TransferVisitorHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/v1/api/chat"),
 	)

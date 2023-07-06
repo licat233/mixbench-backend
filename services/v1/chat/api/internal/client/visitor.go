@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"mixbench/common/uniqueid"
+	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/types"
+	"mixbench/services/v1/chat/model"
 	"net/http"
 	"sync"
 	"time"
@@ -133,10 +135,36 @@ func (c *VisitorClient) WritePump() error {
 		c.Logout()
 	}()
 
-	// 发送欢迎信息
-	if err := c.Client.SendWelcomeMessage(); err != nil {
+	// 如果该游客有客服接待
+	if c.Visitor.KefuId > 0 {
+		// 发送欢迎信息
+		if err := c.Client.SendPresetMessage(WelcomeMessageKey); err != nil {
+			c.Logger.Error(err)
+			return fmt.Errorf("send welcome message error: %s", err)
+		}
+	} else {
+		// 没有分配接待的客服，该怎样处理？说明没有客服在线，无法分配，此时应该发送留言信息
+		// 发送留言信息
+		if err := c.Client.SendPresetMessage(LeaveMessageKey); err != nil {
+			c.Logger.Error(err)
+			return fmt.Errorf("send leave a message error: %s", err)
+		}
+	}
+
+	//已经准备好接收信息了，那就把缓存的游客消息全部发送
+	mdMsgList, _, err := c.hub.MessageModel.FindList(c.ctx, -1, -1, "", &model.Message{
+		VisitorId: c.Visitor.Id,
+		MsgType:   KefuMsgType,
+	})
+	if err != nil {
 		c.Logger.Error(err)
-		return fmt.Errorf("SendWelcomeMessage error: %s", err)
+		return err
+	}
+	msgList := dataconv.MdMessages2ApiMessages(mdMsgList)
+	for _, msg := range msgList {
+		if err := c.WriteMessage(msg); err != nil {
+			return err
+		}
 	}
 
 	for {

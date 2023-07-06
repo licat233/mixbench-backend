@@ -186,11 +186,20 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 
 	browser, _ := l.ua.Browser()
 
+	name := "未知地區-網友"
+	if l.address.Country != "" {
+		name = l.address.Country
+		if l.address.City != "" {
+			name = fmt.Sprintf("%s-%s", name, l.address.City)
+		}
+		name = fmt.Sprintf("%s-網友", name)
+	}
+
 	// 构建 visitor 信息
 	visitor := &model.Visitor{
 		Id:       kefuId,
 		Uuid:     uniqueid.NewUUID(),
-		Name:     fmt.Sprintf("%s-%s網友", l.address.Country, l.address.City),
+		Name:     name,
 		Ip:       l.ip,
 		KefuId:   kefuId,
 		Status:   1,

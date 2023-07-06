@@ -133,8 +133,8 @@ type KefuLoginReq {
   Passport  string `json:"passport"`
   Password  string `json:"password"`
   AutoLogin bool   `json:"autoLogin,default=false"`
-  CaptchaId string `json:"captcha_id"` //验证码ID
-  Solution  string `json:"solution"`   //验证码答案
+  CaptchaId string `json:"captchaId"` //验证码ID
+  Solution  string `json:"solution"`  //验证码答案
 }
 
 type MsgConfItem {
@@ -155,6 +155,11 @@ type VisitorListReq {
   Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
   Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
   Keyword  string `form:"keyword,optional"`             //关键词，可选
+}
+
+type transferVisitorReq {
+  VisitorId int64 `json:"visitorId,optional"` //转移的游客id
+  KefuId    int64 `json:"kefuId,optional"`    //接待游客的客服id
 }
 
 //[custom struct end]
@@ -214,6 +219,11 @@ service chat {
   @doc "获取某客服的游客列表"
   @handler VisitorList
   post /visitorList(VisitorListReq) returns(BaseResp)
+
+  @doc "将游客转接给其他客服"
+  @handler TransferVisitor
+  post /transferVisitor(transferVisitorReq) returns(BaseResp)
+
 }
 
 //[custom service end]

@@ -229,7 +229,7 @@
           },
           {
             "name": "kefuId",
-            "description": "客服id",
+            "description": "客服id， -1表示没有分配到客服",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1303,6 +1303,33 @@
         ]
       }
     },
+    "/v1/api/chat/transferVisitor": {
+      "post": {
+        "summary": "将游客转接给其他客服",
+        "operationId": "TransferVisitor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/transferVisitorReq"
+            }
+          }
+        ],
+        "tags": [
+          "chat"
+        ]
+      }
+    },
     "/v1/api/chat/visitor/": {
       "get": {
         "summary": "获取游客 基础API",
@@ -1688,7 +1715,7 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id"
+          "description": "客服id， -1表示没有分配到客服"
         },
         "msgType": {
           "type": "integer",
@@ -2060,7 +2087,7 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id"
+          "description": "客服id， -1表示没有分配到客服"
         },
         "msgType": {
           "type": "integer",
@@ -2281,7 +2308,7 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "客服id"
+          "description": "客服id， -1表示没有分配到客服"
         },
         "msgType": {
           "type": "integer",
@@ -2881,7 +2908,7 @@
           "format": "boolean",
           "default": "false"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -2895,7 +2922,7 @@
         "passport",
         "password",
         "autoLogin",
-        "captcha_id",
+        "captchaId",
         "solution"
       ]
     },
@@ -3112,7 +3139,7 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id"
+          "description": "客服id， -1表示没有分配到客服"
         },
         "msgType": {
           "type": "integer",
@@ -3580,6 +3607,22 @@
     "VisitorLoginReq": {
       "type": "object",
       "title": "VisitorLoginReq"
+    },
+    "transferVisitorReq": {
+      "type": "object",
+      "properties": {
+        "visitorId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "转移的游客id"
+        },
+        "kefuId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "接待游客的客服id"
+        }
+      },
+      "title": "transferVisitorReq"
     }
   },
   "securityDefinitions": {

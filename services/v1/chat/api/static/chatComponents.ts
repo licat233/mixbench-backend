@@ -89,7 +89,7 @@ export interface KefuLoginReq {
 	passport: string
 	password: string
 	autoLogin: boolean
-	captcha_id: string // 验证码ID
+	captchaId: string // 验证码ID
 	solution: string // 验证码答案
 }
 
@@ -115,12 +115,17 @@ export interface VisitorListReqParams {
 	keyword: string // 关键词，可选
 }
 
+export interface TransferVisitorReq {
+	visitorId?: number // 转移的游客id
+	kefuId?: number // 接待游客的客服id
+}
+
 export interface ChatRecord {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
 	visitorId: number // 游客id
-	kefuId: number // 客服id
+	kefuId: number // 客服id， -1表示没有分配到客服
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
@@ -131,7 +136,7 @@ export interface ChatRecord {
 export interface AddChatRecordReq {
 	content: string // 消息内容
 	visitorId: number // 游客id
-	kefuId: number // 客服id
+	kefuId: number // 客服id， -1表示没有分配到客服
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
@@ -144,7 +149,7 @@ export interface PutChatRecordReq {
 	uuid: string // UUID
 	content: string // 消息内容
 	visitorId: number // 游客id
-	kefuId: number // 客服id
+	kefuId: number // 客服id， -1表示没有分配到客服
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读
@@ -171,7 +176,7 @@ export interface GetChatRecordListReqParams {
 	uuid: string // UUID
 	content: string // 消息内容
 	visitorId: number // 游客id
-	kefuId: number // 客服id
+	kefuId: number // 客服id， -1表示没有分配到客服
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
 	isRead: number // 状态:0未读，1已读

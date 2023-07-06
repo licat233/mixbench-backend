@@ -56,6 +56,14 @@ export function visitorList(params: components.VisitorListReqParams) {
 }
 
 /**
+ * @description "将游客转接给其他客服"
+ * @param req
+ */
+export function transferVisitor(req: components.TransferVisitorReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/transferVisitor`, req)
+}
+
+/**
  * @description "添加聊天记录 基础API"
  * @param req
  */

@@ -41,6 +41,12 @@ func (l *VisitorServerLogic) VisitorServer() error {
 	// 获取 id
 	id := ctxdata.GetInt64FromCtx(l.ctx, "id")
 
+	//如果 游客 id 不存在，即 0
+	if id == 0 {
+		// 测试期间, 设置为 1
+		id = 1
+	}
+
 	kefuM, err := l.svcCtx.VisitorModel.FindOne(l.ctx, id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)

@@ -108,7 +108,8 @@ CREATE TABLE `message_config` (
 -- Records of message_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `message_config` VALUES (1, '欢迎消息', 'welcome', '你好！我是Anna老師，請問有什麼可以幫您？ \\n皺紋問題請回 1 \\n色斑問題請回 2 \\n眼袋問題請回 3 \\n其它肌膚問題請回 4');
+INSERT INTO `message_config` VALUES (1, '歡迎信息', 'welcome_message', '你好！我是Anna老師，請問有什麼可以幫您？ \\n皺紋問題請回 1 \\n色斑問題請回 2 \\n眼袋問題請回 3 \\n其它肌膚問題請回 4');
+INSERT INTO `message_config` VALUES (2, '留言信息', 'leave_message', '你好！Anna暫時不在線，有問題可以添加Anna的line: <a href="line://ti/p/Jh0NreIhfp" style="color:green">anby091</a>');
 COMMIT;
 
 -- ----------------------------
