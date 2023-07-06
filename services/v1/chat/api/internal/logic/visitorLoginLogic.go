@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -17,6 +18,7 @@ import (
 	"mixbench/services/v1/chat/model"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/mssola/useragent"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -29,7 +31,8 @@ type VisitorLoginLogic struct {
 	ip       string
 	address  *utils.AddressInfo
 	referer  string
-	platform string
+	ua       *useragent.UserAgent
+	language string
 }
 
 func NewVisitorLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, req *http.Request) *VisitorLoginLogic {
@@ -42,7 +45,8 @@ func NewVisitorLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, req *
 		ip:       "",
 		address:  nil,
 		referer:  "",
-		platform: "",
+		ua:       nil,
+		language: "",
 	}
 }
 
@@ -51,19 +55,27 @@ const KefuJwtKey = "kefuId"
 
 // 该接口主要用于生成 jwt-token
 func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error) {
+	// 获取设备信息
+	l.ua = useragent.New(utils.RemoteUserAgent(l.req))
+	//如果是机器人
+	if l.ua.Bot() {
+		return nil, errorx.ExternalError(errors.New("the current request is a bot"))
+	}
+	// 获取语言
+	l.language = strings.Join(utils.RemoteLanguage(l.req), ",")
+
 	// 获取 ip
 	l.ip = utils.RemoteIp(l.req)
 	// 解析 ip
 	l.address = utils.QueryAddress(l.ip)
-	// 获取设备
-	platform, err := utils.RemotePlatform(l.req)
-	if err != nil {
-		l.Logger.Error(err)
-		platform = fmt.Sprintf("%s[%s]", err.Error(), platform)
-	}
-	l.platform = platform
+
+	// platform, err := utils.RemotePlatform(l.req)
+	// if err != nil {
+	// 	l.Logger.Error(err)
+	// 	platform = fmt.Sprintf("%s[%s]", err.Error(), platform)
+	// }
 	// 获取来源
-	l.referer = req.Refer
+	l.referer = utils.RemoteReferer(l.req)
 
 	// 获取游客可能存在的id
 	var visitorId int64
@@ -82,7 +94,17 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 					// 值错误，算作新客户
 					l.Logger.Error(err)
 				} else {
-					visitorId = id
+					// visitorId = id
+					//查一下这个id是否存在
+					_, err = l.svcCtx.VisitorModel.FindOne(l.ctx, id)
+					if err != nil && err != model.ErrNotFound {
+						l.Logger.Error(err)
+						return nil, errorx.InternalError(err)
+					}
+					//表示存在该visitor
+					if err == nil {
+						visitorId = id
+					}
 				}
 			}
 		}
@@ -162,16 +184,23 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 		kefuId = kefuCli.Kefu.Id
 	}
 
+	browser, _ := l.ua.Browser()
+
 	// 构建 visitor 信息
 	visitor := &model.Visitor{
+		Id:       kefuId,
 		Uuid:     uniqueid.NewUUID(),
-		Username: fmt.Sprintf("%s-%s網友", l.address.Country, l.address.City),
+		Name:     fmt.Sprintf("%s-%s網友", l.address.Country, l.address.City),
 		Ip:       l.ip,
 		KefuId:   kefuId,
 		Status:   1,
 		Referer:  l.referer,
+		Region:   l.address.Country,
 		City:     l.address.City,
-		Platform: l.platform,
+		Platform: l.ua.Platform(),
+		Os:       l.ua.OS(),
+		Browser:  browser,
+		Language: l.language,
 	}
 
 	// 生成 token

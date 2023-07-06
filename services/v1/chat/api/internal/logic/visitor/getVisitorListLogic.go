@@ -31,13 +31,17 @@ func (l *GetVisitorListLogic) GetVisitorList(req *types.GetVisitorListReq) (any,
 	in := &model.Visitor{
 		Id:       req.Id,
 		Uuid:     req.Uuid,
-		Username: req.Username,
+		Name:     req.Name,
 		Ip:       req.Ip,
 		KefuId:   req.KefuId,
 		Status:   req.Status,
 		Referer:  req.Referer,
+		Region:   req.Region,
 		City:     req.City,
 		Platform: req.Platform,
+		Os:       req.Os,
+		Browser:  req.Browser,
+		Language: req.Language,
 	}
 	mdList, total, err := l.svcCtx.VisitorModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

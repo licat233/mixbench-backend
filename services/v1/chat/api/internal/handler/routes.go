@@ -43,12 +43,23 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodGet,
-					Path:    "/wsVisitor",
+					Path:    "/visitor",
 					Handler: VisitorServerHandler(serverCtx),
 				},
 			}...,
 		),
-		rest.WithPrefix("/v1/api/chat"),
+		rest.WithPrefix("/v1/api/chat/ws"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/kefu",
+				Handler: KefuServerHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/chat/ws"),
 	)
 
 	server.AddRoutes(
@@ -63,85 +74,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/visitorList",
 				Handler: VisitorListHandler(serverCtx),
 			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/wsKefu",
-				Handler: KefuServerHandler(serverCtx),
-			},
 		},
 		rest.WithPrefix("/v1/api/chat"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: visitor.AddVisitorHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: visitor.PutVisitorHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: visitor.GetVisitorHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: visitor.DelVisitorHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: visitor.GetVisitorListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: visitor.GetVisitorEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/visitor"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: kefu.AddKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: kefu.PutKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: kefu.GetKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: kefu.DelKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: kefu.GetKefuListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: kefu.GetKefuEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/kefu"),
 	)
 
 	server.AddRoutes(
@@ -185,42 +119,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/",
-				Handler: message.AddMessageHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: message.PutMessageHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: message.GetMessageHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: message.DelMessageHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: message.GetMessageListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: message.GetMessageEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/message"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
 				Handler: ipblack.AddIpblackHandler(serverCtx),
 			},
 			{
@@ -257,6 +155,78 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/",
+				Handler: kefu.AddKefuHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: kefu.PutKefuHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: kefu.GetKefuHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: kefu.DelKefuHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: kefu.GetKefuListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: kefu.GetKefuEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/chat/kefu"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: message.AddMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: message.PutMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: message.GetMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: message.DelMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: message.GetMessageListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: message.GetMessageEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/chat/message"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
 				Handler: messageConfig.AddMessageConfigHandler(serverCtx),
 			},
 			{
@@ -286,5 +256,41 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/v1/api/chat/messageConfig"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: visitor.AddVisitorHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: visitor.PutVisitorHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: visitor.GetVisitorHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: visitor.DelVisitorHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: visitor.GetVisitorListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: visitor.GetVisitorEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/chat/visitor"),
 	)
 }

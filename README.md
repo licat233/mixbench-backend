@@ -206,9 +206,14 @@ goctl api ts -api captcha.api -dir .
 genzero -h
 ```
 
-## k8s库存在的bug处理
+## 存在的bug处理
 
-务必使用：k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65 // indirect
++ 务必使用：k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65 // indirect
++ 官方插件goctl-swagger存在注释bug，我自己fork了一份，请安装我自己fork的goctl-swagger:
+
+    ```shell
+    GOPROXY=https://goproxy.cn/,direct go install github.com/licat233/goctl-swagger@latest
+    ```
 
 ## 关于chat聊天系统架构
 

@@ -9,13 +9,14 @@ package svc
 
 import (
 	"context"
+	"fmt"
+	"mixbench/common/utils"
 	"mixbench/services/v1/luckydraw/model"
 	"mixbench/services/v1/luckydraw/mq/asynqmq"
 	"mixbench/services/v1/luckydraw/rpc/internal/config"
 
 	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-queue/kq"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 type ServiceContext struct {
@@ -38,8 +39,11 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	if err != nil {
+		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+	}
 	ctx := context.Background()
-	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
 	svc := &ServiceContext{
 		Config:          c,
 		ProjectModel:    model.NewProjectModel(sqlConn, c.CacheRedis),

@@ -8,6 +8,7 @@ import (
 
 	"mixbench/common/errorx"
 	"mixbench/common/filex"
+	"mixbench/common/utils"
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/handler"
 	"mixbench/services/v1/chat/api/internal/svc"
@@ -38,10 +39,11 @@ func main() {
 	if err := filex.CreateDir(staticPath); err != nil {
 		panic(err)
 	}
+	urlPrefix := utils.GenStaticServiceUrl("chat")
 	server.AddRoute(rest.Route{
 		Method:  http.MethodGet,
-		Path:    "/v1/static/chat/:file",
-		Handler: http.StripPrefix("/v1/static/chat/", http.FileServer(http.Dir(staticPath))).ServeHTTP,
+		Path:    urlPrefix + ":file",
+		Handler: http.StripPrefix(urlPrefix, http.FileServer(http.Dir(staticPath))).ServeHTTP,
 	})
 
 	ctx := svc.NewServiceContext(c)
@@ -54,6 +56,7 @@ func main() {
 	//错误处理
 	httpx.SetErrorHandlerCtx(errorx.ResponseErrorHandlerCtx)
 
+	fmt.Printf("Starting static server at %s\n", urlPrefix)
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

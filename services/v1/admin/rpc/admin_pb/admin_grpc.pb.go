@@ -34,6 +34,18 @@ type BaseClient interface {
 	GetAdminerList(ctx context.Context, in *GetAdminerListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error)
 	// 获取管理员枚举列表
 	GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加项目
+	AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
+	// 更新项目
+	PutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error)
+	// 获取项目
+	GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectResp, error)
+	// 删除项目
+	DelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error)
+	// 获取项目列表
+	GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
+	// 获取项目枚举列表
+	GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 }
 
 type baseClient struct {
@@ -98,6 +110,60 @@ func (c *baseClient) GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq
 	return out, nil
 }
 
+func (c *baseClient) AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
+	out := new(AddProjectResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/AddProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error) {
+	out := new(PutProjectResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/PutProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectResp, error) {
+	out := new(GetProjectResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error) {
+	out := new(DelProjectResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/DelProject", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
+	out := new(GetProjectListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetProjectList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetProjectEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BaseServer is the server API for Base service.
 // All implementations must embed UnimplementedBaseServer
 // for forward compatibility
@@ -114,6 +180,18 @@ type BaseServer interface {
 	GetAdminerList(context.Context, *GetAdminerListReq) (*GetAdminerListResp, error)
 	// 获取管理员枚举列表
 	GetAdminerEnums(context.Context, *GetAdminerEnumsReq) (*Enums, error)
+	// 添加项目
+	AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error)
+	// 更新项目
+	PutProject(context.Context, *PutProjectReq) (*PutProjectResp, error)
+	// 获取项目
+	GetProject(context.Context, *GetProjectReq) (*GetProjectResp, error)
+	// 删除项目
+	DelProject(context.Context, *DelProjectReq) (*DelProjectResp, error)
+	// 获取项目列表
+	GetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error)
+	// 获取项目枚举列表
+	GetProjectEnums(context.Context, *GetProjectEnumsReq) (*Enums, error)
 	mustEmbedUnimplementedBaseServer()
 }
 
@@ -138,6 +216,24 @@ func (UnimplementedBaseServer) GetAdminerList(context.Context, *GetAdminerListRe
 }
 func (UnimplementedBaseServer) GetAdminerEnums(context.Context, *GetAdminerEnumsReq) (*Enums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAdminerEnums not implemented")
+}
+func (UnimplementedBaseServer) AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddProject not implemented")
+}
+func (UnimplementedBaseServer) PutProject(context.Context, *PutProjectReq) (*PutProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutProject not implemented")
+}
+func (UnimplementedBaseServer) GetProject(context.Context, *GetProjectReq) (*GetProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
+}
+func (UnimplementedBaseServer) DelProject(context.Context, *DelProjectReq) (*DelProjectResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelProject not implemented")
+}
+func (UnimplementedBaseServer) GetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectList not implemented")
+}
+func (UnimplementedBaseServer) GetProjectEnums(context.Context, *GetProjectEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectEnums not implemented")
 }
 func (UnimplementedBaseServer) mustEmbedUnimplementedBaseServer() {}
 
@@ -260,6 +356,114 @@ func _Base_GetAdminerEnums_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Base_AddProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/AddProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddProject(ctx, req.(*AddProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/PutProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutProject(ctx, req.(*PutProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetProject(ctx, req.(*GetProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelProjectReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/DelProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelProject(ctx, req.(*DelProjectReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetProjectList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetProjectList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetProjectList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetProjectList(ctx, req.(*GetProjectListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetProjectEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetProjectEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetProjectEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetProjectEnums(ctx, req.(*GetProjectEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Base_ServiceDesc is the grpc.ServiceDesc for Base service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -290,6 +494,30 @@ var Base_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAdminerEnums",
 			Handler:    _Base_GetAdminerEnums_Handler,
+		},
+		{
+			MethodName: "AddProject",
+			Handler:    _Base_AddProject_Handler,
+		},
+		{
+			MethodName: "PutProject",
+			Handler:    _Base_PutProject_Handler,
+		},
+		{
+			MethodName: "GetProject",
+			Handler:    _Base_GetProject_Handler,
+		},
+		{
+			MethodName: "DelProject",
+			Handler:    _Base_DelProject_Handler,
+		},
+		{
+			MethodName: "GetProjectList",
+			Handler:    _Base_GetProjectList_Handler,
+		},
+		{
+			MethodName: "GetProjectEnums",
+			Handler:    _Base_GetProjectEnums_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

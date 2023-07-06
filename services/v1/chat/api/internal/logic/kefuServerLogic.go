@@ -6,6 +6,7 @@ import (
 
 	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
+	"mixbench/common/utils"
 	"mixbench/services/v1/chat/api/internal/client"
 	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/svc"
@@ -38,6 +39,9 @@ func NewKefuServerLogic(ctx context.Context, svcCtx *svc.ServiceContext, w http.
 }
 
 func (l *KefuServerLogic) KefuServer() error {
+	if !utils.IsWebsocketRequest(l.r) {
+		return errorx.ExternalError("the current request is not a WebSocket request")
+	}
 	// 获取 id
 	id := ctxdata.GetInt64FromCtx(l.ctx, "id")
 
@@ -52,13 +56,14 @@ func (l *KefuServerLogic) KefuServer() error {
 	// 创建一个kefu client
 	cli, err := client.NewKefuClient(l.ctx, l.svcCtx.Hub, l.w, l.r, kefuA)
 	if err != nil {
-		return errorx.InternalError(err)
+		//可能因为r不是ws请求，导致的报错
+		return errorx.ExternalError(err)
 	}
 
 	// 开始收发ws信息
-	cli.Run()
-
-	// 初始化完成
-
+	err = cli.Run()
+	if err != nil {
+		return errorx.InternalError(err)
+	}
 	return nil
 }

@@ -57,3 +57,39 @@ func (s *BaseServer) GetAdminerEnums(ctx context.Context, in *admin_pb.GetAdmine
 	l := baselogic.NewGetAdminerEnumsLogic(ctx, s.svcCtx)
 	return l.GetAdminerEnums(in)
 }
+
+// 添加项目
+func (s *BaseServer) AddProject(ctx context.Context, in *admin_pb.AddProjectReq) (*admin_pb.AddProjectResp, error) {
+	l := baselogic.NewAddProjectLogic(ctx, s.svcCtx)
+	return l.AddProject(in)
+}
+
+// 更新项目
+func (s *BaseServer) PutProject(ctx context.Context, in *admin_pb.PutProjectReq) (*admin_pb.PutProjectResp, error) {
+	l := baselogic.NewPutProjectLogic(ctx, s.svcCtx)
+	return l.PutProject(in)
+}
+
+// 获取项目
+func (s *BaseServer) GetProject(ctx context.Context, in *admin_pb.GetProjectReq) (*admin_pb.GetProjectResp, error) {
+	l := baselogic.NewGetProjectLogic(ctx, s.svcCtx)
+	return l.GetProject(in)
+}
+
+// 删除项目
+func (s *BaseServer) DelProject(ctx context.Context, in *admin_pb.DelProjectReq) (*admin_pb.DelProjectResp, error) {
+	l := baselogic.NewDelProjectLogic(ctx, s.svcCtx)
+	return l.DelProject(in)
+}
+
+// 获取项目列表
+func (s *BaseServer) GetProjectList(ctx context.Context, in *admin_pb.GetProjectListReq) (*admin_pb.GetProjectListResp, error) {
+	l := baselogic.NewGetProjectListLogic(ctx, s.svcCtx)
+	return l.GetProjectList(in)
+}
+
+// 获取项目枚举列表
+func (s *BaseServer) GetProjectEnums(ctx context.Context, in *admin_pb.GetProjectEnumsReq) (*admin_pb.Enums, error) {
+	l := baselogic.NewGetProjectEnumsLogic(ctx, s.svcCtx)
+	return l.GetProjectEnums(in)
+}

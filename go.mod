@@ -11,6 +11,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/hibiken/asynq v0.24.1
 	github.com/mojocn/base64Captcha v1.3.5
+	github.com/mssola/useragent v1.0.0
 	github.com/oschwald/geoip2-golang v1.9.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/zeromicro/go-queue v1.1.8

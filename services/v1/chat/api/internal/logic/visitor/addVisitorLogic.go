@@ -30,13 +30,17 @@ func NewAddVisitorLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddVis
 func (l *AddVisitorLogic) AddVisitor(req *types.AddVisitorReq) (any, error) {
 	in := &model.Visitor{
 		Uuid:     uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
-		Username: req.Username,
+		Name:     req.Name,
 		Ip:       req.Ip,
 		KefuId:   req.KefuId,
 		Status:   req.Status,
 		Referer:  req.Referer,
+		Region:   req.Region,
 		City:     req.City,
 		Platform: req.Platform,
+		Os:       req.Os,
+		Browser:  req.Browser,
+		Language: req.Language,
 	}
 	if _, err := l.svcCtx.VisitorModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert visitor, error: ", err)

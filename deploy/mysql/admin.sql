@@ -1,3 +1,5 @@
+USE mixbench_admin;
+
 /*
  Navicat MySQL Data Transfer
 
@@ -70,6 +72,30 @@ VALUES
     0
   );
 
+COMMIT;
+
+-- ----------------------------
+-- Table structure for project
+-- ----------------------------
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
+  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '项目名称',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '项目状态: 0已下线，1已上线',
+  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`),
+  KEY `uuid` (`uuid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='项目';
+
+-- ----------------------------
+-- Records of project
+-- ----------------------------
+BEGIN;
+INSERT INTO `project` VALUES (1, '14a1d67c-97cc-463f-a366-65b5caa5e3aa','植题祛斑', 1, '2022-07-07 17:37:52', '2022-08-29 10:01:45', 0);
+INSERT INTO `project` VALUES (2, '24a1d67c-97cc-463f-a366-65b5caa5e3aa', '李中医祛斑', 0, '2022-08-29 10:08:57', '2022-08-29 10:08:57', 0);
 COMMIT;
 
 -- ----------------------------

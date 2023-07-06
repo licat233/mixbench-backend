@@ -31,7 +31,7 @@ func NewAdminAuthMiddleware(c config.Config) *AdminAuthMiddleware {
 
 func (m *AdminAuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		jwtToken := r.Header.Get(jwtx.ReqHeaderKey)
+		jwtToken := r.Header.Get(jwtx.ReqHeaderTokenKey)
 		if jwtToken == "" {
 			httpx.Error(w, errorx.ErrAuth)
 			return

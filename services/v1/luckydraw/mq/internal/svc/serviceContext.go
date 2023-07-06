@@ -8,13 +8,14 @@
 package svc
 
 import (
+	"fmt"
+	"mixbench/common/utils"
 	"mixbench/services/v1/luckydraw"
 	"mixbench/services/v1/luckydraw/model"
 	"mixbench/services/v1/luckydraw/mq/asynqmq"
 	"mixbench/services/v1/luckydraw/mq/internal/config"
 
 	"github.com/hibiken/asynq"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
@@ -26,7 +27,10 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
+	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	if err != nil {
+		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+	}
 	var redisClientOpt = &asynq.RedisClientOpt{
 		Addr:     c.Redis.Host,
 		Password: c.Redis.Pass,

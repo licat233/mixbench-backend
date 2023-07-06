@@ -2,6 +2,7 @@ package client
 
 import (
 	"errors"
+	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -43,6 +44,10 @@ var (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		// 允许跨域请求
+		return true
+	},
 }
 
 var ErrSystem = errors.New("server internal error! 伺服器故障! ")

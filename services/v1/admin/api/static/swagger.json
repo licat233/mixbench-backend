@@ -37,9 +37,13 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       },
       "delete": {
@@ -64,9 +68,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       },
       "post": {
@@ -91,9 +99,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       },
       "put": {
@@ -118,9 +130,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -136,9 +152,13 @@
             }
           }
         },
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -165,9 +185,13 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -193,9 +217,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -341,9 +369,13 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -370,9 +402,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -398,9 +434,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -426,9 +466,13 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "adminer"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -442,7 +486,6 @@
             "schema": {}
           }
         },
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -470,7 +513,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -488,9 +530,13 @@
             }
           }
         },
-        "requestBody": {},
         "tags": [
           "admin"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -517,7 +563,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -545,7 +590,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -573,7 +617,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -591,9 +634,261 @@
             }
           }
         },
-        "requestBody": {},
         "tags": [
           "admin"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/project/": {
+      "get": {
+        "summary": "获取项目 基础API",
+        "operationId": "GetProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "项目 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "project"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "删除项目 基础API",
+        "operationId": "DelProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除项目请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelProjectReq"
+            }
+          }
+        ],
+        "tags": [
+          "project"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "添加项目 基础API",
+        "operationId": "AddProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加项目请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddProjectReq"
+            }
+          }
+        ],
+        "tags": [
+          "project"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "更新项目 基础API",
+        "operationId": "PutProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新项目请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutProjectReq"
+            }
+          }
+        ],
+        "tags": [
+          "project"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/project/enums": {
+      "get": {
+        "summary": "获取项目枚举列表 基础API",
+        "operationId": "GetProjectEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "project"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/project/list": {
+      "get": {
+        "summary": "获取项目列表 基础API",
+        "operationId": "GetProjectList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "项目名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "项目状态: 0已下线，1已上线",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "project"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -625,7 +920,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -652,7 +946,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -680,7 +973,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -696,7 +988,6 @@
             "schema": {}
           }
         },
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -723,7 +1014,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "admin"
         ]
@@ -741,9 +1031,13 @@
             }
           }
         },
-        "requestBody": {},
         "tags": [
           "upload"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -759,9 +1053,13 @@
             }
           }
         },
-        "requestBody": {},
         "tags": [
           "upload"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -777,9 +1075,13 @@
             }
           }
         },
-        "requestBody": {},
         "tags": [
           "upload"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     }
@@ -845,6 +1147,25 @@
         "isSuperAdmin",
         "loginCount",
         "lastLogin"
+      ]
+    },
+    "AddProjectReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态: 0已下线，1已上线"
+        }
+      },
+      "title": "AddProjectReq",
+      "required": [
+        "name",
+        "status"
       ]
     },
     "Adminer": {
@@ -996,20 +1317,7 @@
       "title": "BaseResp",
       "required": [
         "status",
-        "success",
-        "message",
-        "data",
-        "total",
-        "pageSize",
-        "current",
-        "page",
-        "totalPage",
-        "errorCode",
-        "errorMessage",
-        "traceMessage",
-        "showType",
-        "traceId",
-        "host"
+        "success"
       ]
     },
     "ByIdReq": {
@@ -1055,6 +1363,20 @@
         }
       },
       "title": "DelAdminerReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DelProjectReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目 ID"
+        }
+      },
+      "title": "DelProjectReq",
       "required": [
         "id"
       ]
@@ -1126,10 +1448,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetAdminerEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetAdminerEnumsReq"
     },
     "GetAdminerListReq": {
       "type": "object",
@@ -1215,17 +1534,7 @@
           "description": "最后一次登录时间"
         }
       },
-      "title": "GetAdminerListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id",
-        "status",
-        "isSuperAdmin",
-        "loginCount",
-        "lastLogin"
-      ]
+      "title": "GetAdminerListReq"
     },
     "GetAdminerReq": {
       "type": "object",
@@ -1237,6 +1546,80 @@
         }
       },
       "title": "GetAdminerReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetProjectEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetProjectEnumsReq"
+    },
+    "GetProjectListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目状态: 0已下线，1已上线"
+        }
+      },
+      "title": "GetProjectListReq"
+    },
+    "GetProjectReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目 ID"
+        }
+      },
+      "title": "GetProjectReq",
       "required": [
         "id"
       ]
@@ -1292,12 +1675,7 @@
           "description": "关键词，可选"
         }
       },
-      "title": "ListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current"
-      ]
+      "title": "ListReq"
     },
     "NilReq": {
       "type": "object",
@@ -1340,6 +1718,36 @@
       "title": "Options",
       "required": [
         "list"
+      ]
+    },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态: 0已下线，1已上线"
+        }
+      },
+      "title": "Project",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status"
       ]
     },
     "PutAdminerReq": {
@@ -1469,6 +1877,36 @@
         "new_password",
         "captcha_id",
         "solution"
+      ]
+    },
+    "PutProjectReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态: 0已下线，1已上线"
+        }
+      },
+      "title": "PutProjectReq",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status"
       ]
     },
     "Resp": {
@@ -1715,10 +2153,5 @@
       "name": "Authorization",
       "in": "header"
     }
-  },
-  "security": [
-    {
-      "apiKey": []
-    }
-  ]
+  }
 }

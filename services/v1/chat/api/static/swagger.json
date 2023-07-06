@@ -37,7 +37,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "chatRecord"
         ]
@@ -64,7 +63,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chatRecord"
         ]
@@ -91,7 +89,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chatRecord"
         ]
@@ -118,7 +115,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chatRecord"
         ]
@@ -147,7 +143,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "chatRecord"
         ]
@@ -287,7 +282,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "chatRecord"
         ]
@@ -315,7 +309,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "ipblack"
         ]
@@ -342,7 +335,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "ipblack"
         ]
@@ -369,7 +361,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "ipblack"
         ]
@@ -396,7 +387,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "ipblack"
         ]
@@ -425,7 +415,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "ipblack"
         ]
@@ -501,7 +490,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "ipblack"
         ]
@@ -529,7 +517,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "kefu"
         ]
@@ -556,7 +543,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "kefu"
         ]
@@ -583,7 +569,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "kefu"
         ]
@@ -610,7 +595,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "kefu"
         ]
@@ -639,7 +623,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "kefu"
         ]
@@ -739,7 +722,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "kefu"
         ]
@@ -767,7 +749,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chat"
         ]
@@ -795,7 +776,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "message"
         ]
@@ -822,7 +802,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "message"
         ]
@@ -849,7 +828,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "message"
         ]
@@ -876,7 +854,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "message"
         ]
@@ -905,7 +882,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "message"
         ]
@@ -1054,7 +1030,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "message"
         ]
@@ -1082,7 +1057,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "messageConfig"
         ]
@@ -1109,7 +1083,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "messageConfig"
         ]
@@ -1136,7 +1109,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "messageConfig"
         ]
@@ -1163,7 +1135,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "messageConfig"
         ]
@@ -1192,7 +1163,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "messageConfig"
         ]
@@ -1276,7 +1246,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "messageConfig"
         ]
@@ -1304,7 +1273,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chat"
         ]
@@ -1330,7 +1298,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "chat"
         ]
@@ -1358,7 +1325,6 @@
             "format": "int64"
           }
         ],
-        "requestBody": {},
         "tags": [
           "visitor"
         ]
@@ -1385,7 +1351,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "visitor"
         ]
@@ -1412,7 +1377,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "visitor"
         ]
@@ -1439,7 +1403,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "visitor"
         ]
@@ -1468,7 +1431,6 @@
             "default": "-1"
           }
         ],
-        "requestBody": {},
         "tags": [
           "visitor"
         ]
@@ -1538,7 +1500,7 @@
             "type": "string"
           },
           {
-            "name": "username",
+            "name": "name",
             "description": "游客名",
             "in": "query",
             "required": false,
@@ -1577,21 +1539,48 @@
             "type": "string"
           },
           {
+            "name": "region",
+            "description": "地区",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "city",
-            "description": "城市或地区",
+            "description": "城市",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "platform",
-            "description": "设备",
+            "description": "设备平台:移动设备,电脑,平板,Xbox",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "os",
+            "description": "系统: andriod,ios,macOS,windows",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "browser",
+            "description": "浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "language",
+            "description": "语言",
             "in": "query",
             "required": false,
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "visitor"
         ]
@@ -1619,7 +1608,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chat"
         ]
@@ -1640,7 +1628,7 @@
         "parameters": [
           {
             "name": "body",
-            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start]",
+            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start], 游客登录请求",
             "in": "body",
             "required": true,
             "schema": {
@@ -1648,13 +1636,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "chat"
         ]
       }
     },
-    "/v1/api/chat/wsKefu": {
+    "/v1/api/chat/ws/kefu": {
       "get": {
         "summary": "kefu建立ws连接",
         "operationId": "KefuServer",
@@ -1664,13 +1651,12 @@
             "schema": {}
           }
         },
-        "requestBody": {},
         "tags": [
           "chat"
         ]
       }
     },
-    "/v1/api/chat/wsVisitor": {
+    "/v1/api/chat/ws/visitor": {
       "get": {
         "summary": "visitor建立ws连接",
         "operationId": "VisitorServer",
@@ -1680,7 +1666,6 @@
             "schema": {}
           }
         },
-        "requestBody": {},
         "tags": [
           "chat"
         ]
@@ -1877,7 +1862,7 @@
     "AddVisitorReq": {
       "type": "object",
       "properties": {
-        "username": {
+        "name": {
           "type": "string",
           "description": "游客名"
         },
@@ -1899,24 +1884,44 @@
           "type": "string",
           "description": "来源，从哪个网址发起的聊天"
         },
+        "region": {
+          "type": "string",
+          "description": "地区"
+        },
         "city": {
           "type": "string",
-          "description": "城市或地区"
+          "description": "城市"
         },
         "platform": {
           "type": "string",
-          "description": "设备"
+          "description": "设备平台:移动设备,电脑,平板,Xbox"
+        },
+        "os": {
+          "type": "string",
+          "description": "系统: andriod,ios,macOS,windows"
+        },
+        "browser": {
+          "type": "string",
+          "description": "浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge"
+        },
+        "language": {
+          "type": "string",
+          "description": "语言"
         }
       },
       "title": "AddVisitorReq",
       "required": [
-        "username",
+        "name",
         "ip",
         "kefuId",
         "status",
         "referer",
+        "region",
         "city",
-        "platform"
+        "platform",
+        "os",
+        "browser",
+        "language"
       ]
     },
     "BaseResp": {
@@ -1995,20 +2000,7 @@
       "title": "BaseResp",
       "required": [
         "status",
-        "success",
-        "message",
-        "data",
-        "total",
-        "pageSize",
-        "current",
-        "page",
-        "totalPage",
-        "errorCode",
-        "errorMessage",
-        "traceMessage",
-        "showType",
-        "traceId",
-        "host"
+        "success"
       ]
     },
     "ByIdReq": {
@@ -2238,10 +2230,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetChatRecordEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetChatRecordEnumsReq"
     },
     "GetChatRecordListReq": {
       "type": "object",
@@ -2325,20 +2314,7 @@
           "description": "发送时间"
         }
       },
-      "title": "GetChatRecordListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id",
-        "visitorId",
-        "kefuId",
-        "msgType",
-        "status",
-        "isRead",
-        "isSend",
-        "sendTime"
-      ]
+      "title": "GetChatRecordListReq"
     },
     "GetChatRecordReq": {
       "type": "object",
@@ -2364,10 +2340,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetIpblackEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetIpblackEnumsReq"
     },
     "GetIpblackListReq": {
       "type": "object",
@@ -2408,13 +2381,7 @@
           "description": "客服id"
         }
       },
-      "title": "GetIpblackListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id"
-      ]
+      "title": "GetIpblackListReq"
     },
     "GetIpblackReq": {
       "type": "object",
@@ -2440,10 +2407,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetKefuEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetKefuEnumsReq"
     },
     "GetKefuListReq": {
       "type": "object",
@@ -2499,14 +2463,7 @@
           "description": "状态:0离线，1在线，2冻结"
         }
       },
-      "title": "GetKefuListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id",
-        "status"
-      ]
+      "title": "GetKefuListReq"
     },
     "GetKefuReq": {
       "type": "object",
@@ -2532,10 +2489,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetMessageConfigEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetMessageConfigEnumsReq"
     },
     "GetMessageConfigListReq": {
       "type": "object",
@@ -2581,13 +2535,7 @@
           "description": "消息内容"
         }
       },
-      "title": "GetMessageConfigListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id"
-      ]
+      "title": "GetMessageConfigListReq"
     },
     "GetMessageConfigReq": {
       "type": "object",
@@ -2613,10 +2561,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetMessageEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetMessageEnumsReq"
     },
     "GetMessageListReq": {
       "type": "object",
@@ -2706,21 +2651,7 @@
           "description": "过期时间, 默认为3天"
         }
       },
-      "title": "GetMessageListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id",
-        "visitorId",
-        "kefuId",
-        "msgType",
-        "status",
-        "isRead",
-        "isSend",
-        "sendTime",
-        "expireTime"
-      ]
+      "title": "GetMessageListReq"
     },
     "GetMessageReq": {
       "type": "object",
@@ -2746,10 +2677,7 @@
           "description": "父级ID"
         }
       },
-      "title": "GetVisitorEnumsReq",
-      "required": [
-        "parentId"
-      ]
+      "title": "GetVisitorEnumsReq"
     },
     "GetVisitorListReq": {
       "type": "object",
@@ -2786,7 +2714,7 @@
           "type": "string",
           "description": "UUID"
         },
-        "username": {
+        "name": {
           "type": "string",
           "description": "游客名"
         },
@@ -2810,24 +2738,32 @@
           "type": "string",
           "description": "来源，从哪个网址发起的聊天"
         },
+        "region": {
+          "type": "string",
+          "description": "地区"
+        },
         "city": {
           "type": "string",
-          "description": "城市或地区"
+          "description": "城市"
         },
         "platform": {
           "type": "string",
-          "description": "设备"
+          "description": "设备平台:移动设备,电脑,平板,Xbox"
+        },
+        "os": {
+          "type": "string",
+          "description": "系统: andriod,ios,macOS,windows"
+        },
+        "browser": {
+          "type": "string",
+          "description": "浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge"
+        },
+        "language": {
+          "type": "string",
+          "description": "语言"
         }
       },
-      "title": "GetVisitorListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current",
-        "id",
-        "kefuId",
-        "status"
-      ]
+      "title": "GetVisitorListReq"
     },
     "GetVisitorReq": {
       "type": "object",
@@ -2989,12 +2925,7 @@
           "description": "关键词，可选"
         }
       },
-      "title": "ListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current"
-      ]
+      "title": "ListReq"
     },
     "Message": {
       "type": "object",
@@ -3399,7 +3330,7 @@
           "type": "string",
           "description": "UUID"
         },
-        "username": {
+        "name": {
           "type": "string",
           "description": "游客名"
         },
@@ -3421,26 +3352,46 @@
           "type": "string",
           "description": "来源，从哪个网址发起的聊天"
         },
+        "region": {
+          "type": "string",
+          "description": "地区"
+        },
         "city": {
           "type": "string",
-          "description": "城市或地区"
+          "description": "城市"
         },
         "platform": {
           "type": "string",
-          "description": "设备"
+          "description": "设备平台:移动设备,电脑,平板,Xbox"
+        },
+        "os": {
+          "type": "string",
+          "description": "系统: andriod,ios,macOS,windows"
+        },
+        "browser": {
+          "type": "string",
+          "description": "浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge"
+        },
+        "language": {
+          "type": "string",
+          "description": "语言"
         }
       },
       "title": "PutVisitorReq",
       "required": [
         "id",
         "uuid",
-        "username",
+        "name",
         "ip",
         "kefuId",
         "status",
         "referer",
+        "region",
         "city",
-        "platform"
+        "platform",
+        "os",
+        "browser",
+        "language"
       ]
     },
     "Resp": {
@@ -3534,7 +3485,7 @@
           "type": "string",
           "description": "UUID"
         },
-        "username": {
+        "name": {
           "type": "string",
           "description": "游客名"
         },
@@ -3556,26 +3507,46 @@
           "type": "string",
           "description": "来源，从哪个网址发起的聊天"
         },
+        "region": {
+          "type": "string",
+          "description": "地区"
+        },
         "city": {
           "type": "string",
-          "description": "城市或地区"
+          "description": "城市"
         },
         "platform": {
           "type": "string",
-          "description": "设备"
+          "description": "设备平台:移动设备,电脑,平板,Xbox"
+        },
+        "os": {
+          "type": "string",
+          "description": "系统: andriod,ios,macOS,windows"
+        },
+        "browser": {
+          "type": "string",
+          "description": "浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge"
+        },
+        "language": {
+          "type": "string",
+          "description": "语言"
         }
       },
       "title": "Visitor",
       "required": [
         "id",
         "uuid",
-        "username",
+        "name",
         "ip",
         "kefuId",
         "status",
         "referer",
+        "region",
         "city",
-        "platform"
+        "platform",
+        "os",
+        "browser",
+        "language"
       ]
     },
     "VisitorListReq": {
@@ -3604,24 +3575,11 @@
           "description": "关键词，可选"
         }
       },
-      "title": "VisitorListReq",
-      "required": [
-        "pageSize",
-        "page",
-        "current"
-      ]
+      "title": "VisitorListReq"
     },
     "VisitorLoginReq": {
       "type": "object",
-      "properties": {
-        "refer": {
-          "type": "string"
-        }
-      },
-      "title": "VisitorLoginReq",
-      "required": [
-        "refer"
-      ]
+      "title": "VisitorLoginReq"
     }
   },
   "securityDefinitions": {
@@ -3631,10 +3589,5 @@
       "name": "Authorization",
       "in": "header"
     }
-  },
-  "security": [
-    {
-      "apiKey": []
-    }
-  ]
+  }
 }

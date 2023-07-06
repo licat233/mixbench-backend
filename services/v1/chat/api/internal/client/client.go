@@ -4,6 +4,7 @@ import (
 	"context"
 	"mixbench/services/v1/chat/api/internal/types"
 	"mixbench/services/v1/chat/model"
+	"net/http"
 	"strings"
 
 	"github.com/gorilla/websocket"
@@ -20,6 +21,8 @@ type Client struct {
 	// Buffered channel of outbound messages.
 	send chan *types.Message
 	Stop chan bool //关闭信号
+	w    http.ResponseWriter
+	r    *http.Request
 }
 
 func (c *Client) Close() {
@@ -40,6 +43,7 @@ func (c *Client) Send(message *types.Message) {
 	}
 }
 
+// 给send chan发送系统错误消息，如果涉及写入和chan的错误，请勿使用
 func (c *Client) SystemErrorHandler() {
 	c.Send(NewSystemMessage(ErrSystem))
 }

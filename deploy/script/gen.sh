@@ -179,9 +179,10 @@ has_sql_file() {
 
 gen() {
     name=$1
-    # ①根据 genzero 配置文件，使用 genzero 工具生成相关的 .api和.proto 文件
-    # ②根据 .api 和 .proto 文件，使用 goctl 工具生成相关的 gozero 微服务文件
-    # ③根据 genzero 配置文件，使用 genzero 工具修改相关的 gozero 微服务文件
+    # ①使用 goctl 工具生产 model 文件
+    # ②根据 genzero 配置文件，使用 genzero 工具生成相关的 .api和.proto 文件
+    # ③根据 .api 和 .proto 文件，使用 goctl 工具生成相关的 gozero 微服务文件
+    # ④根据 genzero 配置文件，使用 genzero 工具修改相关的 gozero 微服务文件
     # 注意：在某服务没有 mysql 文件的时候，不需要使用 genzero 生成该服务的 .api和.proto 文件
     docs_path="${project_root}/services/v1/${name}/docs"
     if [ ! -d $docs_path ]; then
@@ -190,15 +191,21 @@ gen() {
         return
     fi
 
+    # 判断是否存在 sql 文件， 如果存在才能使用 genzero 工具
     has_sql_file $name
 
-    use_genzero=$? # 0 表示存在，1 表示不存在
+    exist_sql_file=$? # 0 表示存在，1 表示不存在
 
     echo -e "\n开始生成${name}服务文件"
 
+
+
     cd "$docs_path" || exit
-    # 使用 use_genzero
-    if [ $use_genzero -eq 0 ]; then
+    # 使用 genzero
+    if [ $exist_sql_file -eq 0 ]; then
+        for micro in ${all_micros[*]}; do
+            gen_model $name
+        done
         # 如果不存在 genzero.yaml 文件，则生成
         if [ ! -f "./genzero.yaml" ]; then
             if ! genzero init config; then
@@ -207,24 +214,23 @@ gen() {
             fi
         fi
 
-        # ①根据yaml配置文件来生成微服务的配置文件
+        # ②根据yaml配置文件来生成微服务的配置文件
         if ! genzero start; then
             exit 1
         fi
     fi
 
-    # ②使用 goctl 生成微服务文件
+    # ③使用 goctl 生成微服务文件
     for micro in ${all_micros[*]}; do
-        gen_model $name
         gen_rpc $name $micro
         gen_api $name $micro
     done
 
     go mod tidy
 
-    # 使用 use_genzero
-    if [ $use_genzero -eq 0 ]; then
-        # ③使用 genzero 修改微服务文件
+    # 使用 genzero
+    if [ $exist_sql_file -eq 0 ]; then
+        # ④使用 genzero 修改微服务文件
         cd "$docs_path" || exit
         if ! genzero start; then
             exit 1

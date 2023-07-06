@@ -5,59 +5,6 @@ import (
 	"mixbench/services/v1/chat/model"
 )
 
-func MdVisitorToApiVisitor(md *model.Visitor) *types.Visitor {
-	if md == nil {
-		return nil
-	}
-	return &types.Visitor{
-		Id:       md.Id,
-		Uuid:     md.Uuid,
-		Username: md.Username,
-		Ip:       md.Ip,
-		KefuId:   md.KefuId,
-		Status:   md.Status,
-		Referer:  md.Referer,
-		City:     md.City,
-		Platform: md.Platform,
-	}
-}
-
-func MdVisitors2ApiVisitors(mdList []*model.Visitor) []*types.Visitor {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Visitor, 0)
-	for _, v := range mdList {
-		data = append(data, MdVisitorToApiVisitor(v))
-	}
-	return data
-}
-
-func MdKefuToApiKefu(md *model.Kefu) *types.Kefu {
-	if md == nil {
-		return nil
-	}
-	return &types.Kefu{
-		Id:       md.Id,
-		Uuid:     md.Uuid,
-		Passport: md.Passport,
-		Username: md.Username,
-		Password: md.Password,
-		Status:   md.Status,
-	}
-}
-
-func MdKefus2ApiKefus(mdList []*model.Kefu) []*types.Kefu {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Kefu, 0)
-	for _, v := range mdList {
-		data = append(data, MdKefuToApiKefu(v))
-	}
-	return data
-}
-
 func MdChatRecordToApiChatRecord(md *model.ChatRecord) *types.ChatRecord {
 	if md == nil {
 		return nil
@@ -83,6 +30,53 @@ func MdChatRecords2ApiChatRecords(mdList []*model.ChatRecord) []*types.ChatRecor
 	data := make([]*types.ChatRecord, 0)
 	for _, v := range mdList {
 		data = append(data, MdChatRecordToApiChatRecord(v))
+	}
+	return data
+}
+
+func MdIpblackToApiIpblack(md *model.Ipblack) *types.Ipblack {
+	if md == nil {
+		return nil
+	}
+	return &types.Ipblack{
+		Id:     md.Id,
+		Ip:     md.Ip,
+		KefuId: md.KefuId,
+	}
+}
+
+func MdIpblacks2ApiIpblacks(mdList []*model.Ipblack) []*types.Ipblack {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Ipblack, 0)
+	for _, v := range mdList {
+		data = append(data, MdIpblackToApiIpblack(v))
+	}
+	return data
+}
+
+func MdKefuToApiKefu(md *model.Kefu) *types.Kefu {
+	if md == nil {
+		return nil
+	}
+	return &types.Kefu{
+		Id:       md.Id,
+		Uuid:     md.Uuid,
+		Passport: md.Passport,
+		Username: md.Username,
+		Password: md.Password,
+		Status:   md.Status,
+	}
+}
+
+func MdKefus2ApiKefus(mdList []*model.Kefu) []*types.Kefu {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Kefu, 0)
+	for _, v := range mdList {
+		data = append(data, MdKefuToApiKefu(v))
 	}
 	return data
 }
@@ -117,28 +111,6 @@ func MdMessages2ApiMessages(mdList []*model.Message) []*types.Message {
 	return data
 }
 
-func MdIpblackToApiIpblack(md *model.Ipblack) *types.Ipblack {
-	if md == nil {
-		return nil
-	}
-	return &types.Ipblack{
-		Id:     md.Id,
-		Ip:     md.Ip,
-		KefuId: md.KefuId,
-	}
-}
-
-func MdIpblacks2ApiIpblacks(mdList []*model.Ipblack) []*types.Ipblack {
-	if mdList == nil {
-		return nil
-	}
-	data := make([]*types.Ipblack, 0)
-	for _, v := range mdList {
-		data = append(data, MdIpblackToApiIpblack(v))
-	}
-	return data
-}
-
 func MdMessageConfigToApiMessageConfig(md *model.MessageConfig) *types.MessageConfig {
 	if md == nil {
 		return nil
@@ -158,6 +130,38 @@ func MdMessageConfigs2ApiMessageConfigs(mdList []*model.MessageConfig) []*types.
 	data := make([]*types.MessageConfig, 0)
 	for _, v := range mdList {
 		data = append(data, MdMessageConfigToApiMessageConfig(v))
+	}
+	return data
+}
+
+func MdVisitorToApiVisitor(md *model.Visitor) *types.Visitor {
+	if md == nil {
+		return nil
+	}
+	return &types.Visitor{
+		Id:       md.Id,
+		Uuid:     md.Uuid,
+		Name:     md.Name,
+		Ip:       md.Ip,
+		KefuId:   md.KefuId,
+		Status:   md.Status,
+		Referer:  md.Referer,
+		Region:   md.Region,
+		City:     md.City,
+		Platform: md.Platform,
+		Os:       md.Os,
+		Browser:  md.Browser,
+		Language: md.Language,
+	}
+}
+
+func MdVisitors2ApiVisitors(mdList []*model.Visitor) []*types.Visitor {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Visitor, 0)
+	for _, v := range mdList {
+		data = append(data, MdVisitorToApiVisitor(v))
 	}
 	return data
 }

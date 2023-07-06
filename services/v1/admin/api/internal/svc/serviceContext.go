@@ -8,8 +8,9 @@
 package svc
 
 import (
-	"log"
+	"fmt"
 	"mixbench/common/rbacx"
+	"mixbench/common/utils"
 	"mixbench/services/v1/admin/api/internal/config"
 	"mixbench/services/v1/admin/api/internal/middleware"
 	"mixbench/services/v1/admin/model"
@@ -18,7 +19,6 @@ import (
 	"path"
 
 	"github.com/casbin/casbin/v2"
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -42,14 +42,12 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
-	db, err := sqlConn.RawDB()
+	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
 	if err != nil {
-		log.Fatalf("[NewServiceContext] sqlConn.RawDB err: %v", err)
+		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
-	if err := db.Ping(); err != nil {
-		log.Fatalf("[NewServiceContext] SqlConnPing err: %v", err)
-	}
+	// 因为 utils.NewMysql 方法内部已经执行过 sqlConn.RawDB() 方法且无错误了，这里再执行选择忽略错误
+	db, _ := sqlConn.RawDB()
 	JwtBlacklistsModel := model.NewJwtBlacklistModel(sqlConn, c.CacheRedis)
 	AdminerModel := model.NewAdminerModel(sqlConn, c.CacheRedis)
 
@@ -59,7 +57,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		admin_pb.NewAdminClient(clientConn),
 		admin_pb.NewBaseClient(clientConn),
 	}
-
 	casbinFile := path.Join(c.RootDir, "etc/rbac_with_domains_model.conf")
 	enforcer := rbacx.NewCasbinEnforcer(db, casbinFile)
 	return &ServiceContext{

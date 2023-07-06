@@ -57,6 +57,8 @@ services:
       - static_volume:${STATIC_ROOT}
     expose:
       - 6000-10000
+    ports: # 开发测试用
+      - 7777:${CHAT_API_PORT}
     working_dir: ${PROJECT_ROOT}
     restart: on-failure
     privileged: true
@@ -283,8 +285,8 @@ services:
       - "--storage.tsdb.path=/prometheus"
       - "--enable-feature=expand-external-labels" #TODO: 不生效，不知道为什么，查看了prometheus源码，配置的确没问题
       # - "--web.external-url=prometheus"
-    ports:
-      - 9090:9090
+    # ports:
+    #   - 9090:9090
     expose:
       - 9090
     networks:

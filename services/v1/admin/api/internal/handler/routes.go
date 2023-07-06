@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	adminer "mixbench/services/v1/admin/api/internal/handler/adminer"
+	project "mixbench/services/v1/admin/api/internal/handler/project"
 	upload "mixbench/services/v1/admin/api/internal/handler/upload"
 	"mixbench/services/v1/admin/api/internal/svc"
 
@@ -167,6 +168,46 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/adminer"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: project.AddProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: project.PutProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: project.GetProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: project.DelProjectHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: project.GetProjectListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/enums",
+					Handler: project.GetProjectEnumsHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/project"),
 	)
 
 	server.AddRoutes(

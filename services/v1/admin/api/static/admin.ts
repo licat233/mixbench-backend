@@ -182,6 +182,54 @@ export function forgotPassword(req: components.ForgotPasswordReq) {
 }
 
 /**
+ * @description "添加项目 基础API"
+ * @param req
+ */
+export function addProject(req: components.AddProjectReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/project`, req)
+}
+
+/**
+ * @description "更新项目 基础API"
+ * @param req
+ */
+export function putProject(req: components.PutProjectReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/project`, req)
+}
+
+/**
+ * @description "获取项目 基础API"
+ * @param req
+ */
+export function getProject(req: components.GetProjectReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/project`, req)
+}
+
+/**
+ * @description "删除项目 基础API"
+ * @param req
+ */
+export function delProject(req: components.DelProjectReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/project`, req)
+}
+
+/**
+ * @description "获取项目列表 基础API"
+ * @param params
+ */
+export function getProjectList(params: components.GetProjectListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/project/list`, params)
+}
+
+/**
+ * @description "获取项目枚举列表 基础API"
+ * @param req
+ */
+export function getProjectEnums(req: components.GetProjectEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/project/enums`, req)
+}
+
+/**
  * @description "上传头像"
  */
 export function uploadAvatar() {

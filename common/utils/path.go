@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -66,4 +67,9 @@ func getCurrentAbPathByCaller() string {
 		abPath = path.Dir(filename)
 	}
 	return abPath
+}
+
+// 生成静态服务url规范，使其与nginx配置匹配
+func GenStaticServiceUrl(name string) string {
+	return fmt.Sprintf("/v1/static/%s/", name)
 }

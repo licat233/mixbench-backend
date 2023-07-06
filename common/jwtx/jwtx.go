@@ -13,7 +13,7 @@ import (
 	// uuid "github.com/satori/go.uuid"
 )
 
-var ReqHeaderKey = "Authorization"
+var ReqHeaderTokenKey = "Authorization"
 var DefaultDuration int64 = 86400 //一天时间
 
 var (
@@ -66,15 +66,18 @@ func ParseToken(tokenString string, secret string) (*jwt.MapClaims, error) {
 }
 
 func GetToken(r *http.Request) string {
-	return r.Header.Get(ReqHeaderKey)
+	return r.Header.Get(ReqHeaderTokenKey)
 }
 
 // GetClaims 从请求中获取claims
 func GetClaims(r *http.Request, secret string) (*jwt.MapClaims, error) {
 	token := GetToken(r)
+	if token == "" {
+		return nil, nil
+	}
 	claims, err := ParseToken(token, secret)
 	if err != nil {
-		err = fmt.Errorf("从request中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构,error:%s", err.Error())
+		err = fmt.Errorf("从request中获取从jwt解析信息失败, 请检查请求头是否存在%s且claims是否为规定结构,error:%s", ReqHeaderTokenKey, err.Error())
 		logx.WithContext(r.Context()).Error(err)
 		return nil, errorx.InternalError(err)
 	}

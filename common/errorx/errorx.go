@@ -94,15 +94,15 @@ func (e *Errorx) Data() *ResponseError {
  * traceErr error 调试信息
  * alertErr error 提示信息
  */
-func InternalError(errs ...error) error {
+func InternalError(errs ...any) error {
 	var traceErr error
 	n := len(errs)
 	if n > 0 {
-		traceErr = errs[0]
+		traceErr = fmt.Errorf("%s", errs[0])
 	}
 	alertErr := errors.New(ServerErrorMsg)
 	if n > 1 {
-		alertErr = errs[1]
+		alertErr = fmt.Errorf("%s", errs[1])
 	}
 	return internalError(alertErr.Error(), traceErr)
 }
@@ -111,15 +111,15 @@ func InternalError(errs ...error) error {
  * traceErr error 调试信息
  * alertErr error 提示信息
  */
-func ExternalError(errs ...error) error {
+func ExternalError(errs ...any) error {
 	var traceErr error
 	alertErr := errors.New(RequestErrorMsg)
 	n := len(errs)
 	if n > 0 {
-		traceErr = errs[0]
+		traceErr = fmt.Errorf("%s", errs[0])
 	}
 	if n > 1 {
-		alertErr = errs[1]
+		alertErr = fmt.Errorf("%s", errs[1])
 	}
 	return externalError(alertErr.Error(), traceErr)
 }

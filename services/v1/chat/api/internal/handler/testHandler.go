@@ -3,10 +3,11 @@ package handler
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"mixbench/services/v1/chat/api/internal/logic"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func TestHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -17,7 +18,7 @@ func TestHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewTestLogic(r.Context(), svcCtx)
+		l := logic.NewTestLogic(r.Context(), svcCtx, r)
 		resp, err := l.Test(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

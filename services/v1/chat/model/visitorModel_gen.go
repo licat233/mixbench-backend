@@ -41,13 +41,17 @@ type (
 	Visitor struct {
 		Id        int64     `db:"id"`         // 表主键
 		Uuid      string    `db:"uuid"`       // UUID
-		Username  string    `db:"username"`   // 游客名
+		Name      string    `db:"name"`       // 游客名
 		Ip        string    `db:"ip"`         // IP
 		KefuId    int64     `db:"kefu_id"`    // 客服id，-1表示没有客服接待
 		Status    int64     `db:"status"`     // 状态:0离线，1在线，2拉黑
 		Referer   string    `db:"referer"`    // 来源，从哪个网址发起的聊天
-		City      string    `db:"city"`       // 城市或地区
-		Platform  string    `db:"platform"`   // 设备
+		Region    string    `db:"region"`     // 地区
+		City      string    `db:"city"`       // 城市
+		Platform  string    `db:"platform"`   // 设备平台:移动设备,电脑,平板,Xbox
+		Os        string    `db:"os"`         // 系统: andriod,ios,macOS,windows
+		Browser   string    `db:"browser"`    // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+		Language  string    `db:"language"`   // 语言
 		CreateAt  time.Time `db:"create_at"`  // 创建时间
 		UpdateAt  time.Time `db:"update_at"`  // 更新时间
 		IsDeleted int64     `db:"is_deleted"` // 是否已删除
@@ -97,8 +101,8 @@ func (m *defaultVisitorModel) FindOne(ctx context.Context, id int64) (*Visitor, 
 func (m *defaultVisitorModel) Insert(ctx context.Context, data *Visitor) (sql.Result, error) {
 	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, visitorRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Username, data.Ip, data.KefuId, data.Status, data.Referer, data.City, data.Platform, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, visitorRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted)
 	}, visitorIdKey)
 	return ret, err
 }
@@ -107,7 +111,7 @@ func (m *defaultVisitorModel) Update(ctx context.Context, data *Visitor) error {
 	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, visitorRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Username, data.Ip, data.KefuId, data.Status, data.Referer, data.City, data.Platform, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted, data.Id)
 	}, visitorIdKey)
 	return err
 }

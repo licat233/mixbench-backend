@@ -80,7 +80,6 @@ type BaseResp struct {
 }
 
 type VisitorLoginReq struct {
-	Refer string `json:"refer"`
 }
 
 type KefuLoginReq struct {
@@ -109,118 +108,6 @@ type VisitorListReq struct {
 	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
 	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
 	Keyword  string `form:"keyword,optional"`             //关键词，可选
-}
-
-type Visitor struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Username string `json:"username"` //游客名
-	Ip       string `json:"ip"`       //IP
-	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
-	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
-	City     string `json:"city"`     //城市或地区
-	Platform string `json:"platform"` //设备
-}
-
-type AddVisitorReq struct {
-	Username string `json:"username"` //游客名
-	Ip       string `json:"ip"`       //IP
-	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
-	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
-	City     string `json:"city"`     //城市或地区
-	Platform string `json:"platform"` //设备
-}
-
-type PutVisitorReq struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Username string `json:"username"` //游客名
-	Ip       string `json:"ip"`       //IP
-	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
-	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
-	City     string `json:"city"`     //城市或地区
-	Platform string `json:"platform"` //设备
-}
-
-type DelVisitorReq struct {
-	Id int64 `json:"id"` //游客 ID
-}
-
-type GetVisitorReq struct {
-	Id int64 `json:"id"` //游客 ID
-}
-
-type GetVisitorListReq struct {
-	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `form:"keyword,optional"`             //关键词，可选
-	Id       int64  `form:"id,optional,default=-1"`       //表主键
-	Uuid     string `form:"uuid,optional"`                //UUID
-	Username string `form:"username,optional"`            //游客名
-	Ip       string `form:"ip,optional"`                  //IP
-	KefuId   int64  `form:"kefuId,optional,default=-1"`   //客服id，-1表示没有客服接待
-	Status   int64  `form:"status,optional,default=-1"`   //状态:0离线，1在线，2拉黑
-	Referer  string `form:"referer,optional"`             //来源，从哪个网址发起的聊天
-	City     string `form:"city,optional"`                //城市或地区
-	Platform string `form:"platform,optional"`            //设备
-}
-
-type GetVisitorEnumsReq struct {
-	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
-}
-
-type Kefu struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Passport string `json:"passport"` //客服账号
-	Username string `json:"username"` //客服名
-	Password string `json:"password"` //密码
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
-}
-
-type AddKefuReq struct {
-	Passport string `json:"passport"` //客服账号
-	Username string `json:"username"` //客服名
-	Password string `json:"password"` //密码
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
-}
-
-type PutKefuReq struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Passport string `json:"passport"` //客服账号
-	Username string `json:"username"` //客服名
-	Password string `json:"password"` //密码
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
-}
-
-type DelKefuReq struct {
-	Id int64 `json:"id"` //客服 ID
-}
-
-type GetKefuReq struct {
-	Id int64 `json:"id"` //客服 ID
-}
-
-type GetKefuListReq struct {
-	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `form:"keyword,optional"`             //关键词，可选
-	Id       int64  `form:"id,optional,default=-1"`       //表主键
-	Uuid     string `form:"uuid,optional"`                //UUID
-	Passport string `form:"passport,optional"`            //客服账号
-	Username string `form:"username,optional"`            //客服名
-	Password string `form:"password,optional"`            //密码
-	Status   int64  `form:"status,optional,default=-1"`   //状态:0离线，1在线，2冻结
-}
-
-type GetKefuEnumsReq struct {
-	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type ChatRecord struct {
@@ -286,6 +173,95 @@ type GetChatRecordListReq struct {
 }
 
 type GetChatRecordEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
+type Ipblack struct {
+	Id     int64  `json:"id"`     //
+	Ip     string `json:"ip"`     //IP
+	KefuId string `json:"kefuId"` //客服id
+}
+
+type AddIpblackReq struct {
+	Ip     string `json:"ip"`     //IP
+	KefuId string `json:"kefuId"` //客服id
+}
+
+type PutIpblackReq struct {
+	Id     int64  `json:"id"`     //
+	Ip     string `json:"ip"`     //IP
+	KefuId string `json:"kefuId"` //客服id
+}
+
+type DelIpblackReq struct {
+	Id int64 `json:"id"` //IP黑名单 ID
+}
+
+type GetIpblackReq struct {
+	Id int64 `json:"id"` //IP黑名单 ID
+}
+
+type GetIpblackListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //
+	Ip       string `form:"ip,optional"`                  //IP
+	KefuId   string `form:"kefuId,optional"`              //客服id
+}
+
+type GetIpblackEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
+type Kefu struct {
+	Id       int64  `json:"id"`       //表主键
+	Uuid     string `json:"uuid"`     //UUID
+	Passport string `json:"passport"` //客服账号
+	Username string `json:"username"` //客服名
+	Password string `json:"password"` //密码
+	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
+}
+
+type AddKefuReq struct {
+	Passport string `json:"passport"` //客服账号
+	Username string `json:"username"` //客服名
+	Password string `json:"password"` //密码
+	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
+}
+
+type PutKefuReq struct {
+	Id       int64  `json:"id"`       //表主键
+	Uuid     string `json:"uuid"`     //UUID
+	Passport string `json:"passport"` //客服账号
+	Username string `json:"username"` //客服名
+	Password string `json:"password"` //密码
+	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
+}
+
+type DelKefuReq struct {
+	Id int64 `json:"id"` //客服 ID
+}
+
+type GetKefuReq struct {
+	Id int64 `json:"id"` //客服 ID
+}
+
+type GetKefuListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Passport string `form:"passport,optional"`            //客服账号
+	Username string `form:"username,optional"`            //客服名
+	Password string `form:"password,optional"`            //密码
+	Status   int64  `form:"status,optional,default=-1"`   //状态:0离线，1在线，2冻结
+}
+
+type GetKefuEnumsReq struct {
 	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
@@ -359,45 +335,6 @@ type GetMessageEnumsReq struct {
 	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
-type Ipblack struct {
-	Id     int64  `json:"id"`     //
-	Ip     string `json:"ip"`     //IP
-	KefuId string `json:"kefuId"` //客服id
-}
-
-type AddIpblackReq struct {
-	Ip     string `json:"ip"`     //IP
-	KefuId string `json:"kefuId"` //客服id
-}
-
-type PutIpblackReq struct {
-	Id     int64  `json:"id"`     //
-	Ip     string `json:"ip"`     //IP
-	KefuId string `json:"kefuId"` //客服id
-}
-
-type DelIpblackReq struct {
-	Id int64 `json:"id"` //IP黑名单 ID
-}
-
-type GetIpblackReq struct {
-	Id int64 `json:"id"` //IP黑名单 ID
-}
-
-type GetIpblackListReq struct {
-	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `form:"keyword,optional"`             //关键词，可选
-	Id       int64  `form:"id,optional,default=-1"`       //
-	Ip       string `form:"ip,optional"`                  //IP
-	KefuId   string `form:"kefuId,optional"`              //客服id
-}
-
-type GetIpblackEnumsReq struct {
-	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
-}
-
 type MessageConfig struct {
 	Id      int64  `json:"id"`      //主键
 	Name    string `json:"name"`    //名字
@@ -438,5 +375,83 @@ type GetMessageConfigListReq struct {
 }
 
 type GetMessageConfigEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
+type Visitor struct {
+	Id       int64  `json:"id"`       //表主键
+	Uuid     string `json:"uuid"`     //UUID
+	Name     string `json:"name"`     //游客名
+	Ip       string `json:"ip"`       //IP
+	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
+	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
+	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
+	Region   string `json:"region"`   //地区
+	City     string `json:"city"`     //城市
+	Platform string `json:"platform"` //设备平台:移动设备,电脑,平板,Xbox
+	Os       string `json:"os"`       //系统: andriod,ios,macOS,windows
+	Browser  string `json:"browser"`  //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language string `json:"language"` //语言
+}
+
+type AddVisitorReq struct {
+	Name     string `json:"name"`     //游客名
+	Ip       string `json:"ip"`       //IP
+	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
+	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
+	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
+	Region   string `json:"region"`   //地区
+	City     string `json:"city"`     //城市
+	Platform string `json:"platform"` //设备平台:移动设备,电脑,平板,Xbox
+	Os       string `json:"os"`       //系统: andriod,ios,macOS,windows
+	Browser  string `json:"browser"`  //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language string `json:"language"` //语言
+}
+
+type PutVisitorReq struct {
+	Id       int64  `json:"id"`       //表主键
+	Uuid     string `json:"uuid"`     //UUID
+	Name     string `json:"name"`     //游客名
+	Ip       string `json:"ip"`       //IP
+	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
+	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
+	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
+	Region   string `json:"region"`   //地区
+	City     string `json:"city"`     //城市
+	Platform string `json:"platform"` //设备平台:移动设备,电脑,平板,Xbox
+	Os       string `json:"os"`       //系统: andriod,ios,macOS,windows
+	Browser  string `json:"browser"`  //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language string `json:"language"` //语言
+}
+
+type DelVisitorReq struct {
+	Id int64 `json:"id"` //游客 ID
+}
+
+type GetVisitorReq struct {
+	Id int64 `json:"id"` //游客 ID
+}
+
+type GetVisitorListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Name     string `form:"name,optional"`                //游客名
+	Ip       string `form:"ip,optional"`                  //IP
+	KefuId   int64  `form:"kefuId,optional,default=-1"`   //客服id，-1表示没有客服接待
+	Status   int64  `form:"status,optional,default=-1"`   //状态:0离线，1在线，2拉黑
+	Referer  string `form:"referer,optional"`             //来源，从哪个网址发起的聊天
+	Region   string `form:"region,optional"`              //地区
+	City     string `form:"city,optional"`                //城市
+	Platform string `form:"platform,optional"`            //设备平台:移动设备,电脑,平板,Xbox
+	Os       string `form:"os,optional"`                  //系统: andriod,ios,macOS,windows
+	Browser  string `form:"browser,optional"`             //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language string `form:"language,optional"`            //语言
+}
+
+type GetVisitorEnumsReq struct {
 	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }

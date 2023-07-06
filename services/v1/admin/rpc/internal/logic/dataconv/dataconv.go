@@ -68,6 +68,52 @@ func MdAdminers2PbAdminers(mdList []*model.Adminer) []*admin_pb.Adminer {
 	return data
 }
 
+func PbProjectToMdProject(pb *admin_pb.Project) *model.Project {
+	if pb == nil {
+		return nil
+	}
+	return &model.Project{
+		Id:     pb.Id,
+		Uuid:   pb.Uuid,
+		Name:   pb.Name,
+		Status: pb.Status,
+	}
+}
+
+func MdProjectToPbProject(md *model.Project) *admin_pb.Project {
+	if md == nil {
+		return nil
+	}
+	return &admin_pb.Project{
+		Id:     md.Id,
+		Uuid:   md.Uuid,
+		Name:   md.Name,
+		Status: md.Status,
+	}
+}
+
+func PbProjects2MdProjects(pbList []*admin_pb.Project) []*model.Project {
+	if pbList == nil {
+		return nil
+	}
+	data := make([]*model.Project, 0)
+	for _, v := range pbList {
+		data = append(data, PbProjectToMdProject(v))
+	}
+	return data
+}
+
+func MdProjects2PbProjects(mdList []*model.Project) []*admin_pb.Project {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*admin_pb.Project, 0)
+	for _, v := range mdList {
+		data = append(data, MdProjectToPbProject(v))
+	}
+	return data
+}
+
 func ListReqParams(req *admin_pb.ListReq) (pageSize int64, page int64, keyword string) {
 	if req != nil {
 		pageSize = req.PageSize

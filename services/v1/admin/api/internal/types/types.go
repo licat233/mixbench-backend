@@ -222,3 +222,45 @@ type ForgotPasswordReq struct {
 	CaptchaId string `json:"captcha_id"` //验证码ID
 	Solution  string `json:"solution"`   //验证码答案
 }
+
+type Project struct {
+	Id     int64  `json:"id"`     //表主键
+	Uuid   string `json:"uuid"`   //UUID
+	Name   string `json:"name"`   //项目名称
+	Status int64  `json:"status"` //项目状态: 0已下线，1已上线
+}
+
+type AddProjectReq struct {
+	Name   string `json:"name"`   //项目名称
+	Status int64  `json:"status"` //项目状态: 0已下线，1已上线
+}
+
+type PutProjectReq struct {
+	Id     int64  `json:"id"`     //表主键
+	Uuid   string `json:"uuid"`   //UUID
+	Name   string `json:"name"`   //项目名称
+	Status int64  `json:"status"` //项目状态: 0已下线，1已上线
+}
+
+type DelProjectReq struct {
+	Id int64 `json:"id"` //项目 ID
+}
+
+type GetProjectReq struct {
+	Id int64 `json:"id"` //项目 ID
+}
+
+type GetProjectListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Name     string `form:"name,optional"`                //项目名称
+	Status   int64  `form:"status,optional,default=-1"`   //项目状态: 0已下线，1已上线
+}
+
+type GetProjectEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}

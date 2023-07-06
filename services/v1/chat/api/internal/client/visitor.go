@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/api/internal/types"
 	"net/http"
@@ -19,9 +20,9 @@ type VisitorClient struct {
 }
 
 func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http.Request, visitor *types.Visitor) (*VisitorClient, error) {
-	conn, err := upgrader.Upgrade(w, r, nil)
+	conn, err := NewWsConn(w, r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("newWsConn error: %s", err)
 	}
 	c := &VisitorClient{
 		Client: &Client{
@@ -31,6 +32,8 @@ func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *h
 			conn:   conn,
 			send:   make(chan *types.Message, 100),
 			Stop:   make(chan bool),
+			w:      w,
+			r:      r,
 		},
 		Visitor: visitor,
 	}
@@ -39,93 +42,135 @@ func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *h
 	return c, nil
 }
 
-func (c *VisitorClient) Run() {
+func (c *VisitorClient) Run() (err error) {
+	var WritePumpError, ReadPumpError error
+	var wg sync.WaitGroup
 	// 开始收发ws信息
-	go c.WritePump()
-	go c.ReadPump()
-	//等待关闭信号
-	<-c.Stop
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		WritePumpError = c.WritePump()
+	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		ReadPumpError = c.ReadPump()
+	}()
+	//等待关闭信号, 这里可要可不要
+	// <-c.Stop
+	wg.Wait()
+	if WritePumpError != nil {
+		err = fmt.Errorf("WritePumpError: %s", WritePumpError)
+	}
+	if ReadPumpError != nil {
+		err = fmt.Errorf("%s + ReadPumpError: %s", err, ReadPumpError)
+	}
+	return
 }
 
 // 读取游客通过ws发送过来的信息
-func (c *VisitorClient) ReadPump() {
+func (c *VisitorClient) ReadPump() error {
 	defer func() {
-		c.hub.VisitorClients.Del(c.Visitor.Id)
+		c.Logout()
 	}()
-	c.conn.SetReadLimit(maxMessageSize)
-	c.conn.SetReadDeadline(time.Now().Add(pongWait))
-	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
-		_, messageContent, err := c.conn.ReadMessage()
-		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				c.Logger.Error("websocket conn.close error: %v", err)
+		select {
+		case <-c.Stop:
+			return nil
+		default:
+			_, messageContent, err := c.conn.ReadMessage()
+			if err != nil {
+				//异常关闭
+				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+					c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
+					return fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+				}
+				//conn被正常关闭
+				return nil
 			}
-			c.Client.SystemErrorHandler()
-			return
+			// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
+			messageContent = preprocessMessageContent(messageContent)
+			message := &types.Message{
+				Id:         0,
+				Uuid:       uniqueid.NewUUID(),
+				Content:    string(messageContent),
+				VisitorId:  c.Visitor.Id,
+				KefuId:     c.Visitor.KefuId,
+				MsgType:    0,
+				Status:     0,
+				IsRead:     0,
+				IsSend:     0,
+				SendTime:   0,
+				ExpireTime: 0,
+			}
+			//入栈前，持久化一下，防止消息在通道中意外丢失
+			if err := c.hub.SendBeforeHandler(message); err != nil {
+				c.Client.SystemErrorHandler()
+				return fmt.Errorf("SendBeforeHandler error: %s", err)
+			}
+			c.hub.MessageList <- message
 		}
-		// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
-		messageContent = preprocessMessageContent(messageContent)
-		message := &types.Message{
-			Id:         0,
-			Uuid:       uniqueid.NewUUID(),
-			Content:    string(messageContent),
-			VisitorId:  c.Visitor.Id,
-			KefuId:     c.Visitor.KefuId,
-			MsgType:    0,
-			Status:     0,
-			IsRead:     0,
-			IsSend:     0,
-			SendTime:   0,
-			ExpireTime: 0,
-		}
-		//入栈前，持久化一下，防止消息在通道中意外丢失
-		c.hub.SendBeforeHandler(message)
-		c.hub.MessageList <- message
 	}
 }
 
 // 给游客的ws写入消息
-func (c *VisitorClient) WritePump() {
+func (c *VisitorClient) WritePump() error {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
-		c.hub.VisitorClients.Del(c.Visitor.Id)
+		c.Logout()
 	}()
 
 	// 发送欢迎信息
-	if c.Client.SendWelcomeMessage() != nil {
-		return
+	if err := c.Client.SendWelcomeMessage(); err != nil {
+		c.Logger.Error(err)
+		return fmt.Errorf("SendWelcomeMessage error: %s", err)
 	}
 
 	for {
 		select {
 		case message, ok := <-c.send:
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			c.conn.SetReadDeadline(time.Now().Add(pongWait))
 			if !ok {
 				// The hub closed the channel.
 				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
 					c.Logger.Error(err)
+					return fmt.Errorf("conn.WriteMessage error: %s", err)
 				}
-				c.Client.SystemErrorHandler()
-				return
+				// 已关闭，正常退出
+				return nil
 			}
-			body, _ := json.Marshal(*message)
-			if err := c.conn.WriteMessage(websocket.TextMessage, body); err != nil {
-				c.Logger.Error(err)
-				c.Client.SystemErrorHandler()
-				return
+			if err := c.WriteMessage(message); err != nil {
+				return err
 			}
-			_ = c.hub.SendAfterHandler(message)
+		case <-c.Stop:
+			//关闭了
+			return nil
 		case <-ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				c.Logger.Error(err)
-				c.Client.SystemErrorHandler()
-				return
+				return fmt.Errorf("conn.WriteMessage error: %s", err)
 			}
 		}
 	}
+}
+
+func (c *VisitorClient) WriteMessage(message *types.Message) error {
+	body, _ := json.Marshal(*message)
+	if err := c.conn.WriteMessage(websocket.TextMessage, body); err != nil {
+		c.Logger.Error(err)
+		return fmt.Errorf("conn.WriteMessage error: %s", err)
+	}
+	if err := c.hub.SendAfterHandler(message); err != nil {
+		c.Logger.Error(err)
+		return fmt.Errorf("SendAfterHandler error: %s", err)
+	}
+	return nil
+}
+
+func (c *VisitorClient) Logout() {
+	c.hub.VisitorClients.Del(c.Visitor.Id)
 }
 
 type visitorClientMap struct {

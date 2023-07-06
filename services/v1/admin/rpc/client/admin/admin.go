@@ -15,10 +15,14 @@ import (
 type (
 	AddAdminerReq      = admin_pb.AddAdminerReq
 	AddAdminerResp     = admin_pb.AddAdminerResp
+	AddProjectReq      = admin_pb.AddProjectReq
+	AddProjectResp     = admin_pb.AddProjectResp
 	Adminer            = admin_pb.Adminer
 	ByIdReq            = admin_pb.ByIdReq
 	DelAdminerReq      = admin_pb.DelAdminerReq
 	DelAdminerResp     = admin_pb.DelAdminerResp
+	DelProjectReq      = admin_pb.DelProjectReq
+	DelProjectResp     = admin_pb.DelProjectResp
 	Enum               = admin_pb.Enum
 	Enums              = admin_pb.Enums
 	ExistsEmailReq     = admin_pb.ExistsEmailReq
@@ -33,6 +37,11 @@ type (
 	GetAdminerListResp = admin_pb.GetAdminerListResp
 	GetAdminerReq      = admin_pb.GetAdminerReq
 	GetAdminerResp     = admin_pb.GetAdminerResp
+	GetProjectEnumsReq = admin_pb.GetProjectEnumsReq
+	GetProjectListReq  = admin_pb.GetProjectListReq
+	GetProjectListResp = admin_pb.GetProjectListResp
+	GetProjectReq      = admin_pb.GetProjectReq
+	GetProjectResp     = admin_pb.GetProjectResp
 	IsLogoutReq        = admin_pb.IsLogoutReq
 	IsLogoutResp       = admin_pb.IsLogoutResp
 	JwtData            = admin_pb.JwtData
@@ -49,9 +58,12 @@ type (
 	Options            = admin_pb.Options
 	ParseJwtTokenReq   = admin_pb.ParseJwtTokenReq
 	ParseJwtTokenResp  = admin_pb.ParseJwtTokenResp
+	Project            = admin_pb.Project
 	PutAdminerReq      = admin_pb.PutAdminerReq
 	PutAdminerResp     = admin_pb.PutAdminerResp
 	PutPasswordReq     = admin_pb.PutPasswordReq
+	PutProjectReq      = admin_pb.PutProjectReq
+	PutProjectResp     = admin_pb.PutProjectResp
 	ResetLuckValueReq  = admin_pb.ResetLuckValueReq
 	StatusResp         = admin_pb.StatusResp
 	TestReq            = admin_pb.TestReq

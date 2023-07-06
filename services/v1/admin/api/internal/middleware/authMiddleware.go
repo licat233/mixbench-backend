@@ -53,7 +53,7 @@ func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func AuthLogic(ctx context.Context, r *http.Request, config config.Config, adminerModel model.AdminerModel, jwtBlacklistsModel model.JwtBlacklistModel) (*model.Adminer, error) {
-	jwtToken := r.Header.Get(jwtx.ReqHeaderKey)
+	jwtToken := r.Header.Get(jwtx.ReqHeaderTokenKey)
 	if jwtToken == "" {
 		return nil, errorx.ErrAuth
 	}

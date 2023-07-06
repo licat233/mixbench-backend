@@ -37,7 +37,7 @@ func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Req
 }
 
 func (l *LogoutLogic) Logout() (any, error) {
-	token := l.Request.Header.Get(jwtx.ReqHeaderKey)
+	token := l.Request.Header.Get(jwtx.ReqHeaderTokenKey)
 	reqIp := utils.RemoteIp(l.Request)
 	platform, _ := utils.RemotePlatform(l.Request)
 

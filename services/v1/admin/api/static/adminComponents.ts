@@ -236,3 +236,47 @@ export interface ForgotPasswordReq {
 	solution: string // 验证码答案
 }
 
+export interface Project {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 项目名称
+	status: number // 项目状态: 0已下线，1已上线
+}
+
+export interface AddProjectReq {
+	name: string // 项目名称
+	status: number // 项目状态: 0已下线，1已上线
+}
+
+export interface PutProjectReq {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 项目名称
+	status: number // 项目状态: 0已下线，1已上线
+}
+
+export interface DelProjectReq {
+	id: number // 项目 ID
+}
+
+export interface GetProjectReq {
+	id: number // 项目 ID
+}
+
+export interface GetProjectListReq {
+}
+export interface GetProjectListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 项目名称
+	status: number // 项目状态: 0已下线，1已上线
+}
+
+export interface GetProjectEnumsReq {
+	parentId?: number // 父级ID
+}
+

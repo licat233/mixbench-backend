@@ -122,3 +122,49 @@ func PbAdminers2ApiAdminers(pbList []*admin_pb.Adminer) []*types.Adminer {
 	}
 	return data
 }
+
+func MdProjectToApiProject(md *model.Project) *types.Project {
+	if md == nil {
+		return nil
+	}
+	return &types.Project{
+		Id:     md.Id,
+		Uuid:   md.Uuid,
+		Name:   md.Name,
+		Status: md.Status,
+	}
+}
+
+func MdProjects2ApiProjects(mdList []*model.Project) []*types.Project {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Project, 0)
+	for _, v := range mdList {
+		data = append(data, MdProjectToApiProject(v))
+	}
+	return data
+}
+
+func PbProjectToApiProject(pb *admin_pb.Project) *types.Project {
+	if pb == nil {
+		return nil
+	}
+	return &types.Project{
+		Id:     pb.Id,
+		Uuid:   pb.Uuid,
+		Name:   pb.Name,
+		Status: pb.Status,
+	}
+}
+
+func PbProjects2ApiProjects(pbList []*admin_pb.Project) []*types.Project {
+	if pbList == nil {
+		return nil
+	}
+	data := make([]*types.Project, 0)
+	for _, v := range pbList {
+		data = append(data, PbProjectToApiProject(v))
+	}
+	return data
+}

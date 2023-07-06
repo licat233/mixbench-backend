@@ -219,7 +219,7 @@ func (h *Hub) SendBeforeHandler(message *types.Message) error {
 		h.Logger.Error(err)
 		// 出现内部错误，邮件通知管理员
 		msg := fmt.Sprintf("聊天消息保存到数据库失败：%s", err)
-		emailx.SendNotification(h.ctx, "chat系统异常", msg, []string{emailx.AdminerEmail})
+		_ = emailx.SendNotification(h.ctx, "chat系统异常", msg, []string{emailx.AdminerEmail})
 		return err
 	}
 	return nil

@@ -4,10 +4,9 @@ export * from "./chatComponents"
 
 /**
  * @description "游客登录"
- * @param req
  */
-export function visitorLogin(req: components.VisitorLoginReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/visitorLogin`, req)
+export function visitorLogin() {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/visitorLogin`)
 }
 
 /**
@@ -30,7 +29,14 @@ export function test(req: components.TestReq) {
  * @description "visitor建立ws连接"
  */
 export function visitorServer() {
-	return webapi.get<null>(`/v1/api/chat/wsVisitor`)
+	return webapi.get<null>(`/v1/api/chat/ws/visitor`)
+}
+
+/**
+ * @description "kefu建立ws连接"
+ */
+export function kefuServer() {
+	return webapi.get<null>(`/v1/api/chat/ws/kefu`)
 }
 
 /**
@@ -47,109 +53,6 @@ export function saveMsgConf(req: components.SaveMsgConfReq) {
  */
 export function visitorList(params: components.VisitorListReqParams) {
 	return webapi.post<components.BaseResp>(`/v1/api/chat/visitorList`, params)
-}
-
-/**
- * @description "kefu建立ws连接"
- */
-export function kefuServer() {
-	return webapi.get<null>(`/v1/api/chat/wsKefu`)
-}
-
-/**
- * @description "添加游客 基础API"
- * @param req
- */
-export function addVisitor(req: components.AddVisitorReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/visitor`, req)
-}
-
-/**
- * @description "更新游客 基础API"
- * @param req
- */
-export function putVisitor(req: components.PutVisitorReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/visitor`, req)
-}
-
-/**
- * @description "获取游客 基础API"
- * @param req
- */
-export function getVisitor(req: components.GetVisitorReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor`, req)
-}
-
-/**
- * @description "删除游客 基础API"
- * @param req
- */
-export function delVisitor(req: components.DelVisitorReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/visitor`, req)
-}
-
-/**
- * @description "获取游客列表 基础API"
- * @param params
- */
-export function getVisitorList(params: components.GetVisitorListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor/list`, params)
-}
-
-/**
- * @description "获取游客枚举列表 基础API"
- * @param req
- */
-export function getVisitorEnums(req: components.GetVisitorEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor/enums`, req)
-}
-
-/**
- * @description "添加客服 基础API"
- * @param req
- */
-export function addKefu(req: components.AddKefuReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "更新客服 基础API"
- * @param req
- */
-export function putKefu(req: components.PutKefuReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "获取客服 基础API"
- * @param req
- */
-export function getKefu(req: components.GetKefuReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "删除客服 基础API"
- * @param req
- */
-export function delKefu(req: components.DelKefuReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "获取客服列表 基础API"
- * @param params
- */
-export function getKefuList(params: components.GetKefuListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu/list`, params)
-}
-
-/**
- * @description "获取客服枚举列表 基础API"
- * @param req
- */
-export function getKefuEnums(req: components.GetKefuEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu/enums`, req)
 }
 
 /**
@@ -201,54 +104,6 @@ export function getChatRecordEnums(req: components.GetChatRecordEnumsReq) {
 }
 
 /**
- * @description "添加消息, 主要用于缓存未发送成功的消息 基础API"
- * @param req
- */
-export function addMessage(req: components.AddMessageReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/message`, req)
-}
-
-/**
- * @description "更新消息, 主要用于缓存未发送成功的消息 基础API"
- * @param req
- */
-export function putMessage(req: components.PutMessageReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/message`, req)
-}
-
-/**
- * @description "获取消息, 主要用于缓存未发送成功的消息 基础API"
- * @param req
- */
-export function getMessage(req: components.GetMessageReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/message`, req)
-}
-
-/**
- * @description "删除消息, 主要用于缓存未发送成功的消息 基础API"
- * @param req
- */
-export function delMessage(req: components.DelMessageReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/message`, req)
-}
-
-/**
- * @description "获取消息, 主要用于缓存未发送成功的消息列表 基础API"
- * @param params
- */
-export function getMessageList(params: components.GetMessageListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/message/list`, params)
-}
-
-/**
- * @description "获取消息, 主要用于缓存未发送成功的消息枚举列表 基础API"
- * @param req
- */
-export function getMessageEnums(req: components.GetMessageEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/message/enums`, req)
-}
-
-/**
  * @description "添加IP黑名单 基础API"
  * @param req
  */
@@ -297,6 +152,102 @@ export function getIpblackEnums(req: components.GetIpblackEnumsReq) {
 }
 
 /**
+ * @description "添加客服 基础API"
+ * @param req
+ */
+export function addKefu(req: components.AddKefuReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/kefu`, req)
+}
+
+/**
+ * @description "更新客服 基础API"
+ * @param req
+ */
+export function putKefu(req: components.PutKefuReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/chat/kefu`, req)
+}
+
+/**
+ * @description "获取客服 基础API"
+ * @param req
+ */
+export function getKefu(req: components.GetKefuReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu`, req)
+}
+
+/**
+ * @description "删除客服 基础API"
+ * @param req
+ */
+export function delKefu(req: components.DelKefuReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/chat/kefu`, req)
+}
+
+/**
+ * @description "获取客服列表 基础API"
+ * @param params
+ */
+export function getKefuList(params: components.GetKefuListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu/list`, params)
+}
+
+/**
+ * @description "获取客服枚举列表 基础API"
+ * @param req
+ */
+export function getKefuEnums(req: components.GetKefuEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu/enums`, req)
+}
+
+/**
+ * @description "添加消息, 主要用于缓存未发送成功的消息 基础API"
+ * @param req
+ */
+export function addMessage(req: components.AddMessageReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/message`, req)
+}
+
+/**
+ * @description "更新消息, 主要用于缓存未发送成功的消息 基础API"
+ * @param req
+ */
+export function putMessage(req: components.PutMessageReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/chat/message`, req)
+}
+
+/**
+ * @description "获取消息, 主要用于缓存未发送成功的消息 基础API"
+ * @param req
+ */
+export function getMessage(req: components.GetMessageReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/message`, req)
+}
+
+/**
+ * @description "删除消息, 主要用于缓存未发送成功的消息 基础API"
+ * @param req
+ */
+export function delMessage(req: components.DelMessageReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/chat/message`, req)
+}
+
+/**
+ * @description "获取消息, 主要用于缓存未发送成功的消息列表 基础API"
+ * @param params
+ */
+export function getMessageList(params: components.GetMessageListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/message/list`, params)
+}
+
+/**
+ * @description "获取消息, 主要用于缓存未发送成功的消息枚举列表 基础API"
+ * @param req
+ */
+export function getMessageEnums(req: components.GetMessageEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/message/enums`, req)
+}
+
+/**
  * @description "添加消息配置 基础API"
  * @param req
  */
@@ -342,4 +293,52 @@ export function getMessageConfigList(params: components.GetMessageConfigListReqP
  */
 export function getMessageConfigEnums(req: components.GetMessageConfigEnumsReq) {
 	return webapi.get<components.BaseResp>(`/v1/api/chat/messageConfig/enums`, req)
+}
+
+/**
+ * @description "添加游客 基础API"
+ * @param req
+ */
+export function addVisitor(req: components.AddVisitorReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/visitor`, req)
+}
+
+/**
+ * @description "更新游客 基础API"
+ * @param req
+ */
+export function putVisitor(req: components.PutVisitorReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/chat/visitor`, req)
+}
+
+/**
+ * @description "获取游客 基础API"
+ * @param req
+ */
+export function getVisitor(req: components.GetVisitorReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor`, req)
+}
+
+/**
+ * @description "删除游客 基础API"
+ * @param req
+ */
+export function delVisitor(req: components.DelVisitorReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/chat/visitor`, req)
+}
+
+/**
+ * @description "获取游客列表 基础API"
+ * @param params
+ */
+export function getVisitorList(params: components.GetVisitorListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor/list`, params)
+}
+
+/**
+ * @description "获取游客枚举列表 基础API"
+ * @param req
+ */
+export function getVisitorEnums(req: components.GetVisitorEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor/enums`, req)
 }

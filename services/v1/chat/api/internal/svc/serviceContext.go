@@ -1,13 +1,14 @@
 package svc
 
 import (
+	"fmt"
+	"mixbench/common/utils"
 	"mixbench/services/v1/captcha/rpc/captcha"
 	"mixbench/services/v1/chat/api/internal/client"
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/middleware"
 	"mixbench/services/v1/chat/model"
 
-	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -30,7 +31,10 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn := sqlx.NewMysql(c.Mysql.DataSource)
+	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	if err != nil {
+		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+	}
 	svc := &ServiceContext{
 		Config: c,
 

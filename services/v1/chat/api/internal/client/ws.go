@@ -2,9 +2,34 @@ package client
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
+	"mixbench/common/utils"
+	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
+
+func NewWsConn(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
+	if !utils.IsWebsocketRequest(r) {
+		// 不是 WebSocket 请求
+		return nil, errors.New("the current request is not a WebSocket request")
+	}
+
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		return nil, err
+	}
+	if err := conn.SetWriteDeadline(time.Now().Add(writeWait)); err != nil {
+		return nil, fmt.Errorf("SetWriteDeadline error: %s", err)
+	}
+	conn.SetReadLimit(maxMessageSize)
+	conn.SetReadLimit(maxMessageSize)
+	conn.SetReadDeadline(time.Now().Add(pongWait))
+	conn.SetPongHandler(func(string) error { conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	return conn, nil
+}
 
 // 判断 ws.conn是否已经关闭
 func isConnectionClosed(wsConn *websocket.Conn) bool {

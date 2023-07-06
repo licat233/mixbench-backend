@@ -34,7 +34,7 @@ func (l *GetVisitorEnumsLogic) GetVisitorEnums(req *types.GetVisitorEnumsReq) (a
 	data := make([]*types.Enum, 0)
 	for _, v := range mdVisitorList {
 		data = append(data, &types.Enum{
-			Label: v.Username,
+			Label: v.Name,
 			Value: v.Id,
 		})
 	}

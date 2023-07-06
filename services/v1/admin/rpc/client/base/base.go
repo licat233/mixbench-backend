@@ -15,10 +15,14 @@ import (
 type (
 	AddAdminerReq      = admin_pb.AddAdminerReq
 	AddAdminerResp     = admin_pb.AddAdminerResp
+	AddProjectReq      = admin_pb.AddProjectReq
+	AddProjectResp     = admin_pb.AddProjectResp
 	Adminer            = admin_pb.Adminer
 	ByIdReq            = admin_pb.ByIdReq
 	DelAdminerReq      = admin_pb.DelAdminerReq
 	DelAdminerResp     = admin_pb.DelAdminerResp
+	DelProjectReq      = admin_pb.DelProjectReq
+	DelProjectResp     = admin_pb.DelProjectResp
 	Enum               = admin_pb.Enum
 	Enums              = admin_pb.Enums
 	ExistsEmailReq     = admin_pb.ExistsEmailReq
@@ -33,6 +37,11 @@ type (
 	GetAdminerListResp = admin_pb.GetAdminerListResp
 	GetAdminerReq      = admin_pb.GetAdminerReq
 	GetAdminerResp     = admin_pb.GetAdminerResp
+	GetProjectEnumsReq = admin_pb.GetProjectEnumsReq
+	GetProjectListReq  = admin_pb.GetProjectListReq
+	GetProjectListResp = admin_pb.GetProjectListResp
+	GetProjectReq      = admin_pb.GetProjectReq
+	GetProjectResp     = admin_pb.GetProjectResp
 	IsLogoutReq        = admin_pb.IsLogoutReq
 	IsLogoutResp       = admin_pb.IsLogoutResp
 	JwtData            = admin_pb.JwtData
@@ -49,9 +58,12 @@ type (
 	Options            = admin_pb.Options
 	ParseJwtTokenReq   = admin_pb.ParseJwtTokenReq
 	ParseJwtTokenResp  = admin_pb.ParseJwtTokenResp
+	Project            = admin_pb.Project
 	PutAdminerReq      = admin_pb.PutAdminerReq
 	PutAdminerResp     = admin_pb.PutAdminerResp
 	PutPasswordReq     = admin_pb.PutPasswordReq
+	PutProjectReq      = admin_pb.PutProjectReq
+	PutProjectResp     = admin_pb.PutProjectResp
 	ResetLuckValueReq  = admin_pb.ResetLuckValueReq
 	StatusResp         = admin_pb.StatusResp
 	TestReq            = admin_pb.TestReq
@@ -74,6 +86,18 @@ type (
 		GetAdminerList(ctx context.Context, in *GetAdminerListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error)
 		// 获取管理员枚举列表
 		GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+		// 添加项目
+		AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
+		// 更新项目
+		PutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error)
+		// 获取项目
+		GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectResp, error)
+		// 删除项目
+		DelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error)
+		// 获取项目列表
+		GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
+		// 获取项目枚举列表
+		GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 	}
 
 	defaultBase struct {
@@ -121,4 +145,40 @@ func (m *defaultBase) GetAdminerList(ctx context.Context, in *GetAdminerListReq,
 func (m *defaultBase) GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
 	client := admin_pb.NewBaseClient(m.cli.Conn())
 	return client.GetAdminerEnums(ctx, in, opts...)
+}
+
+// 添加项目
+func (m *defaultBase) AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.AddProject(ctx, in, opts...)
+}
+
+// 更新项目
+func (m *defaultBase) PutProject(ctx context.Context, in *PutProjectReq, opts ...grpc.CallOption) (*PutProjectResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.PutProject(ctx, in, opts...)
+}
+
+// 获取项目
+func (m *defaultBase) GetProject(ctx context.Context, in *GetProjectReq, opts ...grpc.CallOption) (*GetProjectResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetProject(ctx, in, opts...)
+}
+
+// 删除项目
+func (m *defaultBase) DelProject(ctx context.Context, in *DelProjectReq, opts ...grpc.CallOption) (*DelProjectResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.DelProject(ctx, in, opts...)
+}
+
+// 获取项目列表
+func (m *defaultBase) GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetProjectList(ctx, in, opts...)
+}
+
+// 获取项目枚举列表
+func (m *defaultBase) GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetProjectEnums(ctx, in, opts...)
 }

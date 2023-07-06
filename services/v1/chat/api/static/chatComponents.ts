@@ -83,7 +83,6 @@ export interface BaseResp {
 }
 
 export interface VisitorLoginReq {
-	refer: string
 }
 
 export interface KefuLoginReq {
@@ -114,122 +113,6 @@ export interface VisitorListReqParams {
 	page: number // 当前页码，默认1，可选
 	current: number // 当前页码，默认1，用于对接umijs，可选
 	keyword: string // 关键词，可选
-}
-
-export interface Visitor {
-	id: number // 表主键
-	uuid: string // UUID
-	username: string // 游客名
-	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
-	status: number // 状态:0离线，1在线，2拉黑
-	referer: string // 来源，从哪个网址发起的聊天
-	city: string // 城市或地区
-	platform: string // 设备
-}
-
-export interface AddVisitorReq {
-	username: string // 游客名
-	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
-	status: number // 状态:0离线，1在线，2拉黑
-	referer: string // 来源，从哪个网址发起的聊天
-	city: string // 城市或地区
-	platform: string // 设备
-}
-
-export interface PutVisitorReq {
-	id: number // 表主键
-	uuid: string // UUID
-	username: string // 游客名
-	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
-	status: number // 状态:0离线，1在线，2拉黑
-	referer: string // 来源，从哪个网址发起的聊天
-	city: string // 城市或地区
-	platform: string // 设备
-}
-
-export interface DelVisitorReq {
-	id: number // 游客 ID
-}
-
-export interface GetVisitorReq {
-	id: number // 游客 ID
-}
-
-export interface GetVisitorListReq {
-}
-export interface GetVisitorListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 表主键
-	uuid: string // UUID
-	username: string // 游客名
-	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
-	status: number // 状态:0离线，1在线，2拉黑
-	referer: string // 来源，从哪个网址发起的聊天
-	city: string // 城市或地区
-	platform: string // 设备
-}
-
-export interface GetVisitorEnumsReq {
-	parentId?: number // 父级ID
-}
-
-export interface Kefu {
-	id: number // 表主键
-	uuid: string // UUID
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface AddKefuReq {
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface PutKefuReq {
-	id: number // 表主键
-	uuid: string // UUID
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface DelKefuReq {
-	id: number // 客服 ID
-}
-
-export interface GetKefuReq {
-	id: number // 客服 ID
-}
-
-export interface GetKefuListReq {
-}
-export interface GetKefuListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 表主键
-	uuid: string // UUID
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface GetKefuEnumsReq {
-	parentId?: number // 父级ID
 }
 
 export interface ChatRecord {
@@ -297,6 +180,99 @@ export interface GetChatRecordListReqParams {
 }
 
 export interface GetChatRecordEnumsReq {
+	parentId?: number // 父级ID
+}
+
+export interface Ipblack {
+	id: number // 
+	ip: string // IP
+	kefuId: string // 客服id
+}
+
+export interface AddIpblackReq {
+	ip: string // IP
+	kefuId: string // 客服id
+}
+
+export interface PutIpblackReq {
+	id: number // 
+	ip: string // IP
+	kefuId: string // 客服id
+}
+
+export interface DelIpblackReq {
+	id: number // IP黑名单 ID
+}
+
+export interface GetIpblackReq {
+	id: number // IP黑名单 ID
+}
+
+export interface GetIpblackListReq {
+}
+export interface GetIpblackListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
+	id: number // 
+	ip: string // IP
+	kefuId: string // 客服id
+}
+
+export interface GetIpblackEnumsReq {
+	parentId?: number // 父级ID
+}
+
+export interface Kefu {
+	id: number // 表主键
+	uuid: string // UUID
+	passport: string // 客服账号
+	username: string // 客服名
+	password: string // 密码
+	status: number // 状态:0离线，1在线，2冻结
+}
+
+export interface AddKefuReq {
+	passport: string // 客服账号
+	username: string // 客服名
+	password: string // 密码
+	status: number // 状态:0离线，1在线，2冻结
+}
+
+export interface PutKefuReq {
+	id: number // 表主键
+	uuid: string // UUID
+	passport: string // 客服账号
+	username: string // 客服名
+	password: string // 密码
+	status: number // 状态:0离线，1在线，2冻结
+}
+
+export interface DelKefuReq {
+	id: number // 客服 ID
+}
+
+export interface GetKefuReq {
+	id: number // 客服 ID
+}
+
+export interface GetKefuListReq {
+}
+export interface GetKefuListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
+	id: number // 表主键
+	uuid: string // UUID
+	passport: string // 客服账号
+	username: string // 客服名
+	password: string // 密码
+	status: number // 状态:0离线，1在线，2冻结
+}
+
+export interface GetKefuEnumsReq {
 	parentId?: number // 父级ID
 }
 
@@ -372,47 +348,6 @@ export interface GetMessageEnumsReq {
 	parentId?: number // 父级ID
 }
 
-export interface Ipblack {
-	id: number // 
-	ip: string // IP
-	kefuId: string // 客服id
-}
-
-export interface AddIpblackReq {
-	ip: string // IP
-	kefuId: string // 客服id
-}
-
-export interface PutIpblackReq {
-	id: number // 
-	ip: string // IP
-	kefuId: string // 客服id
-}
-
-export interface DelIpblackReq {
-	id: number // IP黑名单 ID
-}
-
-export interface GetIpblackReq {
-	id: number // IP黑名单 ID
-}
-
-export interface GetIpblackListReq {
-}
-export interface GetIpblackListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 
-	ip: string // IP
-	kefuId: string // 客服id
-}
-
-export interface GetIpblackEnumsReq {
-	parentId?: number // 父级ID
-}
-
 export interface MessageConfig {
 	id: number // 主键
 	name: string // 名字
@@ -455,6 +390,86 @@ export interface GetMessageConfigListReqParams {
 }
 
 export interface GetMessageConfigEnumsReq {
+	parentId?: number // 父级ID
+}
+
+export interface Visitor {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 游客名
+	ip: string // IP
+	kefuId: number // 客服id，-1表示没有客服接待
+	status: number // 状态:0离线，1在线，2拉黑
+	referer: string // 来源，从哪个网址发起的聊天
+	region: string // 地区
+	city: string // 城市
+	platform: string // 设备平台:移动设备,电脑,平板,Xbox
+	os: string // 系统: andriod,ios,macOS,windows
+	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	language: string // 语言
+}
+
+export interface AddVisitorReq {
+	name: string // 游客名
+	ip: string // IP
+	kefuId: number // 客服id，-1表示没有客服接待
+	status: number // 状态:0离线，1在线，2拉黑
+	referer: string // 来源，从哪个网址发起的聊天
+	region: string // 地区
+	city: string // 城市
+	platform: string // 设备平台:移动设备,电脑,平板,Xbox
+	os: string // 系统: andriod,ios,macOS,windows
+	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	language: string // 语言
+}
+
+export interface PutVisitorReq {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 游客名
+	ip: string // IP
+	kefuId: number // 客服id，-1表示没有客服接待
+	status: number // 状态:0离线，1在线，2拉黑
+	referer: string // 来源，从哪个网址发起的聊天
+	region: string // 地区
+	city: string // 城市
+	platform: string // 设备平台:移动设备,电脑,平板,Xbox
+	os: string // 系统: andriod,ios,macOS,windows
+	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	language: string // 语言
+}
+
+export interface DelVisitorReq {
+	id: number // 游客 ID
+}
+
+export interface GetVisitorReq {
+	id: number // 游客 ID
+}
+
+export interface GetVisitorListReq {
+}
+export interface GetVisitorListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 游客名
+	ip: string // IP
+	kefuId: number // 客服id，-1表示没有客服接待
+	status: number // 状态:0离线，1在线，2拉黑
+	referer: string // 来源，从哪个网址发起的聊天
+	region: string // 地区
+	city: string // 城市
+	platform: string // 设备平台:移动设备,电脑,平板,Xbox
+	os: string // 系统: andriod,ios,macOS,windows
+	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	language: string // 语言
+}
+
+export interface GetVisitorEnumsReq {
 	parentId?: number // 父级ID
 }
 
