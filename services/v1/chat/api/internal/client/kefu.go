@@ -90,7 +90,10 @@ func (c *KefuClient) ReadPump() error {
 			}
 			// messageBody 为一个完整的 message 的 json 数据
 			var message types.Message
-			json.Unmarshal(messageBody, &message)
+			if err := json.Unmarshal(messageBody, &message); err != nil {
+				// 不符合规范的 messageBody，丢弃
+				continue
+			}
 			if message.VisitorId <= 1 {
 				c.Logger.Error("unvalidtor visitor id: %d", message.VisitorId)
 				continue
