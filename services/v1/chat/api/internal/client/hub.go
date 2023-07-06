@@ -140,6 +140,10 @@ func (h *Hub) AssignDBMessage() {
 			// 每次 ticker 触发时执行的操作
 			// 查找在线的客服
 			kefuIds := h.KefuClients.Ids()
+			// 如果没有客服在线
+			if len(kefuIds) == 0 {
+				continue
+			}
 			// 查找需要发给客服的消息
 			kefuMessages, err := h.MessageModel.FindsToKefu(h.ctx, kefuIds)
 			if err != nil {

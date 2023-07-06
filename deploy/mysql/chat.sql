@@ -12,7 +12,7 @@ CREATE TABLE `chat_record` (
   `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
   `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
   `visitor_id` int NOT NULL DEFAULT '0' COMMENT '游客id',
-  `kefu_id` int NOT NULL DEFAULT '0' COMMENT '客服id',
+  `kefu_id` int NOT NULL DEFAULT '0' COMMENT '客服id， -1表示没有分配到客服',
   `msg_type` tinyint NOT NULL DEFAULT '0' COMMENT '0游客消息，1客服消息，2公告消息，3系统消息',
   `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0合法，1违规',
   `is_read` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0未读，1已读',

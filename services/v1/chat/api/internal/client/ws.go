@@ -53,6 +53,7 @@ func isConnectionClosed(wsConn *websocket.Conn) bool {
 	// return false
 }
 
+// 预处理消息内容
 func preprocessMessageContent(content []byte) []byte {
 	return bytes.TrimSpace(bytes.Replace(content, newline, space, -1))
 }

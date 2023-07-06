@@ -88,6 +88,18 @@ func (c *VisitorClient) ReadPump() error {
 				//conn被正常关闭
 				return nil
 			}
+			// 如果该游客没有客服接待
+			if c.Visitor.KefuId <= 0 {
+				//尝试分配客服
+				kefuCli := c.hub.AssignKefu()
+				//如果没有客服
+				if kefuCli == nil {
+					//只能抛弃这条消息
+					continue
+				}
+				//如果有客服，将其分配给该游客
+				c.Visitor.KefuId = kefuCli.Kefu.Id
+			}
 			// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
 			messageContent = preprocessMessageContent(messageContent)
 			message := &types.Message{
