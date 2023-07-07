@@ -71,7 +71,7 @@ func (c *VisitorClient) Run() (err error) {
 }
 
 // 读取游客通过ws发送过来的信息
-func (c *VisitorClient) ReadPump() error {
+func (c *VisitorClient) ReadPump() (e error) {
 	defer func() {
 		c.Logout()
 	}()
@@ -85,7 +85,8 @@ func (c *VisitorClient) ReadPump() error {
 				//异常关闭
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 					c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
-					return fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+					e = fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+					return
 				}
 				//conn被正常关闭
 				return nil
@@ -120,7 +121,8 @@ func (c *VisitorClient) ReadPump() error {
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(message); err != nil {
 				c.Client.SystemErrorHandler(-1, c.Visitor.Id)
-				return fmt.Errorf("SendBeforeHandler error: %s", err)
+				e = fmt.Errorf("SendBeforeHandler error: %s", err)
+				return
 			}
 			c.hub.MessageList <- message
 		}

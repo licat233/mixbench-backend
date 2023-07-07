@@ -75,17 +75,21 @@ func (c *KefuClient) Run() (err error) {
 	wg.Wait()
 	if WritePumpError != nil {
 		err = fmt.Errorf("WritePumpError: %s", WritePumpError)
+		return err
 	}
 	if ReadPumpError != nil {
 		err = fmt.Errorf("%s + ReadPumpError: %s", err, ReadPumpError)
+		return err
 	}
 	return
 }
 
 // 读取客服通过ws发送过来的信息
-func (c *KefuClient) ReadPump() (err error) {
+func (c *KefuClient) ReadPump() (e error) {
 	defer func() {
-		c.Logout()
+		if err := c.Logout(); e == nil {
+			e = err
+		}
 	}()
 	for {
 		select {
@@ -97,7 +101,8 @@ func (c *KefuClient) ReadPump() (err error) {
 				//异常关闭
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 					c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
-					return fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+					e = fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+					return
 				}
 				//conn被正常关闭
 				return nil
@@ -120,7 +125,8 @@ func (c *KefuClient) ReadPump() (err error) {
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(&message); err != nil {
 				c.Client.SystemErrorHandler(c.Kefu.Id, -1)
-				return fmt.Errorf("SendBeforeHandler error: %s", err)
+				e = fmt.Errorf("SendBeforeHandler error: %s", err)
+				return
 			}
 			c.hub.MessageList <- &message
 		}
@@ -128,17 +134,20 @@ func (c *KefuClient) ReadPump() (err error) {
 }
 
 // 给客服的ws写入消息
-func (c *KefuClient) WritePump() (err error) {
+func (c *KefuClient) WritePump() (e error) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
-		c.Logout()
+		if err := c.Logout(); e == nil {
+			e = err
+		}
 	}()
 
 	//发送公告信息
 	if err := c.Client.SendPresetMessage(PublicMessageKey, c.Kefu.Id, -1); err != nil {
 		c.Logger.Error(err)
-		return fmt.Errorf("send public message error: %s", err)
+		e = fmt.Errorf("send public message error: %s", err)
+		return
 	}
 
 	//已经准备好接收信息了，那就把缓存的游客消息全部发送
@@ -148,12 +157,14 @@ func (c *KefuClient) WritePump() (err error) {
 	})
 	if err != nil {
 		c.Logger.Error(err)
-		return err
+		e = err
+		return
 	}
 	msgList := dataconv.MdMessages2ApiMessages(mdMsgList)
 	for _, msg := range msgList {
 		if err := c.WriteMessage(msg); err != nil {
-			return err
+			e = err
+			return
 		}
 	}
 
@@ -164,13 +175,15 @@ func (c *KefuClient) WritePump() (err error) {
 				// The hub closed the channel.
 				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
 					c.Logger.Error(err)
-					return fmt.Errorf("conn.WriteMessage error: %s", err)
+					e = fmt.Errorf("conn.WriteMessage error: %s", err)
+					return
 				}
 				// 已关闭，正常退出
 				return nil
 			}
 			if err := c.WriteMessage(message); err != nil {
-				return err
+				e = err
+				return
 			}
 		case <-c.Stop:
 			//关闭了
@@ -179,7 +192,8 @@ func (c *KefuClient) WritePump() (err error) {
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				c.Logger.Error(err)
-				return fmt.Errorf("conn.WriteMessage error: %s", err)
+				e = fmt.Errorf("conn.WriteMessage error: %s", err)
+				return
 			}
 		}
 	}
