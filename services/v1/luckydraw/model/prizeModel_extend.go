@@ -67,27 +67,27 @@ func (m *defaultPrizeModel) FindList(ctx context.Context, pageSize, page int64, 
 	sq := squirrel.Select(prizeRows).From(m.table).Where("`is_deleted`= '0'")
 	if prize != nil {
 		if prize.Id >= 0 {
-			sq = sq.Where("id = ?", prize.Id)
+			sq = sq.Where("`id` = ?", prize.Id)
 		}
 		if prize.Uuid != "" {
-			sq = sq.Where("uuid = ?", prize.Uuid)
+			sq = sq.Where("`uuid` = ?", prize.Uuid)
 		}
 		if prize.Name != "" {
-			sq = sq.Where("name = ?", prize.Name)
+			sq = sq.Where("`name` = ?", prize.Name)
 			hasName = true
 		}
 		if prize.Image != "" {
-			sq = sq.Where("image = ?", prize.Image)
+			sq = sq.Where("`image` = ?", prize.Image)
 		}
 		if prize.Price >= 0 {
-			sq = sq.Where("price = ?", prize.Price)
+			sq = sq.Where("`price` = ?", prize.Price)
 		}
 		if prize.Status >= 0 {
-			sq = sq.Where("status = ?", prize.Status)
+			sq = sq.Where("`status` = ?", prize.Status)
 		}
 	}
 	if keyword != "" && hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()

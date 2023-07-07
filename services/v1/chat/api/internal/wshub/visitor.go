@@ -34,6 +34,7 @@ func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *h
 			conn:   conn,
 			send:   make(chan *types.Message, 100),
 			Stop:   make(chan bool),
+			Status: true,
 			w:      w,
 			r:      r,
 		},
@@ -58,6 +59,7 @@ func (c *VisitorClient) Run() (err error) {
 		defer wg.Done()
 		ReadPumpError = c.ReadPump()
 	}()
+
 	//等待关闭信号, 这里可要可不要
 	// <-c.Stop
 	wg.Wait()
@@ -71,7 +73,7 @@ func (c *VisitorClient) Run() (err error) {
 }
 
 // 读取游客通过ws发送过来的信息
-func (c *VisitorClient) ReadPump() (e error) {
+func (c *VisitorClient) ReadPump() error {
 	defer func() {
 		c.Logout()
 	}()
@@ -82,14 +84,16 @@ func (c *VisitorClient) ReadPump() (e error) {
 		default:
 			_, messageContent, err := c.conn.ReadMessage()
 			if err != nil {
-				//异常关闭
-				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
-					e = fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
-					return
-				}
 				//conn被正常关闭
 				return nil
+				// if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
+				// 	//conn被正常关闭
+				// 	return nil
+				// } else {
+				// 	//异常关闭
+				// 	c.Logger.Error("websocket conn is unexpected close error: %v", err)
+				// 	return fmt.Errorf("websocket conn is unexpected close error: %v", err)
+				// }
 			}
 			// 如果该游客没有客服接待
 			if c.Visitor.KefuId <= 0 {
@@ -115,14 +119,13 @@ func (c *VisitorClient) ReadPump() (e error) {
 				Status:     0,
 				IsRead:     0,
 				IsSend:     0,
-				SendTime:   0,
+				SendTime:   time.Now().Local().Unix(),
 				ExpireTime: 0,
 			}
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(message); err != nil {
-				c.Client.SystemErrorHandler(-1, c.Visitor.Id)
-				e = fmt.Errorf("SendBeforeHandler error: %s", err)
-				return
+				// c.Client.SystemErrorHandler(-1, c.Visitor.Id)
+				return fmt.Errorf("SendBeforeHandler error: %s", err)
 			}
 			c.hub.MessageList <- message
 		}
@@ -176,8 +179,14 @@ func (c *VisitorClient) WritePump() error {
 			if !ok {
 				// The hub closed the channel.
 				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
-					c.Logger.Error(err)
-					return fmt.Errorf("conn.WriteMessage error: %s", err)
+					if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+						//正常关闭
+						return nil
+					} else {
+						//异常关闭
+						c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
+						return fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+					}
 				}
 				// 已关闭，正常退出
 				return nil
@@ -212,6 +221,10 @@ func (c *VisitorClient) WriteMessage(message *types.Message) error {
 }
 
 func (c *VisitorClient) Logout() {
+	if !c.Client.Status {
+		return
+	}
+	c.Client.Status = false
 	c.hub.VisitorClients.Del(c.Visitor.Id)
 }
 

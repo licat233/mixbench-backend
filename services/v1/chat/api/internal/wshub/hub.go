@@ -140,6 +140,8 @@ func (h *Hub) AssignChanMessage() error {
 }
 
 // 数据库消息的接收与分发
+// 避免重复发送，当send中的方法发送后，如果来不及移除message库中的message，则会二次发送
+// 解决方案：最新的message将不会发送，只发送2分钟以后的message
 func (h *Hub) AssignDBMessage() {
 	ticker := time.NewTicker(30 * time.Second)
 	for {
@@ -180,6 +182,10 @@ func (h *Hub) AssignDBMessage() {
 			for i := range messages {
 				//如果不是客服或者游客发送的消息，则跳过
 				if messages[i].MsgType != KefuMsgType && messages[i].MsgType != VisitorMsgType {
+					continue
+				}
+				//时间约束，如果是2分钟内的，则忽略
+				if time.Since(time.Unix(messages[i].SendTime, 0)).Minutes() < 2 {
 					continue
 				}
 				select {

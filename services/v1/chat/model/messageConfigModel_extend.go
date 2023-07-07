@@ -23,7 +23,7 @@ type messageConfig_model interface {
 	FindByContent(ctx context.Context, content string) (*MessageConfig, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*MessageConfig, error)
 	FindsByNames(ctx context.Context, names []string) ([]*MessageConfig, error)
-	FindsByMsgkes(ctx context.Context, msgkes []string) ([]*MessageConfig, error)
+	FindsByMsgkeys(ctx context.Context, msgkeys []string) ([]*MessageConfig, error)
 	FindsByContents(ctx context.Context, contents []string) ([]*MessageConfig, error)
 
 	FindsById(ctx context.Context, id int64) ([]*MessageConfig, error)
@@ -149,7 +149,7 @@ func (m *defaultMessageConfigModel) FindsByIds(ctx context.Context, ids []int64)
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id`  in (?) ", messageConfigRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in (?) ", messageConfigRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -159,18 +159,18 @@ func (m *defaultMessageConfigModel) FindsByNames(ctx context.Context, names []st
 	if len(names) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `name`  in (?) ", messageConfigRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `name` in (?) ", messageConfigRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
 	return resp, err
 }
 
-func (m *defaultMessageConfigModel) FindsByMsgkes(ctx context.Context, msgkes []string) ([]*MessageConfig, error) {
+func (m *defaultMessageConfigModel) FindsByMsgkeys(ctx context.Context, msgkeys []string) ([]*MessageConfig, error) {
 	var resp = make([]*MessageConfig, 0)
-	if len(msgkes) == 0 {
+	if len(msgkeys) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `msgkey`  in (?) ", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgkes)
+	query := fmt.Sprintf("select %s from %s where `msgkey` in (?) ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgkeys)
 	return resp, err
 }
 
@@ -179,7 +179,7 @@ func (m *defaultMessageConfigModel) FindsByContents(ctx context.Context, content
 	if len(contents) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `content`  in (?) ", messageConfigRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `content` in (?) ", messageConfigRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contents)
 	return resp, err
 }

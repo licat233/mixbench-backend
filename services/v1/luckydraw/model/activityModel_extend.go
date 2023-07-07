@@ -80,39 +80,39 @@ func (m *defaultActivityModel) FindList(ctx context.Context, pageSize, page int6
 	sq := squirrel.Select(activityRows).From(m.table).Where("`is_deleted`= '0'")
 	if activity != nil {
 		if activity.Id >= 0 {
-			sq = sq.Where("id = ?", activity.Id)
+			sq = sq.Where("`id` = ?", activity.Id)
 		}
 		if activity.Uuid != "" {
-			sq = sq.Where("uuid = ?", activity.Uuid)
+			sq = sq.Where("`uuid` = ?", activity.Uuid)
 		}
 		if activity.Name != "" {
-			sq = sq.Where("name = ?", activity.Name)
+			sq = sq.Where("`name` = ?", activity.Name)
 			hasName = true
 		}
 		if activity.ProjectId > 0 {
-			sq = sq.Where("project_id = ?", activity.ProjectId)
+			sq = sq.Where("`project_id` = ?", activity.ProjectId)
 		}
 		if activity.Status >= 0 {
-			sq = sq.Where("status = ?", activity.Status)
+			sq = sq.Where("`status` = ?", activity.Status)
 		}
 		if activity.Pattern >= 0 {
-			sq = sq.Where("pattern = ?", activity.Pattern)
+			sq = sq.Where("`pattern` = ?", activity.Pattern)
 		}
 		if activity.MaxCount >= 0 {
-			sq = sq.Where("max_count = ?", activity.MaxCount)
+			sq = sq.Where("`max_count` = ?", activity.MaxCount)
 		}
 		if activity.MaxPrizes >= 0 {
-			sq = sq.Where("max_prizes = ?", activity.MaxPrizes)
+			sq = sq.Where("`max_prizes` = ?", activity.MaxPrizes)
 		}
 		if activity.StartTime.IsZero() {
-			sq = sq.Where("start_time = ?", activity.StartTime.Format("2006-01-02 15:04:05"))
+			sq = sq.Where("`start_time` = ?", activity.StartTime.Format("2006-01-02 15:04:05"))
 		}
 		if activity.EndTime.IsZero() {
-			sq = sq.Where("end_time = ?", activity.EndTime.Format("2006-01-02 15:04:05"))
+			sq = sq.Where("`end_time` = ?", activity.EndTime.Format("2006-01-02 15:04:05"))
 		}
 	}
 	if keyword != "" && hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()

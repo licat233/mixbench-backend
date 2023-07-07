@@ -70,25 +70,25 @@ func (m *defaultLuckyModel) FindList(ctx context.Context, pageSize, page int64, 
 	sq := squirrel.Select(luckyRows).From(m.table).Where("`is_deleted`= '0'")
 	if lucky != nil {
 		if lucky.Id >= 0 {
-			sq = sq.Where("id = ?", lucky.Id)
+			sq = sq.Where("`id` = ?", lucky.Id)
 		}
 		if lucky.Uuid != "" {
-			sq = sq.Where("uuid = ?", lucky.Uuid)
+			sq = sq.Where("`uuid` = ?", lucky.Uuid)
 		}
 		if lucky.UserId > 0 {
-			sq = sq.Where("user_id = ?", lucky.UserId)
+			sq = sq.Where("`user_id` = ?", lucky.UserId)
 		}
 		if lucky.PrizePoolId > 0 {
-			sq = sq.Where("prize_pool_id = ?", lucky.PrizePoolId)
+			sq = sq.Where("`prize_pool_id` = ?", lucky.PrizePoolId)
 		}
 		if lucky.Status >= 0 {
-			sq = sq.Where("status = ?", lucky.Status)
+			sq = sq.Where("`status` = ?", lucky.Status)
 		}
 		if lucky.LuckDate.IsZero() {
-			sq = sq.Where("luck_date = ?", lucky.LuckDate.Format("2006-01-02 15:04:05"))
+			sq = sq.Where("`luck_date` = ?", lucky.LuckDate.Format("2006-01-02 15:04:05"))
 		}
 		if lucky.Ip != "" {
-			sq = sq.Where("ip = ?", lucky.Ip)
+			sq = sq.Where("`ip` = ?", lucky.Ip)
 		}
 	}
 	if pageSize > 0 && page > 0 {

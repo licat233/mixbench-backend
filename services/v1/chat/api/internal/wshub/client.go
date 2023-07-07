@@ -2,6 +2,7 @@ package wshub
 
 import (
 	"context"
+	"fmt"
 	"mixbench/services/v1/chat/api/internal/types"
 	"mixbench/services/v1/chat/model"
 	"net/http"
@@ -19,10 +20,11 @@ type Client struct {
 	// The websocket connection.
 	conn *websocket.Conn
 	// Buffered channel of outbound messages.
-	send chan *types.Message
-	Stop chan bool //关闭信号
-	w    http.ResponseWriter
-	r    *http.Request
+	send   chan *types.Message
+	Stop   chan bool //关闭信号
+	Status bool      //状态，是否正常
+	w      http.ResponseWriter
+	r      *http.Request
 }
 
 func (c *Client) Close() {
@@ -49,6 +51,8 @@ func (c *Client) Send(message *types.Message) error {
 			}
 		}
 	}
+	//发送前，务必检查 send 通道关闭了没有
+	fmt.Println(*message)
 	select {
 	case c.send <- message:
 		// 消息成功发送
@@ -68,9 +72,7 @@ func (c *Client) SendPresetMessage(msgKey string, kefuId, visitorId int64) error
 	if msgKey = strings.TrimSpace(msgKey); msgKey == "" {
 		return nil
 	}
-	msgList, _, err := c.hub.SvcCtx.MessageConfigModel.FindList(c.ctx, -1, -1, "", &model.MessageConfig{
-		Msgkey: msgKey,
-	})
+	msgList, err := c.hub.SvcCtx.MessageConfigModel.FindsByMsgkey(c.ctx, msgKey)
 	if err != nil {
 		c.Logger.Error(err)
 		c.SystemErrorHandler(kefuId, visitorId)

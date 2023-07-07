@@ -61,21 +61,21 @@ func (m *defaultPrizeGradeModel) FindList(ctx context.Context, pageSize, page in
 	sq := squirrel.Select(prizeGradeRows).From(m.table).Where("`is_deleted`= '0'")
 	if prizeGrade != nil {
 		if prizeGrade.Id >= 0 {
-			sq = sq.Where("id = ?", prizeGrade.Id)
+			sq = sq.Where("`id` = ?", prizeGrade.Id)
 		}
 		if prizeGrade.Uuid != "" {
-			sq = sq.Where("uuid = ?", prizeGrade.Uuid)
+			sq = sq.Where("`uuid` = ?", prizeGrade.Uuid)
 		}
 		if prizeGrade.Name != "" {
-			sq = sq.Where("name = ?", prizeGrade.Name)
+			sq = sq.Where("`name` = ?", prizeGrade.Name)
 			hasName = true
 		}
 		if prizeGrade.IsWin >= 0 {
-			sq = sq.Where("is_win = ?", prizeGrade.IsWin)
+			sq = sq.Where("`is_win` = ?", prizeGrade.IsWin)
 		}
 	}
 	if keyword != "" && hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()

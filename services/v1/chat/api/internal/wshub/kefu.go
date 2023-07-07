@@ -38,6 +38,7 @@ func NewKefuClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http
 			conn:   conn,
 			send:   make(chan *types.Message, 20),
 			Stop:   make(chan bool),
+			Status: true,
 			w:      w,
 			r:      r,
 		},
@@ -99,11 +100,11 @@ func (c *KefuClient) ReadPump() (e error) {
 			_, messageBody, err := c.conn.ReadMessage()
 			if err != nil {
 				//异常关闭
-				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
-					e = fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
-					return
-				}
+				// if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				// 	c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
+				// 	e = fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+				// 	return
+				// }
 				//conn被正常关闭
 				return nil
 			}
@@ -121,6 +122,7 @@ func (c *KefuClient) ReadPump() (e error) {
 			message.Uuid = uniqueid.NewUUID()
 			message.KefuId = c.Kefu.Id
 			message.MsgType = 1
+			message.SendTime = time.Now().Local().Unix()
 
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(&message); err != nil {
@@ -174,9 +176,14 @@ func (c *KefuClient) WritePump() (e error) {
 			if !ok {
 				// The hub closed the channel.
 				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
-					c.Logger.Error(err)
-					e = fmt.Errorf("conn.WriteMessage error: %s", err)
-					return
+					if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+						//正常关闭
+						return nil
+					} else {
+						//异常关闭
+						c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
+						return fmt.Errorf("websocket conn IsUnexpectedCloseError: %v", err)
+					}
 				}
 				// 已关闭，正常退出
 				return nil
@@ -213,6 +220,10 @@ func (c *KefuClient) WriteMessage(message *types.Message) error {
 }
 
 func (c *KefuClient) Logout() error {
+	if !c.Client.Status {
+		return nil
+	}
+	c.Client.Status = false
 	c.hub.KefuClients.Del(c.Kefu.Id)
 	//此时，如果其对接的游客还在线，应该将他的游客转接给其它客服，而不是放任不管
 	//逻辑：转移当前客服的在线游客，分配给其它客服

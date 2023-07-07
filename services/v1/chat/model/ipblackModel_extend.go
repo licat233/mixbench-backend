@@ -124,7 +124,7 @@ func (m *defaultIpblackModel) FindsByIds(ctx context.Context, ids []int64) ([]*I
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id`  in (?) ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in (?) ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -134,7 +134,7 @@ func (m *defaultIpblackModel) FindsByIps(ctx context.Context, ips []string) ([]*
 	if len(ips) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `ip`  in (?) ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` in (?) ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ips)
 	return resp, err
 }
@@ -144,7 +144,7 @@ func (m *defaultIpblackModel) FindsByKefuIds(ctx context.Context, kefuIds []stri
 	if len(kefuIds) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `kefu_id`  in (?) ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `kefu_id` in (?) ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
 	return resp, err
 }

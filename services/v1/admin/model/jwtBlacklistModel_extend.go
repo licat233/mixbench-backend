@@ -165,7 +165,7 @@ func (m *defaultJwtBlacklistModel) FindsByIds(ctx context.Context, ids []int64) 
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id`  in (?) ", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in (?) ", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -175,7 +175,7 @@ func (m *defaultJwtBlacklistModel) FindsByTokens(ctx context.Context, tokens []s
 	if len(tokens) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `token`  in (?) ", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `token` in (?) ", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, tokens)
 	return resp, err
 }
@@ -185,7 +185,7 @@ func (m *defaultJwtBlacklistModel) FindsByPlatforms(ctx context.Context, platfor
 	if len(platforms) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `platform`  in (?) ", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `platform` in (?) ", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, platforms)
 	return resp, err
 }
@@ -195,7 +195,7 @@ func (m *defaultJwtBlacklistModel) FindsByIps(ctx context.Context, ips []string)
 	if len(ips) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `ip`  in (?) ", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` in (?) ", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ips)
 	return resp, err
 }
@@ -205,7 +205,7 @@ func (m *defaultJwtBlacklistModel) FindsByExpireAts(ctx context.Context, expireA
 	if len(expireAts) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `expire_at`  in (?) ", jwtBlacklistRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `expire_at` in (?) ", jwtBlacklistRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, expireAts)
 	return resp, err
 }

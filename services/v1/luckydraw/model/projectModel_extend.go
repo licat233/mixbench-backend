@@ -61,21 +61,21 @@ func (m *defaultProjectModel) FindList(ctx context.Context, pageSize, page int64
 	sq := squirrel.Select(projectRows).From(m.table).Where("`is_deleted`= '0'")
 	if project != nil {
 		if project.Id >= 0 {
-			sq = sq.Where("id = ?", project.Id)
+			sq = sq.Where("`id` = ?", project.Id)
 		}
 		if project.Uuid != "" {
-			sq = sq.Where("uuid = ?", project.Uuid)
+			sq = sq.Where("`uuid` = ?", project.Uuid)
 		}
 		if project.Name != "" {
-			sq = sq.Where("name = ?", project.Name)
+			sq = sq.Where("`name` = ?", project.Name)
 			hasName = true
 		}
 		if project.Status >= 0 {
-			sq = sq.Where("status = ?", project.Status)
+			sq = sq.Where("`status` = ?", project.Status)
 		}
 	}
 	if keyword != "" && hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()

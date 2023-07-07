@@ -66,22 +66,22 @@ func (m *defaultUserPoolModel) FindList(ctx context.Context, pageSize, page int6
 	sq := squirrel.Select(userPoolRows).From(m.table).Where("`is_deleted`= '0'")
 	if userPool != nil {
 		if userPool.Id >= 0 {
-			sq = sq.Where("id = ?", userPool.Id)
+			sq = sq.Where("`id` = ?", userPool.Id)
 		}
 		if userPool.Uuid != "" {
-			sq = sq.Where("uuid = ?", userPool.Uuid)
+			sq = sq.Where("`uuid` = ?", userPool.Uuid)
 		}
 		if userPool.ActivityId > 0 {
-			sq = sq.Where("activity_id = ?", userPool.ActivityId)
+			sq = sq.Where("`activity_id` = ?", userPool.ActivityId)
 		}
 		if userPool.UserId > 0 {
-			sq = sq.Where("user_id = ?", userPool.UserId)
+			sq = sq.Where("`user_id` = ?", userPool.UserId)
 		}
 		if userPool.Status >= 0 {
-			sq = sq.Where("status = ?", userPool.Status)
+			sq = sq.Where("`status` = ?", userPool.Status)
 		}
 		if userPool.Score >= 0 {
-			sq = sq.Where("score = ?", userPool.Score)
+			sq = sq.Where("`score` = ?", userPool.Score)
 		}
 	}
 	if pageSize > 0 && page > 0 {

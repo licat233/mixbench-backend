@@ -75,31 +75,31 @@ func (m *defaultPrizePoolModel) FindList(ctx context.Context, pageSize, page int
 	sq := squirrel.Select(prizePoolRows).From(m.table).Where("`is_deleted`= '0'")
 	if prizePool != nil {
 		if prizePool.Id >= 0 {
-			sq = sq.Where("id = ?", prizePool.Id)
+			sq = sq.Where("`id` = ?", prizePool.Id)
 		}
 		if prizePool.Uuid != "" {
-			sq = sq.Where("uuid = ?", prizePool.Uuid)
+			sq = sq.Where("`uuid` = ?", prizePool.Uuid)
 		}
 		if prizePool.ActivityId > 0 {
-			sq = sq.Where("activity_id = ?", prizePool.ActivityId)
+			sq = sq.Where("`activity_id` = ?", prizePool.ActivityId)
 		}
 		if prizePool.PrizeId > 0 {
-			sq = sq.Where("prize_id = ?", prizePool.PrizeId)
+			sq = sq.Where("`prize_id` = ?", prizePool.PrizeId)
 		}
 		if prizePool.GradeId > 0 {
-			sq = sq.Where("grade_id = ?", prizePool.GradeId)
+			sq = sq.Where("`grade_id` = ?", prizePool.GradeId)
 		}
 		if prizePool.LuckValue >= 0 {
-			sq = sq.Where("luck_value = ?", prizePool.LuckValue)
+			sq = sq.Where("`luck_value` = ?", prizePool.LuckValue)
 		}
 		if prizePool.Status >= 0 {
-			sq = sq.Where("status = ?", prizePool.Status)
+			sq = sq.Where("`status` = ?", prizePool.Status)
 		}
 		if prizePool.Total >= 0 {
-			sq = sq.Where("total = ?", prizePool.Total)
+			sq = sq.Where("`total` = ?", prizePool.Total)
 		}
 		if prizePool.Remainder >= 0 {
-			sq = sq.Where("remainder = ?", prizePool.Remainder)
+			sq = sq.Where("`remainder` = ?", prizePool.Remainder)
 		}
 	}
 	if pageSize > 0 && page > 0 {

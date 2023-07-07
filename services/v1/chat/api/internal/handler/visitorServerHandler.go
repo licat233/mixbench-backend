@@ -15,8 +15,12 @@ func VisitorServerHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		err := l.VisitorServer()
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
-		} else {
-			httpx.Ok(w)
 		}
+		// if err == nil {
+		// 	httpx.Ok(w)
+		// }
+
+		// 注意：在 WebSocket 通信结束后，不要再对 ResponseWriter 进行操作
+
 	}
 }

@@ -76,36 +76,36 @@ func (m *defaultUserModel) FindList(ctx context.Context, pageSize, page int64, k
 	sq := squirrel.Select(userRows).From(m.table).Where("`is_deleted`= '0'")
 	if user != nil {
 		if user.Id >= 0 {
-			sq = sq.Where("id = ?", user.Id)
+			sq = sq.Where("`id` = ?", user.Id)
 		}
 		if user.Uuid != "" {
-			sq = sq.Where("uuid = ?", user.Uuid)
+			sq = sq.Where("`uuid` = ?", user.Uuid)
 		}
 		if user.Passport != "" {
-			sq = sq.Where("passport = ?", user.Passport)
+			sq = sq.Where("`passport` = ?", user.Passport)
 		}
 		if user.Email != "" {
-			sq = sq.Where("email = ?", user.Email)
+			sq = sq.Where("`email` = ?", user.Email)
 		}
 		if user.Phone != "" {
-			sq = sq.Where("phone = ?", user.Phone)
+			sq = sq.Where("`phone` = ?", user.Phone)
 		}
 		if user.Name != "" {
-			sq = sq.Where("name = ?", user.Name)
+			sq = sq.Where("`name` = ?", user.Name)
 			hasName = true
 		}
 		if user.Address != "" {
-			sq = sq.Where("address = ?", user.Address)
+			sq = sq.Where("`address` = ?", user.Address)
 		}
 		if user.Score >= 0 {
-			sq = sq.Where("score = ?", user.Score)
+			sq = sq.Where("`score` = ?", user.Score)
 		}
 		if user.Status >= 0 {
-			sq = sq.Where("status = ?", user.Status)
+			sq = sq.Where("`status` = ?", user.Status)
 		}
 	}
 	if keyword != "" && hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()
