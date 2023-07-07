@@ -12,6 +12,7 @@ import (
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/handler"
 	"mixbench/services/v1/chat/api/internal/svc"
+	"mixbench/services/v1/chat/api/internal/wshub"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -48,8 +49,10 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 
-	defer ctx.Hub.Stop()
-	go ctx.Hub.Run()
+	wsServer := wshub.NewHub(ctx)
+
+	defer wsServer.Stop()
+	go wsServer.Run()
 
 	handler.RegisterHandlers(server, ctx)
 

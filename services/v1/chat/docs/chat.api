@@ -223,7 +223,6 @@ service chat {
   @doc "将游客转接给其他客服"
   @handler TransferVisitor
   post /transferVisitor(transferVisitorReq) returns(BaseResp)
-
 }
 
 //[custom service end]

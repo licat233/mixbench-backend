@@ -1,4 +1,4 @@
-package client
+package wshub
 
 // type clientMap interface {
 // 	Del(id int64)

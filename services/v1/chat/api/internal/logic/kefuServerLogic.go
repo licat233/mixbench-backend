@@ -7,9 +7,9 @@ import (
 	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/utils"
-	"mixbench/services/v1/chat/api/internal/client"
 	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/svc"
+	"mixbench/services/v1/chat/api/internal/wshub"
 	"mixbench/services/v1/chat/model"
 
 	"github.com/gorilla/websocket"
@@ -54,7 +54,7 @@ func (l *KefuServerLogic) KefuServer() error {
 	kefuA := dataconv.MdKefuToApiKefu(kefuM)
 
 	// 创建一个kefu client
-	cli, err := client.NewKefuClient(l.ctx, l.svcCtx.Hub, l.w, l.r, kefuA)
+	cli, err := wshub.NewKefuClient(l.ctx, wshub.HubSvc, l.w, l.r, kefuA)
 	if err != nil {
 		//可能因为r不是ws请求，导致的报错
 		return errorx.ExternalError(err)

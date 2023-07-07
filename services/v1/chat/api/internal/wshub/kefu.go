@@ -1,8 +1,9 @@
-package client
+package wshub
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/api/internal/logic/dataconv"
@@ -16,35 +17,46 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type VisitorClient struct {
+type KefuClient struct {
 	*Client
-	Visitor *types.Visitor
+	Kefu *types.Kefu
 }
 
-func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http.Request, visitor *types.Visitor) (*VisitorClient, error) {
+func NewKefuClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http.Request, kefu *types.Kefu) (*KefuClient, error) {
+	if hub == nil {
+		return nil, errors.New("hub is nil")
+	}
 	conn, err := NewWsConn(w, r)
 	if err != nil {
 		return nil, fmt.Errorf("newWsConn error: %s", err)
 	}
-	c := &VisitorClient{
+	c := &KefuClient{
 		Client: &Client{
 			Logger: logx.WithContext(ctx),
 			ctx:    ctx,
 			hub:    hub,
 			conn:   conn,
-			send:   make(chan *types.Message, 100),
+			send:   make(chan *types.Message, 20),
 			Stop:   make(chan bool),
 			w:      w,
 			r:      r,
 		},
-		Visitor: visitor,
+		Kefu: kefu,
 	}
 	// 注册
-	hub.VisitorClients.Set(c)
+	hub.KefuClients.Set(c)
+	// 此时，可能存在需要接待的游客
+	vclis := hub.VisitorClients.GetByKefuId(-1)
+	for _, v := range vclis {
+		err = hub.TransferVisitor(v.Visitor.Id, kefu.Id)
+		if err != nil {
+			return nil, err
+		}
+	}
 	return c, nil
 }
 
-func (c *VisitorClient) Run() (err error) {
+func (c *KefuClient) Run() (err error) {
 	var WritePumpError, ReadPumpError error
 	var wg sync.WaitGroup
 	// 开始收发ws信息
@@ -70,8 +82,8 @@ func (c *VisitorClient) Run() (err error) {
 	return
 }
 
-// 读取游客通过ws发送过来的信息
-func (c *VisitorClient) ReadPump() error {
+// 读取客服通过ws发送过来的信息
+func (c *KefuClient) ReadPump() (err error) {
 	defer func() {
 		c.Logout()
 	}()
@@ -80,7 +92,7 @@ func (c *VisitorClient) ReadPump() error {
 		case <-c.Stop:
 			return nil
 		default:
-			_, messageContent, err := c.conn.ReadMessage()
+			_, messageBody, err := c.conn.ReadMessage()
 			if err != nil {
 				//异常关闭
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
@@ -90,71 +102,49 @@ func (c *VisitorClient) ReadPump() error {
 				//conn被正常关闭
 				return nil
 			}
-			// 如果该游客没有客服接待
-			if c.Visitor.KefuId <= 0 {
-				//尝试分配客服
-				kefuCli := c.hub.AssignKefu()
-				//如果没有客服
-				if kefuCli == nil {
-					//只能抛弃这条消息
-					continue
-				}
-				//如果有客服，将其分配给该游客
-				c.Visitor.KefuId = kefuCli.Kefu.Id
+			// messageBody 为一个完整的 message 的 json 数据
+			var message types.Message
+			if err = json.Unmarshal(messageBody, &message); err != nil {
+				// 不符合规范的 messageBody，丢弃
+				continue
 			}
-			// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
-			messageContent = preprocessMessageContent(messageContent)
-			message := &types.Message{
-				Id:         0,
-				Uuid:       uniqueid.NewUUID(),
-				Content:    string(messageContent),
-				VisitorId:  c.Visitor.Id,
-				KefuId:     c.Visitor.KefuId,
-				MsgType:    0,
-				Status:     0,
-				IsRead:     0,
-				IsSend:     0,
-				SendTime:   0,
-				ExpireTime: 0,
+			if message.VisitorId <= 1 {
+				c.Logger.Error("unvalidtor visitor id: %d", message.VisitorId)
+				continue
 			}
+
+			message.Uuid = uniqueid.NewUUID()
+			message.KefuId = c.Kefu.Id
+			message.MsgType = 1
+
 			//入栈前，持久化一下，防止消息在通道中意外丢失
-			if err := c.hub.SendBeforeHandler(message); err != nil {
-				c.Client.SystemErrorHandler(-1, c.Visitor.Id)
+			if err := c.hub.SendBeforeHandler(&message); err != nil {
+				c.Client.SystemErrorHandler(c.Kefu.Id, -1)
 				return fmt.Errorf("SendBeforeHandler error: %s", err)
 			}
-			c.hub.MessageList <- message
+			c.hub.MessageList <- &message
 		}
 	}
 }
 
-// 给游客的ws写入消息
-func (c *VisitorClient) WritePump() error {
+// 给客服的ws写入消息
+func (c *KefuClient) WritePump() (err error) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
 		c.Logout()
 	}()
 
-	// 如果该游客有客服接待
-	if c.Visitor.KefuId > 0 {
-		// 发送欢迎信息
-		if err := c.Client.SendPresetMessage(WelcomeMessageKey, -1, c.Visitor.Id); err != nil {
-			c.Logger.Error(err)
-			return fmt.Errorf("send welcome message error: %s", err)
-		}
-	} else {
-		// 没有分配接待的客服，该怎样处理？说明没有客服在线，无法分配，此时应该发送留言信息
-		// 发送留言信息
-		if err := c.Client.SendPresetMessage(LeaveMessageKey, -1, c.Visitor.Id); err != nil {
-			c.Logger.Error(err)
-			return fmt.Errorf("send leave a message error: %s", err)
-		}
+	//发送公告信息
+	if err := c.Client.SendPresetMessage(PublicMessageKey, c.Kefu.Id, -1); err != nil {
+		c.Logger.Error(err)
+		return fmt.Errorf("send public message error: %s", err)
 	}
 
 	//已经准备好接收信息了，那就把缓存的游客消息全部发送
-	mdMsgList, _, err := c.hub.MessageModel.FindList(c.ctx, -1, -1, "", &model.Message{
-		VisitorId: c.Visitor.Id,
-		MsgType:   KefuMsgType,
+	mdMsgList, _, err := c.hub.SvcCtx.MessageModel.FindList(c.ctx, -1, -1, "", &model.Message{
+		KefuId:  c.Kefu.Id,
+		MsgType: VisitorMsgType,
 	})
 	if err != nil {
 		c.Logger.Error(err)
@@ -170,7 +160,6 @@ func (c *VisitorClient) WritePump() error {
 	for {
 		select {
 		case message, ok := <-c.send:
-			c.conn.SetReadDeadline(time.Now().Add(pongWait))
 			if !ok {
 				// The hub closed the channel.
 				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
@@ -196,7 +185,7 @@ func (c *VisitorClient) WritePump() error {
 	}
 }
 
-func (c *VisitorClient) WriteMessage(message *types.Message) error {
+func (c *KefuClient) WriteMessage(message *types.Message) error {
 	body, _ := json.Marshal(*message)
 	if err := c.conn.WriteMessage(websocket.TextMessage, body); err != nil {
 		c.Logger.Error(err)
@@ -209,42 +198,56 @@ func (c *VisitorClient) WriteMessage(message *types.Message) error {
 	return nil
 }
 
-func (c *VisitorClient) Logout() {
-	c.hub.VisitorClients.Del(c.Visitor.Id)
+func (c *KefuClient) Logout() error {
+	c.hub.KefuClients.Del(c.Kefu.Id)
+	//此时，如果其对接的游客还在线，应该将他的游客转接给其它客服，而不是放任不管
+	//逻辑：转移当前客服的在线游客，分配给其它客服
+	vclis := c.hub.VisitorClients.GetByKefuId(c.Kefu.Id)
+	for _, vcli := range vclis {
+		kcli := c.hub.AssignKefu()
+		if kcli == nil {
+			//如果没有客服可分配，则无法分配，无需分配
+			break
+		}
+		if err := c.hub.TransferVisitor(vcli.Visitor.Id, kcli.Kefu.Id); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-type visitorClientMap struct {
-	Map     map[int64]*VisitorClient
+type kefuClientMap struct {
+	Map     map[int64]*KefuClient
 	RwMutex *sync.RWMutex
 }
 
-func newVisitorClientMap() *visitorClientMap {
-	return &visitorClientMap{
-		Map:     map[int64]*VisitorClient{},
+func newKefuClientMap() *kefuClientMap {
+	return &kefuClientMap{
+		Map:     map[int64]*KefuClient{},
 		RwMutex: &sync.RWMutex{},
 	}
 }
 
-func (l *visitorClientMap) Ids() []int64 {
+func (l *kefuClientMap) Ids() []int64 {
 	l.RwMutex.RLock()
 	defer l.RwMutex.RUnlock()
 	var res []int64
 	for i := range l.Map {
-		res = append(res, l.Map[i].Visitor.Id)
+		res = append(res, l.Map[i].Kefu.Id)
 	}
 	return res
 }
 
-func (l *visitorClientMap) Set(vc *VisitorClient) {
+func (l *kefuClientMap) Set(vc *KefuClient) {
 	if vc == nil {
 		return
 	}
 	l.RwMutex.Lock()
 	defer l.RwMutex.Unlock()
-	l.Map[vc.Visitor.Id] = vc
+	l.Map[vc.Kefu.Id] = vc
 }
 
-func (l *visitorClientMap) Del(id int64) {
+func (l *kefuClientMap) Del(id int64) {
 	l.RwMutex.Lock()
 	defer l.RwMutex.Unlock()
 	if v, ok := l.Map[id]; ok {
@@ -253,30 +256,30 @@ func (l *visitorClientMap) Del(id int64) {
 	}
 }
 
-func (l *visitorClientMap) Get(id int64) *VisitorClient {
+func (l *kefuClientMap) Get(id int64) *KefuClient {
 	l.RwMutex.RLock()
 	defer l.RwMutex.RUnlock()
 	return l.Map[id]
 }
 
-func (l *visitorClientMap) Len() int {
+func (l *kefuClientMap) Len() int {
 	l.RwMutex.RLock()
 	defer l.RwMutex.RUnlock()
 	return len(l.Map)
 }
 
-// func (l *visitorClientMap) Lock() {
+// func (l *kefuClientMap) Lock() {
 // 	l.RwMutex.Lock()
 // }
 
-// func (l *visitorClientMap) Unlock() {
+// func (l *kefuClientMap) Unlock() {
 // 	l.RwMutex.Unlock()
 // }
 
-// func (l *visitorClientMap) RLock() {
+// func (l *kefuClientMap) RLock() {
 // 	l.RwMutex.RLock()
 // }
 
-// func (l *visitorClientMap) RUnlock() {
+// func (l *kefuClientMap) RUnlock() {
 // 	l.RwMutex.RUnlock()
 // }

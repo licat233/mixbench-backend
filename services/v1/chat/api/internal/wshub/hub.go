@@ -1,12 +1,14 @@
-package client
+package wshub
 
 import (
 	"context"
 	"fmt"
 	"mixbench/common/emailx"
+	"mixbench/common/errorx"
 	"mixbench/common/timer"
 	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/api/internal/logic/dataconv"
+	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
 	"mixbench/services/v1/chat/model"
 	"time"
@@ -15,9 +17,13 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+var HubSvc *Hub
+
 type Hub struct {
 	logx.Logger
 	ctx context.Context
+
+	SvcCtx *svc.ServiceContext
 
 	Timer  timer.Timer
 	StopCh chan bool //监听停止信号的通道
@@ -27,33 +33,28 @@ type Hub struct {
 	VisitorClients *visitorClientMap
 	MessageList    chan *types.Message
 
-	MessageModel       model.MessageModel
-	ChatRecordModel    model.ChatRecordModel
-	MessageConfigModel model.MessageConfigModel
-
 	hasSendBeforeHandlerErr bool
 	hasSendAfterHandlerErr  bool
 	hasDbErr                bool
 }
 
-func NewHub(messageModel model.MessageModel, chatRecordModel model.ChatRecordModel, messageConfigModel model.MessageConfigModel) *Hub {
+func NewHub(svcCtx *svc.ServiceContext) *Hub {
 	ctx := context.Background()
-	return &Hub{
+	HubSvc = &Hub{
 		Logger:                  logx.WithContext(ctx),
 		ctx:                     ctx,
+		SvcCtx:                  svcCtx,
 		Timer:                   timer.NewTimerTask(),
 		StopCh:                  make(chan bool),
 		Upgrader:                upgrader,
 		KefuClients:             newKefuClientMap(),
 		VisitorClients:          newVisitorClientMap(),
 		MessageList:             make(chan *types.Message, 4000),
-		MessageModel:            messageModel,
-		ChatRecordModel:         chatRecordModel,
-		MessageConfigModel:      messageConfigModel,
 		hasSendBeforeHandlerErr: false,
 		hasSendAfterHandlerErr:  false,
 		hasDbErr:                false,
 	}
+	return HubSvc
 }
 
 func (h *Hub) WithContext(ctx context.Context) *Hub {
@@ -70,7 +71,9 @@ func (h *Hub) Run() (err error) {
 	go func() {
 		h.AssignDBMessage()
 	}()
+	//开始定时任务
 	h.Timer.Start()
+	fmt.Println("Starting websocket server...")
 	// 锁住服务，防止服务退出
 	h.Block()
 	return nil
@@ -153,7 +156,7 @@ func (h *Hub) AssignDBMessage() {
 				continue
 			}
 			// 查找需要发给客服的消息
-			kefuMessages, err := h.MessageModel.FindsToKefu(h.ctx, kefuIds)
+			kefuMessages, err := h.SvcCtx.MessageModel.FindsToKefu(h.ctx, kefuIds)
 			if err != nil {
 				h.Logger.Error(err)
 				// 出现内部错误，邮件通知管理员
@@ -164,7 +167,7 @@ func (h *Hub) AssignDBMessage() {
 			// 查找在线的游客
 			visitorIds := h.VisitorClients.Ids()
 			// 查找需要发给游客的消息
-			visitorMessages, err := h.MessageModel.FindsToVisitor(h.ctx, visitorIds)
+			visitorMessages, err := h.SvcCtx.MessageModel.FindsToVisitor(h.ctx, visitorIds)
 			if err != nil {
 				h.Logger.Error(err)
 				// 出现内部错误，邮件通知管理员
@@ -258,7 +261,7 @@ func (h *Hub) SendBeforeHandler(message *types.Message) error {
 		ExpireTime: exp,
 	}
 	// 存入数据库
-	if _, err := h.MessageModel.Insert(h.ctx, data); err != nil {
+	if _, err := h.SvcCtx.MessageModel.Insert(h.ctx, data); err != nil {
 		h.hasSendBeforeHandlerErr = true
 		h.Logger.Error(err)
 		// 出现内部错误，邮件通知管理员
@@ -279,7 +282,7 @@ func (h *Hub) SendAfterHandler(message *types.Message) error {
 		return nil
 	}
 	// 将 message 表中的记录删除，并添加到 chat_record 表中
-	err := h.MessageModel.Delete(h.ctx, message.Id)
+	err := h.SvcCtx.MessageModel.Delete(h.ctx, message.Id)
 	if err != nil {
 		h.hasSendAfterHandlerErr = true
 		h.Logger.Error(err)
@@ -294,7 +297,7 @@ func (h *Hub) SendAfterHandler(message *types.Message) error {
 		IsSend:    1,
 		SendTime:  time.Unix(message.SendTime, 0).Local(),
 	}
-	_, err = h.ChatRecordModel.Insert(h.ctx, data)
+	_, err = h.SvcCtx.ChatRecordModel.Insert(h.ctx, data)
 	if err != nil {
 		h.hasSendAfterHandlerErr = true
 		h.Logger.Error(err)
@@ -307,11 +310,100 @@ func (h *Hub) SendAfterHandler(message *types.Message) error {
 func (h *Hub) DeleteExpiredMessages() error {
 	// 每天凌晨2点，删除过期的消息
 	_, err := h.Timer.AddTaskByFunc("DeleteExpiredMessages", "0 2 * * *", func() {
-		err := h.MessageModel.DeleteExpiredRecords(h.ctx)
+		err := h.SvcCtx.MessageModel.DeleteExpiredRecords(h.ctx)
 		if err != nil {
 			h.Logger.Error(err)
 			h.Timer.StopTask("DeleteExpiredMessages")
 		}
 	})
 	return err
+}
+
+// TransferVisitor 转移有游客给其它客服
+func (l *Hub) TransferVisitor(visitorId, kefuId int64) (err error) {
+	if visitorId <= 0 {
+		return errorx.ExternalError("visitorId <=0", "visitorId must be greater than 0")
+	}
+
+	//更新 clients 中心的游客信息
+	//判断是否还在线
+	visitorCli := l.VisitorClients.Get(visitorId)
+	if visitorCli != nil {
+		//如果还在线，则修改
+		visitorCli.Visitor.KefuId = kefuId
+	}
+	//如果不在线，就不用修改
+
+	//先判断该游客是否存在
+	visitor, err := l.SvcCtx.VisitorModel.FindOne(l.ctx, visitorId)
+	if err != nil && err != model.ErrNotFound {
+		l.Logger.Error(err)
+		return errorx.InternalError(err)
+	}
+	//如果不存在，则返回错误
+	if err == model.ErrNotFound {
+		return errorx.ExternalError("the visitorId does not exist")
+	}
+
+	//先判断该客服是否存在
+	_, err = l.SvcCtx.KefuModel.FindOne(l.ctx, kefuId)
+	if err != nil && err != model.ErrNotFound {
+		l.Logger.Error(err)
+		return errorx.InternalError(err)
+	}
+	//如果不存在，则返回错误
+	if err == model.ErrNotFound {
+		return errorx.ExternalError("the kefuId does not exist")
+	}
+
+	//修改该游客的接待客服id
+	visitor.KefuId = kefuId
+	//更新游客信息
+	if err := l.SvcCtx.VisitorModel.Update(l.ctx, visitor); err != nil {
+		l.Logger.Error(err)
+		return errorx.InternalError(err)
+	}
+
+	//再更新message缓存的数据
+	//查找出游客发出去的信息
+	mdMsgList, _, err := l.SvcCtx.MessageModel.FindList(l.ctx, -1, -1, "", &model.Message{
+		VisitorId: visitorId,
+		MsgType:   VisitorMsgType,
+	})
+	if err != nil {
+		l.Logger.Error(err)
+		return errorx.InternalError(err)
+	}
+	// 必须一条一条的更新，才能更新redis缓存
+	for _, msg := range mdMsgList {
+		msg.KefuId = kefuId
+		if err := l.SvcCtx.MessageModel.Update(l.ctx, msg); err != nil {
+			l.Logger.Error(err)
+			return errorx.InternalError(err)
+		}
+	}
+
+	//更新 chat_record 数据
+	mdRecordList, _, err := l.SvcCtx.ChatRecordModel.FindList(l.ctx, -1, -1, "", &model.ChatRecord{
+		VisitorId: visitorId,
+		MsgType:   VisitorMsgType,
+	})
+	if err != nil {
+		l.Logger.Error(err)
+		return errorx.InternalError(err)
+	}
+	// 必须一条一条的更新，才能更新redis缓存
+	for _, record := range mdRecordList {
+		record.KefuId = kefuId
+		if err := l.SvcCtx.ChatRecordModel.Update(l.ctx, record); err != nil {
+			l.Logger.Error(err)
+			return errorx.InternalError(err)
+		}
+	}
+
+	//还需要修改 send 通道中的消息
+	//需要再 send 前做校验逻辑，代码不在这里写
+	// 已在 client.go 内函数 (c *Client) Send(message *types.Message) error 中实现
+
+	return nil
 }

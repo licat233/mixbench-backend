@@ -1,4 +1,4 @@
-package client
+package wshub
 
 import (
 	"context"
@@ -33,11 +33,11 @@ func (c *Client) Close() {
 	}
 }
 
-// 主要用来防止阻塞，用于其它逻辑，请注意区分消息类型
+// Send 主要用来防止阻塞，用于其它逻辑，请注意区分消息类型
 func (c *Client) Send(message *types.Message) error {
 	//发送前，需要校验，该游客信息是否已经被修改了客服号
 	if message.MsgType == VisitorMsgType {
-		msg, err := c.hub.MessageModel.FindOne(c.ctx, message.Id)
+		msg, err := c.hub.SvcCtx.MessageModel.FindOne(c.ctx, message.Id)
 		if err != nil && err != model.ErrNotFound {
 			c.Logger.Error(err)
 			return err
@@ -58,17 +58,17 @@ func (c *Client) Send(message *types.Message) error {
 	return nil
 }
 
-// 给send chan发送系统错误消息，如果涉及写入和chan的错误，请勿使用
+// SystemErrorHandler 给send chan发送系统错误消息，如果涉及写入和chan的错误，请勿使用
 func (c *Client) SystemErrorHandler(kefuId, visitorId int64) {
 	c.Send(NewSystemMessage(ErrSystem, kefuId, visitorId))
 }
 
-// 发送预设的消息
+// SendPresetMessage 发送预设的消息
 func (c *Client) SendPresetMessage(msgKey string, kefuId, visitorId int64) error {
 	if msgKey = strings.TrimSpace(msgKey); msgKey == "" {
 		return nil
 	}
-	msgList, _, err := c.hub.MessageConfigModel.FindList(c.ctx, -1, -1, "", &model.MessageConfig{
+	msgList, _, err := c.hub.SvcCtx.MessageConfigModel.FindList(c.ctx, -1, -1, "", &model.MessageConfig{
 		Msgkey: msgKey,
 	})
 	if err != nil {

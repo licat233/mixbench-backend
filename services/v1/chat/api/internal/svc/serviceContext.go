@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"mixbench/common/utils"
 	"mixbench/services/v1/captcha/rpc/captcha"
-	"mixbench/services/v1/chat/api/internal/client"
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/middleware"
 	"mixbench/services/v1/chat/model"
@@ -27,7 +26,7 @@ type ServiceContext struct {
 	MessageConfigModel model.MessageConfigModel
 	VisitorModel       model.VisitorModel
 
-	Hub *client.Hub
+	// Hub *wshub.Hub
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -47,8 +46,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		MessageConfigModel: model.NewMessageConfigModel(sqlConn, c.CacheRedis),
 		VisitorModel:       model.NewVisitorModel(sqlConn, c.CacheRedis),
 
-		Hub: nil,
+		// Hub: nil,
 	}
-	svc.Hub = client.NewHub(svc.MessageModel, svc.ChatRecordModel, svc.MessageConfigModel)
+	// svc.Hub = wshub.NewHub(svc.MessageModel, svc.ChatRecordModel, svc.MessageConfigModel)
 	return svc
 }

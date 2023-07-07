@@ -1,4 +1,4 @@
-package client
+package wshub
 
 // // client需要实现的接口，暂时不用
 // type Pump interface {

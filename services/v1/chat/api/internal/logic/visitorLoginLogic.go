@@ -15,6 +15,7 @@ import (
 	"mixbench/common/utils"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
+	"mixbench/services/v1/chat/api/internal/wshub"
 	"mixbench/services/v1/chat/model"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -144,11 +145,11 @@ func (l *VisitorLoginLogic) isOldVisitor() (any, error) {
 	}
 	kefuId = visitor.KefuId
 
-	kefuCli := l.svcCtx.Hub.KefuClients.Get(kefuId)
+	kefuCli := wshub.HubSvc.KefuClients.Get(kefuId)
 	//客服如果不在线，
 	if kefuCli == nil {
 		// 分配给其它客服
-		kefuCli = l.svcCtx.Hub.AssignKefu()
+		kefuCli = wshub.HubSvc.AssignKefu()
 		// 表明没有客服在线
 		if kefuCli == nil {
 			// 则保留其原来的客服, 不更新visitor
@@ -184,7 +185,7 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 	// 获取接待的客服id
 	var kefuId int64
 	//表示为新客户，接下来为其分配客服
-	kefuCli := l.svcCtx.Hub.AssignKefu()
+	kefuCli := wshub.HubSvc.AssignKefu()
 	// 表明没有客服在线
 	if kefuCli == nil {
 		// 没有客服在线，将其id设为 -1 表示其没有分配到客服
