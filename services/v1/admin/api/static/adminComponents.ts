@@ -134,6 +134,13 @@ export interface PwdCompareReqParams {
 	hash: string // 密文
 }
 
+export interface DevPanelLoginReq {
+	username: string
+	password: string
+	captcha_id: string // 验证码ID
+	solution: string // 验证码答案
+}
+
 export interface Adminer {
 	id: number // 表主键
 	uuid: string // UUID

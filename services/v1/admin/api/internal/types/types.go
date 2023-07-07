@@ -125,6 +125,13 @@ type PwdCompareReq struct {
 	Hash     string `form:"hash"`     //密文
 }
 
+type DevPanelLoginReq struct {
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	CaptchaId string `json:"captcha_id"` //验证码ID
+	Solution  string `json:"solution"`   //验证码答案
+}
+
 type Adminer struct {
 	Id           int64  `json:"id"`           //表主键
 	Uuid         string `json:"uuid"`         //UUID

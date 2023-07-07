@@ -343,20 +343,20 @@ type GetMessageEnumsReq struct {
 type MessageConfig struct {
 	Id      int64  `json:"id"`      //主键
 	Name    string `json:"name"`    //名字
-	Key     string `json:"key"`     //密匙
+	Msgkey  string `json:"msgkey"`  //消息密匙
 	Content string `json:"content"` //消息内容
 }
 
 type AddMessageConfigReq struct {
 	Name    string `json:"name"`    //名字
-	Key     string `json:"key"`     //密匙
+	Msgkey  string `json:"msgkey"`  //消息密匙
 	Content string `json:"content"` //消息内容
 }
 
 type PutMessageConfigReq struct {
 	Id      int64  `json:"id"`      //主键
 	Name    string `json:"name"`    //名字
-	Key     string `json:"key"`     //密匙
+	Msgkey  string `json:"msgkey"`  //消息密匙
 	Content string `json:"content"` //消息内容
 }
 
@@ -375,7 +375,7 @@ type GetMessageConfigListReq struct {
 	Keyword  string `form:"keyword,optional"`             //关键词，可选
 	Id       int64  `form:"id,optional,default=-1"`       //主键
 	Name     string `form:"name,optional"`                //名字
-	Key      string `form:"key,optional"`                 //密匙
+	Msgkey   string `form:"msgkey,optional"`              //消息密匙
 	Content  string `form:"content,optional"`             //消息内容
 }
 

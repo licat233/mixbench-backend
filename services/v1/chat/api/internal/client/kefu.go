@@ -107,7 +107,7 @@ func (c *KefuClient) ReadPump() error {
 
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(&message); err != nil {
-				c.Client.SystemErrorHandler()
+				c.Client.SystemErrorHandler(c.Kefu.Id, -1)
 				return fmt.Errorf("SendBeforeHandler error: %s", err)
 			}
 			c.hub.MessageList <- &message
@@ -124,7 +124,7 @@ func (c *KefuClient) WritePump() error {
 	}()
 
 	//发送公告信息
-	if err := c.Client.SendPresetMessage(PublicMessageKey); err != nil {
+	if err := c.Client.SendPresetMessage(PublicMessageKey, c.Kefu.Id, -1); err != nil {
 		c.Logger.Error(err)
 		return fmt.Errorf("send public message error: %s", err)
 	}

@@ -356,20 +356,20 @@ export interface GetMessageEnumsReq {
 export interface MessageConfig {
 	id: number // 主键
 	name: string // 名字
-	key: string // 密匙
+	msgkey: string // 消息密匙
 	content: string // 消息内容
 }
 
 export interface AddMessageConfigReq {
 	name: string // 名字
-	key: string // 密匙
+	msgkey: string // 消息密匙
 	content: string // 消息内容
 }
 
 export interface PutMessageConfigReq {
 	id: number // 主键
 	name: string // 名字
-	key: string // 密匙
+	msgkey: string // 消息密匙
 	content: string // 消息内容
 }
 
@@ -390,7 +390,7 @@ export interface GetMessageConfigListReqParams {
 	keyword: string // 关键词，可选
 	id: number // 主键
 	name: string // 名字
-	key: string // 密匙
+	msgkey: string // 消息密匙
 	content: string // 消息内容
 }
 

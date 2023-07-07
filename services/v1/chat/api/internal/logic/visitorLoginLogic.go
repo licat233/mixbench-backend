@@ -159,6 +159,15 @@ func (l *VisitorLoginLogic) isOldVisitor() (any, error) {
 				l.Logger.Error(err)
 				return nil, errorx.InternalError(err)
 			}
+			//此时需要更新聊天记录，不然新客服无法看到过往的聊天记录
+			transferLogic := NewTransferVisitorLogic(l.ctx, l.svcCtx)
+			_, err := transferLogic.TransferVisitor(&types.TransferVisitorReq{
+				VisitorId: 0,
+				KefuId:    kefuId,
+			})
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 

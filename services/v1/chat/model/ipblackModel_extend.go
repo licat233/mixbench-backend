@@ -23,6 +23,10 @@ type ipblack_model interface {
 	FindsByIds(ctx context.Context, ids []int64) ([]*Ipblack, error)
 	FindsByIps(ctx context.Context, ips []string) ([]*Ipblack, error)
 	FindsByKefuIds(ctx context.Context, kefuIds []string) ([]*Ipblack, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Ipblack, error)
+	FindsByIp(ctx context.Context, ip string) ([]*Ipblack, error)
+	FindsByKefuId(ctx context.Context, kefuId string) ([]*Ipblack, error)
 }
 
 func (m *defaultIpblackModel) FindCount(ctx context.Context) (int64, error) {
@@ -50,13 +54,13 @@ func (m *defaultIpblackModel) FindList(ctx context.Context, pageSize, page int64
 	sq := squirrel.Select(ipblackRows).From(m.table)
 	if ipblack != nil {
 		if ipblack.Id >= 0 {
-			sq = sq.Where("id = ?", ipblack.Id)
+			sq = sq.Where("`id` = ?", ipblack.Id)
 		}
 		if ipblack.Ip != "" {
-			sq = sq.Where("ip = ?", ipblack.Ip)
+			sq = sq.Where("`ip` = ?", ipblack.Ip)
 		}
 		if ipblack.KefuId != "" {
-			sq = sq.Where("kefu_id = ?", ipblack.KefuId)
+			sq = sq.Where("`kefu_id` = ?", ipblack.KefuId)
 		}
 	}
 	if pageSize > 0 && page > 0 {
@@ -142,5 +146,26 @@ func (m *defaultIpblackModel) FindsByKefuIds(ctx context.Context, kefuIds []stri
 	}
 	query := fmt.Sprintf("select %s from %s where `kefu_id`  in (?) ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
+	return resp, err
+}
+
+func (m *defaultIpblackModel) FindsById(ctx context.Context, id int64) ([]*Ipblack, error) {
+	var resp = make([]*Ipblack, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? ", ipblackRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultIpblackModel) FindsByIp(ctx context.Context, ip string) ([]*Ipblack, error) {
+	var resp = make([]*Ipblack, 0)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? ", ipblackRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ip)
+	return resp, err
+}
+
+func (m *defaultIpblackModel) FindsByKefuId(ctx context.Context, kefuId string) ([]*Ipblack, error) {
+	var resp = make([]*Ipblack, 0)
+	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? ", ipblackRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
 	return resp, err
 }

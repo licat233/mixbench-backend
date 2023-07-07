@@ -70,6 +70,8 @@ type (
 	TestResp           = admin_pb.TestResp
 	TreeOption         = admin_pb.TreeOption
 	TreeOptions        = admin_pb.TreeOptions
+	ValidateTokenReq   = admin_pb.ValidateTokenReq
+	ValidateTokenResp  = admin_pb.ValidateTokenResp
 	VerifyPasswordReq  = admin_pb.VerifyPasswordReq
 	VerifyPasswordResp = admin_pb.VerifyPasswordResp
 

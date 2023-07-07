@@ -24,7 +24,12 @@ type project_model interface {
 	FindsByIds(ctx context.Context, ids []int64) ([]*Project, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Project, error)
 	FindsByNames(ctx context.Context, names []string) ([]*Project, error)
-	FindsByStatus(ctx context.Context, status []int64) ([]*Project, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Project, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Project, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*Project, error)
+	FindsByName(ctx context.Context, name string) ([]*Project, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*Project, error)
 
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
@@ -56,21 +61,21 @@ func (m *defaultProjectModel) FindList(ctx context.Context, pageSize, page int64
 	sq := squirrel.Select(projectRows).From(m.table).Where("`is_deleted`= '0'")
 	if project != nil {
 		if project.Id >= 0 {
-			sq = sq.Where("id = ?", project.Id)
+			sq = sq.Where("`id` = ?", project.Id)
 		}
 		if project.Uuid != "" {
-			sq = sq.Where("uuid = ?", project.Uuid)
+			sq = sq.Where("`uuid` = ?", project.Uuid)
 		}
 		if project.Name != "" {
-			sq = sq.Where("name = ?", project.Name)
+			sq = sq.Where("`name` = ?", project.Name)
 			hasName = true
 		}
 		if project.Status >= 0 {
-			sq = sq.Where("status = ?", project.Status)
+			sq = sq.Where("`status` = ?", project.Status)
 		}
 	}
-	if keyword != "" && !hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+	if keyword != "" && hasName {
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()
@@ -172,12 +177,40 @@ func (m *defaultProjectModel) FindsByNames(ctx context.Context, names []string) 
 	return resp, err
 }
 
-func (m *defaultProjectModel) FindsByStatus(ctx context.Context, status []int64) ([]*Project, error) {
+func (m *defaultProjectModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Project, error) {
 	var resp = make([]*Project, 0)
-	if len(status) == 0 {
+	if len(statuslist) == 0 {
 		return resp, nil
 	}
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", projectRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultProjectModel) FindsById(ctx context.Context, id int64) ([]*Project, error) {
+	var resp = make([]*Project, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", projectRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultProjectModel) FindsByUuid(ctx context.Context, uuid string) ([]*Project, error) {
+	var resp = make([]*Project, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", projectRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultProjectModel) FindsByName(ctx context.Context, name string) ([]*Project, error) {
+	var resp = make([]*Project, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", projectRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultProjectModel) FindsByStatus(ctx context.Context, status int64) ([]*Project, error) {
+	var resp = make([]*Project, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", projectRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
 	return resp, err
 }

@@ -7,6 +7,7 @@ import (
 	"mixbench/common/utils"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -124,4 +125,37 @@ func ExpiredTime(claims jwt.MapClaims) int64 {
 		return 0
 	}
 	return res
+}
+
+func ValidateToken(tokenString string, secretKey string) (bool, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secretKey), nil
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	// 检查 token 是否有效
+	if !token.Valid {
+		return false, nil
+	}
+
+	// 检查过期时间
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if claims, ok := token.Claims.(jwt.MapClaims); ok {
+			if _, found := claims["exp"]; !found {
+				// exp字段不存在
+				return true, nil
+			}
+		}
+		expirationTime := time.Unix(int64(claims["exp"].(float64)), 0)
+		currentTime := time.Now()
+
+		if currentTime.After(expirationTime) {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }

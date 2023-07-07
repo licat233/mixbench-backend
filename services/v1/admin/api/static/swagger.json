@@ -478,7 +478,7 @@
     },
     "/v1/api/admin/auth": {
       "get": {
-        "summary": "鉴权接口",
+        "summary": "jwt鉴权接口",
         "operationId": "auth",
         "responses": {
           "200": {
@@ -537,6 +537,66 @@
           {
             "apiKey": []
           }
+        ]
+      }
+    },
+    "/v1/api/admin/devPanelAuth": {
+      "get": {
+        "summary": "开发面板的鉴权",
+        "operationId": "devPanelAuth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/devPanelLogin": {
+      "get": {
+        "summary": "开发面板的登录",
+        "operationId": "devPanelLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "captcha_id",
+            "description": "验证码ID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "solution",
+            "description": "验证码答案",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "admin"
         ]
       }
     },
@@ -1996,6 +2056,32 @@
       "title": "bindEmailCaptchaReq",
       "required": [
         "email",
+        "solution"
+      ]
+    },
+    "devPanelLoginReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "captcha_id": {
+          "type": "string",
+          "description": "验证码ID"
+        },
+        "solution": {
+          "type": "string",
+          "description": "验证码答案"
+        }
+      },
+      "title": "devPanelLoginReq",
+      "required": [
+        "username",
+        "password",
+        "captcha_id",
         "solution"
       ]
     },

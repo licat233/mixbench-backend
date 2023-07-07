@@ -3,10 +3,25 @@ import type * as components from "./adminComponents"
 export * from "./adminComponents"
 
 /**
- * @description "鉴权接口"
+ * @description "jwt鉴权接口"
  */
 export function auth() {
 	return webapi.get<null>(`/v1/api/admin/auth`)
+}
+
+/**
+ * @description "开发面板的登录"
+ * @param req
+ */
+export function devPanelLogin(req: components.DevPanelLoginReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/devPanelLogin`, req)
+}
+
+/**
+ * @description "开发面板的鉴权"
+ */
+export function devPanelAuth() {
+	return webapi.get<null>(`/v1/api/admin/devPanelAuth`)
 }
 
 /**

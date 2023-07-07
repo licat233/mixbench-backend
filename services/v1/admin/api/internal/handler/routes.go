@@ -22,6 +22,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
+				Path:    "/devPanelLogin",
+				Handler: devPanelLoginHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/devPanelAuth",
+				Handler: devPanelAuthHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
 				Path:    "/superAdminAuth",
 				Handler: superAdminAuthHandler(serverCtx),
 			},

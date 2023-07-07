@@ -18,7 +18,6 @@ type lucky_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*Lucky, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, lucky *Lucky) (resp []*Lucky, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*Lucky, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*Lucky, error)
 	FindByUserId(ctx context.Context, userId int64) (*Lucky, error)
@@ -26,6 +25,22 @@ type lucky_model interface {
 	FindByStatus(ctx context.Context, status int64) (*Lucky, error)
 	FindByLuckDate(ctx context.Context, luckDate time.Time) (*Lucky, error)
 	FindByIp(ctx context.Context, ip string) (*Lucky, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*Lucky, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*Lucky, error)
+	FindsByUserIds(ctx context.Context, userIds []int64) ([]*Lucky, error)
+	FindsByPrizePoolIds(ctx context.Context, prizePoolIds []int64) ([]*Lucky, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Lucky, error)
+	FindsByLuckDates(ctx context.Context, luckDates []time.Time) ([]*Lucky, error)
+	FindsByIps(ctx context.Context, ips []string) ([]*Lucky, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Lucky, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*Lucky, error)
+	FindsByUserId(ctx context.Context, userId int64) ([]*Lucky, error)
+	FindsByPrizePoolId(ctx context.Context, prizePoolId int64) ([]*Lucky, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*Lucky, error)
+	FindsByLuckDate(ctx context.Context, luckDate time.Time) ([]*Lucky, error)
+	FindsByIp(ctx context.Context, ip string) ([]*Lucky, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -98,16 +113,6 @@ func (m *defaultLuckyModel) FindList(ctx context.Context, pageSize, page int64, 
 		return
 	}
 	return
-}
-
-func (m *defaultLuckyModel) FindsByIds(ctx context.Context, ids []int64) ([]*Lucky, error) {
-	var resp = make([]*Lucky, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultLuckyModel) TableName() string {
@@ -196,6 +201,125 @@ func (m *defaultLuckyModel) FindByIp(ctx context.Context, ip string) (*Lucky, er
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultLuckyModel) FindsByIds(ctx context.Context, ids []int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByUuids(ctx context.Context, uuids []string) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByUserIds(ctx context.Context, userIds []int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(userIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `user_id` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userIds)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByPrizePoolIds(ctx context.Context, prizePoolIds []int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(prizePoolIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `prize_pool_id` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizePoolIds)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(statuslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByLuckDates(ctx context.Context, luckDates []time.Time) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(luckDates) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `luck_date` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckDates)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByIps(ctx context.Context, ips []string) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	if len(ips) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `ip` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ips)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsById(ctx context.Context, id int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByUuid(ctx context.Context, uuid string) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByUserId(ctx context.Context, userId int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByPrizePoolId(ctx context.Context, prizePoolId int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `prize_pool_id` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizePoolId)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByStatus(ctx context.Context, status int64) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByLuckDate(ctx context.Context, luckDate time.Time) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `luck_date` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckDate)
+	return resp, err
+}
+
+func (m *defaultLuckyModel) FindsByIp(ctx context.Context, ip string) ([]*Lucky, error) {
+	var resp = make([]*Lucky, 0)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? and `is_deleted` = '0' ", luckyRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ip)
+	return resp, err
 }
 
 func (m *defaultLuckyModel) formatUuidKey(uuid string) string {

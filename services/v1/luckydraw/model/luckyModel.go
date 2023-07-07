@@ -30,13 +30,13 @@ type (
 		// FindDetails(ctx context.Context, options *FindDetailsOptions) (resp []*LuckyDetail, total int64, err error)
 		FindByUserAndActivity(ctx context.Context, UserId, ActivityId int64) ([]*Lucky, error)
 		FindCountByUserAndActivity(ctx context.Context, UserId, ActivityId int64) (int64, error)
-		FindCountByPrizePoolId(ctx context.Context, prizesPoolIds []int64) (int64, error)
-		FindsByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) ([]*Lucky, error)
-		FindCountByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error)
+		// FindCountByPrizePoolId(ctx context.Context, prizesPoolIds []int64) (int64, error)
+		FindlistByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) (list []*Lucky, total int64, err error)
+		// FindCountByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error)
 
-		FindsByUserIds(ctx context.Context, userIds []int64, pageSize, page int64) ([]*Lucky, error)
-		FindsByPrizePoolIds(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) ([]*Lucky, error)
-		FindCountByUserIds(ctx context.Context, userIds []int64) (int64, error)
+		FindlistByUserIds(ctx context.Context, userIds []int64, pageSize, page int64) (list []*Lucky, total int64, err error)
+		FindlistByPrizePoolIds(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) (list []*Lucky, total int64, err error)
+		// FindCountByUserIds(ctx context.Context, userIds []int64) (int64, error)
 
 		Conn() sqlc.CachedConn
 	}
@@ -71,92 +71,80 @@ func (m *customLuckyModel) FindCountByUserId(ctx context.Context, userId int64) 
 	}
 }
 
-func (m *customLuckyModel) FindsByPrizePoolIds(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) ([]*Lucky, error) {
+func (m *customLuckyModel) FindlistByPrizePoolIds(ctx context.Context, prizesPoolIds []int64, pageSize, page int64) (list []*Lucky, total int64, err error) {
 	if len(prizesPoolIds) == 0 {
-		return nil, nil
+		return
 	}
-	var resp []*Lucky
-	var temps []string
-	for _, prizesPoolId := range prizesPoolIds {
-		temps = append(temps, fmt.Sprint(prizesPoolId))
-	}
-	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select %s from %s where `prize_pool_id` in(%s)", luckyRows, m.table, whereSql)
+	query := fmt.Sprintf("select %s from %s where `prize_pool_id` in(?)", luckyRows, m.table)
 	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+		var count int64
+		queryCount := fmt.Sprintf("select count(*) from %s where `prize_pool_id` in(?)", m.table)
+		err = m.QueryRowNoCacheCtx(ctx, &count, queryCount, prizesPoolIds)
+		total = count
+		if err != nil {
+			return
+		}
 	}
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
+	err = m.QueryRowsNoCacheCtx(ctx, &list, query, prizesPoolIds)
+	return
 }
 
-func (m *customLuckyModel) FindCountByPrizePoolId(ctx context.Context, prizesPoolIds []int64) (int64, error) {
-	if len(prizesPoolIds) == 0 {
-		return 0, nil
-	}
-	var count int64
-	var temps []string
-	for _, prizesPoolId := range prizesPoolIds {
-		temps = append(temps, fmt.Sprint(prizesPoolId))
-	}
-	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select count(*) from %s where `prize_pool_id` in(%s)", m.table, whereSql)
-	err := m.QueryRowNoCacheCtx(ctx, &count, query)
-	switch err {
-	case nil:
-		return count, nil
-	case sqlc.ErrNotFound:
-		return count, ErrNotFound
-	default:
-		return count, err
-	}
-}
+// func (m *customLuckyModel) FindCountByPrizePoolId(ctx context.Context, prizesPoolIds []int64) (int64, error) {
+// 	if len(prizesPoolIds) == 0 {
+// 		return 0, nil
+// 	}
+// 	var count int64
+// 	var temps []string
+// 	for _, prizesPoolId := range prizesPoolIds {
+// 		temps = append(temps, fmt.Sprint(prizesPoolId))
+// 	}
+// 	whereSql := strings.Join(temps, ",")
+// 	query := fmt.Sprintf("select count(*) from %s where `prize_pool_id` in(%s)", m.table, whereSql)
+// 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
+// 	switch err {
+// 	case nil:
+// 		return count, nil
+// 	case sqlc.ErrNotFound:
+// 		return count, ErrNotFound
+// 	default:
+// 		return count, err
+// 	}
+// }
 
-func (m *customLuckyModel) FindsByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) ([]*Lucky, error) {
-	var resp []*Lucky
-	var temps []string
-	if len(prizesPoolIds) == 0 {
-		return nil, nil
+func (m *customLuckyModel) FindlistByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId, pageSize, page int64) (list []*Lucky, total int64, err error) {
+	if len(prizesPoolIds) == 0 || userId == 0 {
+		return
 	}
-	for _, prizesPoolId := range prizesPoolIds {
-		temps = append(temps, fmt.Sprint(prizesPoolId))
-	}
-	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `prize_pool_id` in(%s)", luckyRows, m.table, whereSql)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `prize_pool_id` in(?)", luckyRows, m.table)
 	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+		var count int64
+		queryCount := fmt.Sprintf("select count(*) from %s where  `user_id` = ? and `prize_pool_id` in(?)", m.table)
+		err = m.QueryRowNoCacheCtx(ctx, &count, queryCount, userId, prizesPoolIds)
+		total = count
+		if err != nil {
+			return
+		}
 	}
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
+	err = m.QueryRowsNoCacheCtx(ctx, &list, query, userId, prizesPoolIds)
+	return
 }
 
-func (m *customLuckyModel) FindCountByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error) {
-	var count int64
-	var temps []string
-	if len(prizesPoolIds) == 0 {
-		return 0, nil
-	}
-	for _, prizesPoolId := range prizesPoolIds {
-		temps = append(temps, fmt.Sprint(prizesPoolId))
-	}
-	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select count(*) from %s where `user_id` = ? and `prize_pool_id` in(%s)", m.table, whereSql)
-	err := m.QueryRowNoCacheCtx(ctx, &count, query, userId)
-	return count, err
-}
+// func (m *customLuckyModel) FindCountByPrizePoolIdAndUserId(ctx context.Context, prizesPoolIds []int64, userId int64) (int64, error) {
+// 	var count int64
+// 	var temps []string
+// 	if len(prizesPoolIds) == 0 {
+// 		return 0, nil
+// 	}
+// 	for _, prizesPoolId := range prizesPoolIds {
+// 		temps = append(temps, fmt.Sprint(prizesPoolId))
+// 	}
+// 	whereSql := strings.Join(temps, ",")
+// 	query := fmt.Sprintf("select count(*) from %s where `user_id` = ? and `prize_pool_id` in(%s)", m.table, whereSql)
+// 	err := m.QueryRowNoCacheCtx(ctx, &count, query, userId)
+// 	return count, err
+// }
 
 func (m *customLuckyModel) UpdateStatus(ctx context.Context, id, status int64) error {
 	// luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, id)
@@ -228,45 +216,39 @@ func (m *customLuckyModel) FindCountByUserAndActivity(ctx context.Context, UserI
 	}
 }
 
-func (m *customLuckyModel) FindsByUserIds(ctx context.Context, userIds []int64, pageSize, page int64) ([]*Lucky, error) {
-	var resp []*Lucky
-	var temps []string
+func (m *customLuckyModel) FindlistByUserIds(ctx context.Context, userIds []int64, pageSize, page int64) (list []*Lucky, total int64, err error) {
 	if len(userIds) == 0 {
-		return nil, nil
+		return
 	}
-	for _, userId := range userIds {
-		temps = append(temps, fmt.Sprint(userId))
-	}
-	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select %s from %s where `user_id` in(%s)", luckyRows, m.table, whereSql)
+	query := fmt.Sprintf("select %s from %s where `user_id` in(?)", luckyRows, m.table)
 	if pageSize > 0 && page > 0 {
 		query = fmt.Sprintf("%s limit %v,%v", query, (page-1)*pageSize, pageSize)
+		var count int64
+		queryCount := fmt.Sprintf("select count(*) from %s where `user_id` in(?)", m.table)
+		err = m.QueryRowNoCacheCtx(ctx, &count, queryCount, userIds)
+		total = count
+		if err != nil {
+			return
+		}
 	}
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
+	err = m.QueryRowsNoCacheCtx(ctx, &list, query, userIds)
+	return
 }
 
-func (m *customLuckyModel) FindCountByUserIds(ctx context.Context, userIds []int64) (int64, error) {
-	var count int64
-	var temps []string
-	if len(userIds) == 0 {
-		return 0, nil
-	}
-	for _, userId := range userIds {
-		temps = append(temps, fmt.Sprint(userId))
-	}
-	whereSql := strings.Join(temps, ",")
-	query := fmt.Sprintf("select count(*) from %s where `user_id` in(%s)", m.table, whereSql)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
-	return count, err
-}
+// func (m *customLuckyModel) FindCountByUserIds(ctx context.Context, userIds []int64) (int64, error) {
+// 	var count int64
+// 	var temps []string
+// 	if len(userIds) == 0 {
+// 		return 0, nil
+// 	}
+// 	for _, userId := range userIds {
+// 		temps = append(temps, fmt.Sprint(userId))
+// 	}
+// 	whereSql := strings.Join(temps, ",")
+// 	query := fmt.Sprintf("select count(*) from %s where `user_id` in(%s)", m.table, whereSql)
+// 	err := m.QueryRowsNoCacheCtx(ctx, &count, query)
+// 	return count, err
+// }
 
 func (m *customLuckyModel) Conn() sqlc.CachedConn {
 	return m.CachedConn

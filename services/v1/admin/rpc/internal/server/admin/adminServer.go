@@ -34,10 +34,22 @@ func (s *AdminServer) GenerateToken(ctx context.Context, in *admin_pb.GenerateTo
 	return l.GenerateToken(in)
 }
 
+// 验证token是否有效
+func (s *AdminServer) ValidateToken(ctx context.Context, in *admin_pb.ValidateTokenReq) (*admin_pb.ValidateTokenResp, error) {
+	l := adminlogic.NewValidateTokenLogic(ctx, s.svcCtx)
+	return l.ValidateToken(in)
+}
+
 // 账号登录
 func (s *AdminServer) Login(ctx context.Context, in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	l := adminlogic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
+}
+
+// 超级管理员/开发员登录
+func (s *AdminServer) SuperAdminLogin(ctx context.Context, in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
+	l := adminlogic.NewSuperAdminLoginLogic(ctx, s.svcCtx)
+	return l.SuperAdminLogin(in)
 }
 
 // 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题

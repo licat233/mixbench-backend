@@ -6,13 +6,13 @@ import (
 	"mixbench/services/v1/chat/api/internal/types"
 )
 
-func NewPublicMessage(content string) *types.Message {
+func NewPublicMessage(content string, kefuId, visitorId int64) *types.Message {
 	return &types.Message{
 		Id:         0,
 		Uuid:       uniqueid.NewUUID(),
 		Content:    content,
-		VisitorId:  0,
-		KefuId:     0,
+		VisitorId:  visitorId,
+		KefuId:     kefuId,
 		MsgType:    PublicMsgType,
 		Status:     0,
 		IsRead:     0,
@@ -22,13 +22,13 @@ func NewPublicMessage(content string) *types.Message {
 	}
 }
 
-func NewSystemMessage(content any) *types.Message {
+func NewSystemMessage(content any, kefuId, visitorId int64) *types.Message {
 	return &types.Message{
 		Id:         0,
 		Uuid:       uniqueid.NewUUID(),
 		Content:    fmt.Sprintf("%s", content),
-		VisitorId:  0,
-		KefuId:     0,
+		VisitorId:  visitorId,
+		KefuId:     kefuId,
 		MsgType:    SystemMsgType,
 		Status:     0,
 		IsRead:     0,

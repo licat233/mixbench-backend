@@ -119,7 +119,7 @@ func (c *VisitorClient) ReadPump() error {
 			}
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(message); err != nil {
-				c.Client.SystemErrorHandler()
+				c.Client.SystemErrorHandler(-1, c.Visitor.Id)
 				return fmt.Errorf("SendBeforeHandler error: %s", err)
 			}
 			c.hub.MessageList <- message
@@ -138,14 +138,14 @@ func (c *VisitorClient) WritePump() error {
 	// 如果该游客有客服接待
 	if c.Visitor.KefuId > 0 {
 		// 发送欢迎信息
-		if err := c.Client.SendPresetMessage(WelcomeMessageKey); err != nil {
+		if err := c.Client.SendPresetMessage(WelcomeMessageKey, -1, c.Visitor.Id); err != nil {
 			c.Logger.Error(err)
 			return fmt.Errorf("send welcome message error: %s", err)
 		}
 	} else {
 		// 没有分配接待的客服，该怎样处理？说明没有客服在线，无法分配，此时应该发送留言信息
 		// 发送留言信息
-		if err := c.Client.SendPresetMessage(LeaveMessageKey); err != nil {
+		if err := c.Client.SendPresetMessage(LeaveMessageKey, -1, c.Visitor.Id); err != nil {
 			c.Logger.Error(err)
 			return fmt.Errorf("send leave a message error: %s", err)
 		}

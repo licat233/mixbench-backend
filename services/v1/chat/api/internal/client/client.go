@@ -59,27 +59,27 @@ func (c *Client) Send(message *types.Message) error {
 }
 
 // 给send chan发送系统错误消息，如果涉及写入和chan的错误，请勿使用
-func (c *Client) SystemErrorHandler() {
-	c.Send(NewSystemMessage(ErrSystem))
+func (c *Client) SystemErrorHandler(kefuId, visitorId int64) {
+	c.Send(NewSystemMessage(ErrSystem, kefuId, visitorId))
 }
 
 // 发送预设的消息
-func (c *Client) SendPresetMessage(messageKey string) error {
-	if messageKey = strings.TrimSpace(messageKey); messageKey == "" {
+func (c *Client) SendPresetMessage(msgKey string, kefuId, visitorId int64) error {
+	if msgKey = strings.TrimSpace(msgKey); msgKey == "" {
 		return nil
 	}
 	msgList, _, err := c.hub.MessageConfigModel.FindList(c.ctx, -1, -1, "", &model.MessageConfig{
-		Key: messageKey,
+		Msgkey: msgKey,
 	})
 	if err != nil {
 		c.Logger.Error(err)
-		c.SystemErrorHandler()
+		c.SystemErrorHandler(kefuId, visitorId)
 		return err
 	}
 	// 如果存在，则发送
 	for _, msg := range msgList {
 		if content := strings.TrimSpace(msg.Content); content != "" {
-			welcomeMsg := NewPublicMessage(content)
+			welcomeMsg := NewPublicMessage(content, kefuId, visitorId)
 			c.Send(welcomeMsg)
 		}
 	}

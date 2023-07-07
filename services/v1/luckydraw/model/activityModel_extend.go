@@ -18,7 +18,6 @@ type activity_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*Activity, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, activity *Activity) (resp []*Activity, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*Activity, error)
 	FindByName(ctx context.Context, name string) (*Activity, error)
@@ -29,6 +28,28 @@ type activity_model interface {
 	FindByMaxPrizes(ctx context.Context, maxPrizes int64) (*Activity, error)
 	FindByStartTime(ctx context.Context, startTime time.Time) (*Activity, error)
 	FindByEndTime(ctx context.Context, endTime time.Time) (*Activity, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*Activity, error)
+	FindsByNames(ctx context.Context, names []string) ([]*Activity, error)
+	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Activity, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Activity, error)
+	FindsByPatterns(ctx context.Context, patterns []int64) ([]*Activity, error)
+	FindsByMaxCounts(ctx context.Context, maxCounts []int64) ([]*Activity, error)
+	FindsByMaxPrizeslist(ctx context.Context, maxPrizeslist []int64) ([]*Activity, error)
+	FindsByStartTimes(ctx context.Context, startTimes []time.Time) ([]*Activity, error)
+	FindsByEndTimes(ctx context.Context, endTimes []time.Time) ([]*Activity, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Activity, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*Activity, error)
+	FindsByName(ctx context.Context, name string) ([]*Activity, error)
+	FindsByProjectId(ctx context.Context, projectId int64) ([]*Activity, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*Activity, error)
+	FindsByPattern(ctx context.Context, pattern int64) ([]*Activity, error)
+	FindsByMaxCount(ctx context.Context, maxCount int64) ([]*Activity, error)
+	FindsByMaxPrizes(ctx context.Context, maxPrizes int64) ([]*Activity, error)
+	FindsByStartTime(ctx context.Context, startTime time.Time) ([]*Activity, error)
+	FindsByEndTime(ctx context.Context, endTime time.Time) ([]*Activity, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -90,7 +111,7 @@ func (m *defaultActivityModel) FindList(ctx context.Context, pageSize, page int6
 			sq = sq.Where("end_time = ?", activity.EndTime.Format("2006-01-02 15:04:05"))
 		}
 	}
-	if keyword != "" && !hasName {
+	if keyword != "" && hasName {
 		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
@@ -115,16 +136,6 @@ func (m *defaultActivityModel) FindList(ctx context.Context, pageSize, page int6
 		return
 	}
 	return
-}
-
-func (m *defaultActivityModel) FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error) {
-	var resp = make([]*Activity, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", activityRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultActivityModel) TableName() string {
@@ -255,6 +266,176 @@ func (m *defaultActivityModel) FindByEndTime(ctx context.Context, endTime time.T
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultActivityModel) FindsByIds(ctx context.Context, ids []int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByUuids(ctx context.Context, uuids []string) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByNames(ctx context.Context, names []string) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(names) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(projectIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(statuslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByPatterns(ctx context.Context, patterns []int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(patterns) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `pattern` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, patterns)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByMaxCounts(ctx context.Context, maxCounts []int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(maxCounts) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `max_count` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxCounts)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByMaxPrizeslist(ctx context.Context, maxPrizeslist []int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(maxPrizeslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `max_prizes` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxPrizeslist)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByStartTimes(ctx context.Context, startTimes []time.Time) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(startTimes) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `start_time` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, startTimes)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByEndTimes(ctx context.Context, endTimes []time.Time) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	if len(endTimes) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `end_time` in (?) and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, endTimes)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsById(ctx context.Context, id int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByUuid(ctx context.Context, uuid string) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByName(ctx context.Context, name string) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByProjectId(ctx context.Context, projectId int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectId)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByStatus(ctx context.Context, status int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByPattern(ctx context.Context, pattern int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `pattern` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, pattern)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByMaxCount(ctx context.Context, maxCount int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `max_count` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxCount)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByMaxPrizes(ctx context.Context, maxPrizes int64) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `max_prizes` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxPrizes)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByStartTime(ctx context.Context, startTime time.Time) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `start_time` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, startTime)
+	return resp, err
+}
+
+func (m *defaultActivityModel) FindsByEndTime(ctx context.Context, endTime time.Time) ([]*Activity, error) {
+	var resp = make([]*Activity, 0)
+	query := fmt.Sprintf("select %s from %s where `end_time` = ? and `is_deleted` = '0' ", activityRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, endTime)
+	return resp, err
 }
 
 func (m *defaultActivityModel) formatUuidKey(uuid string) string {

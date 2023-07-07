@@ -17,13 +17,26 @@ type prize_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*Prize, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, prize *Prize) (resp []*Prize, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*Prize, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*Prize, error)
 	FindByName(ctx context.Context, name string) (*Prize, error)
 	FindByImage(ctx context.Context, image string) (*Prize, error)
 	FindByPrice(ctx context.Context, price float64) (*Prize, error)
 	FindByStatus(ctx context.Context, status int64) (*Prize, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*Prize, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*Prize, error)
+	FindsByNames(ctx context.Context, names []string) ([]*Prize, error)
+	FindsByImages(ctx context.Context, images []string) ([]*Prize, error)
+	FindsByPrices(ctx context.Context, prices []float64) ([]*Prize, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Prize, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Prize, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*Prize, error)
+	FindsByName(ctx context.Context, name string) ([]*Prize, error)
+	FindsByImage(ctx context.Context, image string) ([]*Prize, error)
+	FindsByPrice(ctx context.Context, price float64) ([]*Prize, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*Prize, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -73,7 +86,7 @@ func (m *defaultPrizeModel) FindList(ctx context.Context, pageSize, page int64, 
 			sq = sq.Where("status = ?", prize.Status)
 		}
 	}
-	if keyword != "" && !hasName {
+	if keyword != "" && hasName {
 		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
@@ -98,16 +111,6 @@ func (m *defaultPrizeModel) FindList(ctx context.Context, pageSize, page int64, 
 		return
 	}
 	return
-}
-
-func (m *defaultPrizeModel) FindsByIds(ctx context.Context, ids []int64) ([]*Prize, error) {
-	var resp = make([]*Prize, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", prizeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultPrizeModel) TableName() string {
@@ -182,6 +185,108 @@ func (m *defaultPrizeModel) FindByStatus(ctx context.Context, status int64) (*Pr
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultPrizeModel) FindsByIds(ctx context.Context, ids []int64) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByUuids(ctx context.Context, uuids []string) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByNames(ctx context.Context, names []string) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	if len(names) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByImages(ctx context.Context, images []string) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	if len(images) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `image` in (?) and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, images)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByPrices(ctx context.Context, prices []float64) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	if len(prices) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `price` in (?) and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prices)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	if len(statuslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsById(ctx context.Context, id int64) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByUuid(ctx context.Context, uuid string) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByName(ctx context.Context, name string) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByImage(ctx context.Context, image string) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	query := fmt.Sprintf("select %s from %s where `image` = ? and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, image)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByPrice(ctx context.Context, price float64) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	query := fmt.Sprintf("select %s from %s where `price` = ? and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, price)
+	return resp, err
+}
+
+func (m *defaultPrizeModel) FindsByStatus(ctx context.Context, status int64) ([]*Prize, error) {
+	var resp = make([]*Prize, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", prizeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
 }
 
 func (m *defaultPrizeModel) formatUuidKey(uuid string) string {

@@ -9,6 +9,7 @@ require (
 	github.com/casbin/casbin/v2 v2.71.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/uuid v1.3.0
+	github.com/gorilla/sessions v1.2.1
 	github.com/hibiken/asynq v0.24.1
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/mssola/useragent v1.0.0
@@ -25,6 +26,7 @@ require (
 	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
+	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.16.0 // indirect
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.16.0 // indirect

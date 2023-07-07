@@ -17,11 +17,20 @@ type prizeGrade_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*PrizeGrade, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, prizeGrade *PrizeGrade) (resp []*PrizeGrade, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*PrizeGrade, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*PrizeGrade, error)
 	FindByName(ctx context.Context, name string) (*PrizeGrade, error)
 	FindByIsWin(ctx context.Context, isWin int64) (*PrizeGrade, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*PrizeGrade, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*PrizeGrade, error)
+	FindsByNames(ctx context.Context, names []string) ([]*PrizeGrade, error)
+	FindsByIsWins(ctx context.Context, isWins []int64) ([]*PrizeGrade, error)
+
+	FindsById(ctx context.Context, id int64) ([]*PrizeGrade, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*PrizeGrade, error)
+	FindsByName(ctx context.Context, name string) ([]*PrizeGrade, error)
+	FindsByIsWin(ctx context.Context, isWin int64) ([]*PrizeGrade, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -65,7 +74,7 @@ func (m *defaultPrizeGradeModel) FindList(ctx context.Context, pageSize, page in
 			sq = sq.Where("is_win = ?", prizeGrade.IsWin)
 		}
 	}
-	if keyword != "" && !hasName {
+	if keyword != "" && hasName {
 		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
@@ -90,16 +99,6 @@ func (m *defaultPrizeGradeModel) FindList(ctx context.Context, pageSize, page in
 		return
 	}
 	return
-}
-
-func (m *defaultPrizeGradeModel) FindsByIds(ctx context.Context, ids []int64) ([]*PrizeGrade, error) {
-	var resp = make([]*PrizeGrade, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultPrizeGradeModel) TableName() string {
@@ -146,6 +145,74 @@ func (m *defaultPrizeGradeModel) FindByIsWin(ctx context.Context, isWin int64) (
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultPrizeGradeModel) FindsByIds(ctx context.Context, ids []int64) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsByUuids(ctx context.Context, uuids []string) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsByNames(ctx context.Context, names []string) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	if len(names) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsByIsWins(ctx context.Context, isWins []int64) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	if len(isWins) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `is_win` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isWins)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsById(ctx context.Context, id int64) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsByUuid(ctx context.Context, uuid string) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsByName(ctx context.Context, name string) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultPrizeGradeModel) FindsByIsWin(ctx context.Context, isWin int64) ([]*PrizeGrade, error) {
+	var resp = make([]*PrizeGrade, 0)
+	query := fmt.Sprintf("select %s from %s where `is_win` = ? and `is_deleted` = '0' ", prizeGradeRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isWin)
+	return resp, err
 }
 
 func (m *defaultPrizeGradeModel) formatUuidKey(uuid string) string {

@@ -70,6 +70,8 @@ type (
 	TestResp           = admin_pb.TestResp
 	TreeOption         = admin_pb.TreeOption
 	TreeOptions        = admin_pb.TreeOptions
+	ValidateTokenReq   = admin_pb.ValidateTokenReq
+	ValidateTokenResp  = admin_pb.ValidateTokenResp
 	VerifyPasswordReq  = admin_pb.VerifyPasswordReq
 	VerifyPasswordResp = admin_pb.VerifyPasswordResp
 
@@ -78,8 +80,12 @@ type (
 		Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error)
 		// 生产token
 		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+		// 验证token是否有效
+		ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error)
 		// 账号登录
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		// 超级管理员/开发员登录
+		SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 		LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
 		// 邮箱是否存在
@@ -123,10 +129,22 @@ func (m *defaultAdmin) GenerateToken(ctx context.Context, in *GenerateTokenReq, 
 	return client.GenerateToken(ctx, in, opts...)
 }
 
+// 验证token是否有效
+func (m *defaultAdmin) ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.ValidateToken(ctx, in, opts...)
+}
+
 // 账号登录
 func (m *defaultAdmin) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+// 超级管理员/开发员登录
+func (m *defaultAdmin) SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.SuperAdminLogin(ctx, in, opts...)
 }
 
 // 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题

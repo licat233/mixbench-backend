@@ -35,14 +35,28 @@ type visitor_model interface {
 	FindsByNames(ctx context.Context, names []string) ([]*Visitor, error)
 	FindsByIps(ctx context.Context, ips []string) ([]*Visitor, error)
 	FindsByKefuIds(ctx context.Context, kefuIds []int64) ([]*Visitor, error)
-	FindsByStatus(ctx context.Context, status []int64) ([]*Visitor, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Visitor, error)
 	FindsByReferers(ctx context.Context, referers []string) ([]*Visitor, error)
 	FindsByRegions(ctx context.Context, regions []string) ([]*Visitor, error)
 	FindsByCities(ctx context.Context, cities []string) ([]*Visitor, error)
 	FindsByPlatforms(ctx context.Context, platforms []string) ([]*Visitor, error)
-	FindsByOs(ctx context.Context, os []string) ([]*Visitor, error)
+	FindsByOslist(ctx context.Context, oslist []string) ([]*Visitor, error)
 	FindsByBrowsers(ctx context.Context, browsers []string) ([]*Visitor, error)
 	FindsByLanguages(ctx context.Context, languages []string) ([]*Visitor, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Visitor, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*Visitor, error)
+	FindsByName(ctx context.Context, name string) ([]*Visitor, error)
+	FindsByIp(ctx context.Context, ip string) ([]*Visitor, error)
+	FindsByKefuId(ctx context.Context, kefuId int64) ([]*Visitor, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*Visitor, error)
+	FindsByReferer(ctx context.Context, referer string) ([]*Visitor, error)
+	FindsByRegion(ctx context.Context, region string) ([]*Visitor, error)
+	FindsByCity(ctx context.Context, city string) ([]*Visitor, error)
+	FindsByPlatform(ctx context.Context, platform string) ([]*Visitor, error)
+	FindsByOs(ctx context.Context, os string) ([]*Visitor, error)
+	FindsByBrowser(ctx context.Context, browser string) ([]*Visitor, error)
+	FindsByLanguage(ctx context.Context, language string) ([]*Visitor, error)
 
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
@@ -74,48 +88,48 @@ func (m *defaultVisitorModel) FindList(ctx context.Context, pageSize, page int64
 	sq := squirrel.Select(visitorRows).From(m.table).Where("`is_deleted`= '0'")
 	if visitor != nil {
 		if visitor.Id >= 0 {
-			sq = sq.Where("id = ?", visitor.Id)
+			sq = sq.Where("`id` = ?", visitor.Id)
 		}
 		if visitor.Uuid != "" {
-			sq = sq.Where("uuid = ?", visitor.Uuid)
+			sq = sq.Where("`uuid` = ?", visitor.Uuid)
 		}
 		if visitor.Name != "" {
-			sq = sq.Where("name = ?", visitor.Name)
+			sq = sq.Where("`name` = ?", visitor.Name)
 			hasName = true
 		}
 		if visitor.Ip != "" {
-			sq = sq.Where("ip = ?", visitor.Ip)
+			sq = sq.Where("`ip` = ?", visitor.Ip)
 		}
 		if visitor.KefuId > 0 {
-			sq = sq.Where("kefu_id = ?", visitor.KefuId)
+			sq = sq.Where("`kefu_id` = ?", visitor.KefuId)
 		}
 		if visitor.Status >= 0 {
-			sq = sq.Where("status = ?", visitor.Status)
+			sq = sq.Where("`status` = ?", visitor.Status)
 		}
 		if visitor.Referer != "" {
-			sq = sq.Where("referer = ?", visitor.Referer)
+			sq = sq.Where("`referer` = ?", visitor.Referer)
 		}
 		if visitor.Region != "" {
-			sq = sq.Where("region = ?", visitor.Region)
+			sq = sq.Where("`region` = ?", visitor.Region)
 		}
 		if visitor.City != "" {
-			sq = sq.Where("city = ?", visitor.City)
+			sq = sq.Where("`city` = ?", visitor.City)
 		}
 		if visitor.Platform != "" {
-			sq = sq.Where("platform = ?", visitor.Platform)
+			sq = sq.Where("`platform` = ?", visitor.Platform)
 		}
 		if visitor.Os != "" {
-			sq = sq.Where("os = ?", visitor.Os)
+			sq = sq.Where("`os` = ?", visitor.Os)
 		}
 		if visitor.Browser != "" {
-			sq = sq.Where("browser = ?", visitor.Browser)
+			sq = sq.Where("`browser` = ?", visitor.Browser)
 		}
 		if visitor.Language != "" {
-			sq = sq.Where("language = ?", visitor.Language)
+			sq = sq.Where("`language` = ?", visitor.Language)
 		}
 	}
-	if keyword != "" && !hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+	if keyword != "" && hasName {
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()
@@ -363,13 +377,13 @@ func (m *defaultVisitorModel) FindsByKefuIds(ctx context.Context, kefuIds []int6
 	return resp, err
 }
 
-func (m *defaultVisitorModel) FindsByStatus(ctx context.Context, status []int64) ([]*Visitor, error) {
+func (m *defaultVisitorModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Visitor, error) {
 	var resp = make([]*Visitor, 0)
-	if len(status) == 0 {
+	if len(statuslist) == 0 {
 		return resp, nil
 	}
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
 	return resp, err
 }
 
@@ -413,13 +427,13 @@ func (m *defaultVisitorModel) FindsByPlatforms(ctx context.Context, platforms []
 	return resp, err
 }
 
-func (m *defaultVisitorModel) FindsByOs(ctx context.Context, os []string) ([]*Visitor, error) {
+func (m *defaultVisitorModel) FindsByOslist(ctx context.Context, oslist []string) ([]*Visitor, error) {
 	var resp = make([]*Visitor, 0)
-	if len(os) == 0 {
+	if len(oslist) == 0 {
 		return resp, nil
 	}
 	query := fmt.Sprintf("select %s from %s where `os` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, os)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, oslist)
 	return resp, err
 }
 
@@ -440,6 +454,97 @@ func (m *defaultVisitorModel) FindsByLanguages(ctx context.Context, languages []
 	}
 	query := fmt.Sprintf("select %s from %s where `language` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, languages)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsById(ctx context.Context, id int64) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByUuid(ctx context.Context, uuid string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByName(ctx context.Context, name string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByIp(ctx context.Context, ip string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ip)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByKefuId(ctx context.Context, kefuId int64) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByStatus(ctx context.Context, status int64) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByReferer(ctx context.Context, referer string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `referer` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, referer)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByRegion(ctx context.Context, region string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `region` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, region)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByCity(ctx context.Context, city string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `city` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, city)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByPlatform(ctx context.Context, platform string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `platform` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, platform)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByOs(ctx context.Context, os string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `os` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, os)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByBrowser(ctx context.Context, browser string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `browser` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, browser)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByLanguage(ctx context.Context, language string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `language` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, language)
 	return resp, err
 }
 

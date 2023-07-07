@@ -17,13 +17,26 @@ type userPool_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*UserPool, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, userPool *UserPool) (resp []*UserPool, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*UserPool, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*UserPool, error)
 	FindByActivityId(ctx context.Context, activityId int64) (*UserPool, error)
 	FindByUserId(ctx context.Context, userId int64) (*UserPool, error)
 	FindByStatus(ctx context.Context, status int64) (*UserPool, error)
 	FindByScore(ctx context.Context, score int64) (*UserPool, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*UserPool, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*UserPool, error)
+	FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*UserPool, error)
+	FindsByUserIds(ctx context.Context, userIds []int64) ([]*UserPool, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*UserPool, error)
+	FindsByScores(ctx context.Context, scores []int64) ([]*UserPool, error)
+
+	FindsById(ctx context.Context, id int64) ([]*UserPool, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*UserPool, error)
+	FindsByActivityId(ctx context.Context, activityId int64) ([]*UserPool, error)
+	FindsByUserId(ctx context.Context, userId int64) ([]*UserPool, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*UserPool, error)
+	FindsByScore(ctx context.Context, score int64) ([]*UserPool, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -93,16 +106,6 @@ func (m *defaultUserPoolModel) FindList(ctx context.Context, pageSize, page int6
 		return
 	}
 	return
-}
-
-func (m *defaultUserPoolModel) FindsByIds(ctx context.Context, ids []int64) ([]*UserPool, error) {
-	var resp = make([]*UserPool, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", userPoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultUserPoolModel) TableName() string {
@@ -177,6 +180,108 @@ func (m *defaultUserPoolModel) FindByScore(ctx context.Context, score int64) (*U
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultUserPoolModel) FindsByIds(ctx context.Context, ids []int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByUuids(ctx context.Context, uuids []string) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	if len(activityIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `activity_id` in (?) and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityIds)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByUserIds(ctx context.Context, userIds []int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	if len(userIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `user_id` in (?) and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userIds)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	if len(statuslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByScores(ctx context.Context, scores []int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	if len(scores) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `score` in (?) and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, scores)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsById(ctx context.Context, id int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByUuid(ctx context.Context, uuid string) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByActivityId(ctx context.Context, activityId int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByUserId(ctx context.Context, userId int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByStatus(ctx context.Context, status int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
+}
+
+func (m *defaultUserPoolModel) FindsByScore(ctx context.Context, score int64) ([]*UserPool, error) {
+	var resp = make([]*UserPool, 0)
+	query := fmt.Sprintf("select %s from %s where `score` = ? and `is_deleted` = '0' ", userPoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, score)
+	return resp, err
 }
 
 func (m *defaultUserPoolModel) formatUuidKey(uuid string) string {

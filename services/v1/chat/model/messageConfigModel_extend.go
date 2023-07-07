@@ -19,12 +19,17 @@ type messageConfig_model interface {
 	FindList(ctx context.Context, pageSize, page int64, keyword string, messageConfig *MessageConfig) (resp []*MessageConfig, total int64, err error)
 	TableName() string
 	FindByName(ctx context.Context, name string) (*MessageConfig, error)
-	FindByKey(ctx context.Context, key string) (*MessageConfig, error)
+	FindByMsgkey(ctx context.Context, msgkey string) (*MessageConfig, error)
 	FindByContent(ctx context.Context, content string) (*MessageConfig, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*MessageConfig, error)
 	FindsByNames(ctx context.Context, names []string) ([]*MessageConfig, error)
-	FindsByKeies(ctx context.Context, keies []string) ([]*MessageConfig, error)
+	FindsByMsgkes(ctx context.Context, msgkes []string) ([]*MessageConfig, error)
 	FindsByContents(ctx context.Context, contents []string) ([]*MessageConfig, error)
+
+	FindsById(ctx context.Context, id int64) ([]*MessageConfig, error)
+	FindsByName(ctx context.Context, name string) ([]*MessageConfig, error)
+	FindsByMsgkey(ctx context.Context, msgkey string) ([]*MessageConfig, error)
+	FindsByContent(ctx context.Context, content string) ([]*MessageConfig, error)
 }
 
 func (m *defaultMessageConfigModel) FindCount(ctx context.Context) (int64, error) {
@@ -53,21 +58,21 @@ func (m *defaultMessageConfigModel) FindList(ctx context.Context, pageSize, page
 	sq := squirrel.Select(messageConfigRows).From(m.table)
 	if messageConfig != nil {
 		if messageConfig.Id >= 0 {
-			sq = sq.Where("id = ?", messageConfig.Id)
+			sq = sq.Where("`id` = ?", messageConfig.Id)
 		}
 		if messageConfig.Name != "" {
-			sq = sq.Where("name = ?", messageConfig.Name)
+			sq = sq.Where("`name` = ?", messageConfig.Name)
 			hasName = true
 		}
-		if messageConfig.Key != "" {
-			sq = sq.Where("key = ?", messageConfig.Key)
+		if messageConfig.Msgkey != "" {
+			sq = sq.Where("`msgkey` = ?", messageConfig.Msgkey)
 		}
 		if messageConfig.Content != "" {
-			sq = sq.Where("content = ?", messageConfig.Content)
+			sq = sq.Where("`content` = ?", messageConfig.Content)
 		}
 	}
-	if keyword != "" && !hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+	if keyword != "" && hasName {
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()
@@ -111,10 +116,10 @@ func (m *defaultMessageConfigModel) FindByName(ctx context.Context, name string)
 	}
 }
 
-func (m *defaultMessageConfigModel) FindByKey(ctx context.Context, key string) (*MessageConfig, error) {
+func (m *defaultMessageConfigModel) FindByMsgkey(ctx context.Context, msgkey string) (*MessageConfig, error) {
 	var resp MessageConfig
-	query := fmt.Sprintf("select %s from %s where `key` = ? limit 1", messageConfigRows, m.table)
-	err := m.QueryRowNoCacheCtx(ctx, &resp, query, key)
+	query := fmt.Sprintf("select %s from %s where `msgkey` = ? limit 1", messageConfigRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, msgkey)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -159,13 +164,13 @@ func (m *defaultMessageConfigModel) FindsByNames(ctx context.Context, names []st
 	return resp, err
 }
 
-func (m *defaultMessageConfigModel) FindsByKeies(ctx context.Context, keies []string) ([]*MessageConfig, error) {
+func (m *defaultMessageConfigModel) FindsByMsgkes(ctx context.Context, msgkes []string) ([]*MessageConfig, error) {
 	var resp = make([]*MessageConfig, 0)
-	if len(keies) == 0 {
+	if len(msgkes) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `key`  in (?) ", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, keies)
+	query := fmt.Sprintf("select %s from %s where `msgkey`  in (?) ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgkes)
 	return resp, err
 }
 
@@ -176,5 +181,33 @@ func (m *defaultMessageConfigModel) FindsByContents(ctx context.Context, content
 	}
 	query := fmt.Sprintf("select %s from %s where `content`  in (?) ", messageConfigRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contents)
+	return resp, err
+}
+
+func (m *defaultMessageConfigModel) FindsById(ctx context.Context, id int64) ([]*MessageConfig, error) {
+	var resp = make([]*MessageConfig, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultMessageConfigModel) FindsByName(ctx context.Context, name string) ([]*MessageConfig, error) {
+	var resp = make([]*MessageConfig, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultMessageConfigModel) FindsByMsgkey(ctx context.Context, msgkey string) ([]*MessageConfig, error) {
+	var resp = make([]*MessageConfig, 0)
+	query := fmt.Sprintf("select %s from %s where `msgkey` = ? ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgkey)
+	return resp, err
+}
+
+func (m *defaultMessageConfigModel) FindsByContent(ctx context.Context, content string) ([]*MessageConfig, error) {
+	var resp = make([]*MessageConfig, 0)
+	query := fmt.Sprintf("select %s from %s where `content` = ? ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, content)
 	return resp, err
 }

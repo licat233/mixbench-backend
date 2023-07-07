@@ -31,7 +31,7 @@ func (l *GetMessageConfigListLogic) GetMessageConfigList(req *types.GetMessageCo
 	in := &model.MessageConfig{
 		Id:      req.Id,
 		Name:    req.Name,
-		Key:     req.Key,
+		Msgkey:  req.Msgkey,
 		Content: req.Content,
 	}
 	mdList, total, err := l.svcCtx.MessageConfigModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)

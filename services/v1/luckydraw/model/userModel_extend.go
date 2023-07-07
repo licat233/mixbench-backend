@@ -17,7 +17,6 @@ type user_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*User, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, user *User) (resp []*User, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*User, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*User, error)
 	FindByPassport(ctx context.Context, passport string) (*User, error)
@@ -27,6 +26,26 @@ type user_model interface {
 	FindByAddress(ctx context.Context, address string) (*User, error)
 	FindByScore(ctx context.Context, score int64) (*User, error)
 	FindByStatus(ctx context.Context, status int64) (*User, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*User, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*User, error)
+	FindsByPassports(ctx context.Context, passports []string) ([]*User, error)
+	FindsByEmails(ctx context.Context, emails []string) ([]*User, error)
+	FindsByPhones(ctx context.Context, phones []string) ([]*User, error)
+	FindsByNames(ctx context.Context, names []string) ([]*User, error)
+	FindsByAddresslist(ctx context.Context, addresslist []string) ([]*User, error)
+	FindsByScores(ctx context.Context, scores []int64) ([]*User, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*User, error)
+
+	FindsById(ctx context.Context, id int64) ([]*User, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*User, error)
+	FindsByPassport(ctx context.Context, passport string) ([]*User, error)
+	FindsByEmail(ctx context.Context, email string) ([]*User, error)
+	FindsByPhone(ctx context.Context, phone string) ([]*User, error)
+	FindsByName(ctx context.Context, name string) ([]*User, error)
+	FindsByAddress(ctx context.Context, address string) ([]*User, error)
+	FindsByScore(ctx context.Context, score int64) ([]*User, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*User, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -85,7 +104,7 @@ func (m *defaultUserModel) FindList(ctx context.Context, pageSize, page int64, k
 			sq = sq.Where("status = ?", user.Status)
 		}
 	}
-	if keyword != "" && !hasName {
+	if keyword != "" && hasName {
 		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
@@ -110,16 +129,6 @@ func (m *defaultUserModel) FindList(ctx context.Context, pageSize, page int64, k
 		return
 	}
 	return
-}
-
-func (m *defaultUserModel) FindsByIds(ctx context.Context, ids []int64) ([]*User, error) {
-	var resp = make([]*User, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultUserModel) TableName() string {
@@ -236,6 +245,159 @@ func (m *defaultUserModel) FindByStatus(ctx context.Context, status int64) (*Use
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultUserModel) FindsByIds(ctx context.Context, ids []int64) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByUuids(ctx context.Context, uuids []string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByPassports(ctx context.Context, passports []string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(passports) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `passport` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passports)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByEmails(ctx context.Context, emails []string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(emails) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `email` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, emails)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByPhones(ctx context.Context, phones []string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(phones) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `phone` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, phones)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByNames(ctx context.Context, names []string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(names) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByAddresslist(ctx context.Context, addresslist []string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(addresslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `address` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, addresslist)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByScores(ctx context.Context, scores []int64) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(scores) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `score` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, scores)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*User, error) {
+	var resp = make([]*User, 0)
+	if len(statuslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsById(ctx context.Context, id int64) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByUuid(ctx context.Context, uuid string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByPassport(ctx context.Context, passport string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `passport` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passport)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByEmail(ctx context.Context, email string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `email` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, email)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByPhone(ctx context.Context, phone string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `phone` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, phone)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByName(ctx context.Context, name string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByAddress(ctx context.Context, address string) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `address` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, address)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByScore(ctx context.Context, score int64) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `score` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, score)
+	return resp, err
+}
+
+func (m *defaultUserModel) FindsByStatus(ctx context.Context, status int64) ([]*User, error) {
+	var resp = make([]*User, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", userRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
 }
 
 func (m *defaultUserModel) formatUuidKey(uuid string) string {

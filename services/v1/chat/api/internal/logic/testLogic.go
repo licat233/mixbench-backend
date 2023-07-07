@@ -4,9 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
-	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
@@ -31,17 +29,21 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Reque
 }
 
 func (l *TestLogic) Test(req *types.TestReq) (any, error) {
-	token := jwtx.GetToken(l.r)
-	claims, err := jwtx.GetClaims(l.r, l.svcCtx.Config.Auth.AccessSecret)
+	// token := jwtx.GetToken(l.r)
+	// claims, err := jwtx.GetClaims(l.r, l.svcCtx.Config.Auth.AccessSecret)
+	// if err != nil {
+	// 	return nil, errorx.InternalError(err)
+	// }
+	// data := map[string]any{
+	// 	"param":         req.Data,
+	// 	"token_value":   token,
+	// 	"token_details": claims,
+	// 	"cxt_id":        ctxdata.GetUidFromCtx(l.ctx),
+	// }
+	list, total, err := l.svcCtx.MessageConfigModel.FindList(l.ctx, 10, 1, "", nil)
 	if err != nil {
 		return nil, errorx.InternalError(err)
 	}
-	data := map[string]any{
-		"param":         req.Data,
-		"token_value":   token,
-		"token_details": claims,
-		"cxt_id":        ctxdata.GetUidFromCtx(l.ctx),
-	}
 
-	return respx.NewData(data), nil
+	return respx.NewListData(list, total, 10, 1), nil
 }

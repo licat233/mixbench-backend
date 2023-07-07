@@ -98,18 +98,18 @@ DROP TABLE IF EXISTS `message_config`;
 CREATE TABLE `message_config` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '名字',
-  `key` varchar(255) NOT NULL DEFAULT '' COMMENT '密匙',
+  `msgkey` varchar(255) NOT NULL DEFAULT '' COMMENT '消息密匙',
   `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='消息配置';
+  UNIQUE KEY `msgkey` (`msgkey`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='消息配置';
 
 -- ----------------------------
 -- Records of message_config
 -- ----------------------------
 BEGIN;
 INSERT INTO `message_config` VALUES (1, '歡迎信息', 'welcome_message', '你好！我是Anna老師，請問有什麼可以幫您？ \\n皺紋問題請回 1 \\n色斑問題請回 2 \\n眼袋問題請回 3 \\n其它肌膚問題請回 4');
-INSERT INTO `message_config` VALUES (2, '留言信息', 'leave_message', '你好！Anna暫時不在線，有問題可以添加Anna的line: <a href="line://ti/p/Jh0NreIhfp" style="color:green">anby091</a>');
+INSERT INTO `message_config` VALUES (2, '留言信息', 'leave_message', '你好！Anna暫時不在線，有問題可以添加Anna的line: <a href=\"line://ti/p/Jh0NreIhfp\" style=\"color:green\">anby091</a>');
 COMMIT;
 
 -- ----------------------------

@@ -193,7 +193,7 @@ func (h *Hub) AssignDBMessage() {
 
 func (h *Hub) AssignMessage(message *types.Message) error {
 	switch message.MsgType {
-	case 0:
+	case VisitorMsgType:
 		// 游客消息，转发给客服
 		if cli := h.KefuClients.Get(message.KefuId); cli != nil {
 			//可能会存在数据库查找错误
@@ -201,12 +201,33 @@ func (h *Hub) AssignMessage(message *types.Message) error {
 				return err
 			}
 		}
-	case 1, 2:
-		// 客服消息,公告消息，转发给游客
+	case KefuMsgType:
+		// 客服消息，公告消息，转发给游客
 		if cli := h.VisitorClients.Get(message.VisitorId); cli != nil {
 			//可能会存在数据库查找错误
 			if err := cli.Send(message); err != nil {
 				return err
+			}
+		}
+	case PublicMsgType, SystemMsgType:
+		//公告信息，可能发给客服，或者游客
+		//依据kefuId和visitorId来做判断
+		if message.KefuId > 0 {
+			//发给客服
+			if cli := h.KefuClients.Get(message.KefuId); cli != nil {
+				//可能会存在数据库查找错误
+				if err := cli.Send(message); err != nil {
+					return err
+				}
+			}
+		}
+		if message.VisitorId > 0 {
+			//发给游客
+			if cli := h.VisitorClients.Get(message.VisitorId); cli != nil {
+				//可能会存在数据库查找错误
+				if err := cli.Send(message); err != nil {
+					return err
+				}
 			}
 		}
 	}

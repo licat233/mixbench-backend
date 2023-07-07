@@ -17,7 +17,6 @@ type prizePool_model interface {
 	FindCount(ctx context.Context) (int64, error)
 	FindAll(ctx context.Context) ([]*PrizePool, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, prizePool *PrizePool) (resp []*PrizePool, total int64, err error)
-	FindsByIds(ctx context.Context, ids []int64) ([]*PrizePool, error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*PrizePool, error)
 	FindByActivityId(ctx context.Context, activityId int64) (*PrizePool, error)
@@ -27,6 +26,26 @@ type prizePool_model interface {
 	FindByStatus(ctx context.Context, status int64) (*PrizePool, error)
 	FindByTotal(ctx context.Context, total int64) (*PrizePool, error)
 	FindByRemainder(ctx context.Context, remainder int64) (*PrizePool, error)
+	FindsByIds(ctx context.Context, ids []int64) ([]*PrizePool, error)
+	FindsByUuids(ctx context.Context, uuids []string) ([]*PrizePool, error)
+	FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*PrizePool, error)
+	FindsByPrizeIds(ctx context.Context, prizeIds []int64) ([]*PrizePool, error)
+	FindsByGradeIds(ctx context.Context, gradeIds []int64) ([]*PrizePool, error)
+	FindsByLuckValues(ctx context.Context, luckValues []int64) ([]*PrizePool, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*PrizePool, error)
+	FindsByTotals(ctx context.Context, totals []int64) ([]*PrizePool, error)
+	FindsByRemainders(ctx context.Context, remainders []int64) ([]*PrizePool, error)
+
+	FindsById(ctx context.Context, id int64) ([]*PrizePool, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*PrizePool, error)
+	FindsByActivityId(ctx context.Context, activityId int64) ([]*PrizePool, error)
+	FindsByPrizeId(ctx context.Context, prizeId int64) ([]*PrizePool, error)
+	FindsByGradeId(ctx context.Context, gradeId int64) ([]*PrizePool, error)
+	FindsByLuckValue(ctx context.Context, luckValue int64) ([]*PrizePool, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*PrizePool, error)
+	FindsByTotal(ctx context.Context, total int64) ([]*PrizePool, error)
+	FindsByRemainder(ctx context.Context, remainder int64) ([]*PrizePool, error)
+
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
 }
@@ -105,16 +124,6 @@ func (m *defaultPrizePoolModel) FindList(ctx context.Context, pageSize, page int
 		return
 	}
 	return
-}
-
-func (m *defaultPrizePoolModel) FindsByIds(ctx context.Context, ids []int64) ([]*PrizePool, error) {
-	var resp = make([]*PrizePool, 0)
-	if len(ids) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `id` in(?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
-	return resp, err
 }
 
 func (m *defaultPrizePoolModel) TableName() string {
@@ -231,6 +240,159 @@ func (m *defaultPrizePoolModel) FindByRemainder(ctx context.Context, remainder i
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultPrizePoolModel) FindsByIds(ctx context.Context, ids []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByUuids(ctx context.Context, uuids []string) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(uuids) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByActivityIds(ctx context.Context, activityIds []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(activityIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `activity_id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityIds)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByPrizeIds(ctx context.Context, prizeIds []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(prizeIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `prize_id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizeIds)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByGradeIds(ctx context.Context, gradeIds []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(gradeIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `grade_id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, gradeIds)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByLuckValues(ctx context.Context, luckValues []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(luckValues) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `luck_value` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckValues)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(statuslist) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByTotals(ctx context.Context, totals []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(totals) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `total` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, totals)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByRemainders(ctx context.Context, remainders []int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	if len(remainders) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `remainder` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, remainders)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsById(ctx context.Context, id int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByUuid(ctx context.Context, uuid string) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByActivityId(ctx context.Context, activityId int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `activity_id` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityId)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByPrizeId(ctx context.Context, prizeId int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `prize_id` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizeId)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByGradeId(ctx context.Context, gradeId int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `grade_id` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, gradeId)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByLuckValue(ctx context.Context, luckValue int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `luck_value` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckValue)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByStatus(ctx context.Context, status int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByTotal(ctx context.Context, total int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `total` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, total)
+	return resp, err
+}
+
+func (m *defaultPrizePoolModel) FindsByRemainder(ctx context.Context, remainder int64) ([]*PrizePool, error) {
+	var resp = make([]*PrizePool, 0)
+	query := fmt.Sprintf("select %s from %s where `remainder` = ? and `is_deleted` = '0' ", prizePoolRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, remainder)
+	return resp, err
 }
 
 func (m *defaultPrizePoolModel) formatUuidKey(uuid string) string {

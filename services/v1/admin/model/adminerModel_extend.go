@@ -34,14 +34,27 @@ type adminer_model interface {
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Adminer, error)
 	FindsByNames(ctx context.Context, names []string) ([]*Adminer, error)
 	FindsByAvatars(ctx context.Context, avatars []string) ([]*Adminer, error)
-	FindsByAccess(ctx context.Context, access []string) ([]*Adminer, error)
+	FindsByAccesslist(ctx context.Context, accesslist []string) ([]*Adminer, error)
 	FindsByPassports(ctx context.Context, passports []string) ([]*Adminer, error)
 	FindsByPasswords(ctx context.Context, passwords []string) ([]*Adminer, error)
 	FindsByEmails(ctx context.Context, emails []string) ([]*Adminer, error)
-	FindsByStatus(ctx context.Context, status []int64) ([]*Adminer, error)
+	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Adminer, error)
 	FindsByIsSuperAdmins(ctx context.Context, isSuperAdmins []int64) ([]*Adminer, error)
 	FindsByLoginCounts(ctx context.Context, loginCounts []int64) ([]*Adminer, error)
 	FindsByLastLogins(ctx context.Context, lastLogins []time.Time) ([]*Adminer, error)
+
+	FindsById(ctx context.Context, id int64) ([]*Adminer, error)
+	FindsByUuid(ctx context.Context, uuid string) ([]*Adminer, error)
+	FindsByName(ctx context.Context, name string) ([]*Adminer, error)
+	FindsByAvatar(ctx context.Context, avatar string) ([]*Adminer, error)
+	FindsByAccess(ctx context.Context, access string) ([]*Adminer, error)
+	FindsByPassport(ctx context.Context, passport string) ([]*Adminer, error)
+	FindsByPassword(ctx context.Context, password string) ([]*Adminer, error)
+	FindsByEmail(ctx context.Context, email string) ([]*Adminer, error)
+	FindsByStatus(ctx context.Context, status int64) ([]*Adminer, error)
+	FindsByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) ([]*Adminer, error)
+	FindsByLoginCount(ctx context.Context, loginCount int64) ([]*Adminer, error)
+	FindsByLastLogin(ctx context.Context, lastLogin time.Time) ([]*Adminer, error)
 
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
@@ -73,45 +86,45 @@ func (m *defaultAdminerModel) FindList(ctx context.Context, pageSize, page int64
 	sq := squirrel.Select(adminerRows).From(m.table).Where("`is_deleted`= '0'")
 	if adminer != nil {
 		if adminer.Id >= 0 {
-			sq = sq.Where("id = ?", adminer.Id)
+			sq = sq.Where("`id` = ?", adminer.Id)
 		}
 		if adminer.Uuid != "" {
-			sq = sq.Where("uuid = ?", adminer.Uuid)
+			sq = sq.Where("`uuid` = ?", adminer.Uuid)
 		}
 		if adminer.Name != "" {
-			sq = sq.Where("name = ?", adminer.Name)
+			sq = sq.Where("`name` = ?", adminer.Name)
 			hasName = true
 		}
 		if adminer.Avatar != "" {
-			sq = sq.Where("avatar = ?", adminer.Avatar)
+			sq = sq.Where("`avatar` = ?", adminer.Avatar)
 		}
 		if adminer.Access != "" {
-			sq = sq.Where("access = ?", adminer.Access)
+			sq = sq.Where("`access` = ?", adminer.Access)
 		}
 		if adminer.Passport != "" {
-			sq = sq.Where("passport = ?", adminer.Passport)
+			sq = sq.Where("`passport` = ?", adminer.Passport)
 		}
 		if adminer.Password != "" {
-			sq = sq.Where("password = ?", adminer.Password)
+			sq = sq.Where("`password` = ?", adminer.Password)
 		}
 		if adminer.Email != "" {
-			sq = sq.Where("email = ?", adminer.Email)
+			sq = sq.Where("`email` = ?", adminer.Email)
 		}
 		if adminer.Status >= 0 {
-			sq = sq.Where("status = ?", adminer.Status)
+			sq = sq.Where("`status` = ?", adminer.Status)
 		}
 		if adminer.IsSuperAdmin >= 0 {
-			sq = sq.Where("is_super_admin = ?", adminer.IsSuperAdmin)
+			sq = sq.Where("`is_super_admin` = ?", adminer.IsSuperAdmin)
 		}
 		if adminer.LoginCount >= 0 {
-			sq = sq.Where("login_count = ?", adminer.LoginCount)
+			sq = sq.Where("`login_count` = ?", adminer.LoginCount)
 		}
 		if adminer.LastLogin.IsZero() {
-			sq = sq.Where("last_login = ?", adminer.LastLogin.Format("2006-01-02 15:04:05"))
+			sq = sq.Where("`last_login` = ?", adminer.LastLogin.Format("2006-01-02 15:04:05"))
 		}
 	}
-	if keyword != "" && !hasName {
-		sq = sq.Where("name LIKE ?", fmt.Sprintf("%%%s%%", keyword))
+	if keyword != "" && hasName {
+		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
 		sqCount := sq.RemoveLimit().RemoveOffset()
@@ -335,13 +348,13 @@ func (m *defaultAdminerModel) FindsByAvatars(ctx context.Context, avatars []stri
 	return resp, err
 }
 
-func (m *defaultAdminerModel) FindsByAccess(ctx context.Context, access []string) ([]*Adminer, error) {
+func (m *defaultAdminerModel) FindsByAccesslist(ctx context.Context, accesslist []string) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
-	if len(access) == 0 {
+	if len(accesslist) == 0 {
 		return resp, nil
 	}
 	query := fmt.Sprintf("select %s from %s where `access` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, access)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, accesslist)
 	return resp, err
 }
 
@@ -375,13 +388,13 @@ func (m *defaultAdminerModel) FindsByEmails(ctx context.Context, emails []string
 	return resp, err
 }
 
-func (m *defaultAdminerModel) FindsByStatus(ctx context.Context, status []int64) ([]*Adminer, error) {
+func (m *defaultAdminerModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
-	if len(status) == 0 {
+	if len(statuslist) == 0 {
 		return resp, nil
 	}
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
 	return resp, err
 }
 
@@ -412,6 +425,90 @@ func (m *defaultAdminerModel) FindsByLastLogins(ctx context.Context, lastLogins 
 	}
 	query := fmt.Sprintf("select %s from %s where `last_login` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLogins)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsById(ctx context.Context, id int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByUuid(ctx context.Context, uuid string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByName(ctx context.Context, name string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByAvatar(ctx context.Context, avatar string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `avatar` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, avatar)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByAccess(ctx context.Context, access string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `access` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, access)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByPassport(ctx context.Context, passport string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `passport` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passport)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByPassword(ctx context.Context, password string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `password` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, password)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByEmail(ctx context.Context, email string) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `email` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, email)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByStatus(ctx context.Context, status int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, status)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `is_super_admin` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isSuperAdmin)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByLoginCount(ctx context.Context, loginCount int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `login_count` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, loginCount)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByLastLogin(ctx context.Context, lastLogin time.Time) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `last_login` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLogin)
 	return resp, err
 }
 

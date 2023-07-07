@@ -38,7 +38,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha"
         ]
@@ -67,7 +66,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha"
         ]
@@ -96,7 +94,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha"
         ]
@@ -125,7 +122,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha"
         ]
@@ -141,7 +137,6 @@
             "schema": {}
           }
         },
-        "requestBody": {},
         "tags": [
           "captcha"
         ]
@@ -168,7 +163,6 @@
             "type": "string"
           }
         ],
-        "requestBody": {},
         "tags": [
           "captcha"
         ]
@@ -242,37 +236,38 @@
       },
       "title": "BaseResp",
       "required": [
-        "success",
-        "showType"
+        "success"
       ]
     },
     "CaptchaBgColor": {
       "type": "object",
       "properties": {
         "R": {
-          "$ref": "#/definitions/uint8",
-          "default": "254"
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
         },
         "G": {
-          "$ref": "#/definitions/uint8",
-          "default": "254"
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
         },
         "B": {
-          "$ref": "#/definitions/uint8",
-          "default": "254"
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
         },
         "A": {
-          "$ref": "#/definitions/uint8",
-          "default": "254"
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
         }
       },
-      "title": "CaptchaBgColor",
-      "required": [
-        "R",
-        "G",
-        "B",
-        "A"
-      ]
+      "title": "CaptchaBgColor"
     },
     "CaptchaInfo": {
       "type": "object",
@@ -311,8 +306,6 @@
       },
       "title": "CaptchaReq",
       "required": [
-        "height",
-        "width",
         "BgColor"
       ]
     },
@@ -408,10 +401,5 @@
       "name": "Authorization",
       "in": "header"
     }
-  },
-  "security": [
-    {
-      "apiKey": []
-    }
-  ]
+  }
 }

@@ -118,7 +118,7 @@ func MdMessageConfigToApiMessageConfig(md *model.MessageConfig) *types.MessageCo
 	return &types.MessageConfig{
 		Id:      md.Id,
 		Name:    md.Name,
-		Key:     md.Key,
+		Msgkey:  md.Msgkey,
 		Content: md.Content,
 	}
 }

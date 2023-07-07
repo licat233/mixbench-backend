@@ -30,7 +30,7 @@ func (l *PutMessageConfigLogic) PutMessageConfig(req *types.PutMessageConfigReq)
 	in := &model.MessageConfig{
 		Id:      req.Id,
 		Name:    req.Name,
-		Key:     req.Key,
+		Msgkey:  req.Msgkey,
 		Content: req.Content,
 	}
 	if err := l.svcCtx.MessageConfigModel.Update(l.ctx, in); err != nil {

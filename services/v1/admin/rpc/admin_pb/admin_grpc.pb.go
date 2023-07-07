@@ -532,8 +532,12 @@ type AdminClient interface {
 	Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error)
 	// 生产token
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	// 验证token是否有效
+	ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error)
 	// 账号登录
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// 超级管理员/开发员登录
+	SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 	LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
 	// 邮箱是否存在
@@ -580,9 +584,27 @@ func (c *adminClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, o
 	return out, nil
 }
 
+func (c *adminClient) ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error) {
+	out := new(ValidateTokenResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ValidateToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	out := new(LoginResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/Login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminClient) SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+	out := new(LoginResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/SuperAdminLogin", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -678,8 +700,12 @@ type AdminServer interface {
 	Test(context.Context, *TestReq) (*TestResp, error)
 	// 生产token
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	// 验证token是否有效
+	ValidateToken(context.Context, *ValidateTokenReq) (*ValidateTokenResp, error)
 	// 账号登录
 	Login(context.Context, *LoginReq) (*LoginResp, error)
+	// 超级管理员/开发员登录
+	SuperAdminLogin(context.Context, *LoginReq) (*LoginResp, error)
 	// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
 	LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error)
 	// 邮箱是否存在
@@ -711,8 +737,14 @@ func (UnimplementedAdminServer) Test(context.Context, *TestReq) (*TestResp, erro
 func (UnimplementedAdminServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
 }
+func (UnimplementedAdminServer) ValidateToken(context.Context, *ValidateTokenReq) (*ValidateTokenResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateToken not implemented")
+}
 func (UnimplementedAdminServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAdminServer) SuperAdminLogin(context.Context, *LoginReq) (*LoginResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SuperAdminLogin not implemented")
 }
 func (UnimplementedAdminServer) LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginByEmail not implemented")
@@ -790,6 +822,24 @@ func _Admin_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_ValidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateTokenReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).ValidateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/ValidateToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).ValidateToken(ctx, req.(*ValidateTokenReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginReq)
 	if err := dec(in); err != nil {
@@ -804,6 +854,24 @@ func _Admin_Login_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServer).Login(ctx, req.(*LoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Admin_SuperAdminLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).SuperAdminLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/SuperAdminLogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).SuperAdminLogin(ctx, req.(*LoginReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -986,8 +1054,16 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Admin_GenerateToken_Handler,
 		},
 		{
+			MethodName: "ValidateToken",
+			Handler:    _Admin_ValidateToken_Handler,
+		},
+		{
 			MethodName: "Login",
 			Handler:    _Admin_Login_Handler,
+		},
+		{
+			MethodName: "SuperAdminLogin",
+			Handler:    _Admin_SuperAdminLogin_Handler,
 		},
 		{
 			MethodName: "LoginByEmail",
