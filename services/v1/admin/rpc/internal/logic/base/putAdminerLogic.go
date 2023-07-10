@@ -30,7 +30,7 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 // 更新管理员，
 func (l *PutAdminerLogic) PutAdminer(in *admin_pb.PutAdminerReq) (*admin_pb.PutAdminerResp, error) {
 	// 不更新密码，密码需要通过单独端口进行更新
-	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
+	adminer, err := l.svcCtx.AdminerModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

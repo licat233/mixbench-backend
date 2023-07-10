@@ -39,7 +39,7 @@ func (c *Client) Close() {
 func (c *Client) Send(message *model.Message) error {
 	//发送前，需要校验，该游客信息是否已经被修改了客服号
 	if message.MsgType == VisitorMsgType {
-		msg, err := c.hub.SvcCtx.MessageModel.FindOne(c.ctx, message.Id)
+		msg, err := c.hub.SvcCtx.MessageModel.FindById(c.ctx, message.Id)
 		if err != nil && err != model.ErrNotFound {
 			c.Logger.Error(err)
 			return err

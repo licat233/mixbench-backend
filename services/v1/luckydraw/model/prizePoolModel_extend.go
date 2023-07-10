@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var PrizePoolTableName = "prize_pool"
@@ -18,6 +19,7 @@ type prizePool_model interface {
 	FindAll(ctx context.Context) ([]*PrizePool, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, prizePool *PrizePool) (resp []*PrizePool, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*PrizePool, error)
 	FindByUuid(ctx context.Context, uuid string) (*PrizePool, error)
 	FindByActivityId(ctx context.Context, activityId int64) (*PrizePool, error)
 	FindByPrizeId(ctx context.Context, prizeId int64) (*PrizePool, error)
@@ -128,6 +130,23 @@ func (m *defaultPrizePoolModel) FindList(ctx context.Context, pageSize, page int
 
 func (m *defaultPrizePoolModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultPrizePoolModel) FindById(ctx context.Context, id int64) (*PrizePool, error) {
+	var resp PrizePool
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", prizePoolRows, m.table)
+	prizePoolIdKey := fmt.Sprintf("%s%v", cachePrizePoolIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, prizePoolIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultPrizePoolModel) FindByUuid(ctx context.Context, uuid string) (*PrizePool, error) {

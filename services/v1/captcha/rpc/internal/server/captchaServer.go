@@ -35,9 +35,9 @@ func (s *CaptchaServer) VerifyCaptcha(ctx context.Context, in *captcha_pb.Verify
 }
 
 // 获取邮箱验证码
-func (s *CaptchaServer) GetEmailCaptcha(ctx context.Context, in *captcha_pb.GetEmailCaptchaReq) (*captcha_pb.GetEmailCaptchaResp, error) {
-	l := logic.NewGetEmailCaptchaLogic(ctx, s.svcCtx)
-	return l.GetEmailCaptcha(in)
+func (s *CaptchaServer) SendEmailCaptcha(ctx context.Context, in *captcha_pb.SendEmailCaptchaReq) (*captcha_pb.SendEmailCaptchaResp, error) {
+	l := logic.NewSendEmailCaptchaLogic(ctx, s.svcCtx)
+	return l.SendEmailCaptcha(in)
 }
 
 // 校验邮箱验证码

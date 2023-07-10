@@ -72,7 +72,7 @@ func (p *AsynqConsumer) LuckydrawResultHandler(msg types.LuckydrawResultMsg) (er
 	//奖励积分
 	var awardScore int64 = 10
 
-	user, err := p.svcCtx.UserModel.FindOne(p.ctx, msg.UserId)
+	user, err := p.svcCtx.UserModel.FindById(p.ctx, msg.UserId)
 	if err != nil && err != model.ErrNotFound {
 		err = fmt.Errorf("find user error, err: %+v", err)
 		return

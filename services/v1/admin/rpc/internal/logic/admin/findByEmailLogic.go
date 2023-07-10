@@ -9,7 +9,6 @@ package adminlogic
 
 import (
 	"context"
-	"errors"
 	"mixbench/common/errorx"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
@@ -47,9 +46,9 @@ func (l *FindByEmailLogic) FindByEmail(in *admin_pb.FindByEmailReq) (*admin_pb.F
 		return nil, errorx.IntRpcErr(err)
 	}
 	//账户不存在
-	if err == model.ErrNotFound {
-		return nil, errorx.ExtRpcErr(errors.New("account does not exist"))
-	}
+	// if err == model.ErrNotFound {
+	// 	return nil, errorx.ExtRpcErr(errors.New("account does not exist"))
+	// }
 
 	return &admin_pb.FindByEmailResp{
 		Adminer: dataconv.MdAdminerToPbAdminer(adminer),

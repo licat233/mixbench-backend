@@ -9,6 +9,7 @@ import (
 	"path"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"gopkg.in/gomail.v2"
@@ -35,7 +36,10 @@ func init() {
 	}
 }
 
+// 注意，发送邮件会出现比较大的延迟，所以最好设置ctx
 func sendEmail(ctx context.Context, subject string, body string, receiver []string, headerParams map[string][]string) error {
+	newCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	msg := gomail.NewMessage()
 	msg.SetHeader("From", username)
 	msg.SetHeader("To", receiver...)
@@ -43,15 +47,20 @@ func sendEmail(ctx context.Context, subject string, body string, receiver []stri
 	for k, v := range headerParams {
 		msg.SetHeader(k, v...)
 	}
-	// 新建拨号器
-	dialer := gomail.NewDialer(host, port, username, password)
-	// 关闭SSL协议认证
-	dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
-	msg.SetBody("text/html", body)
-	if err := dialer.DialAndSend(msg); err != nil {
-		logx.WithContext(ctx).Error(fmt.Sprintf("email sending failed:%#+v", err))
-		return ErrEmailSendFailed
-	}
+
+	//发送邮件到邮箱，为了避免超时，交给协程去执行
+	go func() {
+		// 新建拨号器
+		dialer := gomail.NewDialer(host, port, username, password)
+		// 关闭SSL协议认证
+		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+		msg.SetBody("text/html", body)
+		if err := dialer.DialAndSend(msg); err != nil {
+			logx.WithContext(newCtx).Error(fmt.Sprintf("email sending failed:%#+v", err))
+			// return ErrEmailSendFailed
+		}
+	}()
+
 	return nil
 }
 
@@ -64,7 +73,7 @@ func genBody(ctx context.Context, htmlname string, data map[string]string) (stri
 	}
 	html := string(body)
 	for k, v := range data {
-		html = strings.Replace(html, k, v, -1)
+		html = strings.ReplaceAll(html, k, v)
 	}
 	return html, nil
 }

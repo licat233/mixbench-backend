@@ -62,7 +62,7 @@ func (m *customJwtBlacklistModel) Update(ctx context.Context, data *JwtBlacklist
 
 func (m *customJwtBlacklistModel) Delete(ctx context.Context, id int64) error {
 	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, id)
-	data, err := m.FindOne(ctx, id)
+	data, err := m.FindById(ctx, id)
 	if err != nil && err != ErrNotFound {
 		return err
 	}
@@ -85,7 +85,7 @@ func (m *customJwtBlacklistModel) FindCount(ctx context.Context) (int64, error) 
 }
 
 func (m *customJwtBlacklistModel) Exist(ctx context.Context, id int64) (bool, error) {
-	_, err := m.FindOne(ctx, id)
+	_, err := m.FindById(ctx, id)
 	if err != nil && err != ErrNotFound {
 		return false, err
 	}

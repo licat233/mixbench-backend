@@ -28,7 +28,7 @@ func NewGetIpblackLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetIpb
 }
 
 func (l *GetIpblackLogic) GetIpblack(req *types.GetIpblackReq) (any, error) {
-	mdIpblack, err := l.svcCtx.IpblackModel.FindOne(l.ctx, req.Id)
+	mdIpblack, err := l.svcCtx.IpblackModel.FindById(l.ctx, req.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error("failed to find ipblack, error: ", err)
 		return nil, errorx.InternalError(err)

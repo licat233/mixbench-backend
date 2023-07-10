@@ -28,7 +28,7 @@ func NewGetActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAc
 
 // 获取活动
 func (l *GetActivityLogic) GetActivity(in *luckydraw_pb.GetActivityReq) (*luckydraw_pb.GetActivityResp, error) {
-	res, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.ActivityModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

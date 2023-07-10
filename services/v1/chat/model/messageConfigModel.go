@@ -33,7 +33,7 @@ func NewMessageConfigModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.O
 }
 
 func (m *customMessageConfigModel) UpdateContent(ctx context.Context, Id int64, content string) error {
-	data, err := m.FindOne(ctx, Id)
+	data, err := m.FindById(ctx, Id)
 	if err != nil {
 		return err
 	}

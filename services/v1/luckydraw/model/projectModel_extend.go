@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var ProjectTableName = "project"
@@ -18,6 +19,7 @@ type project_model interface {
 	FindAll(ctx context.Context) ([]*Project, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, project *Project) (resp []*Project, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Project, error)
 	FindByUuid(ctx context.Context, uuid string) (*Project, error)
 	FindByName(ctx context.Context, name string) (*Project, error)
 	FindByStatus(ctx context.Context, status int64) (*Project, error)
@@ -103,6 +105,23 @@ func (m *defaultProjectModel) FindList(ctx context.Context, pageSize, page int64
 
 func (m *defaultProjectModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultProjectModel) FindById(ctx context.Context, id int64) (*Project, error) {
+	var resp Project
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", projectRows, m.table)
+	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, projectIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultProjectModel) FindByUuid(ctx context.Context, uuid string) (*Project, error) {

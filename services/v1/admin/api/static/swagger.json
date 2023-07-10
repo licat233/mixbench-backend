@@ -581,7 +581,7 @@
             "type": "string"
           },
           {
-            "name": "captcha_id",
+            "name": "captchaId",
             "description": "验证码ID",
             "in": "query",
             "required": true,
@@ -1482,7 +1482,7 @@
           "type": "string",
           "description": " 邮箱"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -1494,7 +1494,7 @@
       "title": "ForgotPasswordReq",
       "required": [
         "email",
-        "captcha_id",
+        "captchaId",
         "solution"
       ]
     },
@@ -1914,15 +1914,15 @@
     "PutPasswordReq": {
       "type": "object",
       "properties": {
-        "old_password": {
+        "oldPassword": {
           "type": "string",
           "description": " 旧密码"
         },
-        "new_password": {
+        "newPassword": {
           "type": "string",
           "description": " 新密码"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -1933,9 +1933,9 @@
       },
       "title": "PutPasswordReq",
       "required": [
-        "old_password",
-        "new_password",
-        "captcha_id",
+        "oldPassword",
+        "newPassword",
+        "captchaId",
         "solution"
       ]
     },
@@ -2044,7 +2044,7 @@
           "type": "string",
           "description": "邮箱地址"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -2068,7 +2068,7 @@
         "password": {
           "type": "string"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -2081,7 +2081,7 @@
       "required": [
         "username",
         "password",
-        "captcha_id",
+        "captchaId",
         "solution"
       ]
     },
@@ -2098,7 +2098,7 @@
           "default": "false",
           "description": "是否开启自动登录"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -2121,7 +2121,7 @@
           "type": "string",
           "description": "邮箱地址"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -2150,7 +2150,7 @@
           "format": "boolean",
           "default": "false"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },
@@ -2164,7 +2164,7 @@
         "passport",
         "password",
         "autoLogin",
-        "captcha_id",
+        "captchaId",
         "solution"
       ]
     },
@@ -2206,7 +2206,7 @@
           "type": "string",
           "description": "邮箱地址"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码ID"
         },

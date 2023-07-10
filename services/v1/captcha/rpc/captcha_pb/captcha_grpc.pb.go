@@ -27,7 +27,7 @@ type CaptchaClient interface {
 	// 校验验证码
 	VerifyCaptcha(ctx context.Context, in *VerifyCaptchaReq, opts ...grpc.CallOption) (*VerifyCaptchaResp, error)
 	// 获取邮箱验证码
-	GetEmailCaptcha(ctx context.Context, in *GetEmailCaptchaReq, opts ...grpc.CallOption) (*GetEmailCaptchaResp, error)
+	SendEmailCaptcha(ctx context.Context, in *SendEmailCaptchaReq, opts ...grpc.CallOption) (*SendEmailCaptchaResp, error)
 	// 校验邮箱验证码
 	AuthEmailCaptcha(ctx context.Context, in *AuthEmailCaptchaReq, opts ...grpc.CallOption) (*AuthEmailCaptchaResp, error)
 }
@@ -58,9 +58,9 @@ func (c *captchaClient) VerifyCaptcha(ctx context.Context, in *VerifyCaptchaReq,
 	return out, nil
 }
 
-func (c *captchaClient) GetEmailCaptcha(ctx context.Context, in *GetEmailCaptchaReq, opts ...grpc.CallOption) (*GetEmailCaptchaResp, error) {
-	out := new(GetEmailCaptchaResp)
-	err := c.cc.Invoke(ctx, "/captcha_proto.Captcha/GetEmailCaptcha", in, out, opts...)
+func (c *captchaClient) SendEmailCaptcha(ctx context.Context, in *SendEmailCaptchaReq, opts ...grpc.CallOption) (*SendEmailCaptchaResp, error) {
+	out := new(SendEmailCaptchaResp)
+	err := c.cc.Invoke(ctx, "/captcha_proto.Captcha/SendEmailCaptcha", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ type CaptchaServer interface {
 	// 校验验证码
 	VerifyCaptcha(context.Context, *VerifyCaptchaReq) (*VerifyCaptchaResp, error)
 	// 获取邮箱验证码
-	GetEmailCaptcha(context.Context, *GetEmailCaptchaReq) (*GetEmailCaptchaResp, error)
+	SendEmailCaptcha(context.Context, *SendEmailCaptchaReq) (*SendEmailCaptchaResp, error)
 	// 校验邮箱验证码
 	AuthEmailCaptcha(context.Context, *AuthEmailCaptchaReq) (*AuthEmailCaptchaResp, error)
 	mustEmbedUnimplementedCaptchaServer()
@@ -101,8 +101,8 @@ func (UnimplementedCaptchaServer) GetMathCaptcha(context.Context, *GetCaptchaReq
 func (UnimplementedCaptchaServer) VerifyCaptcha(context.Context, *VerifyCaptchaReq) (*VerifyCaptchaResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyCaptcha not implemented")
 }
-func (UnimplementedCaptchaServer) GetEmailCaptcha(context.Context, *GetEmailCaptchaReq) (*GetEmailCaptchaResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetEmailCaptcha not implemented")
+func (UnimplementedCaptchaServer) SendEmailCaptcha(context.Context, *SendEmailCaptchaReq) (*SendEmailCaptchaResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendEmailCaptcha not implemented")
 }
 func (UnimplementedCaptchaServer) AuthEmailCaptcha(context.Context, *AuthEmailCaptchaReq) (*AuthEmailCaptchaResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthEmailCaptcha not implemented")
@@ -156,20 +156,20 @@ func _Captcha_VerifyCaptcha_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Captcha_GetEmailCaptcha_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetEmailCaptchaReq)
+func _Captcha_SendEmailCaptcha_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendEmailCaptchaReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CaptchaServer).GetEmailCaptcha(ctx, in)
+		return srv.(CaptchaServer).SendEmailCaptcha(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/captcha_proto.Captcha/GetEmailCaptcha",
+		FullMethod: "/captcha_proto.Captcha/SendEmailCaptcha",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CaptchaServer).GetEmailCaptcha(ctx, req.(*GetEmailCaptchaReq))
+		return srv.(CaptchaServer).SendEmailCaptcha(ctx, req.(*SendEmailCaptchaReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -208,8 +208,8 @@ var Captcha_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Captcha_VerifyCaptcha_Handler,
 		},
 		{
-			MethodName: "GetEmailCaptcha",
-			Handler:    _Captcha_GetEmailCaptcha_Handler,
+			MethodName: "SendEmailCaptcha",
+			Handler:    _Captcha_SendEmailCaptcha_Handler,
 		},
 		{
 			MethodName: "AuthEmailCaptcha",

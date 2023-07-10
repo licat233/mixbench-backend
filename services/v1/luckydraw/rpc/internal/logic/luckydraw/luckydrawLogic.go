@@ -53,7 +53,7 @@ func (l *LuckydrawLogic) Luckydraw(in *luckydraw_pb.LuckydrawReq) (*luckydraw_pb
 		return nil, errorx.SecRpcErr(errors.New("request ip validator failed"))
 	}
 	//获取用户信息
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx, in.UserId)
+	user, err := l.svcCtx.UserModel.FindById(l.ctx, in.UserId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -67,7 +67,7 @@ func (l *LuckydrawLogic) Luckydraw(in *luckydraw_pb.LuckydrawReq) (*luckydraw_pb
 	}
 
 	//获取活动信息
-	mdActivity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
+	mdActivity, err := l.svcCtx.ActivityModel.FindById(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -139,7 +139,7 @@ func (l *LuckydrawLogic) Luckydraw(in *luckydraw_pb.LuckydrawReq) (*luckydraw_pb
 	*/
 
 	//查询是否是否中奖
-	grade, err := l.svcCtx.PrizeGradeModel.FindOne(l.ctx, PrizePool.GradeId)
+	grade, err := l.svcCtx.PrizeGradeModel.FindById(l.ctx, PrizePool.GradeId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
@@ -160,7 +160,7 @@ func (l *LuckydrawLogic) Luckydraw(in *luckydraw_pb.LuckydrawReq) (*luckydraw_pb
 	}
 
 	//获取奖品信息
-	mdPrize, err := l.svcCtx.PrizeModel.FindOne(l.ctx, PrizePool.PrizeId)
+	mdPrize, err := l.svcCtx.PrizeModel.FindById(l.ctx, PrizePool.PrizeId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -117,7 +117,7 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 				//合法性
 				if id > 0 {
 					//查一下这个id是否存在
-					visitor, err := l.svcCtx.VisitorModel.FindOne(l.ctx, id)
+					visitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, id)
 					if err != nil && err != model.ErrNotFound {
 						l.Logger.Error(err)
 						return nil, errorx.InternalError(err)
@@ -126,7 +126,7 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 					if err == nil {
 						visitorId = id
 						//查找项目是否还在
-						_, err = l.svcCtx.ProjectModel.FindOne(l.ctx, visitor.ProjectId)
+						_, err = l.svcCtx.ProjectModel.FindById(l.ctx, visitor.ProjectId)
 						if err != nil && err != model.ErrNotFound {
 							l.Logger.Error(err)
 							return nil, errorx.InternalError(err)
@@ -172,7 +172,7 @@ func (l *VisitorLoginLogic) isOldVisitor() (any, error) {
 	// 获取接待的客服id
 	var kefuId int64
 	// 获取其kefuId
-	visitor, err := l.svcCtx.VisitorModel.FindOne(l.ctx, l.id)
+	visitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, l.id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
@@ -276,7 +276,7 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 	}
 
 	//取出数据库中的记录
-	visitorMd, err := l.svcCtx.VisitorModel.FindOne(l.ctx, newId)
+	visitorMd, err := l.svcCtx.VisitorModel.FindById(l.ctx, newId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)

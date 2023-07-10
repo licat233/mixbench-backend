@@ -347,7 +347,7 @@ func (l *Hub) TransferVisitor(visitorId, kefuId int64) (err error) {
 	//如果不在线，就不用修改
 
 	//先判断该游客是否存在
-	visitor, err := l.SvcCtx.VisitorModel.FindOne(l.ctx, visitorId)
+	visitor, err := l.SvcCtx.VisitorModel.FindById(l.ctx, visitorId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return errorx.InternalError(err)
@@ -358,7 +358,7 @@ func (l *Hub) TransferVisitor(visitorId, kefuId int64) (err error) {
 	}
 
 	//先判断该客服是否存在
-	_, err = l.SvcCtx.KefuModel.FindOne(l.ctx, kefuId)
+	_, err = l.SvcCtx.KefuModel.FindById(l.ctx, kefuId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return errorx.InternalError(err)

@@ -81,6 +81,12 @@ func (l *AuthEmailCaptchaLogic) AuthEmailCaptcha(in *captcha_pb.AuthEmailCaptcha
 	//清除验证码
 	_ = l.svcCtx.CaptchaStore.Get(CaptchaId, true)
 
+	//同时清除redis中的映射数据
+	if _, e := l.svcCtx.RedisClient.DelCtx(l.ctx, key); e != nil {
+		l.Logger.Error(err)
+		return nil, errorx.IntRpcErr(err)
+	}
+
 	//返回
 	return &captcha_pb.AuthEmailCaptchaResp{
 		Success: ok,

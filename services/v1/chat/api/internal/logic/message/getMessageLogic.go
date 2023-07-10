@@ -28,7 +28,7 @@ func NewGetMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetMes
 }
 
 func (l *GetMessageLogic) GetMessage(req *types.GetMessageReq) (any, error) {
-	mdMessage, err := l.svcCtx.MessageModel.FindOne(l.ctx, req.Id)
+	mdMessage, err := l.svcCtx.MessageModel.FindById(l.ctx, req.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error("failed to find message, error: ", err)
 		return nil, errorx.InternalError(err)

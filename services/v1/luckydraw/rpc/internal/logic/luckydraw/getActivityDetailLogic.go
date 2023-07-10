@@ -36,7 +36,7 @@ func NewGetActivityDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 // 获取活动详细
 func (l *GetActivityDetailLogic) GetActivityDetail(in *luckydraw_pb.GetActivityDetailReq) (*luckydraw_pb.GetActivityDetailResp, error) {
-	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
+	activity, err := l.svcCtx.ActivityModel.FindById(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

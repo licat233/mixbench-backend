@@ -66,7 +66,7 @@ func (l *KefuLoginLogic) KefuLogin(req *types.KefuLoginReq) (any, error) {
 	}
 
 	//查找项目是否还在
-	_, err = l.svcCtx.ProjectModel.FindOne(l.ctx, kefu.ProjectId)
+	_, err = l.svcCtx.ProjectModel.FindById(l.ctx, kefu.ProjectId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)

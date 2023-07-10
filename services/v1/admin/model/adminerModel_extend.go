@@ -10,6 +10,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var AdminerTableName = "adminer"
@@ -19,6 +20,7 @@ type adminer_model interface {
 	FindAll(ctx context.Context) ([]*Adminer, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, adminer *Adminer) (resp []*Adminer, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Adminer, error)
 	FindByUuid(ctx context.Context, uuid string) (*Adminer, error)
 	FindByName(ctx context.Context, name string) (*Adminer, error)
 	FindByAvatar(ctx context.Context, avatar string) (*Adminer, error)
@@ -152,6 +154,23 @@ func (m *defaultAdminerModel) FindList(ctx context.Context, pageSize, page int64
 
 func (m *defaultAdminerModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultAdminerModel) FindById(ctx context.Context, id int64) (*Adminer, error) {
+	var resp Adminer
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
+	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, adminerIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultAdminerModel) FindByUuid(ctx context.Context, uuid string) (*Adminer, error) {

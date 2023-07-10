@@ -29,7 +29,7 @@ func NewResetLuckValueLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Re
 // 重置奖品幸运值
 func (l *ResetLuckValueLogic) ResetLuckValue(in *luckydraw_pb.ResetLuckValueReq) (*luckydraw_pb.StatusResp, error) {
 	//先验证活动信息是否正确
-	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
+	activity, err := l.svcCtx.ActivityModel.FindById(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

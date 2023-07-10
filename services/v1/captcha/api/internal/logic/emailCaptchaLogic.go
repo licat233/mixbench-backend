@@ -77,12 +77,12 @@ func (l *EmailCaptchaLogic) EmailCaptcha(req *types.EmailCaptchaReq) (any, error
 
 	adminer := adminerResp.Adminer
 	datetime := time.Now().Local().Format("2006-01-02 15:04:05")
-	ip := l.r.RemoteAddr
+	ip := utils.RemoteIp(l.r)
 
 	addrDetail := utils.QueryAddress(ip)
 	address := fmt.Sprintf("%s-%s-%s", addrDetail.Continent, addrDetail.Country, addrDetail.City)
 
-	resp, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
+	resp, err := l.svcCtx.CaptchaRpc.SendEmailCaptcha(l.ctx, &captcha_pb.SendEmailCaptchaReq{
 		Email:    email,
 		Account:  adminer.Passport,
 		Datetime: datetime,

@@ -28,7 +28,7 @@ func NewGetMessageConfigLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *GetMessageConfigLogic) GetMessageConfig(req *types.GetMessageConfigReq) (any, error) {
-	mdMessageConfig, err := l.svcCtx.MessageConfigModel.FindOne(l.ctx, req.Id)
+	mdMessageConfig, err := l.svcCtx.MessageConfigModel.FindById(l.ctx, req.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error("failed to find messageConfig, error: ", err)
 		return nil, errorx.InternalError(err)

@@ -58,4 +58,4 @@ services/v1/luckydraw/mq/**/*.go common/**/*.go {
 
 # ======================== luckydraw end ========================
 
-# backup time: 2023-06-17 16:04:08
+# backup time: 2023-07-10 11:50:50

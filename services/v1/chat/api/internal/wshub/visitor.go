@@ -66,7 +66,7 @@ func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *h
 	}
 
 	//查看是否存在该游客
-	visitor, err := c.hub.SvcCtx.VisitorModel.FindOne(c.ctx, id)
+	visitor, err := c.hub.SvcCtx.VisitorModel.FindById(c.ctx, id)
 	if err != nil && err != model.ErrNotFound {
 		c.Logger.Error(err)
 		return nil, err
@@ -77,7 +77,7 @@ func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *h
 	}
 
 	//查找是否存在该项目
-	_, err = c.hub.SvcCtx.ProjectModel.FindOne(c.ctx, visitor.ProjectId)
+	_, err = c.hub.SvcCtx.ProjectModel.FindById(c.ctx, visitor.ProjectId)
 	if err != nil && err != model.ErrNotFound {
 		c.Logger.Error(err)
 		return nil, err

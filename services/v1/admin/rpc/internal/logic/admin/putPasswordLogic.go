@@ -40,7 +40,7 @@ func (l *PutPasswordLogic) PutPassword(in *admin_pb.PutPasswordReq) (*admin_pb.S
 	if err != nil {
 		return nil, errorx.ExtRpcErr(err)
 	}
-	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.AdminerId)
+	adminer, err := l.svcCtx.AdminerModel.FindById(l.ctx, in.AdminerId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -28,7 +28,7 @@ func NewGetKefuLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetKefuLo
 }
 
 func (l *GetKefuLogic) GetKefu(req *types.GetKefuReq) (any, error) {
-	mdKefu, err := l.svcCtx.KefuModel.FindOne(l.ctx, req.Id)
+	mdKefu, err := l.svcCtx.KefuModel.FindById(l.ctx, req.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error("failed to find kefu, error: ", err)
 		return nil, errorx.InternalError(err)

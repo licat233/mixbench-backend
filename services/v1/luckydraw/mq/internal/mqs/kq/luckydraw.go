@@ -57,7 +57,7 @@ func (l *GoodluckStatusMq) execService(message types.LuckydrawResultMsg) (err er
 	//奖励积分
 	var awardScore int64 = 10
 
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx, message.UserId)
+	user, err := l.svcCtx.UserModel.FindById(l.ctx, message.UserId)
 	if err != nil && err != model.ErrNotFound {
 		err = fmt.Errorf("error finding user, err: %+v", err)
 		return

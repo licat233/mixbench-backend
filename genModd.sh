@@ -56,7 +56,7 @@ for service in ${service_list[*]}; do
         go_path="${micro_path}/${service}.go"
         yaml_name="${service}"
         yaml_path="${micro_path}/etc/${yaml_name}.yaml"
-        monitor_file="${micro_path}/**/*.go common/**/*.go"
+        monitor_file="${micro_path}/**/*.go ${service_path}/model/**/*.go common/**/*.go"
         prep="    prep: go build -o ${build_path} -v ${go_path}"
         daemon="    daemon +sigkill: ${build_path} -f ${yaml_path}"
         if [[ "$micro" = "api" ]]; then

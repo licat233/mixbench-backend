@@ -307,7 +307,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.User[lucky.UserId]; ok && v != nil {
 			user = v
 		} else {
-			user, err = m.UserModel.FindOne(ctx, lucky.UserId)
+			user, err = m.UserModel.FindById(ctx, lucky.UserId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -324,7 +324,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.PrizePool[lucky.PrizePoolId]; ok && v != nil {
 			prizesPool = v
 		} else {
-			prizesPool, err = m.PrizePoolModel.FindOne(ctx, lucky.PrizePoolId)
+			prizesPool, err = m.PrizePoolModel.FindById(ctx, lucky.PrizePoolId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -342,7 +342,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.PrizeGrade[prizesPool.GradeId]; ok && v != nil {
 			prizeGrade = v
 		} else {
-			prizeGrade, err = m.PrizeGradeModel.FindOne(ctx, prizesPool.GradeId)
+			prizeGrade, err = m.PrizeGradeModel.FindById(ctx, prizesPool.GradeId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -355,7 +355,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.Prize[prizesPool.PrizeId]; ok && v != nil {
 			prize = v
 		} else {
-			prize, err = m.PrizeModel.FindOne(ctx, prizesPool.PrizeId)
+			prize, err = m.PrizeModel.FindById(ctx, prizesPool.PrizeId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -368,7 +368,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.Activity[prizesPool.ActivityId]; ok && v != nil {
 			activity = v
 		} else {
-			activity, err = m.ActivityModel.FindOne(ctx, prizesPool.ActivityId)
+			activity, err = m.ActivityModel.FindById(ctx, prizesPool.ActivityId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -384,7 +384,7 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 		if v, ok := m.storage.Project[activity.ProjectId]; ok && v != nil {
 			project = v
 		} else {
-			project, err = m.ProjectModel.FindOne(ctx, activity.ProjectId)
+			project, err = m.ProjectModel.FindById(ctx, activity.ProjectId)
 			if err != nil && err != ErrNotFound {
 				return
 			}
@@ -413,42 +413,42 @@ func (m *CommonModel) QueryLuckyDetailsInfo2(ctx context.Context, luckyList []*L
 func (m *CommonModel) QueryLuckyDetailsInfo1(ctx context.Context, luckyList []*Lucky) (resp []*LuckyDetail, err error) {
 	for _, lucky := range luckyList {
 		//查询用户
-		user, e := m.UserModel.FindOne(ctx, lucky.UserId)
+		user, e := m.UserModel.FindById(ctx, lucky.UserId)
 		if e != nil && e != ErrNotFound {
 			err = e
 			return
 		}
 
 		//查询奖品池
-		prizesPool, e := m.PrizePoolModel.FindOne(ctx, lucky.PrizePoolId)
+		prizesPool, e := m.PrizePoolModel.FindById(ctx, lucky.PrizePoolId)
 		if e != nil && e != ErrNotFound {
 			err = e
 			return
 		}
 
 		//查询活动
-		activity, e := m.ActivityModel.FindOne(ctx, prizesPool.ActivityId)
+		activity, e := m.ActivityModel.FindById(ctx, prizesPool.ActivityId)
 		if e != nil && e != ErrNotFound {
 			err = e
 			return
 		}
 
 		//查询奖品
-		prize, e := m.PrizeModel.FindOne(ctx, prizesPool.PrizeId)
+		prize, e := m.PrizeModel.FindById(ctx, prizesPool.PrizeId)
 		if e != nil && e != ErrNotFound {
 			err = e
 			return
 		}
 
 		//查询获奖等级
-		prizeGrade, e := m.PrizeGradeModel.FindOne(ctx, prizesPool.GradeId)
+		prizeGrade, e := m.PrizeGradeModel.FindById(ctx, prizesPool.GradeId)
 		if e != nil && e != ErrNotFound {
 			err = e
 			return
 		}
 
 		//查询项目
-		project, e := m.ProjectModel.FindOne(ctx, activity.ProjectId)
+		project, e := m.ProjectModel.FindById(ctx, activity.ProjectId)
 		if e != nil && e != ErrNotFound {
 			err = e
 			return

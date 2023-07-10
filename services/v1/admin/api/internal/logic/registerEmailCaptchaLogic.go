@@ -70,7 +70,7 @@ func (l *RegisterEmailCaptchaLogic) RegisterEmailCaptcha(req *types.RegisterEmai
 	}
 
 	//开始发送邮件
-	result, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
+	result, err := l.svcCtx.CaptchaRpc.SendEmailCaptcha(l.ctx, &captcha_pb.SendEmailCaptchaReq{
 		Email: email,
 	})
 	if err != nil {

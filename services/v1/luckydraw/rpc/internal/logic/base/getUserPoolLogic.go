@@ -28,7 +28,7 @@ func NewGetUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 // 获取活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理
 func (l *GetUserPoolLogic) GetUserPool(in *luckydraw_pb.GetUserPoolReq) (*luckydraw_pb.GetUserPoolResp, error) {
-	res, err := l.svcCtx.UserPoolModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.UserPoolModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

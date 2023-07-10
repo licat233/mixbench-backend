@@ -28,7 +28,7 @@ func NewGetPrizePoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetP
 
 // 获取活动奖品池，某活动中的奖品信息
 func (l *GetPrizePoolLogic) GetPrizePool(in *luckydraw_pb.GetPrizePoolReq) (*luckydraw_pb.GetPrizePoolResp, error) {
-	res, err := l.svcCtx.PrizePoolModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.PrizePoolModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

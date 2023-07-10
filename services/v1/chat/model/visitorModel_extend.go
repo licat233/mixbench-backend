@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var VisitorTableName = "visitor"
@@ -18,6 +19,7 @@ type visitor_model interface {
 	FindAll(ctx context.Context) ([]*Visitor, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, visitor *Visitor) (resp []*Visitor, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Visitor, error)
 	FindByUuid(ctx context.Context, uuid string) (*Visitor, error)
 	FindByName(ctx context.Context, name string) (*Visitor, error)
 	FindByIp(ctx context.Context, ip string) (*Visitor, error)
@@ -163,6 +165,23 @@ func (m *defaultVisitorModel) FindList(ctx context.Context, pageSize, page int64
 
 func (m *defaultVisitorModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultVisitorModel) FindById(ctx context.Context, id int64) (*Visitor, error) {
+	var resp Visitor
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", visitorRows, m.table)
+	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, visitorIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultVisitorModel) FindByUuid(ctx context.Context, uuid string) (*Visitor, error) {

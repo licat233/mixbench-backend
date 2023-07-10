@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var KefuTableName = "kefu"
@@ -18,6 +19,7 @@ type kefu_model interface {
 	FindAll(ctx context.Context) ([]*Kefu, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, kefu *Kefu) (resp []*Kefu, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Kefu, error)
 	FindByUuid(ctx context.Context, uuid string) (*Kefu, error)
 	FindByProjectId(ctx context.Context, projectId int64) (*Kefu, error)
 	FindByPassport(ctx context.Context, passport string) (*Kefu, error)
@@ -116,6 +118,23 @@ func (m *defaultKefuModel) FindList(ctx context.Context, pageSize, page int64, k
 
 func (m *defaultKefuModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultKefuModel) FindById(ctx context.Context, id int64) (*Kefu, error) {
+	var resp Kefu
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", kefuRows, m.table)
+	kefuIdKey := fmt.Sprintf("%s%v", cacheKefuIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, kefuIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultKefuModel) FindByUuid(ctx context.Context, uuid string) (*Kefu, error) {

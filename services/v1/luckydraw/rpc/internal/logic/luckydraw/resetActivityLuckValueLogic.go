@@ -36,7 +36,7 @@ func NewResetActivityLuckValueLogic(ctx context.Context, svcCtx *svc.ServiceCont
 // 重置某活动奖品池的奖品运气值，传入一个即可，由于是危险操作，所以需要同时传入 uuid 和 id
 func (l *ResetActivityLuckValueLogic) ResetActivityLuckValue(in *luckydraw_pb.ResetActivityLuckValueReq) (*luckydraw_pb.StatusResp, error) {
 	//先验证活动信息是否正确
-	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
+	activity, err := l.svcCtx.ActivityModel.FindById(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

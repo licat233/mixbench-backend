@@ -28,7 +28,7 @@ func NewGetPrizeGradeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 
 // 获取奖品级别
 func (l *GetPrizeGradeLogic) GetPrizeGrade(in *luckydraw_pb.GetPrizeGradeReq) (*luckydraw_pb.GetPrizeGradeResp, error) {
-	res, err := l.svcCtx.PrizeGradeModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.PrizeGradeModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

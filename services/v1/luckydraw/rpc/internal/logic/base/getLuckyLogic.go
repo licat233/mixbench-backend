@@ -28,7 +28,7 @@ func NewGetLuckyLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetLucky
 
 // 获取中奖名单
 func (l *GetLuckyLogic) GetLucky(in *luckydraw_pb.GetLuckyReq) (*luckydraw_pb.GetLuckyResp, error) {
-	res, err := l.svcCtx.LuckyModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.LuckyModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

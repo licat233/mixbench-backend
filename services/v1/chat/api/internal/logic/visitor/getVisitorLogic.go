@@ -28,7 +28,7 @@ func NewGetVisitorLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetVis
 }
 
 func (l *GetVisitorLogic) GetVisitor(req *types.GetVisitorReq) (any, error) {
-	mdVisitor, err := l.svcCtx.VisitorModel.FindOne(l.ctx, req.Id)
+	mdVisitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, req.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error("failed to find visitor, error: ", err)
 		return nil, errorx.InternalError(err)

@@ -23,9 +23,9 @@ func formatEmailCaptchaKey(captchaId interface{}) string {
 	return fmt.Sprintf("%s:%v", CaptchaKeyPrefix, captchaId)
 }
 
-func formatEmailCaptchaReceiverKey(receiver any) string {
-	return fmt.Sprintf("captchaReceiver:%v", receiver)
-}
+// func formatEmailCaptchaReceiverKey(receiver any) string {
+// 	return fmt.Sprintf("captchaReceiver:%v", receiver)
+// }
 
 func generateDigitCaptcha(store base64Captcha.Store) (captchaId string, err error) {
 	defer func() {

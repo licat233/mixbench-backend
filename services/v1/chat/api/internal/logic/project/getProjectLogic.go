@@ -28,7 +28,7 @@ func NewGetProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPro
 }
 
 func (l *GetProjectLogic) GetProject(req *types.GetProjectReq) (any, error) {
-	mdProject, err := l.svcCtx.ProjectModel.FindOne(l.ctx, req.Id)
+	mdProject, err := l.svcCtx.ProjectModel.FindById(l.ctx, req.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error("failed to find project, error: ", err)
 		return nil, errorx.InternalError(err)

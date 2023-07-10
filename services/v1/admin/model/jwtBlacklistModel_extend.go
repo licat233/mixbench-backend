@@ -10,6 +10,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var JwtBlacklistTableName = "jwt_blacklist"
@@ -19,6 +20,7 @@ type jwtBlacklist_model interface {
 	FindAll(ctx context.Context) ([]*JwtBlacklist, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, jwtBlacklist *JwtBlacklist) (resp []*JwtBlacklist, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*JwtBlacklist, error)
 	FindByToken(ctx context.Context, token string) (*JwtBlacklist, error)
 	FindByPlatform(ctx context.Context, platform string) (*JwtBlacklist, error)
 	FindByIp(ctx context.Context, ip string) (*JwtBlacklist, error)
@@ -102,6 +104,23 @@ func (m *defaultJwtBlacklistModel) FindList(ctx context.Context, pageSize, page 
 
 func (m *defaultJwtBlacklistModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultJwtBlacklistModel) FindById(ctx context.Context, id int64) (*JwtBlacklist, error) {
+	var resp JwtBlacklist
+	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", jwtBlacklistRows, m.table)
+	jwtBlacklistIdKey := fmt.Sprintf("%s%v", cacheJwtBlacklistIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, jwtBlacklistIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultJwtBlacklistModel) FindByToken(ctx context.Context, token string) (*JwtBlacklist, error) {

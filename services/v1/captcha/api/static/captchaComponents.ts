@@ -36,29 +36,29 @@ export interface CaptchaReq {
 }
 
 export interface EmailCaptchaReq {
-	captcha_id: string
+	captchaId: string
 	solution: string
 	email: string // 接收验证码的邮箱地址
 }
 
 export interface EmailCaptchaResp {
-	captcha_id: string
-	expires_at: number
+	captchaId: string
+	expiresAt: number
 }
 
 export interface EmailCaptchaVerifyReq {
 	email: string
-	captcha_id: string
+	captchaId: string
 	solution: string
 }
 
 export interface CaptchaInfo {
-	captcha_id: string // 验证码Key
-	base64_image: string // base46图片数据
+	captchaId: string // 验证码Key
+	base64Image: string // base46图片数据
 }
 
 export interface ProcessCaptchaReq {
-	captcha_id: string
+	captchaId: string
 	solution: string
 }
 

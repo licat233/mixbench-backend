@@ -18,7 +18,7 @@ func loginEmailCaptchaHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewLoginEmailCaptchaLogic(r.Context(), svcCtx)
+		l := logic.NewLoginEmailCaptchaLogic(r.Context(), svcCtx, r)
 		resp, err := l.LoginEmailCaptcha(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

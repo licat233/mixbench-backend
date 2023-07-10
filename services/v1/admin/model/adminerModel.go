@@ -17,6 +17,7 @@ type (
 		adminerModel  // extended interface by gozero
 		adminer_model // extended interface by genzero
 		ExistsByEmail(ctx context.Context, email string) (bool, error)
+		CountByEmail(ctx context.Context, email string) (int64, error)
 	}
 
 	customAdminerModel struct {
@@ -34,6 +35,13 @@ func NewAdminerModel(conn sqlx.SqlConn, c cache.CacheConf) AdminerModel {
 func (m *customAdminerModel) ExistsByEmail(ctx context.Context, email string) (bool, error) {
 	var count int64
 	query := fmt.Sprintf("select count(*) as count from %s where `email` = ? limit 1", m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &count, query, email)
+	err := m.QueryRowNoCacheCtx(ctx, &count, query, email)
 	return count != 0, err
+}
+
+func (m *customAdminerModel) CountByEmail(ctx context.Context, email string) (int64, error) {
+	var res int64
+	query := fmt.Sprintf("select count(*) from %s where `email` = ?", m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &res, query, email)
+	return res, err
 }

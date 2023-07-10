@@ -31,29 +31,29 @@ type CaptchaReq struct {
 }
 
 type EmailCaptchaReq struct {
-	CaptchaId string `json:"captcha_id"`
+	CaptchaId string `json:"captchaId"`
 	Solution  string `json:"solution"`
 	Email     string `json:"email"` //接收验证码的邮箱地址
 }
 
 type EmailCaptchaResp struct {
-	CaptchaId string `json:"captcha_id"`
-	ExpiresAt int64  `json:"expires_at"`
+	CaptchaId string `json:"captchaId"`
+	ExpiresAt int64  `json:"expiresAt"`
 }
 
 type EmailCaptchaVerifyReq struct {
 	Email     string `json:"email"`
-	CaptchaId string `json:"captcha_id"`
+	CaptchaId string `json:"captchaId"`
 	Solution  string `json:"solution"`
 }
 
 type CaptchaInfo struct {
-	CaptchaId   string `json:"captcha_id"`   //验证码Key
-	Base64Image string `json:"base64_image"` //base46图片数据
+	CaptchaId   string `json:"captchaId"`   //验证码Key
+	Base64Image string `json:"base64Image"` //base46图片数据
 }
 
 type ProcessCaptchaReq struct {
-	CaptchaId string `json:"captcha_id"`
+	CaptchaId string `json:"captchaId"`
 	Solution  string `json:"solution"`
 }
 

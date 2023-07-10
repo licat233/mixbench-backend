@@ -28,7 +28,7 @@ func NewGetPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPrize
 
 // 获取奖品名单
 func (l *GetPrizeLogic) GetPrize(in *luckydraw_pb.GetPrizeReq) (*luckydraw_pb.GetPrizeResp, error) {
-	res, err := l.svcCtx.PrizeModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.PrizeModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

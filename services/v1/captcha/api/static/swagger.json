@@ -272,19 +272,19 @@
     "CaptchaInfo": {
       "type": "object",
       "properties": {
-        "captcha_id": {
+        "captchaId": {
           "type": "string",
           "description": "验证码Key"
         },
-        "base64_image": {
+        "base64Image": {
           "type": "string",
           "description": "base46图片数据"
         }
       },
       "title": "CaptchaInfo",
       "required": [
-        "captcha_id",
-        "base64_image"
+        "captchaId",
+        "base64Image"
       ]
     },
     "CaptchaReq": {
@@ -312,7 +312,7 @@
     "EmailCaptchaReq": {
       "type": "object",
       "properties": {
-        "captcha_id": {
+        "captchaId": {
           "type": "string"
         },
         "solution": {
@@ -325,7 +325,7 @@
       },
       "title": "EmailCaptchaReq",
       "required": [
-        "captcha_id",
+        "captchaId",
         "solution",
         "email"
       ]
@@ -333,18 +333,18 @@
     "EmailCaptchaResp": {
       "type": "object",
       "properties": {
-        "captcha_id": {
+        "captchaId": {
           "type": "string"
         },
-        "expires_at": {
+        "expiresAt": {
           "type": "integer",
           "format": "int64"
         }
       },
       "title": "EmailCaptchaResp",
       "required": [
-        "captcha_id",
-        "expires_at"
+        "captchaId",
+        "expiresAt"
       ]
     },
     "EmailCaptchaVerifyReq": {
@@ -353,7 +353,7 @@
         "email": {
           "type": "string"
         },
-        "captcha_id": {
+        "captchaId": {
           "type": "string"
         },
         "solution": {
@@ -363,14 +363,14 @@
       "title": "EmailCaptchaVerifyReq",
       "required": [
         "email",
-        "captcha_id",
+        "captchaId",
         "solution"
       ]
     },
     "ProcessCaptchaReq": {
       "type": "object",
       "properties": {
-        "captcha_id": {
+        "captchaId": {
           "type": "string"
         },
         "solution": {
@@ -379,7 +379,7 @@
       },
       "title": "ProcessCaptchaReq",
       "required": [
-        "captcha_id",
+        "captchaId",
         "solution"
       ]
     },

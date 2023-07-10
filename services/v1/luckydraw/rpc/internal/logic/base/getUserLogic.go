@@ -28,7 +28,7 @@ func NewGetUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserLo
 
 // 获取用户名单
 func (l *GetUserLogic) GetUser(in *luckydraw_pb.GetUserReq) (*luckydraw_pb.GetUserResp, error) {
-	res, err := l.svcCtx.UserModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.UserModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

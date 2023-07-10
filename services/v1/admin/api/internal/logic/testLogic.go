@@ -1,20 +1,16 @@
-/*
- * @Author: licat
- * @Date: 2023-02-17 15:41:34
- * @LastEditors: licat
- * @LastEditTime: 2023-02-20 12:25:21
- * @Description: licat233@gmail.com
- */
 package logic
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"time"
 
 	"mixbench/common/respx"
+	"mixbench/common/utils"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
-	"mixbench/services/v1/admin/rpc/admin_pb"
+	"mixbench/services/v1/captcha/rpc/captcha_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -38,15 +34,19 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext, w http.Respon
 }
 
 func (l *TestLogic) Test(req *types.TestReq) (any, error) {
-	data := req.Data
-	if data == "" {
-		data = "test successful"
-	}
-	resp, err := l.svcCtx.AdminRpc.Test(l.ctx, &admin_pb.TestReq{
-		Data: data,
+	ip := utils.RemoteIp(l.r)
+
+	addrDetail := utils.QueryAddress(ip)
+	address := fmt.Sprintf("%s-%s-%s", addrDetail.Continent, addrDetail.Country, addrDetail.City)
+	resp, err := l.svcCtx.CaptchaRpc.SendEmailCaptcha(l.ctx, &captcha_pb.SendEmailCaptchaReq{
+		Email:    "1697470538@qq.com",
+		Account:  "licat233",
+		Datetime: time.Now().Local().Format("2006-01-02 15:04:05"),
+		Address:  address,
+		Ip:       ip,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return respx.DefaultSingleResp(resp.Data, nil)
+	return respx.DefaultSingleResp(resp, nil)
 }

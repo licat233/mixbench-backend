@@ -59,7 +59,7 @@ func (l *GetUserLuckyDetailLogic) GetUserLuckyDetail(in *luckydraw_pb.GetUserLuc
 		user = tools.MdUserToPbUser(mdUser)
 	} else if in.UserId > 0 {
 		// 查询用户是否存在
-		mdUser, err := l.svcCtx.UserModel.FindOne(l.ctx, in.UserId)
+		mdUser, err := l.svcCtx.UserModel.FindById(l.ctx, in.UserId)
 		if err != nil && err != model.ErrNotFound {
 			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)

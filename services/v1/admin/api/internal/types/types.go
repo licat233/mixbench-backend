@@ -83,33 +83,33 @@ type LoginReq struct {
 	Passport  string `json:"passport"`
 	Password  string `json:"password"`
 	AutoLogin bool   `json:"autoLogin,default=false"`
-	CaptchaId string `json:"captcha_id"` //验证码ID
-	Solution  string `json:"solution"`   //验证码答案
+	CaptchaId string `json:"captchaId"` //验证码ID
+	Solution  string `json:"solution"`  //验证码答案
 }
 
 type LoginByEmailReq struct {
 	Email     string `json:"email"`                   //邮箱地址
 	AutoLogin bool   `json:"autoLogin,default=false"` //是否开启自动登录
-	CaptchaId string `json:"captcha_id,optional"`     //验证码ID
+	CaptchaId string `json:"captchaId,optional"`      //验证码ID
 	Solution  string `json:"solution"`                //验证码答案
 }
 
 type LoginEmailCaptchaReq struct {
-	Email     string `json:"email"`               //邮箱地址
-	CaptchaId string `json:"captcha_id,optional"` //验证码ID
-	Solution  string `json:"solution"`            //验证码答案
+	Email     string `json:"email"`              //邮箱地址
+	CaptchaId string `json:"captchaId,optional"` //验证码ID
+	Solution  string `json:"solution"`           //验证码答案
 }
 
 type RegisterEmailCaptchaReq struct {
-	Email     string `json:"email"`               //邮箱地址
-	CaptchaId string `json:"captcha_id,optional"` //验证码ID
-	Solution  string `json:"solution"`            //验证码答案
+	Email     string `json:"email"`              //邮箱地址
+	CaptchaId string `json:"captchaId,optional"` //验证码ID
+	Solution  string `json:"solution"`           //验证码答案
 }
 
 type BindEmailCaptchaReq struct {
-	Email     string `json:"email"`               //邮箱地址
-	CaptchaId string `json:"captcha_id,optional"` //验证码ID
-	Solution  string `json:"solution"`            //验证码答案
+	Email     string `json:"email"`              //邮箱地址
+	CaptchaId string `json:"captchaId,optional"` //验证码ID
+	Solution  string `json:"solution"`           //验证码答案
 }
 
 type TestReq struct {
@@ -128,8 +128,8 @@ type PwdCompareReq struct {
 type DevPanelLoginReq struct {
 	Username  string `json:"username"`
 	Password  string `json:"password"`
-	CaptchaId string `json:"captcha_id"` //验证码ID
-	Solution  string `json:"solution"`   //验证码答案
+	CaptchaId string `json:"captchaId"` //验证码ID
+	Solution  string `json:"solution"`  //验证码答案
 }
 
 type Adminer struct {
@@ -218,16 +218,16 @@ type VerifyPasswordReq struct {
 }
 
 type PutPasswordReq struct {
-	OldPassword string `json:"old_password"` // 旧密码
-	NewPassword string `json:"new_password"` // 新密码
-	CaptchaId   string `json:"captcha_id"`   //验证码ID
-	Solution    string `json:"solution"`     //验证码答案
+	OldPassword string `json:"oldPassword"` // 旧密码
+	NewPassword string `json:"newPassword"` // 新密码
+	CaptchaId   string `json:"captchaId"`   //验证码ID
+	Solution    string `json:"solution"`    //验证码答案
 }
 
 type ForgotPasswordReq struct {
-	Email     string `json:"email"`      // 邮箱
-	CaptchaId string `json:"captcha_id"` //验证码ID
-	Solution  string `json:"solution"`   //验证码答案
+	Email     string `json:"email"`     // 邮箱
+	CaptchaId string `json:"captchaId"` //验证码ID
+	Solution  string `json:"solution"`  //验证码答案
 }
 
 type Project struct {

@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var PrizeGradeTableName = "prize_grade"
@@ -18,6 +19,7 @@ type prizeGrade_model interface {
 	FindAll(ctx context.Context) ([]*PrizeGrade, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, prizeGrade *PrizeGrade) (resp []*PrizeGrade, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*PrizeGrade, error)
 	FindByUuid(ctx context.Context, uuid string) (*PrizeGrade, error)
 	FindByName(ctx context.Context, name string) (*PrizeGrade, error)
 	FindByIsWin(ctx context.Context, isWin int64) (*PrizeGrade, error)
@@ -103,6 +105,23 @@ func (m *defaultPrizeGradeModel) FindList(ctx context.Context, pageSize, page in
 
 func (m *defaultPrizeGradeModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultPrizeGradeModel) FindById(ctx context.Context, id int64) (*PrizeGrade, error) {
+	var resp PrizeGrade
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", prizeGradeRows, m.table)
+	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, prizeGradeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultPrizeGradeModel) FindByUuid(ctx context.Context, uuid string) (*PrizeGrade, error) {

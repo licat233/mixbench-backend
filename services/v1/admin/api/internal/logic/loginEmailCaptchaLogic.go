@@ -9,10 +9,14 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 	"strings"
+	"time"
 
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
+	"mixbench/common/utils"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
 	"mixbench/services/v1/admin/rpc/admin_pb"
@@ -26,13 +30,15 @@ type LoginEmailCaptchaLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewLoginEmailCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginEmailCaptchaLogic {
+func NewLoginEmailCaptchaLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *LoginEmailCaptchaLogic {
 	return &LoginEmailCaptchaLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
@@ -58,20 +64,29 @@ func (l *LoginEmailCaptchaLogic) LoginEmailCaptcha(req *types.LoginEmailCaptchaR
 		return nil, errorx.Alert("captcha auth failed")
 	}
 
-	//检查该邮箱是否存在
-	resp, err := l.svcCtx.AdminRpc.ExistsEmail(l.ctx, &admin_pb.ExistsEmailReq{
+	// 检查邮箱是否已注册
+	adminerResp, err := l.svcCtx.AdminRpc.FindByEmail(l.ctx, &admin_pb.FindByEmailReq{
 		Email: email,
 	})
 	if err != nil {
 		return nil, err
 	}
-	if !resp.Exists {
+	if adminerResp.Adminer == nil {
 		return nil, errorx.Alert("This email is not registered")
 	}
 
+	ip := utils.RemoteIp(l.r)
+
+	addrDetail := utils.QueryAddress(ip)
+	address := fmt.Sprintf("%s-%s-%s", addrDetail.Continent, addrDetail.Country, addrDetail.City)
+
 	//开始发送邮件
-	result, err := l.svcCtx.CaptchaRpc.GetEmailCaptcha(l.ctx, &captcha_pb.GetEmailCaptchaReq{
-		Email: email,
+	result, err := l.svcCtx.CaptchaRpc.SendEmailCaptcha(l.ctx, &captcha_pb.SendEmailCaptchaReq{
+		Email:    email,
+		Account:  adminerResp.Adminer.Passport,
+		Datetime: time.Now().Local().Format("2006-01-02 15:04:05"),
+		Address:  address,
+		Ip:       ip,
 	})
 	if err != nil {
 		return nil, err

@@ -86,32 +86,32 @@ export interface LoginReq {
 	passport: string
 	password: string
 	autoLogin: boolean
-	captcha_id: string // 验证码ID
+	captchaId: string // 验证码ID
 	solution: string // 验证码答案
 }
 
 export interface LoginByEmailReq {
 	email: string // 邮箱地址
 	autoLogin: boolean // 是否开启自动登录
-	captcha_id?: string // 验证码ID
+	captchaId?: string // 验证码ID
 	solution: string // 验证码答案
 }
 
 export interface LoginEmailCaptchaReq {
 	email: string // 邮箱地址
-	captcha_id?: string // 验证码ID
+	captchaId?: string // 验证码ID
 	solution: string // 验证码答案
 }
 
 export interface RegisterEmailCaptchaReq {
 	email: string // 邮箱地址
-	captcha_id?: string // 验证码ID
+	captchaId?: string // 验证码ID
 	solution: string // 验证码答案
 }
 
 export interface BindEmailCaptchaReq {
 	email: string // 邮箱地址
-	captcha_id?: string // 验证码ID
+	captchaId?: string // 验证码ID
 	solution: string // 验证码答案
 }
 
@@ -137,7 +137,7 @@ export interface PwdCompareReqParams {
 export interface DevPanelLoginReq {
 	username: string
 	password: string
-	captcha_id: string // 验证码ID
+	captchaId: string // 验证码ID
 	solution: string // 验证码答案
 }
 
@@ -229,17 +229,17 @@ export interface VerifyPasswordReq {
 }
 
 export interface PutPasswordReq {
-	old_password: string // 旧密码
-	new_password: string // 新密码
+	oldPassword: string // 旧密码
+	newPassword: string // 新密码
 	//附加的验证码
-	captcha_id: string // 验证码ID
+	captchaId: string // 验证码ID
 	solution: string // 验证码答案
 }
 
 export interface ForgotPasswordReq {
 	email: string // 邮箱
 	//附加的验证码
-	captcha_id: string // 验证码ID
+	captchaId: string // 验证码ID
 	solution: string // 验证码答案
 }
 

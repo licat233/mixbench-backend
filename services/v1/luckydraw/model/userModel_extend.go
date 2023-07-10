@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var UserTableName = "user"
@@ -18,6 +19,7 @@ type user_model interface {
 	FindAll(ctx context.Context) ([]*User, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, user *User) (resp []*User, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*User, error)
 	FindByUuid(ctx context.Context, uuid string) (*User, error)
 	FindByPassport(ctx context.Context, passport string) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
@@ -133,6 +135,23 @@ func (m *defaultUserModel) FindList(ctx context.Context, pageSize, page int64, k
 
 func (m *defaultUserModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultUserModel) FindById(ctx context.Context, id int64) (*User, error) {
+	var resp User
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", userRows, m.table)
+	userIdKey := fmt.Sprintf("%s%v", cacheUserIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, userIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultUserModel) FindByUuid(ctx context.Context, uuid string) (*User, error) {

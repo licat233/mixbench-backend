@@ -10,6 +10,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var MessageTableName = "message"
@@ -19,6 +20,7 @@ type message_model interface {
 	FindAll(ctx context.Context) ([]*Message, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, message *Message) (resp []*Message, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Message, error)
 	FindByUuid(ctx context.Context, uuid string) (*Message, error)
 	FindByContent(ctx context.Context, content string) (*Message, error)
 	FindByContentType(ctx context.Context, contentType int64) (*Message, error)
@@ -153,6 +155,23 @@ func (m *defaultMessageModel) FindList(ctx context.Context, pageSize, page int64
 
 func (m *defaultMessageModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultMessageModel) FindById(ctx context.Context, id int64) (*Message, error) {
+	var resp Message
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", messageRows, m.table)
+	messageIdKey := fmt.Sprintf("%s%v", cacheMessageIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, messageIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultMessageModel) FindByUuid(ctx context.Context, uuid string) (*Message, error) {

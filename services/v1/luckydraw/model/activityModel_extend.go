@@ -10,6 +10,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var ActivityTableName = "activity"
@@ -19,6 +20,7 @@ type activity_model interface {
 	FindAll(ctx context.Context) ([]*Activity, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, activity *Activity) (resp []*Activity, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Activity, error)
 	FindByUuid(ctx context.Context, uuid string) (*Activity, error)
 	FindByName(ctx context.Context, name string) (*Activity, error)
 	FindByProjectId(ctx context.Context, projectId int64) (*Activity, error)
@@ -104,10 +106,10 @@ func (m *defaultActivityModel) FindList(ctx context.Context, pageSize, page int6
 		if activity.MaxPrizes >= 0 {
 			sq = sq.Where("`max_prizes` = ?", activity.MaxPrizes)
 		}
-		if activity.StartTime.IsZero() {
+		if !activity.StartTime.IsZero() {
 			sq = sq.Where("`start_time` = ?", activity.StartTime.Format("2006-01-02 15:04:05"))
 		}
-		if activity.EndTime.IsZero() {
+		if !activity.EndTime.IsZero() {
 			sq = sq.Where("`end_time` = ?", activity.EndTime.Format("2006-01-02 15:04:05"))
 		}
 	}
@@ -140,6 +142,23 @@ func (m *defaultActivityModel) FindList(ctx context.Context, pageSize, page int6
 
 func (m *defaultActivityModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultActivityModel) FindById(ctx context.Context, id int64) (*Activity, error) {
+	var resp Activity
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", activityRows, m.table)
+	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, activityIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultActivityModel) FindByUuid(ctx context.Context, uuid string) (*Activity, error) {

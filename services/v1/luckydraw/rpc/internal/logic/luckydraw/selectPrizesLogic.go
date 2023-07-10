@@ -34,7 +34,7 @@ func (l *SelectPrizesLogic) SelectPrizes(in *luckydraw_pb.SelectPrizesReq) (*luc
 		return nil, errorx.SecRpcErr(errors.New("luckerUuids len = 0"))
 	}
 	//查询是否存在该活动
-	activity, err := l.svcCtx.ActivityModel.FindOne(l.ctx, in.ActivityId)
+	activity, err := l.svcCtx.ActivityModel.FindById(l.ctx, in.ActivityId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

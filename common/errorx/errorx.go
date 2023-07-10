@@ -365,7 +365,7 @@ func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
 	default:
 		//未知错误，可能是panic引起的，内部错误，不抛给前端
 		//记录一下
-		err := fmt.Errorf("未知错误，可能是panic引起的: %+v", statusErr.Message())
+		err := fmt.Errorf("未知错误: %+v", statusErr.Message())
 		logx.WithContext(context.Background()).Error(err)
 		errorx = internalError(ServerErrorMsg, err)
 	}

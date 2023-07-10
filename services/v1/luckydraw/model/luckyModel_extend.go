@@ -10,6 +10,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var LuckyTableName = "lucky"
@@ -19,6 +20,7 @@ type lucky_model interface {
 	FindAll(ctx context.Context) ([]*Lucky, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, lucky *Lucky) (resp []*Lucky, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Lucky, error)
 	FindByUuid(ctx context.Context, uuid string) (*Lucky, error)
 	FindByUserId(ctx context.Context, userId int64) (*Lucky, error)
 	FindByPrizePoolId(ctx context.Context, prizePoolId int64) (*Lucky, error)
@@ -84,7 +86,7 @@ func (m *defaultLuckyModel) FindList(ctx context.Context, pageSize, page int64, 
 		if lucky.Status >= 0 {
 			sq = sq.Where("`status` = ?", lucky.Status)
 		}
-		if lucky.LuckDate.IsZero() {
+		if !lucky.LuckDate.IsZero() {
 			sq = sq.Where("`luck_date` = ?", lucky.LuckDate.Format("2006-01-02 15:04:05"))
 		}
 		if lucky.Ip != "" {
@@ -117,6 +119,23 @@ func (m *defaultLuckyModel) FindList(ctx context.Context, pageSize, page int64, 
 
 func (m *defaultLuckyModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultLuckyModel) FindById(ctx context.Context, id int64) (*Lucky, error) {
+	var resp Lucky
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", luckyRows, m.table)
+	luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, luckyIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultLuckyModel) FindByUuid(ctx context.Context, uuid string) (*Lucky, error) {

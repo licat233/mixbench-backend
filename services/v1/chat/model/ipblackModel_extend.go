@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var IpblackTableName = "ipblack"
@@ -18,6 +19,7 @@ type ipblack_model interface {
 	FindAll(ctx context.Context) ([]*Ipblack, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, ipblack *Ipblack) (resp []*Ipblack, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*Ipblack, error)
 	FindByIp(ctx context.Context, ip string) (*Ipblack, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Ipblack, error)
 	FindsByIps(ctx context.Context, ips []string) ([]*Ipblack, error)
@@ -85,6 +87,23 @@ func (m *defaultIpblackModel) FindList(ctx context.Context, pageSize, page int64
 
 func (m *defaultIpblackModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultIpblackModel) FindById(ctx context.Context, id int64) (*Ipblack, error) {
+	var resp Ipblack
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' limit 1", ipblackRows, m.table)
+	ipblackIdKey := fmt.Sprintf("%s%v", cacheIpblackIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, ipblackIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultIpblackModel) FindByIp(ctx context.Context, ip string) (*Ipblack, error) {

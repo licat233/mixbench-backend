@@ -36,7 +36,7 @@ func NewVerifyPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ve
 
 // 验证管理员密码
 func (l *VerifyPasswordLogic) VerifyPassword(in *admin_pb.VerifyPasswordReq) (*admin_pb.VerifyPasswordResp, error) {
-	adminer, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.AdminerId)
+	adminer, err := l.svcCtx.AdminerModel.FindById(l.ctx, in.AdminerId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

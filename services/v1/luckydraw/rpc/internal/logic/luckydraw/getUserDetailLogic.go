@@ -36,7 +36,7 @@ func NewGetUserDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Get
 
 // 获取用户详细
 func (l *GetUserDetailLogic) GetUserDetail(in *luckydraw_pb.GetUserDetailReq) (*luckydraw_pb.GetUserDetailResp, error) {
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx, in.UserId)
+	user, err := l.svcCtx.UserModel.FindById(l.ctx, in.UserId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

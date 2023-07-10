@@ -95,7 +95,7 @@ func AuthLogic(ctx context.Context, r *http.Request, config config.Config, admin
 		return nil, errorx.ErrAuth
 	}
 
-	adminer, err := adminerModel.FindOne(ctx, int64(uid))
+	adminer, err := adminerModel.FindById(ctx, int64(uid))
 	if err != nil && err != model.ErrNotFound {
 		logx.WithContext(ctx).Error(err)
 		return nil, errorx.InternalError(err)

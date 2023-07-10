@@ -49,33 +49,33 @@ type CaptchaReq {
 
 //获取邮箱验证码请求
 type EmailCaptchaReq {
-	CaptchaId string `json:"captcha_id"`
+	CaptchaId string `json:"captchaId"`
 	Solution  string `json:"solution"`
 	Email     string `json:"email"` //接收验证码的邮箱地址
 }
 
 //获取邮箱验证码响应
 type EmailCaptchaResp {
-	CaptchaId string `json:"captcha_id"`
-	ExpiresAt int64  `json:"expires_at"`
+	CaptchaId string `json:"captchaId"`
+	ExpiresAt int64  `json:"expiresAt"`
 }
 
 //邮箱验证码校验请求
 type EmailCaptchaVerifyReq {
 	Email     string `json:"email"`
-	CaptchaId string `json:"captcha_id"`
+	CaptchaId string `json:"captchaId"`
 	Solution  string `json:"solution"`
 }
 
 //图片验证码信息
 type CaptchaInfo {
-	CaptchaId   string `json:"captcha_id"`   //验证码Key
-	Base64Image string `json:"base64_image"` //base46图片数据
+	CaptchaId   string `json:"captchaId"`   //验证码Key
+	Base64Image string `json:"base64Image"` //base46图片数据
 }
 
 //校验验证码请求
 type ProcessCaptchaReq {
-	CaptchaId string `json:"captcha_id"`
+	CaptchaId string `json:"captchaId"`
 	Solution  string `json:"solution"`
 }
 

@@ -9,6 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 var MessageConfigTableName = "message_config"
@@ -18,6 +19,7 @@ type messageConfig_model interface {
 	FindAll(ctx context.Context) ([]*MessageConfig, error)
 	FindList(ctx context.Context, pageSize, page int64, keyword string, messageConfig *MessageConfig) (resp []*MessageConfig, total int64, err error)
 	TableName() string
+	FindById(ctx context.Context, id int64) (*MessageConfig, error)
 	FindByProjectId(ctx context.Context, projectId int64) (*MessageConfig, error)
 	FindByName(ctx context.Context, name string) (*MessageConfig, error)
 	FindByMsgkey(ctx context.Context, msgkey string) (*MessageConfig, error)
@@ -106,6 +108,23 @@ func (m *defaultMessageConfigModel) FindList(ctx context.Context, pageSize, page
 
 func (m *defaultMessageConfigModel) TableName() string {
 	return m.table
+}
+
+func (m *defaultMessageConfigModel) FindById(ctx context.Context, id int64) (*MessageConfig, error) {
+	var resp MessageConfig
+	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", messageConfigRows, m.table)
+	messageConfigIdKey := fmt.Sprintf("%s%v", cacheMessageConfigIdPrefix, id)
+	err := m.QueryRowCtx(ctx, &resp, messageConfigIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		return conn.QueryRowCtx(ctx, v, query, id)
+	})
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultMessageConfigModel) FindByProjectId(ctx context.Context, projectId int64) (*MessageConfig, error) {

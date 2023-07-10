@@ -65,7 +65,7 @@ func NewKefuClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http
 	}
 
 	//查找是否存在该客服
-	kefu, err := c.hub.SvcCtx.KefuModel.FindOne(c.ctx, id)
+	kefu, err := c.hub.SvcCtx.KefuModel.FindById(c.ctx, id)
 	if err != nil && err != model.ErrNotFound {
 		c.Logger.Error(err)
 		return nil, err
@@ -76,7 +76,7 @@ func NewKefuClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http
 	}
 
 	//查找是否存在该项目
-	_, err = c.hub.SvcCtx.ProjectModel.FindOne(c.ctx, kefu.ProjectId)
+	_, err = c.hub.SvcCtx.ProjectModel.FindById(c.ctx, kefu.ProjectId)
 	if err != nil && err != model.ErrNotFound {
 		c.Logger.Error(err)
 		return nil, err

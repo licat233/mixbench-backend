@@ -18,8 +18,8 @@ type (
 	CaptchaBgColor       = captcha_pb.CaptchaBgColor
 	GetCaptchaReq        = captcha_pb.GetCaptchaReq
 	GetCaptchaResp       = captcha_pb.GetCaptchaResp
-	GetEmailCaptchaReq   = captcha_pb.GetEmailCaptchaReq
-	GetEmailCaptchaResp  = captcha_pb.GetEmailCaptchaResp
+	SendEmailCaptchaReq  = captcha_pb.SendEmailCaptchaReq
+	SendEmailCaptchaResp = captcha_pb.SendEmailCaptchaResp
 	SendEmailReq         = captcha_pb.SendEmailReq
 	SendEmailResp        = captcha_pb.SendEmailResp
 	VerifyCaptchaReq     = captcha_pb.VerifyCaptchaReq
@@ -31,7 +31,7 @@ type (
 		// 校验验证码
 		VerifyCaptcha(ctx context.Context, in *VerifyCaptchaReq, opts ...grpc.CallOption) (*VerifyCaptchaResp, error)
 		// 获取邮箱验证码
-		GetEmailCaptcha(ctx context.Context, in *GetEmailCaptchaReq, opts ...grpc.CallOption) (*GetEmailCaptchaResp, error)
+		SendEmailCaptcha(ctx context.Context, in *SendEmailCaptchaReq, opts ...grpc.CallOption) (*SendEmailCaptchaResp, error)
 		// 校验邮箱验证码
 		AuthEmailCaptcha(ctx context.Context, in *AuthEmailCaptchaReq, opts ...grpc.CallOption) (*AuthEmailCaptchaResp, error)
 	}
@@ -60,9 +60,9 @@ func (m *defaultCaptcha) VerifyCaptcha(ctx context.Context, in *VerifyCaptchaReq
 }
 
 // 获取邮箱验证码
-func (m *defaultCaptcha) GetEmailCaptcha(ctx context.Context, in *GetEmailCaptchaReq, opts ...grpc.CallOption) (*GetEmailCaptchaResp, error) {
+func (m *defaultCaptcha) SendEmailCaptcha(ctx context.Context, in *SendEmailCaptchaReq, opts ...grpc.CallOption) (*SendEmailCaptchaResp, error) {
 	client := captcha_pb.NewCaptchaClient(m.cli.Conn())
-	return client.GetEmailCaptcha(ctx, in, opts...)
+	return client.SendEmailCaptcha(ctx, in, opts...)
 }
 
 // 校验邮箱验证码

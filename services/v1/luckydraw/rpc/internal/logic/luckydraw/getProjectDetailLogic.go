@@ -35,7 +35,7 @@ func NewGetProjectDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 // 获取项目详细
 func (l *GetProjectDetailLogic) GetProjectDetail(in *luckydraw_pb.GetProjectDetailReq) (*luckydraw_pb.GetProjectDetailResp, error) {
-	project, err := l.svcCtx.ProjectModel.FindOne(l.ctx, in.ProjectId)
+	project, err := l.svcCtx.ProjectModel.FindById(l.ctx, in.ProjectId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
