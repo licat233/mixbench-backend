@@ -57,7 +57,7 @@ server {
         proxy_pass http://mixbench:${CAPTCHA_API_PORT};
     }
     location /v1/api/luckydraw/ {
-        proxy_pass http://mixbench:${LUCKDRAW_API_PORT};
+        proxy_pass http://mixbench:${LUCKYDRAW_API_PORT};
     }
 
     # 使用 root 声明的是根目录，经过 location 匹配后，直接去根目录下找访问路径中 sever_name 后面的文件地址。

@@ -29,11 +29,12 @@ func NewAddKefuLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddKefuLo
 
 func (l *AddKefuLogic) AddKefu(req *types.AddKefuReq) (any, error) {
 	in := &model.Kefu{
-		Uuid:     uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
-		Passport: req.Passport,
-		Username: req.Username,
-		Password: req.Password,
-		Status:   req.Status,
+		Uuid:      uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
+		ProjectId: req.ProjectId,
+		Passport:  req.Passport,
+		Username:  req.Username,
+		Password:  req.Password,
+		Status:    req.Status,
 	}
 	if _, err := l.svcCtx.KefuModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert kefu, error: ", err)

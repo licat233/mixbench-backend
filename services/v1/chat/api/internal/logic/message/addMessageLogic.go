@@ -30,16 +30,18 @@ func NewAddMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddMes
 
 func (l *AddMessageLogic) AddMessage(req *types.AddMessageReq) (any, error) {
 	in := &model.Message{
-		Uuid:       uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
-		Content:    req.Content,
-		VisitorId:  req.VisitorId,
-		KefuId:     req.KefuId,
-		MsgType:    req.MsgType,
-		Status:     req.Status,
-		IsRead:     req.IsRead,
-		IsSend:     req.IsSend,
-		SendTime:   time.Unix(req.SendTime, 0).Local(),
-		ExpireTime: time.Now().Local().Add(3 * 24 * time.Hour),
+		Uuid:        uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
+		Content:     req.Content,
+		ContentType: req.ContentType,
+		VisitorId:   req.VisitorId,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		MsgType:     req.MsgType,
+		Status:      req.Status,
+		IsRead:      req.IsRead,
+		IsSend:      req.IsSend,
+		SendTime:    time.Unix(req.SendTime, 0).Local(),
+		ExpireTime:  time.Unix(req.ExpireTime, 0).Local(),
 	}
 	if _, err := l.svcCtx.MessageModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert message, error: ", err)

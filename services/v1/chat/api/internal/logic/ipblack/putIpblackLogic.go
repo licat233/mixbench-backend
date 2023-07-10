@@ -28,9 +28,8 @@ func NewPutIpblackLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutIpb
 
 func (l *PutIpblackLogic) PutIpblack(req *types.PutIpblackReq) (any, error) {
 	in := &model.Ipblack{
-		Id:     req.Id,
-		Ip:     req.Ip,
-		KefuId: req.KefuId,
+		Id: req.Id,
+		Ip: req.Ip,
 	}
 	if err := l.svcCtx.IpblackModel.Update(l.ctx, in); err != nil {
 		l.Logger.Error("failed to update ipblack, error: ", err)

@@ -19,10 +19,10 @@ func NewWsConn(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) 
 
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		return nil, err
+		return conn, err
 	}
 	if err := conn.SetWriteDeadline(time.Now().Add(writeWait)); err != nil {
-		return nil, fmt.Errorf("SetWriteDeadline error: %s", err)
+		return conn, fmt.Errorf("SetWriteDeadline error: %s", err)
 	}
 	conn.SetReadLimit(maxMessageSize)
 	conn.SetReadLimit(maxMessageSize)
@@ -31,13 +31,20 @@ func NewWsConn(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) 
 	return conn, nil
 }
 
+// 关闭ws.conn
+func CloseWsConn(conn *websocket.Conn) {
+	isClose := isConnectionClosed(conn)
+	if !isClose {
+		conn.Close()
+	}
+}
+
 // 判断 ws.conn是否已经关闭
 func isConnectionClosed(wsConn *websocket.Conn) bool {
 	if wsConn == nil {
 		return true
 	}
 	_, _, err := wsConn.ReadMessage()
-	//如果 err == nil，说明conn还未关闭
 	return err != nil
 
 	// if err != nil {

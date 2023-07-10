@@ -43,7 +43,8 @@ type (
 		Uuid      string    `db:"uuid"`       // UUID
 		Name      string    `db:"name"`       // 游客名
 		Ip        string    `db:"ip"`         // IP
-		KefuId    int64     `db:"kefu_id"`    // 客服id，-1表示没有客服接待
+		KefuId    int64     `db:"kefu_id"`    // 客服id，0表示没有客服接待
+		ProjectId int64     `db:"project_id"` // 项目id
 		Status    int64     `db:"status"`     // 状态:0离线，1在线，2拉黑
 		Referer   string    `db:"referer"`    // 来源，从哪个网址发起的聊天
 		Region    string    `db:"region"`     // 地区
@@ -101,8 +102,8 @@ func (m *defaultVisitorModel) FindOne(ctx context.Context, id int64) (*Visitor, 
 func (m *defaultVisitorModel) Insert(ctx context.Context, data *Visitor) (sql.Result, error) {
 	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, visitorRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, visitorRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.ProjectId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted)
 	}, visitorIdKey)
 	return ret, err
 }
@@ -111,7 +112,7 @@ func (m *defaultVisitorModel) Update(ctx context.Context, data *Visitor) error {
 	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, visitorRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.ProjectId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted, data.Id)
 	}, visitorIdKey)
 	return err
 }

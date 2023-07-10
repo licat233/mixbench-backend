@@ -3,7 +3,8 @@ package wshub
 import (
 	"context"
 	"fmt"
-	"mixbench/services/v1/chat/api/internal/types"
+	"mixbench/common/jwtx"
+	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/model"
 	"net/http"
 	"strings"
@@ -20,23 +21,22 @@ type Client struct {
 	// The websocket connection.
 	conn *websocket.Conn
 	// Buffered channel of outbound messages.
-	send   chan *types.Message
-	Stop   chan bool //关闭信号
-	Status bool      //状态，是否正常
-	w      http.ResponseWriter
-	r      *http.Request
+	send      chan *model.Message
+	Stop      chan bool //关闭信号
+	Status    bool      //状态，是否正常
+	ProjectId int64
+	w         http.ResponseWriter
+	r         *http.Request
 }
 
 func (c *Client) Close() {
 	c.Stop <- true
 	close(c.send)
-	if !isConnectionClosed(c.conn) {
-		c.conn.Close()
-	}
+	CloseWsConn(c.conn)
 }
 
 // Send 主要用来防止阻塞，用于其它逻辑，请注意区分消息类型
-func (c *Client) Send(message *types.Message) error {
+func (c *Client) Send(message *model.Message) error {
 	//发送前，需要校验，该游客信息是否已经被修改了客服号
 	if message.MsgType == VisitorMsgType {
 		msg, err := c.hub.SvcCtx.MessageModel.FindOne(c.ctx, message.Id)
@@ -52,7 +52,6 @@ func (c *Client) Send(message *types.Message) error {
 		}
 	}
 	//发送前，务必检查 send 通道关闭了没有
-	fmt.Println(*message)
 	select {
 	case c.send <- message:
 		// 消息成功发送
@@ -72,7 +71,8 @@ func (c *Client) SendPresetMessage(msgKey string, kefuId, visitorId int64) error
 	if msgKey = strings.TrimSpace(msgKey); msgKey == "" {
 		return nil
 	}
-	msgList, err := c.hub.SvcCtx.MessageConfigModel.FindsByMsgkey(c.ctx, msgKey)
+
+	msgList, err := c.hub.SvcCtx.MessageConfigModel.FindsByMsgkeyProjectId(c.ctx, msgKey, c.ProjectId)
 	if err != nil {
 		c.Logger.Error(err)
 		c.SystemErrorHandler(kefuId, visitorId)
@@ -81,48 +81,59 @@ func (c *Client) SendPresetMessage(msgKey string, kefuId, visitorId int64) error
 	// 如果存在，则发送
 	for _, msg := range msgList {
 		if content := strings.TrimSpace(msg.Content); content != "" {
-			welcomeMsg := NewPublicMessage(content, kefuId, visitorId)
+			welcomeMsg := c.NewPublicMessage(content, kefuId, visitorId)
 			c.Send(welcomeMsg)
 		}
 	}
 	return nil
 }
 
-// 丧失了灵活性，暂时不用
-// // ws写入消息，
-// func (c *Client) WritePump(logout func()) {
-// 	ticker := time.NewTicker(pingPeriod)
-// 	defer func() {
-// 		ticker.Stop()
-// 		logout()
-// 	}()
-// 	hub := c.hub
-// 	conn := c.conn
-// 	logger := c.Logger
-// 	send := c.send
-// 	for {
-// 		select {
-// 		case message, ok := <-send:
-// 			conn.SetWriteDeadline(time.Now().Add(writeWait))
-// 			if !ok {
-// 				// The hub closed the channel.
-// 				if err := conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
-// 					logger.Error(err)
-// 				}
-// 				return
-// 			}
-// 			body, _ := json.Marshal(*message)
-// 			if err := conn.WriteMessage(websocket.TextMessage, body); err != nil {
-// 				logger.Error(err)
-// 				return
-// 			}
-// 			_ = hub.SendAfterHandler(message)
-// 		case <-ticker.C:
-// 			conn.SetWriteDeadline(time.Now().Add(writeWait))
-// 			if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-// 				logger.Error(err)
-// 				return
-// 			}
-// 		}
-// 	}
-// }
+// 获取第一条信息 token 做鉴权，以及从中获取 id 值
+// 如果err!=nil，表示内部错误
+func (c *Client) Identify() (ok bool, id int64, err error) {
+	//读取第一条信息，即 token
+	_, token, err := c.conn.ReadMessage()
+	if err != nil {
+		c.Logger.Error("error reading the first message: ", err)
+		err = fmt.Errorf("error reading the first message: %v", err)
+		return
+	}
+
+	//鉴权
+	claims, ok := jwtx.ValidateToken(string(token), c.hub.SvcCtx.Config.VisitorAuthSecret)
+	if !ok {
+		//如果鉴权失败
+		return
+	}
+	//提取token信息
+	id, ok = jwtx.GetId(claims)
+	return
+}
+
+func (c *Client) IdentifyNotice(ok bool) error {
+	body := "no"
+	if ok {
+		body = "yes"
+	}
+	if err := c.conn.WriteMessage(websocket.TextMessage, []byte(body)); err != nil {
+		c.Logger.Error(err)
+		return fmt.Errorf("conn.WriteMessage error: %s", err)
+	}
+	return nil
+}
+
+func (c *Client) NewPublicMessage(content string, kefuId, visitorId int64) *model.Message {
+	return &model.Message{
+		Id:          0,
+		Uuid:        uniqueid.NewUUID(),
+		Content:     content,
+		ContentType: TextContentType,
+		VisitorId:   visitorId,
+		KefuId:      kefuId,
+		ProjectId:   c.ProjectId,
+		MsgType:     PublicMsgType,
+		Status:      0,
+		IsRead:      0,
+		IsSend:      0,
+	}
+}

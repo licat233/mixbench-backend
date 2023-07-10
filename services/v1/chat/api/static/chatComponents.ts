@@ -124,23 +124,27 @@ export interface ChatRecord {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
-	kefuId: number // 客服id， -1表示没有分配到客服
+	kefuId: number // 客服id， 0表示没有分配到客服
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
 }
 
 export interface AddChatRecordReq {
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
-	kefuId: number // 客服id， -1表示没有分配到客服
+	kefuId: number // 客服id， 0表示没有分配到客服
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
 }
 
@@ -148,12 +152,14 @@ export interface PutChatRecordReq {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
-	kefuId: number // 客服id， -1表示没有分配到客服
+	kefuId: number // 客服id， 0表示没有分配到客服
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
 }
 
@@ -175,12 +181,14 @@ export interface GetChatRecordListReqParams {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
-	kefuId: number // 客服id， -1表示没有分配到客服
+	kefuId: number // 客服id， 0表示没有分配到客服
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
 }
 
@@ -191,18 +199,15 @@ export interface GetChatRecordEnumsReq {
 export interface Ipblack {
 	id: number // 
 	ip: string // IP
-	kefuId: string // 客服id
 }
 
 export interface AddIpblackReq {
 	ip: string // IP
-	kefuId: string // 客服id
 }
 
 export interface PutIpblackReq {
 	id: number // 
 	ip: string // IP
-	kefuId: string // 客服id
 }
 
 export interface DelIpblackReq {
@@ -222,7 +227,6 @@ export interface GetIpblackListReqParams {
 	keyword: string // 关键词，可选
 	id: number // 
 	ip: string // IP
-	kefuId: string // 客服id
 }
 
 export interface GetIpblackEnumsReq {
@@ -232,6 +236,7 @@ export interface GetIpblackEnumsReq {
 export interface Kefu {
 	id: number // 表主键
 	uuid: string // UUID
+	projectId: number // 项目id
 	passport: string // 客服账号
 	username: string // 客服名
 	password: string // 密码
@@ -239,6 +244,7 @@ export interface Kefu {
 }
 
 export interface AddKefuReq {
+	projectId: number // 项目id
 	passport: string // 客服账号
 	username: string // 客服名
 	password: string // 密码
@@ -248,6 +254,7 @@ export interface AddKefuReq {
 export interface PutKefuReq {
 	id: number // 表主键
 	uuid: string // UUID
+	projectId: number // 项目id
 	passport: string // 客服账号
 	username: string // 客服名
 	password: string // 密码
@@ -271,6 +278,7 @@ export interface GetKefuListReqParams {
 	keyword: string // 关键词，可选
 	id: number // 表主键
 	uuid: string // UUID
+	projectId: number // 项目id
 	passport: string // 客服账号
 	username: string // 客服名
 	password: string // 密码
@@ -285,40 +293,46 @@ export interface Message {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为3天
 }
 
 export interface AddMessageReq {
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为3天
 }
 
 export interface PutMessageReq {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为3天
 }
 
 export interface DelMessageReq {
@@ -339,28 +353,76 @@ export interface GetMessageListReqParams {
 	id: number // 表主键
 	uuid: string // UUID
 	content: string // 消息内容
+	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
 	visitorId: number // 游客id
 	kefuId: number // 客服id
+	projectId: number // 项目id
 	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
 	status: number // 状态:0合法，1违规
-	isRead: number // 状态:0未读，1已读
-	isSend: number // 状态:0未发送，1已发送
+	isRead: number // 是否已读:0未读，1已读
+	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为3天
 }
 
 export interface GetMessageEnumsReq {
 	parentId?: number // 父级ID
 }
 
+export interface Project {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 项目名称
+	status: number // 项目状态
+}
+
+export interface AddProjectReq {
+	name: string // 项目名称
+	status: number // 项目状态
+}
+
+export interface PutProjectReq {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 项目名称
+	status: number // 项目状态
+}
+
+export interface DelProjectReq {
+	id: number // 项目 ID
+}
+
+export interface GetProjectReq {
+	id: number // 项目 ID
+}
+
+export interface GetProjectListReq {
+}
+export interface GetProjectListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 项目名称
+	status: number // 项目状态
+}
+
+export interface GetProjectEnumsReq {
+	parentId?: number // 父级ID
+}
+
 export interface MessageConfig {
 	id: number // 主键
+	projectId: number // 项目id
 	name: string // 名字
 	msgkey: string // 消息密匙
 	content: string // 消息内容
 }
 
 export interface AddMessageConfigReq {
+	projectId: number // 项目id
 	name: string // 名字
 	msgkey: string // 消息密匙
 	content: string // 消息内容
@@ -368,6 +430,7 @@ export interface AddMessageConfigReq {
 
 export interface PutMessageConfigReq {
 	id: number // 主键
+	projectId: number // 项目id
 	name: string // 名字
 	msgkey: string // 消息密匙
 	content: string // 消息内容
@@ -389,6 +452,7 @@ export interface GetMessageConfigListReqParams {
 	current: number // 当前页码，默认1，用于对接umijs，可选
 	keyword: string // 关键词，可选
 	id: number // 主键
+	projectId: number // 项目id
 	name: string // 名字
 	msgkey: string // 消息密匙
 	content: string // 消息内容
@@ -403,7 +467,8 @@ export interface Visitor {
 	uuid: string // UUID
 	name: string // 游客名
 	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
+	kefuId: number // 客服id，0表示没有客服接待
+	projectId: number // 项目id
 	status: number // 状态:0离线，1在线，2拉黑
 	referer: string // 来源，从哪个网址发起的聊天
 	region: string // 地区
@@ -417,7 +482,8 @@ export interface Visitor {
 export interface AddVisitorReq {
 	name: string // 游客名
 	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
+	kefuId: number // 客服id，0表示没有客服接待
+	projectId: number // 项目id
 	status: number // 状态:0离线，1在线，2拉黑
 	referer: string // 来源，从哪个网址发起的聊天
 	region: string // 地区
@@ -433,7 +499,8 @@ export interface PutVisitorReq {
 	uuid: string // UUID
 	name: string // 游客名
 	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
+	kefuId: number // 客服id，0表示没有客服接待
+	projectId: number // 项目id
 	status: number // 状态:0离线，1在线，2拉黑
 	referer: string // 来源，从哪个网址发起的聊天
 	region: string // 地区
@@ -463,7 +530,8 @@ export interface GetVisitorListReqParams {
 	uuid: string // UUID
 	name: string // 游客名
 	ip: string // IP
-	kefuId: number // 客服id，-1表示没有客服接待
+	kefuId: number // 客服id，0表示没有客服接待
+	projectId: number // 项目id
 	status: number // 状态:0离线，1在线，2拉黑
 	referer: string // 来源，从哪个网址发起的聊天
 	region: string // 地区

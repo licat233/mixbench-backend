@@ -21,7 +21,8 @@ var (
 	ErrTokenExpired     = errors.New("token is expired")
 	ErrTokenNotValidYet = errors.New("token not active yet")
 	ErrTokenMalformed   = errors.New("that's not even a token")
-	ErrTokenInvalid     = errors.New("couldn't handle this token")
+	ErrTokenInvalid     = errors.New("invalid token")
+	ErrNotExist         = errors.New("not exist")
 )
 
 func CreateToken(claims jwt.MapClaims, secret string) (string, error) {
@@ -33,37 +34,33 @@ func CreateToken(claims jwt.MapClaims, secret string) (string, error) {
 }
 
 // 解析token, 返回原生error
-func ParseToken(tokenString string, secret string) (*jwt.MapClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &jwt.MapClaims{}, func(token *jwt.Token) (i interface{}, e error) {
-		return []byte(secret), nil
+func ParseToken(tokenString string, secret string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, e error) {
+		// 返回用于验证签名的密钥
+		return []byte(secret), nil // 替换为实际的密钥
 	})
 
 	if err != nil {
+		//Token 解析失败
 		return nil, err
 	}
 
-	// if err != nil {
-	// 	if ve, ok := err.(*jwt.ValidationError); ok {
-	// 		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-	// 			return nil, ErrTokenMalformed
-	// 		} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-	// 			return nil, ErrTokenExpired
-	// 		} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-	// 			return nil, ErrTokenNotValidYet
-	// 		} else {
-	// 			return nil, ErrTokenInvalid
-	// 		}
-	// 	}
-	// }
-
-	if token != nil {
-		if claims, ok := token.Claims.(*jwt.MapClaims); ok && token.Valid {
-			return claims, nil
-		}
-		return nil, ErrTokenInvalid
-	} else {
+	if token == nil {
 		return nil, ErrTokenInvalid
 	}
+
+	// 验证 token 是否有效
+	if !token.Valid {
+		//无效的 Token
+		return nil, ErrTokenInvalid
+	}
+
+	// 提取 claims
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, ErrTokenInvalid
+	}
+	return claims, nil
 }
 
 func GetToken(r *http.Request) string {
@@ -71,7 +68,7 @@ func GetToken(r *http.Request) string {
 }
 
 // GetClaims 从请求中获取claims
-func GetClaims(r *http.Request, secret string) (*jwt.MapClaims, error) {
+func GetClaims(r *http.Request, secret string) (jwt.MapClaims, error) {
 	token := GetToken(r)
 	if token == "" {
 		return nil, nil
@@ -127,35 +124,41 @@ func ExpiredTime(claims jwt.MapClaims) int64 {
 	return res
 }
 
-func ValidateToken(tokenString string, secretKey string) (bool, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secretKey), nil
-	})
-
+func ValidateToken(token string, secret string) (jwt.MapClaims, bool) {
+	claims, err := ParseToken(token, secret)
 	if err != nil {
-		return false, err
+		return nil, false
 	}
+	return claims, IsExpired(claims)
+}
 
-	// 检查 token 是否有效
-	if !token.Valid {
-		return false, nil
-	}
+func IsExpired(claims jwt.MapClaims) bool {
+	// 获取当前时间
+	currentTime := time.Now().Local()
 
-	// 检查过期时间
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		if claims, ok := token.Claims.(jwt.MapClaims); ok {
-			if _, found := claims["exp"]; !found {
-				// exp字段不存在
-				return true, nil
-			}
-		}
-		expirationTime := time.Unix(int64(claims["exp"].(float64)), 0)
-		currentTime := time.Now()
+	// 判断是否已过期
+	if exp, ok := claims["exp"].(float64); ok {
+		expirationTime := time.Unix(int64(exp), 0).Local()
 
 		if currentTime.After(expirationTime) {
-			return false, nil
+			//Token 已过期
+			return false
+		} else {
+			//Token 未过期
+			return true
 		}
+	} else {
+		//Token 没有设置过期时间，不会过期
+		return true
 	}
+}
 
-	return true, nil
+func GetId(claims jwt.MapClaims) (int64, bool) {
+	// 获取 id 值
+	id, ok := claims["id"].(float64)
+	if !ok {
+		// id 不存在或类型不正确
+		return 0, false
+	}
+	return int64(id), true
 }

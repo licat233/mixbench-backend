@@ -22,8 +22,10 @@ type (
 
 		Insert(ctx context.Context, data *Message) (sql.Result, error)
 		DeleteExpiredRecords(ctx context.Context) error
-		FindsToVisitor(ctx context.Context, visitorIds []int64) ([]*Message, error)
-		FindsToKefu(ctx context.Context, kefuIds []int64) ([]*Message, error)
+		FindsToVisitorByVisitorIds(ctx context.Context, visitorIds []int64) ([]*Message, error)
+		FindsToKefuByKefuIds(ctx context.Context, kefuIds []int64) ([]*Message, error)
+		FindsToKefuByKefuId(ctx context.Context, kefuId int64) ([]*Message, error)
+		FindsToVisitorByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
 	}
 
 	customMessageModel struct {
@@ -57,7 +59,7 @@ func (m *customMessageModel) DeleteExpiredRecords(ctx context.Context) error {
 	return err
 }
 
-func (m *customMessageModel) FindsToKefu(ctx context.Context, kefuIds []int64) ([]*Message, error) {
+func (m *customMessageModel) FindsToKefuByKefuIds(ctx context.Context, kefuIds []int64) ([]*Message, error) {
 	var resp = make([]*Message, 0)
 	if len(kefuIds) == 0 {
 		return resp, nil
@@ -67,12 +69,28 @@ func (m *customMessageModel) FindsToKefu(ctx context.Context, kefuIds []int64) (
 	return resp, err
 }
 
-func (m *customMessageModel) FindsToVisitor(ctx context.Context, visitorIds []int64) ([]*Message, error) {
+func (m *customMessageModel) FindsToVisitorByVisitorIds(ctx context.Context, visitorIds []int64) ([]*Message, error) {
 	var resp = make([]*Message, 0)
 	if len(visitorIds) == 0 {
 		return resp, nil
 	}
 	query := fmt.Sprintf("select %s from %s where `visitor_id` in(?) and `msg_type` = '1' and `is_deleted` = '0' ", messageRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, visitorIds)
+	return resp, err
+}
+
+// 查找游客发给客服的消息
+func (m *customMessageModel) FindsToKefuByKefuId(ctx context.Context, kefuId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `msg_type` = '0' and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
+	return resp, err
+}
+
+// 查找客服发给游客的信息
+func (m *customMessageModel) FindsToVisitorByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `msg_type` = '1' and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, visitorId)
 	return resp, err
 }

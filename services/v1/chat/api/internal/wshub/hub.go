@@ -7,7 +7,6 @@ import (
 	"mixbench/common/errorx"
 	"mixbench/common/timer"
 	"mixbench/common/uniqueid"
-	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
 	"mixbench/services/v1/chat/model"
@@ -31,7 +30,7 @@ type Hub struct {
 	Upgrader       websocket.Upgrader
 	KefuClients    *kefuClientMap
 	VisitorClients *visitorClientMap
-	MessageList    chan *types.Message
+	MessageStore   chan *model.Message
 
 	hasSendBeforeHandlerErr bool
 	hasSendAfterHandlerErr  bool
@@ -49,7 +48,7 @@ func NewHub(svcCtx *svc.ServiceContext) *Hub {
 		Upgrader:                upgrader,
 		KefuClients:             newKefuClientMap(),
 		VisitorClients:          newVisitorClientMap(),
-		MessageList:             make(chan *types.Message, 4000),
+		MessageStore:            make(chan *model.Message, 4000),
 		hasSendBeforeHandlerErr: false,
 		hasSendAfterHandlerErr:  false,
 		hasDbErr:                false,
@@ -86,12 +85,12 @@ func (h *Hub) Block() {
 func (h *Hub) Stop() {
 	h.StopCh <- true
 	h.Timer.Close()
-	close(h.MessageList)
+	close(h.MessageStore)
 	close(h.StopCh)
 }
 
 // 分配客服
-func (h *Hub) AssignKefu() *KefuClient {
+func (h *Hub) AssignKefu(projectId int64) *KefuClient {
 	// 前提是有客服在线
 	if h.KefuClients.Len() == 0 {
 		// 没有客服在线，表示未分配状态，应该执行消息自动回复机制
@@ -105,8 +104,11 @@ func (h *Hub) AssignKefu() *KefuClient {
 	for i := range h.VisitorClients.Map {
 		kefu_id := h.VisitorClients.Map[i].Visitor.KefuId
 		// 确保该客服在线
-		if _, ok := h.KefuClients.Map[kefu_id]; ok {
-			kefuStatisticMap[kefu_id]++
+		if kefu, ok := h.KefuClients.Map[kefu_id]; ok {
+			//确保该客服是指定项目的
+			if kefu.ProjectId == projectId {
+				kefuStatisticMap[kefu_id]++
+			}
 		}
 	}
 	h.KefuClients.RwMutex.RUnlock()
@@ -130,7 +132,7 @@ func (h *Hub) AssignChanMessage() error {
 		case <-h.StopCh:
 			// 当接收到 stop 信号时，停止循环任务
 			return nil
-		case message := <-h.MessageList:
+		case message := <-h.MessageStore:
 			if err := h.AssignMessage(message); err != nil {
 				return err
 			}
@@ -158,7 +160,7 @@ func (h *Hub) AssignDBMessage() {
 				continue
 			}
 			// 查找需要发给客服的消息
-			kefuMessages, err := h.SvcCtx.MessageModel.FindsToKefu(h.ctx, kefuIds)
+			kefuMessages, err := h.SvcCtx.MessageModel.FindsToKefuByKefuIds(h.ctx, kefuIds)
 			if err != nil {
 				h.Logger.Error(err)
 				// 出现内部错误，邮件通知管理员
@@ -169,7 +171,7 @@ func (h *Hub) AssignDBMessage() {
 			// 查找在线的游客
 			visitorIds := h.VisitorClients.Ids()
 			// 查找需要发给游客的消息
-			visitorMessages, err := h.SvcCtx.MessageModel.FindsToVisitor(h.ctx, visitorIds)
+			visitorMessages, err := h.SvcCtx.MessageModel.FindsToVisitorByVisitorIds(h.ctx, visitorIds)
 			if err != nil {
 				h.Logger.Error(err)
 				// 出现内部错误，邮件通知管理员
@@ -177,19 +179,18 @@ func (h *Hub) AssignDBMessage() {
 				emailx.SendNotification(h.ctx, "chat系统异常", msg, []string{emailx.AdminerEmail})
 				return
 			}
-			mdMessages := append(kefuMessages, visitorMessages...)
-			messages := dataconv.MdMessages2ApiMessages(mdMessages)
+			messages := append(kefuMessages, visitorMessages...)
 			for i := range messages {
 				//如果不是客服或者游客发送的消息，则跳过
 				if messages[i].MsgType != KefuMsgType && messages[i].MsgType != VisitorMsgType {
 					continue
 				}
 				//时间约束，如果是2分钟内的，则忽略
-				if time.Since(time.Unix(messages[i].SendTime, 0)).Minutes() < 2 {
+				if time.Since(time.Unix(messages[i].SendTime.Unix(), 0)).Minutes() < 2 {
 					continue
 				}
 				select {
-				case h.MessageList <- messages[i]:
+				case h.MessageStore <- messages[i]:
 					// 发送成功
 				default:
 					//发送失败
@@ -200,7 +201,7 @@ func (h *Hub) AssignDBMessage() {
 	}
 }
 
-func (h *Hub) AssignMessage(message *types.Message) error {
+func (h *Hub) AssignMessage(message *model.Message) error {
 	switch message.MsgType {
 	case VisitorMsgType:
 		// 游客消息，转发给客服
@@ -210,6 +211,7 @@ func (h *Hub) AssignMessage(message *types.Message) error {
 				return err
 			}
 		}
+		//如果客服不在线，因为已经持久化过了，所以这里直接抛弃即可，不用管
 	case KefuMsgType:
 		// 客服消息，公告消息，转发给游客
 		if cli := h.VisitorClients.Get(message.VisitorId); cli != nil {
@@ -243,7 +245,9 @@ func (h *Hub) AssignMessage(message *types.Message) error {
 	return nil
 }
 
-func (h *Hub) SendBeforeHandler(message *types.Message) error {
+// SendBeforeHandler 发送之前的处理
+// 持久化处理，保存到message表中
+func (h *Hub) SendBeforeHandler(message *model.Message) error {
 	// 如果不是客服或者游客的消息，不用保存
 	if message.MsgType != KefuMsgType && message.MsgType != VisitorMsgType {
 		return nil
@@ -254,17 +258,19 @@ func (h *Hub) SendBeforeHandler(message *types.Message) error {
 	// 过期时间为3天后
 	exp := time.Now().Local().Add(3 * 24 * time.Hour)
 	data := &model.Message{
-		Id:         0,
-		Uuid:       uniqueid.NewUUID(),
-		Content:    message.Content,
-		VisitorId:  message.VisitorId,
-		KefuId:     message.KefuId,
-		MsgType:    message.MsgType,
-		Status:     message.Status,
-		IsRead:     0,
-		IsSend:     0,
-		SendTime:   time.Now().Local(),
-		ExpireTime: exp,
+		Id:          message.Id,
+		Uuid:        uniqueid.NewUUID(),
+		Content:     message.Content,
+		ContentType: message.ContentType,
+		VisitorId:   message.VisitorId,
+		KefuId:      message.KefuId,
+		ProjectId:   message.ProjectId,
+		MsgType:     message.MsgType,
+		Status:      message.Status,
+		IsRead:      message.IsRead,
+		IsSend:      message.IsSend,
+		SendTime:    time.Now().Local(),
+		ExpireTime:  exp,
 	}
 	// 存入数据库
 	if _, err := h.SvcCtx.MessageModel.Insert(h.ctx, data); err != nil {
@@ -278,7 +284,7 @@ func (h *Hub) SendBeforeHandler(message *types.Message) error {
 	return nil
 }
 
-// 消息发送成功后的回调，确保已经发送给前端了之后，再调用
+// SendAfterHandler 消息发送成功后的回调，确保已经发送给前端了之后，再调用
 func (h *Hub) SendAfterHandler(message *types.Message) error {
 	// 如果不是客服或者游客的消息，不用保存
 	if message.MsgType != 0 && message.MsgType != 1 {

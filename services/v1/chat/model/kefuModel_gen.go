@@ -41,6 +41,7 @@ type (
 	Kefu struct {
 		Id        int64     `db:"id"`         // 表主键
 		Uuid      string    `db:"uuid"`       // UUID
+		ProjectId int64     `db:"project_id"` // 项目id
 		Passport  string    `db:"passport"`   // 客服账号
 		Username  string    `db:"username"`   // 客服名
 		Password  string    `db:"password"`   // 密码
@@ -94,8 +95,8 @@ func (m *defaultKefuModel) FindOne(ctx context.Context, id int64) (*Kefu, error)
 func (m *defaultKefuModel) Insert(ctx context.Context, data *Kefu) (sql.Result, error) {
 	kefuIdKey := fmt.Sprintf("%s%v", cacheKefuIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, kefuRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Username, data.Password, data.Status, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, kefuRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ProjectId, data.Passport, data.Username, data.Password, data.Status, data.IsDeleted)
 	}, kefuIdKey)
 	return ret, err
 }
@@ -104,7 +105,7 @@ func (m *defaultKefuModel) Update(ctx context.Context, data *Kefu) error {
 	kefuIdKey := fmt.Sprintf("%s%v", cacheKefuIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, kefuRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Passport, data.Username, data.Password, data.Status, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ProjectId, data.Passport, data.Username, data.Password, data.Status, data.IsDeleted, data.Id)
 	}, kefuIdKey)
 	return err
 }

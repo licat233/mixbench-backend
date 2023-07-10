@@ -30,14 +30,18 @@ func NewGetChatRecordListLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *GetChatRecordListLogic) GetChatRecordList(req *types.GetChatRecordListReq) (any, error) {
 	in := &model.ChatRecord{
-		Id:        req.Id,
-		Uuid:      req.Uuid,
-		VisitorId: req.VisitorId,
-		KefuId:    req.KefuId,
-		Status:    req.Status,
-		IsRead:    req.IsRead,
-		IsSend:    req.IsSend,
-		SendTime:  time.Unix(req.SendTime, 0).Local(),
+		Id:          req.Id,
+		Uuid:        req.Uuid,
+		Content:     req.Content,
+		ContentType: req.ContentType,
+		VisitorId:   req.VisitorId,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		MsgType:     req.MsgType,
+		Status:      req.Status,
+		IsRead:      req.IsRead,
+		IsSend:      req.IsSend,
+		SendTime:    time.Unix(req.SendTime, 0).Local(),
 	}
 	mdList, total, err := l.svcCtx.ChatRecordModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

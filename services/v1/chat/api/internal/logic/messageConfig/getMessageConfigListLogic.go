@@ -29,10 +29,11 @@ func NewGetMessageConfigListLogic(ctx context.Context, svcCtx *svc.ServiceContex
 
 func (l *GetMessageConfigListLogic) GetMessageConfigList(req *types.GetMessageConfigListReq) (any, error) {
 	in := &model.MessageConfig{
-		Id:      req.Id,
-		Name:    req.Name,
-		Msgkey:  req.Msgkey,
-		Content: req.Content,
+		Id:        req.Id,
+		ProjectId: req.ProjectId,
+		Name:      req.Name,
+		Msgkey:    req.Msgkey,
+		Content:   req.Content,
 	}
 	mdList, total, err := l.svcCtx.MessageConfigModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

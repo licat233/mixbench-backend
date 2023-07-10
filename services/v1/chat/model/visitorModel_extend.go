@@ -22,6 +22,7 @@ type visitor_model interface {
 	FindByName(ctx context.Context, name string) (*Visitor, error)
 	FindByIp(ctx context.Context, ip string) (*Visitor, error)
 	FindByKefuId(ctx context.Context, kefuId int64) (*Visitor, error)
+	FindByProjectId(ctx context.Context, projectId int64) (*Visitor, error)
 	FindByStatus(ctx context.Context, status int64) (*Visitor, error)
 	FindByReferer(ctx context.Context, referer string) (*Visitor, error)
 	FindByRegion(ctx context.Context, region string) (*Visitor, error)
@@ -35,6 +36,7 @@ type visitor_model interface {
 	FindsByNames(ctx context.Context, names []string) ([]*Visitor, error)
 	FindsByIps(ctx context.Context, ips []string) ([]*Visitor, error)
 	FindsByKefuIds(ctx context.Context, kefuIds []int64) ([]*Visitor, error)
+	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Visitor, error)
 	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Visitor, error)
 	FindsByReferers(ctx context.Context, referers []string) ([]*Visitor, error)
 	FindsByRegions(ctx context.Context, regions []string) ([]*Visitor, error)
@@ -49,6 +51,7 @@ type visitor_model interface {
 	FindsByName(ctx context.Context, name string) ([]*Visitor, error)
 	FindsByIp(ctx context.Context, ip string) ([]*Visitor, error)
 	FindsByKefuId(ctx context.Context, kefuId int64) ([]*Visitor, error)
+	FindsByProjectId(ctx context.Context, projectId int64) ([]*Visitor, error)
 	FindsByStatus(ctx context.Context, status int64) ([]*Visitor, error)
 	FindsByReferer(ctx context.Context, referer string) ([]*Visitor, error)
 	FindsByRegion(ctx context.Context, region string) ([]*Visitor, error)
@@ -102,6 +105,9 @@ func (m *defaultVisitorModel) FindList(ctx context.Context, pageSize, page int64
 		}
 		if visitor.KefuId > 0 {
 			sq = sq.Where("`kefu_id` = ?", visitor.KefuId)
+		}
+		if visitor.ProjectId > 0 {
+			sq = sq.Where("`project_id` = ?", visitor.ProjectId)
 		}
 		if visitor.Status >= 0 {
 			sq = sq.Where("`status` = ?", visitor.Status)
@@ -205,6 +211,20 @@ func (m *defaultVisitorModel) FindByKefuId(ctx context.Context, kefuId int64) (*
 	var resp Visitor
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `is_deleted` = '0' limit 1", visitorRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, kefuId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultVisitorModel) FindByProjectId(ctx context.Context, projectId int64) (*Visitor, error) {
+	var resp Visitor
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' limit 1", visitorRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, projectId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -377,6 +397,16 @@ func (m *defaultVisitorModel) FindsByKefuIds(ctx context.Context, kefuIds []int6
 	return resp, err
 }
 
+func (m *defaultVisitorModel) FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	if len(projectIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	return resp, err
+}
+
 func (m *defaultVisitorModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Visitor, error) {
 	var resp = make([]*Visitor, 0)
 	if len(statuslist) == 0 {
@@ -489,6 +519,13 @@ func (m *defaultVisitorModel) FindsByKefuId(ctx context.Context, kefuId int64) (
 	var resp = make([]*Visitor, 0)
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `is_deleted` = '0' ", visitorRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByProjectId(ctx context.Context, projectId int64) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectId)
 	return resp, err
 }
 

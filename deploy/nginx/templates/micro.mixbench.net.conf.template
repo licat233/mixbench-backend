@@ -1,9 +1,28 @@
 # 负载均衡的写法
 # 在http块中的全局块中配置
+
+# 这段 Nginx 配置的作用是将 HTTP 头部中的 Upgrade 字段的值为 "websocket" 的请求转换为 WebSocket 连接，从而实现升级握手。它使用了 Nginx 的 map 指令来定义一个映射变量 $connection_upgrade。
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+
 # upstream固定写法 后面的myserver可以自定义
 upstream admin_server {
     server app:${ADMIN_API_PORT};
     keepalive 1000; # 默认值100，可能不够用
+}
+
+upstream captcha_server {
+    server app:${CAPTCHA_API_PORT};
+}
+
+upstream luckydraw_server {
+    server app:${LUCKYDRAW_API_PORT};
+}
+
+upstream chat_server {
+    server app:${CHAT_API_PORT};
 }
 
 server {
@@ -67,40 +86,40 @@ server {
     location /v1/api/captcha/ {
         # 该服务不需要鉴权
         # auth_request /v1/api/admin/auth;
-        proxy_pass http://app:${CAPTCHA_API_PORT};
+        proxy_pass http://captcha_server;
     }
 
     location /v1/api/luckydraw/ {
         # 调用nginx的auth模块鉴权
         auth_request /v1/api/admin/auth;
-        proxy_pass http://app:${LUCKDRAW_API_PORT};
+        proxy_pass http://luckydraw_server;
     }
 
     location /v1/api/chat/ {
-        proxy_pass http://app:${CHAT_API_PORT};
+        # 走自己的鉴权
+        proxy_pass http://chat_server;
     }
 
     # 静态资源服务
 
     location /v1/static/admin/ {
-        # 负载均衡写法
         proxy_pass http://admin_server;
-        # add_header Cache-Control public;
+        add_header Cache-Control public;
     }
 
     location /v1/static/captcha/ {
-        proxy_pass http://app:${CAPTCHA_API_PORT};
-        # add_header Cache-Control public;
+        proxy_pass http://captcha_server;
+        add_header Cache-Control public;
     }
 
     location /v1/static/luckydraw/ {
-        proxy_pass http://app:${LUCKDRAW_API_PORT};
-        # add_header Cache-Control public;
+        proxy_pass http://luckydraw_server;
+        add_header Cache-Control public;
     }
 
     location /v1/static/chat/ {
-        proxy_pass http://app:${CHAT_API_PORT};
-        # add_header Cache-Control public;
+        proxy_pass http://chat_server;
+        add_header Cache-Control public;
     }
 
     # 使用 root 声明的是根目录，经过 location 匹配后，直接去根目录下找访问路径中 sever_name 后面的文件地址。

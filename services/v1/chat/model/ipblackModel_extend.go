@@ -19,26 +19,25 @@ type ipblack_model interface {
 	FindList(ctx context.Context, pageSize, page int64, keyword string, ipblack *Ipblack) (resp []*Ipblack, total int64, err error)
 	TableName() string
 	FindByIp(ctx context.Context, ip string) (*Ipblack, error)
-	FindByKefuId(ctx context.Context, kefuId string) (*Ipblack, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Ipblack, error)
 	FindsByIps(ctx context.Context, ips []string) ([]*Ipblack, error)
-	FindsByKefuIds(ctx context.Context, kefuIds []string) ([]*Ipblack, error)
 
 	FindsById(ctx context.Context, id int64) ([]*Ipblack, error)
 	FindsByIp(ctx context.Context, ip string) ([]*Ipblack, error)
-	FindsByKefuId(ctx context.Context, kefuId string) ([]*Ipblack, error)
+
+	SoftDelete(ctx context.Context, id int64) error
 }
 
 func (m *defaultIpblackModel) FindCount(ctx context.Context) (int64, error) {
 	var count int64
-	query := fmt.Sprintf("select count(*) as count from %s", m.table)
+	query := fmt.Sprintf("select count(*) as count from %s where `is_deleted` = '0'", m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &count, query)
 	return count, err
 }
 
 func (m *defaultIpblackModel) FindAll(ctx context.Context) ([]*Ipblack, error) {
 	var resp = make([]*Ipblack, 0)
-	query := fmt.Sprintf("select %s from %s limit 99999", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `is_deleted` = '0' limit 99999", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
 	switch err {
 	case nil:
@@ -51,16 +50,13 @@ func (m *defaultIpblackModel) FindAll(ctx context.Context) ([]*Ipblack, error) {
 }
 
 func (m *defaultIpblackModel) FindList(ctx context.Context, pageSize, page int64, keyword string, ipblack *Ipblack) (resp []*Ipblack, total int64, err error) {
-	sq := squirrel.Select(ipblackRows).From(m.table)
+	sq := squirrel.Select(ipblackRows).From(m.table).Where("`is_deleted`= '0'")
 	if ipblack != nil {
 		if ipblack.Id >= 0 {
 			sq = sq.Where("`id` = ?", ipblack.Id)
 		}
 		if ipblack.Ip != "" {
 			sq = sq.Where("`ip` = ?", ipblack.Ip)
-		}
-		if ipblack.KefuId != "" {
-			sq = sq.Where("`kefu_id` = ?", ipblack.KefuId)
 		}
 	}
 	if pageSize > 0 && page > 0 {
@@ -93,22 +89,8 @@ func (m *defaultIpblackModel) TableName() string {
 
 func (m *defaultIpblackModel) FindByIp(ctx context.Context, ip string) (*Ipblack, error) {
 	var resp Ipblack
-	query := fmt.Sprintf("select %s from %s where `ip` = ? limit 1", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? and `is_deleted` = '0' limit 1", ipblackRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, ip)
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
-func (m *defaultIpblackModel) FindByKefuId(ctx context.Context, kefuId string) (*Ipblack, error) {
-	var resp Ipblack
-	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? limit 1", ipblackRows, m.table)
-	err := m.QueryRowNoCacheCtx(ctx, &resp, query, kefuId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -124,7 +106,7 @@ func (m *defaultIpblackModel) FindsByIds(ctx context.Context, ids []int64) ([]*I
 	if len(ids) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `id` in (?) ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
 	return resp, err
 }
@@ -134,38 +116,33 @@ func (m *defaultIpblackModel) FindsByIps(ctx context.Context, ips []string) ([]*
 	if len(ips) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `ip` in (?) ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` in (?) and `is_deleted` = '0' ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ips)
-	return resp, err
-}
-
-func (m *defaultIpblackModel) FindsByKefuIds(ctx context.Context, kefuIds []string) ([]*Ipblack, error) {
-	var resp = make([]*Ipblack, 0)
-	if len(kefuIds) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `kefu_id` in (?) ", ipblackRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
 	return resp, err
 }
 
 func (m *defaultIpblackModel) FindsById(ctx context.Context, id int64) ([]*Ipblack, error) {
 	var resp = make([]*Ipblack, 0)
-	query := fmt.Sprintf("select %s from %s where `id` = ? ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `id` = ? and `is_deleted` = '0' ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, id)
 	return resp, err
 }
 
 func (m *defaultIpblackModel) FindsByIp(ctx context.Context, ip string) ([]*Ipblack, error) {
 	var resp = make([]*Ipblack, 0)
-	query := fmt.Sprintf("select %s from %s where `ip` = ? ", ipblackRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `ip` = ? and `is_deleted` = '0' ", ipblackRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ip)
 	return resp, err
 }
 
-func (m *defaultIpblackModel) FindsByKefuId(ctx context.Context, kefuId string) ([]*Ipblack, error) {
-	var resp = make([]*Ipblack, 0)
-	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? ", ipblackRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
-	return resp, err
+func (m *defaultIpblackModel) SoftDelete(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("update %s set `is_deleted` = '1' where `id` = ?", m.table)
+	_, err := m.ExecNoCacheCtx(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// 删除缓存
+	err = m.DelCacheCtx(ctx, m.formatPrimary(id))
+	return err
 }

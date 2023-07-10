@@ -29,9 +29,8 @@ func NewGetIpblackListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetIpblackListLogic) GetIpblackList(req *types.GetIpblackListReq) (any, error) {
 	in := &model.Ipblack{
-		Id:     req.Id,
-		Ip:     req.Ip,
-		KefuId: req.KefuId,
+		Id: req.Id,
+		Ip: req.Ip,
 	}
 	mdList, total, err := l.svcCtx.IpblackModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

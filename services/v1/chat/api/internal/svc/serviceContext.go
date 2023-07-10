@@ -25,8 +25,7 @@ type ServiceContext struct {
 	MessageModel       model.MessageModel
 	MessageConfigModel model.MessageConfigModel
 	VisitorModel       model.VisitorModel
-
-	// Hub *wshub.Hub
+	ProjectModel       model.ProjectModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -35,8 +34,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
 	svc := &ServiceContext{
-		Config: c,
-
+		Config:             c,
 		VisitorAuth:        middleware.NewVisitorAuthMiddleware().Handle,
 		CaptchaRpc:         captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
 		ChatRecordModel:    model.NewChatRecordModel(sqlConn, c.CacheRedis),
@@ -45,9 +43,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		MessageModel:       model.NewMessageModel(sqlConn, c.CacheRedis),
 		MessageConfigModel: model.NewMessageConfigModel(sqlConn, c.CacheRedis),
 		VisitorModel:       model.NewVisitorModel(sqlConn, c.CacheRedis),
-
-		// Hub: nil,
+		ProjectModel:       model.NewProjectModel(sqlConn, c.CacheRedis),
 	}
-	// svc.Hub = wshub.NewHub(svc.MessageModel, svc.ChatRecordModel, svc.MessageConfigModel)
 	return svc
 }

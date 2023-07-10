@@ -39,20 +39,22 @@ type (
 	}
 
 	Message struct {
-		Id         int64     `db:"id"`          // 表主键
-		Uuid       string    `db:"uuid"`        // UUID
-		Content    string    `db:"content"`     // 消息内容
-		VisitorId  int64     `db:"visitor_id"`  // 游客id
-		KefuId     int64     `db:"kefu_id"`     // 客服id
-		MsgType    int64     `db:"msg_type"`    // 0游客消息，1客服消息，2公告消息，3系统消息
-		Status     int64     `db:"status"`      // 状态:0合法，1违规
-		IsRead     int64     `db:"is_read"`     // 状态:0未读，1已读
-		IsSend     int64     `db:"is_send"`     // 状态:0未发送，1已发送
-		SendTime   time.Time `db:"send_time"`   // 发送时间
-		ExpireTime time.Time `db:"expire_time"` // 过期时间, 默认为3天
-		CreateAt   time.Time `db:"create_at"`   // 创建时间
-		UpdateAt   time.Time `db:"update_at"`   // 更新时间
-		IsDeleted  int64     `db:"is_deleted"`  // 是否已删除
+		Id          int64     `db:"id"`           // 表主键
+		Uuid        string    `db:"uuid"`         // UUID
+		Content     string    `db:"content"`      // 消息内容
+		ContentType int64     `db:"content_type"` // 0文本，1图片，2表情，3视频, 4错误信息
+		VisitorId   int64     `db:"visitor_id"`   // 游客id
+		KefuId      int64     `db:"kefu_id"`      // 客服id
+		ProjectId   int64     `db:"project_id"`   // 项目id
+		MsgType     int64     `db:"msg_type"`     // 0游客消息，1客服消息，2公告消息，3系统消息
+		Status      int64     `db:"status"`       // 状态:0合法，1违规
+		IsRead      int64     `db:"is_read"`      // 是否已读:0未读，1已读
+		IsSend      int64     `db:"is_send"`      // 是否已发送:0未发送，1已发送
+		SendTime    time.Time `db:"send_time"`    // 发送时间
+		ExpireTime  time.Time `db:"expire_time"`  // 缓存过期时间, 默认为3天
+		CreateAt    time.Time `db:"create_at"`    // 创建时间
+		UpdateAt    time.Time `db:"update_at"`    // 更新时间
+		IsDeleted   int64     `db:"is_deleted"`   // 是否已删除
 	}
 )
 
@@ -99,8 +101,8 @@ func (m *defaultMessageModel) FindOne(ctx context.Context, id int64) (*Message, 
 func (m *defaultMessageModel) Insert(ctx context.Context, data *Message) (sql.Result, error) {
 	messageIdKey := fmt.Sprintf("%s%v", cacheMessageIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, messageRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.VisitorId, data.KefuId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, messageRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.ContentType, data.VisitorId, data.KefuId, data.ProjectId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.IsDeleted)
 	}, messageIdKey)
 	return ret, err
 }
@@ -109,7 +111,7 @@ func (m *defaultMessageModel) Update(ctx context.Context, data *Message) error {
 	messageIdKey := fmt.Sprintf("%s%v", cacheMessageIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, messageRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.VisitorId, data.KefuId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.ContentType, data.VisitorId, data.KefuId, data.ProjectId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.IsDeleted, data.Id)
 	}, messageIdKey)
 	return err
 }

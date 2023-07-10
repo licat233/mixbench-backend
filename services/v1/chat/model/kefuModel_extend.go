@@ -19,12 +19,14 @@ type kefu_model interface {
 	FindList(ctx context.Context, pageSize, page int64, keyword string, kefu *Kefu) (resp []*Kefu, total int64, err error)
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*Kefu, error)
+	FindByProjectId(ctx context.Context, projectId int64) (*Kefu, error)
 	FindByPassport(ctx context.Context, passport string) (*Kefu, error)
 	FindByUsername(ctx context.Context, username string) (*Kefu, error)
 	FindByPassword(ctx context.Context, password string) (*Kefu, error)
 	FindByStatus(ctx context.Context, status int64) (*Kefu, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Kefu, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Kefu, error)
+	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Kefu, error)
 	FindsByPassports(ctx context.Context, passports []string) ([]*Kefu, error)
 	FindsByUsernames(ctx context.Context, usernames []string) ([]*Kefu, error)
 	FindsByPasswords(ctx context.Context, passwords []string) ([]*Kefu, error)
@@ -32,6 +34,7 @@ type kefu_model interface {
 
 	FindsById(ctx context.Context, id int64) ([]*Kefu, error)
 	FindsByUuid(ctx context.Context, uuid string) ([]*Kefu, error)
+	FindsByProjectId(ctx context.Context, projectId int64) ([]*Kefu, error)
 	FindsByPassport(ctx context.Context, passport string) ([]*Kefu, error)
 	FindsByUsername(ctx context.Context, username string) ([]*Kefu, error)
 	FindsByPassword(ctx context.Context, password string) ([]*Kefu, error)
@@ -70,6 +73,9 @@ func (m *defaultKefuModel) FindList(ctx context.Context, pageSize, page int64, k
 		}
 		if kefu.Uuid != "" {
 			sq = sq.Where("`uuid` = ?", kefu.Uuid)
+		}
+		if kefu.ProjectId > 0 {
+			sq = sq.Where("`project_id` = ?", kefu.ProjectId)
 		}
 		if kefu.Passport != "" {
 			sq = sq.Where("`passport` = ?", kefu.Passport)
@@ -116,6 +122,20 @@ func (m *defaultKefuModel) FindByUuid(ctx context.Context, uuid string) (*Kefu, 
 	var resp Kefu
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' limit 1", kefuRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, uuid)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultKefuModel) FindByProjectId(ctx context.Context, projectId int64) (*Kefu, error) {
+	var resp Kefu
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' limit 1", kefuRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, projectId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -202,6 +222,16 @@ func (m *defaultKefuModel) FindsByUuids(ctx context.Context, uuids []string) ([]
 	return resp, err
 }
 
+func (m *defaultKefuModel) FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Kefu, error) {
+	var resp = make([]*Kefu, 0)
+	if len(projectIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", kefuRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	return resp, err
+}
+
 func (m *defaultKefuModel) FindsByPassports(ctx context.Context, passports []string) ([]*Kefu, error) {
 	var resp = make([]*Kefu, 0)
 	if len(passports) == 0 {
@@ -253,6 +283,13 @@ func (m *defaultKefuModel) FindsByUuid(ctx context.Context, uuid string) ([]*Kef
 	var resp = make([]*Kefu, 0)
 	query := fmt.Sprintf("select %s from %s where `uuid` = ? and `is_deleted` = '0' ", kefuRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuid)
+	return resp, err
+}
+
+func (m *defaultKefuModel) FindsByProjectId(ctx context.Context, projectId int64) ([]*Kefu, error) {
+	var resp = make([]*Kefu, 0)
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' ", kefuRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectId)
 	return resp, err
 }
 

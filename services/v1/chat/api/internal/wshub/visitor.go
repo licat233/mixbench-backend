@@ -3,12 +3,14 @@ package wshub
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/types"
 	"mixbench/services/v1/chat/model"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -18,30 +20,89 @@ import (
 
 type VisitorClient struct {
 	*Client
-	Visitor *types.Visitor
+	Visitor *model.Visitor
 }
 
-func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http.Request, visitor *types.Visitor) (*VisitorClient, error) {
+// 新建游客client，如果初始化失败，会返回 nil, nil
+func NewVisitorClient(ctx context.Context, hub *Hub, w http.ResponseWriter, r *http.Request) (*VisitorClient, error) {
+	if hub == nil {
+		return nil, errors.New("hub is nil")
+	}
+	var isOk = false
 	conn, err := NewWsConn(w, r)
 	if err != nil {
 		return nil, fmt.Errorf("newWsConn error: %s", err)
 	}
+	defer func() {
+		if !isOk {
+			if conn != nil {
+				conn.Close()
+			}
+			// CloseWsConn(conn)
+		}
+	}()
 	c := &VisitorClient{
 		Client: &Client{
-			Logger: logx.WithContext(ctx),
-			ctx:    ctx,
-			hub:    hub,
-			conn:   conn,
-			send:   make(chan *types.Message, 100),
-			Stop:   make(chan bool),
-			Status: true,
-			w:      w,
-			r:      r,
+			Logger:    logx.WithContext(ctx),
+			ctx:       ctx,
+			hub:       hub,
+			conn:      conn,
+			send:      make(chan *model.Message, 100),
+			Stop:      make(chan bool),
+			Status:    true,
+			ProjectId: 0,
+			w:         w,
+			r:         r,
 		},
-		Visitor: visitor,
+		Visitor: nil,
 	}
+	// 鉴权
+	ok, id, err := c.Identify()
+	if err != nil {
+		return nil, fmt.Errorf("token identify error: %v", err)
+	}
+	if !ok || id <= 0 {
+		return nil, nil
+	}
+
+	//查看是否存在该游客
+	visitor, err := c.hub.SvcCtx.VisitorModel.FindOne(c.ctx, id)
+	if err != nil && err != model.ErrNotFound {
+		c.Logger.Error(err)
+		return nil, err
+	}
+
+	if err == model.ErrNotFound {
+		return nil, nil
+	}
+
+	//查找是否存在该项目
+	_, err = c.hub.SvcCtx.ProjectModel.FindOne(c.ctx, visitor.ProjectId)
+	if err != nil && err != model.ErrNotFound {
+		c.Logger.Error(err)
+		return nil, err
+	}
+
+	if err == model.ErrNotFound {
+		return nil, nil
+	}
+
+	c.Visitor = visitor
+	c.Client.ProjectId = visitor.ProjectId
+
 	// 注册
 	hub.VisitorClients.Set(c)
+
+	//更新数据库中的数据为在线状态
+	visitor.Status = 1
+	err = c.hub.SvcCtx.VisitorModel.Update(c.ctx, visitor)
+	if err != nil {
+		c.Logger.Error(err)
+		return nil, err
+	}
+
+	isOk = true
+
 	return c, nil
 }
 
@@ -52,16 +113,15 @@ func (c *VisitorClient) Run() (err error) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		WritePumpError = c.WritePump()
-	}()
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
 		ReadPumpError = c.ReadPump()
 	}()
 
-	//等待关闭信号, 这里可要可不要
-	// <-c.Stop
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		WritePumpError = c.WritePump()
+	}()
+
 	wg.Wait()
 	if WritePumpError != nil {
 		err = fmt.Errorf("WritePumpError: %s", WritePumpError)
@@ -77,6 +137,7 @@ func (c *VisitorClient) ReadPump() error {
 	defer func() {
 		c.Logout()
 	}()
+
 	for {
 		select {
 		case <-c.Stop:
@@ -84,50 +145,41 @@ func (c *VisitorClient) ReadPump() error {
 		default:
 			_, messageContent, err := c.conn.ReadMessage()
 			if err != nil {
-				//conn被正常关闭
 				return nil
-				// if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
-				// 	//conn被正常关闭
-				// 	return nil
-				// } else {
-				// 	//异常关闭
-				// 	c.Logger.Error("websocket conn is unexpected close error: %v", err)
-				// 	return fmt.Errorf("websocket conn is unexpected close error: %v", err)
-				// }
-			}
-			// 如果该游客没有客服接待
-			if c.Visitor.KefuId <= 0 {
-				//尝试分配客服
-				kefuCli := c.hub.AssignKefu()
-				//如果没有客服
-				if kefuCli == nil {
-					//只能抛弃这条消息
-					continue
-				}
-				//如果有客服，将其分配给该游客
-				c.Visitor.KefuId = kefuCli.Kefu.Id
 			}
 			// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
 			messageContent = preprocessMessageContent(messageContent)
-			message := &types.Message{
-				Id:         0,
-				Uuid:       uniqueid.NewUUID(),
-				Content:    string(messageContent),
-				VisitorId:  c.Visitor.Id,
-				KefuId:     c.Visitor.KefuId,
-				MsgType:    0,
-				Status:     0,
-				IsRead:     0,
-				IsSend:     0,
-				SendTime:   time.Now().Local().Unix(),
-				ExpireTime: 0,
+			content := string(messageContent)
+			if strings.ToLower(content) == "ping" {
+				//ping 不用管
+				continue
 			}
+
+			// 如果该游客没有客服接待
+			if c.Visitor.KefuId <= 0 {
+				//尝试分配客服
+				kefuCli := c.hub.AssignKefu(c.ProjectId)
+				//如果没有客服
+				if kefuCli == nil {
+					//则缓存这条消息，待客服上线后，给与回复
+
+					// continue
+				} else {
+					//如果有客服，将其分配给该游客
+					c.Visitor.KefuId = kefuCli.Kefu.Id
+				}
+			}
+
+			message := c.NewMessage(content)
+
 			//入栈前，持久化一下，防止消息在通道中意外丢失
 			if err := c.hub.SendBeforeHandler(message); err != nil {
-				// c.Client.SystemErrorHandler(-1, c.Visitor.Id)
 				return fmt.Errorf("SendBeforeHandler error: %s", err)
 			}
-			c.hub.MessageList <- message
+			//有客服接待，则发送
+			if c.Visitor.KefuId > 0 {
+				c.hub.MessageStore <- message
+			}
 		}
 	}
 }
@@ -156,11 +208,8 @@ func (c *VisitorClient) WritePump() error {
 		}
 	}
 
-	//已经准备好接收信息了，那就把缓存的游客消息全部发送
-	mdMsgList, _, err := c.hub.SvcCtx.MessageModel.FindList(c.ctx, -1, -1, "", &model.Message{
-		VisitorId: c.Visitor.Id,
-		MsgType:   KefuMsgType,
-	})
+	//已经准备好接收信息了，那就把缓存的游客消息全部发送给该游客
+	mdMsgList, err := c.hub.SvcCtx.MessageModel.FindsToVisitorByVisitorId(c.ctx, c.Visitor.Id)
 	if err != nil {
 		c.Logger.Error(err)
 		return err
@@ -191,7 +240,7 @@ func (c *VisitorClient) WritePump() error {
 				// 已关闭，正常退出
 				return nil
 			}
-			if err := c.WriteMessage(message); err != nil {
+			if err := c.WriteMessage(dataconv.MdMessageToApiMessage(message)); err != nil {
 				return err
 			}
 		case <-c.Stop:
@@ -220,12 +269,37 @@ func (c *VisitorClient) WriteMessage(message *types.Message) error {
 	return nil
 }
 
-func (c *VisitorClient) Logout() {
+func (c *VisitorClient) Logout() error {
 	if !c.Client.Status {
-		return
+		return nil
 	}
 	c.Client.Status = false
 	c.hub.VisitorClients.Del(c.Visitor.Id)
+
+	//更新数据库中的数据为离线状态
+	c.Visitor.Status = 0
+	err := c.hub.SvcCtx.VisitorModel.Update(c.ctx, c.Visitor)
+	if err != nil {
+		c.Logger.Error(err)
+		return err
+	}
+	return nil
+}
+
+func (c *VisitorClient) NewMessage(content string) *model.Message {
+	return &model.Message{
+		Id:          0,
+		Uuid:        uniqueid.NewUUID(),
+		Content:     content,
+		ContentType: TextContentType,
+		VisitorId:   c.Visitor.Id,
+		KefuId:      c.Visitor.KefuId,
+		MsgType:     VisitorMsgType, //目前仅支持普通文本的消息
+		Status:      0,
+		IsRead:      0,
+		IsSend:      0,
+		SendTime:    time.Now().Local(),
+	}
 }
 
 type visitorClientMap struct {
@@ -279,19 +353,6 @@ func (l *visitorClientMap) Len() int {
 	defer l.RwMutex.RUnlock()
 	return len(l.Map)
 }
-
-// // GetWaitVisitors 获取正在等待客服接待的游客
-// func (l *visitorClientMap) GetWaitVisitors() []*types.Visitor {
-// 	l.RwMutex.RLock()
-// 	defer l.RwMutex.RUnlock()
-// 	var res []*types.Visitor
-// 	for i := range l.Map {
-// 		if l.Map[i].Visitor.KefuId <= 0 {
-// 			res = append(res, l.Map[i].Visitor)
-// 		}
-// 	}
-// 	return res
-// }
 
 // GetByKefuId 通过kefuid查找
 func (l *visitorClientMap) GetByKefuId(kefuId int64) []*VisitorClient {

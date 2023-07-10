@@ -30,9 +30,9 @@ services:
       - ADMIN_RPC_PORT=${ADMIN_RPC_PORT}
       - CAPTCHA_API_PORT=${CAPTCHA_API_PORT}
       - CAPTCHA_RPC_PORT=${CAPTCHA_RPC_PORT}
-      - LUCKDRAW_API_PORT=${LUCKDRAW_API_PORT}
-      - LUCKDRAW_RPC_PORT=${LUCKDRAW_RPC_PORT}
-      - LUCKDRAW_MQ_PORT=${LUCKDRAW_MQ_PORT}
+      - LUCKYDRAW_API_PORT=${LUCKYDRAW_API_PORT}
+      - LUCKYDRAW_RPC_PORT=${LUCKYDRAW_RPC_PORT}
+      - LUCKYDRAW_MQ_PORT=${LUCKYDRAW_MQ_PORT}
     volumes:
       - .:/go/app
       - build_volume:/go/app/build
@@ -124,9 +124,9 @@ services:
       - ADMIN_RPC_PORT=${ADMIN_RPC_PORT}
       - CAPTCHA_API_PORT=${CAPTCHA_API_PORT}
       - CAPTCHA_RPC_PORT=${CAPTCHA_RPC_PORT}
-      - LUCKDRAW_API_PORT=${LUCKDRAW_API_PORT}
-      - LUCKDRAW_RPC_PORT=${LUCKDRAW_RPC_PORT}
-      - LUCKDRAW_MQ_PORT=${LUCKDRAW_MQ_PORT}
+      - LUCKYDRAW_API_PORT=${LUCKYDRAW_API_PORT}
+      - LUCKYDRAW_RPC_PORT=${LUCKYDRAW_RPC_PORT}
+      - LUCKYDRAW_MQ_PORT=${LUCKYDRAW_MQ_PORT}
     ports:
       - ${NGINX_HTTP_PORT}:80
       - ${NGINX_HTTPS_PORT}:443
@@ -158,7 +158,7 @@ services:
       - LOG_LEVEL=debug
     restart: on-failure
     expose:
-      - 5775/udp  
+      - 5775/udp
       - 6831/udp
       - 6832/udp
       - 5778

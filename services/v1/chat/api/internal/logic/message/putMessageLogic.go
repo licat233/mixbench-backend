@@ -29,17 +29,19 @@ func NewPutMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutMes
 
 func (l *PutMessageLogic) PutMessage(req *types.PutMessageReq) (any, error) {
 	in := &model.Message{
-		Id:         req.Id,
-		Uuid:       req.Uuid,
-		Content:    req.Content,
-		VisitorId:  req.VisitorId,
-		KefuId:     req.KefuId,
-		MsgType:    req.MsgType,
-		Status:     req.Status,
-		IsRead:     req.IsRead,
-		IsSend:     req.IsSend,
-		SendTime:   time.Unix(req.SendTime, 0).Local(),
-		ExpireTime: time.Unix(req.ExpireTime, 0).Local(),
+		Id:          req.Id,
+		Uuid:        req.Uuid,
+		Content:     req.Content,
+		ContentType: req.ContentType,
+		VisitorId:   req.VisitorId,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		MsgType:     req.MsgType,
+		Status:      req.Status,
+		IsRead:      req.IsRead,
+		IsSend:      req.IsSend,
+		SendTime:    time.Unix(req.SendTime, 0).Local(),
+		ExpireTime:  time.Unix(req.ExpireTime, 0).Local(),
 	}
 	if err := l.svcCtx.MessageModel.Update(l.ctx, in); err != nil {
 		l.Logger.Error("failed to update message, error: ", err)

@@ -28,8 +28,7 @@ func NewAddIpblackLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddIpb
 
 func (l *AddIpblackLogic) AddIpblack(req *types.AddIpblackReq) (any, error) {
 	in := &model.Ipblack{
-		Ip:     req.Ip,
-		KefuId: req.KefuId,
+		Ip: req.Ip,
 	}
 	if _, err := l.svcCtx.IpblackModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert ipblack, error: ", err)

@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -16,6 +17,7 @@ type (
 		messageConfigModel  // extended interface by gozero
 		messageConfig_model // extended interface by genzero
 		UpdateContent(ctx context.Context, Id int64, content string) error
+		FindsByMsgkeyProjectId(ctx context.Context, msgkey string, projectId int64) ([]*MessageConfig, error)
 	}
 
 	customMessageConfigModel struct {
@@ -37,4 +39,11 @@ func (m *customMessageConfigModel) UpdateContent(ctx context.Context, Id int64, 
 	}
 	data.Content = content
 	return m.Update(ctx, data)
+}
+
+func (m *customMessageConfigModel) FindsByMsgkeyProjectId(ctx context.Context, msgkey string, projectId int64) ([]*MessageConfig, error) {
+	var resp = make([]*MessageConfig, 0)
+	query := fmt.Sprintf("select %s from %s where `msgkey` = ? and `project_id` = ? ", messageConfigRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgkey, projectId)
+	return resp, err
 }

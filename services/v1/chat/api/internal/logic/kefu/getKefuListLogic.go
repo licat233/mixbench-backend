@@ -29,12 +29,13 @@ func NewGetKefuListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetKe
 
 func (l *GetKefuListLogic) GetKefuList(req *types.GetKefuListReq) (any, error) {
 	in := &model.Kefu{
-		Id:       req.Id,
-		Uuid:     req.Uuid,
-		Passport: req.Passport,
-		Username: req.Username,
-		Password: req.Password,
-		Status:   req.Status,
+		Id:        req.Id,
+		Uuid:      req.Uuid,
+		ProjectId: req.ProjectId,
+		Passport:  req.Passport,
+		Username:  req.Username,
+		Password:  req.Password,
+		Status:    req.Status,
 	}
 	mdList, total, err := l.svcCtx.KefuModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

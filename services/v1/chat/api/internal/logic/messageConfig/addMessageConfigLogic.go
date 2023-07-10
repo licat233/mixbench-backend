@@ -28,9 +28,10 @@ func NewAddMessageConfigLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *AddMessageConfigLogic) AddMessageConfig(req *types.AddMessageConfigReq) (any, error) {
 	in := &model.MessageConfig{
-		Name:    req.Name,
-		Msgkey:  req.Msgkey,
-		Content: req.Content,
+		ProjectId: req.ProjectId,
+		Name:      req.Name,
+		Msgkey:    req.Msgkey,
+		Content:   req.Content,
 	}
 	if _, err := l.svcCtx.MessageConfigModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert messageConfig, error: ", err)

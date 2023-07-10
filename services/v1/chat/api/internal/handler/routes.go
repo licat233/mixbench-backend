@@ -9,6 +9,7 @@ import (
 	kefu "mixbench/services/v1/chat/api/internal/handler/kefu"
 	message "mixbench/services/v1/chat/api/internal/handler/message"
 	messageConfig "mixbench/services/v1/chat/api/internal/handler/messageConfig"
+	project "mixbench/services/v1/chat/api/internal/handler/project"
 	visitor "mixbench/services/v1/chat/api/internal/handler/visitor"
 	"mixbench/services/v1/chat/api/internal/svc"
 
@@ -225,6 +226,42 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/v1/api/chat/message"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: project.AddProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: project.PutProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: project.GetProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: project.DelProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: project.GetProjectListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: project.GetProjectEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/chat/project"),
 	)
 
 	server.AddRoutes(

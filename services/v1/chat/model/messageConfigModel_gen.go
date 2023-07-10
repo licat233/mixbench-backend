@@ -40,10 +40,11 @@ type (
 	}
 
 	MessageConfig struct {
-		Id      int64  `db:"id"`      // 主键
-		Name    string `db:"name"`    // 名字
-		Msgkey  string `db:"msgkey"`  // 消息密匙
-		Content string `db:"content"` // 消息内容
+		Id        int64  `db:"id"`         // 主键
+		ProjectId int64  `db:"project_id"` // 项目id
+		Name      string `db:"name"`       // 名字
+		Msgkey    string `db:"msgkey"`     // 消息密匙
+		Content   string `db:"content"`    // 消息内容
 	}
 )
 
@@ -117,8 +118,8 @@ func (m *defaultMessageConfigModel) Insert(ctx context.Context, data *MessageCon
 	messageConfigIdKey := fmt.Sprintf("%s%v", cacheMessageConfigIdPrefix, data.Id)
 	messageConfigMsgkeyKey := fmt.Sprintf("%s%v", cacheMessageConfigMsgkeyPrefix, data.Msgkey)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, messageConfigRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Name, data.Msgkey, data.Content)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, messageConfigRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.ProjectId, data.Name, data.Msgkey, data.Content)
 	}, messageConfigIdKey, messageConfigMsgkeyKey)
 	return ret, err
 }
@@ -133,7 +134,7 @@ func (m *defaultMessageConfigModel) Update(ctx context.Context, newData *Message
 	messageConfigMsgkeyKey := fmt.Sprintf("%s%v", cacheMessageConfigMsgkeyPrefix, data.Msgkey)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, messageConfigRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.Name, newData.Msgkey, newData.Content, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.ProjectId, newData.Name, newData.Msgkey, newData.Content, newData.Id)
 	}, messageConfigIdKey, messageConfigMsgkeyKey)
 	return err
 }

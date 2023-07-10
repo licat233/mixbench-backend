@@ -41,10 +41,11 @@ type (
 	}
 
 	Ipblack struct {
-		Id       int64     `db:"id"`
-		Ip       string    `db:"ip"`        // IP
-		CreateAt time.Time `db:"create_at"` // 创建时间
-		KefuId   string    `db:"kefu_id"`   // 客服id
+		Id        int64     `db:"id"`
+		Ip        string    `db:"ip"`         // IP
+		CreateAt  time.Time `db:"create_at"`  // 创建时间
+		UpdateAt  time.Time `db:"update_at"`  // 更新时间
+		IsDeleted int64     `db:"is_deleted"` // 是否已删除
 	}
 )
 
@@ -119,7 +120,7 @@ func (m *defaultIpblackModel) Insert(ctx context.Context, data *Ipblack) (sql.Re
 	ipblackIpKey := fmt.Sprintf("%s%v", cacheIpblackIpPrefix, data.Ip)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, ipblackRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Ip, data.KefuId)
+		return conn.ExecCtx(ctx, query, data.Ip, data.IsDeleted)
 	}, ipblackIdKey, ipblackIpKey)
 	return ret, err
 }
@@ -134,7 +135,7 @@ func (m *defaultIpblackModel) Update(ctx context.Context, newData *Ipblack) erro
 	ipblackIpKey := fmt.Sprintf("%s%v", cacheIpblackIpPrefix, data.Ip)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, ipblackRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.Ip, newData.KefuId, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.Ip, newData.IsDeleted, newData.Id)
 	}, ipblackIdKey, ipblackIpKey)
 	return err
 }

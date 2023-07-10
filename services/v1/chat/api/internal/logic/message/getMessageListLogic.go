@@ -30,17 +30,19 @@ func NewGetMessageListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetMessageListLogic) GetMessageList(req *types.GetMessageListReq) (any, error) {
 	in := &model.Message{
-		Id:         req.Id,
-		Uuid:       req.Uuid,
-		Content:    req.Content,
-		VisitorId:  req.VisitorId,
-		KefuId:     req.KefuId,
-		MsgType:    req.MsgType,
-		Status:     req.Status,
-		IsRead:     req.IsRead,
-		IsSend:     req.IsSend,
-		SendTime:   time.Unix(req.SendTime, 0).Local(),
-		ExpireTime: time.Unix(req.ExpireTime, 0).Local(),
+		Id:          req.Id,
+		Uuid:        req.Uuid,
+		Content:     req.Content,
+		ContentType: req.ContentType,
+		VisitorId:   req.VisitorId,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		MsgType:     req.MsgType,
+		Status:      req.Status,
+		IsRead:      req.IsRead,
+		IsSend:      req.IsSend,
+		SendTime:    time.Unix(req.SendTime, 0).Local(),
+		ExpireTime:  time.Unix(req.ExpireTime, 0).Local(),
 	}
 	mdList, total, err := l.svcCtx.MessageModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

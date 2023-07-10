@@ -27,7 +27,12 @@ func RemoteIp(req *http.Request) string {
 	return strings.TrimSpace(strs[len(strs)-1])
 }
 
-// 获取请求头中的User-Agent
+// 获取请求头中的Origin
+func RemoteOrigin(r *http.Request) string {
+	return r.Header.Get("Origin")
+}
+
+// 获取请求头中的Referer
 func RemoteReferer(r *http.Request) string {
 	return r.Header.Get("Referer")
 }

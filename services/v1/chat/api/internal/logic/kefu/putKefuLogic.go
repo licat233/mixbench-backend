@@ -28,12 +28,13 @@ func NewPutKefuLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutKefuLo
 
 func (l *PutKefuLogic) PutKefu(req *types.PutKefuReq) (any, error) {
 	in := &model.Kefu{
-		Id:       req.Id,
-		Uuid:     req.Uuid,
-		Passport: req.Passport,
-		Username: req.Username,
-		Password: req.Password,
-		Status:   req.Status,
+		Id:        req.Id,
+		Uuid:      req.Uuid,
+		ProjectId: req.ProjectId,
+		Passport:  req.Passport,
+		Username:  req.Username,
+		Password:  req.Password,
+		Status:    req.Status,
 	}
 	if err := l.svcCtx.KefuModel.Update(l.ctx, in); err != nil {
 		l.Logger.Error("failed to update kefu, error: ", err)

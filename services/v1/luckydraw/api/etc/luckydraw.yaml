@@ -1,6 +1,6 @@
 Name: luckydraw-api
 Host: 0.0.0.0
-Port: ${LUCKDRAW_API_PORT}
+Port: ${LUCKYDRAW_API_PORT}
 Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
@@ -18,7 +18,7 @@ StaticConfig:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: ${PROMETHEUS_LUCKDRAW_API_PORT}
+  Port: ${PROMETHEUS_LUCKYDRAW_API_PORT}
   Path: /metrics
 
 #链路追踪
@@ -43,7 +43,7 @@ CaptchaRpc:
 
 LuckydrawRpc:
   Endpoints:
-    - 127.0.0.1:${LUCKDRAW_RPC_PORT}
+    - 127.0.0.1:${LUCKYDRAW_RPC_PORT}
   NonBlock: true
   # Etcd:
   #   Hosts:

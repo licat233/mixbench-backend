@@ -116,40 +116,46 @@ type TransferVisitorReq struct {
 }
 
 type ChatRecord struct {
-	Id        int64  `json:"id"`        //表主键
-	Uuid      string `json:"uuid"`      //UUID
-	Content   string `json:"content"`   //消息内容
-	VisitorId int64  `json:"visitorId"` //游客id
-	KefuId    int64  `json:"kefuId"`    //客服id， -1表示没有分配到客服
-	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
-	Status    int64  `json:"status"`    //状态:0合法，1违规
-	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
-	IsSend    int64  `json:"isSend"`    //状态:0未发送，1已发送
-	SendTime  int64  `json:"sendTime"`  //发送时间
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	Content     string `json:"content"`     //消息内容
+	ContentType int64  `json:"contentType"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `json:"visitorId"`   //游客id
+	KefuId      int64  `json:"kefuId"`      //客服id， 0表示没有分配到客服
+	ProjectId   int64  `json:"projectId"`   //项目id
+	MsgType     int64  `json:"msgType"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `json:"status"`      //状态:0合法，1违规
+	IsRead      int64  `json:"isRead"`      //是否已读:0未读，1已读
+	IsSend      int64  `json:"isSend"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `json:"sendTime"`    //发送时间
 }
 
 type AddChatRecordReq struct {
-	Content   string `json:"content"`   //消息内容
-	VisitorId int64  `json:"visitorId"` //游客id
-	KefuId    int64  `json:"kefuId"`    //客服id， -1表示没有分配到客服
-	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
-	Status    int64  `json:"status"`    //状态:0合法，1违规
-	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
-	IsSend    int64  `json:"isSend"`    //状态:0未发送，1已发送
-	SendTime  int64  `json:"sendTime"`  //发送时间
+	Content     string `json:"content"`     //消息内容
+	ContentType int64  `json:"contentType"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `json:"visitorId"`   //游客id
+	KefuId      int64  `json:"kefuId"`      //客服id， 0表示没有分配到客服
+	ProjectId   int64  `json:"projectId"`   //项目id
+	MsgType     int64  `json:"msgType"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `json:"status"`      //状态:0合法，1违规
+	IsRead      int64  `json:"isRead"`      //是否已读:0未读，1已读
+	IsSend      int64  `json:"isSend"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `json:"sendTime"`    //发送时间
 }
 
 type PutChatRecordReq struct {
-	Id        int64  `json:"id"`        //表主键
-	Uuid      string `json:"uuid"`      //UUID
-	Content   string `json:"content"`   //消息内容
-	VisitorId int64  `json:"visitorId"` //游客id
-	KefuId    int64  `json:"kefuId"`    //客服id， -1表示没有分配到客服
-	MsgType   int64  `json:"msgType"`   //0游客消息，1客服消息，2公告消息，3系统消息
-	Status    int64  `json:"status"`    //状态:0合法，1违规
-	IsRead    int64  `json:"isRead"`    //状态:0未读，1已读
-	IsSend    int64  `json:"isSend"`    //状态:0未发送，1已发送
-	SendTime  int64  `json:"sendTime"`  //发送时间
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	Content     string `json:"content"`     //消息内容
+	ContentType int64  `json:"contentType"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `json:"visitorId"`   //游客id
+	KefuId      int64  `json:"kefuId"`      //客服id， 0表示没有分配到客服
+	ProjectId   int64  `json:"projectId"`   //项目id
+	MsgType     int64  `json:"msgType"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `json:"status"`      //状态:0合法，1违规
+	IsRead      int64  `json:"isRead"`      //是否已读:0未读，1已读
+	IsSend      int64  `json:"isSend"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `json:"sendTime"`    //发送时间
 }
 
 type DelChatRecordReq struct {
@@ -161,20 +167,22 @@ type GetChatRecordReq struct {
 }
 
 type GetChatRecordListReq struct {
-	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
-	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
-	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
-	Keyword   string `form:"keyword,optional"`              //关键词，可选
-	Id        int64  `form:"id,optional,default=-1"`        //表主键
-	Uuid      string `form:"uuid,optional"`                 //UUID
-	Content   string `form:"content,optional"`              //消息内容
-	VisitorId int64  `form:"visitorId,optional,default=-1"` //游客id
-	KefuId    int64  `form:"kefuId,optional,default=-1"`    //客服id， -1表示没有分配到客服
-	MsgType   int64  `form:"msgType,optional,default=-1"`   //0游客消息，1客服消息，2公告消息，3系统消息
-	Status    int64  `form:"status,optional,default=-1"`    //状态:0合法，1违规
-	IsRead    int64  `form:"isRead,optional,default=-1"`    //状态:0未读，1已读
-	IsSend    int64  `form:"isSend,optional,default=-1"`    //状态:0未发送，1已发送
-	SendTime  int64  `form:"sendTime,optional,default=-1"`  //发送时间
+	PageSize    int64  `form:"pageSize,optional,default=20"`    //页面容量，默认20，可选
+	Page        int64  `form:"page,optional,default=1"`         //当前页码，默认1，可选
+	Current     int64  `form:"current,optional,default=1"`      //当前页码，默认1，用于对接umijs，可选
+	Keyword     string `form:"keyword,optional"`                //关键词，可选
+	Id          int64  `form:"id,optional,default=-1"`          //表主键
+	Uuid        string `form:"uuid,optional"`                   //UUID
+	Content     string `form:"content,optional"`                //消息内容
+	ContentType int64  `form:"contentType,optional,default=-1"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `form:"visitorId,optional,default=-1"`   //游客id
+	KefuId      int64  `form:"kefuId,optional,default=-1"`      //客服id， 0表示没有分配到客服
+	ProjectId   int64  `form:"projectId,optional,default=-1"`   //项目id
+	MsgType     int64  `form:"msgType,optional,default=-1"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `form:"status,optional,default=-1"`      //状态:0合法，1违规
+	IsRead      int64  `form:"isRead,optional,default=-1"`      //是否已读:0未读，1已读
+	IsSend      int64  `form:"isSend,optional,default=-1"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `form:"sendTime,optional,default=-1"`    //发送时间
 }
 
 type GetChatRecordEnumsReq struct {
@@ -182,20 +190,17 @@ type GetChatRecordEnumsReq struct {
 }
 
 type Ipblack struct {
-	Id     int64  `json:"id"`     //
-	Ip     string `json:"ip"`     //IP
-	KefuId string `json:"kefuId"` //客服id
+	Id int64  `json:"id"` //
+	Ip string `json:"ip"` //IP
 }
 
 type AddIpblackReq struct {
-	Ip     string `json:"ip"`     //IP
-	KefuId string `json:"kefuId"` //客服id
+	Ip string `json:"ip"` //IP
 }
 
 type PutIpblackReq struct {
-	Id     int64  `json:"id"`     //
-	Ip     string `json:"ip"`     //IP
-	KefuId string `json:"kefuId"` //客服id
+	Id int64  `json:"id"` //
+	Ip string `json:"ip"` //IP
 }
 
 type DelIpblackReq struct {
@@ -213,7 +218,6 @@ type GetIpblackListReq struct {
 	Keyword  string `form:"keyword,optional"`             //关键词，可选
 	Id       int64  `form:"id,optional,default=-1"`       //
 	Ip       string `form:"ip,optional"`                  //IP
-	KefuId   string `form:"kefuId,optional"`              //客服id
 }
 
 type GetIpblackEnumsReq struct {
@@ -221,28 +225,31 @@ type GetIpblackEnumsReq struct {
 }
 
 type Kefu struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Passport string `json:"passport"` //客服账号
-	Username string `json:"username"` //客服名
-	Password string `json:"password"` //密码
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
+	Id        int64  `json:"id"`        //表主键
+	Uuid      string `json:"uuid"`      //UUID
+	ProjectId int64  `json:"projectId"` //项目id
+	Passport  string `json:"passport"`  //客服账号
+	Username  string `json:"username"`  //客服名
+	Password  string `json:"password"`  //密码
+	Status    int64  `json:"status"`    //状态:0离线，1在线，2冻结
 }
 
 type AddKefuReq struct {
-	Passport string `json:"passport"` //客服账号
-	Username string `json:"username"` //客服名
-	Password string `json:"password"` //密码
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
+	ProjectId int64  `json:"projectId"` //项目id
+	Passport  string `json:"passport"`  //客服账号
+	Username  string `json:"username"`  //客服名
+	Password  string `json:"password"`  //密码
+	Status    int64  `json:"status"`    //状态:0离线，1在线，2冻结
 }
 
 type PutKefuReq struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Passport string `json:"passport"` //客服账号
-	Username string `json:"username"` //客服名
-	Password string `json:"password"` //密码
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2冻结
+	Id        int64  `json:"id"`        //表主键
+	Uuid      string `json:"uuid"`      //UUID
+	ProjectId int64  `json:"projectId"` //项目id
+	Passport  string `json:"passport"`  //客服账号
+	Username  string `json:"username"`  //客服名
+	Password  string `json:"password"`  //密码
+	Status    int64  `json:"status"`    //状态:0离线，1在线，2冻结
 }
 
 type DelKefuReq struct {
@@ -254,16 +261,17 @@ type GetKefuReq struct {
 }
 
 type GetKefuListReq struct {
-	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `form:"keyword,optional"`             //关键词，可选
-	Id       int64  `form:"id,optional,default=-1"`       //表主键
-	Uuid     string `form:"uuid,optional"`                //UUID
-	Passport string `form:"passport,optional"`            //客服账号
-	Username string `form:"username,optional"`            //客服名
-	Password string `form:"password,optional"`            //密码
-	Status   int64  `form:"status,optional,default=-1"`   //状态:0离线，1在线，2冻结
+	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
+	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
+	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
+	Keyword   string `form:"keyword,optional"`              //关键词，可选
+	Id        int64  `form:"id,optional,default=-1"`        //表主键
+	Uuid      string `form:"uuid,optional"`                 //UUID
+	ProjectId int64  `form:"projectId,optional,default=-1"` //项目id
+	Passport  string `form:"passport,optional"`             //客服账号
+	Username  string `form:"username,optional"`             //客服名
+	Password  string `form:"password,optional"`             //密码
+	Status    int64  `form:"status,optional,default=-1"`    //状态:0离线，1在线，2冻结
 }
 
 type GetKefuEnumsReq struct {
@@ -271,43 +279,49 @@ type GetKefuEnumsReq struct {
 }
 
 type Message struct {
-	Id         int64  `json:"id"`         //表主键
-	Uuid       string `json:"uuid"`       //UUID
-	Content    string `json:"content"`    //消息内容
-	VisitorId  int64  `json:"visitorId"`  //游客id
-	KefuId     int64  `json:"kefuId"`     //客服id
-	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息，2公告消息，3系统消息
-	Status     int64  `json:"status"`     //状态:0合法，1违规
-	IsRead     int64  `json:"isRead"`     //状态:0未读，1已读
-	IsSend     int64  `json:"isSend"`     //状态:0未发送，1已发送
-	SendTime   int64  `json:"sendTime"`   //发送时间
-	ExpireTime int64  `json:"expireTime"` //过期时间, 默认为3天
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	Content     string `json:"content"`     //消息内容
+	ContentType int64  `json:"contentType"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `json:"visitorId"`   //游客id
+	KefuId      int64  `json:"kefuId"`      //客服id
+	ProjectId   int64  `json:"projectId"`   //项目id
+	MsgType     int64  `json:"msgType"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `json:"status"`      //状态:0合法，1违规
+	IsRead      int64  `json:"isRead"`      //是否已读:0未读，1已读
+	IsSend      int64  `json:"isSend"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `json:"sendTime"`    //发送时间
+	ExpireTime  int64  `json:"expireTime"`  //缓存过期时间, 默认为3天
 }
 
 type AddMessageReq struct {
-	Content    string `json:"content"`    //消息内容
-	VisitorId  int64  `json:"visitorId"`  //游客id
-	KefuId     int64  `json:"kefuId"`     //客服id
-	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息，2公告消息，3系统消息
-	Status     int64  `json:"status"`     //状态:0合法，1违规
-	IsRead     int64  `json:"isRead"`     //状态:0未读，1已读
-	IsSend     int64  `json:"isSend"`     //状态:0未发送，1已发送
-	SendTime   int64  `json:"sendTime"`   //发送时间
-	ExpireTime int64  `json:"expireTime"` //过期时间, 默认为3天
+	Content     string `json:"content"`     //消息内容
+	ContentType int64  `json:"contentType"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `json:"visitorId"`   //游客id
+	KefuId      int64  `json:"kefuId"`      //客服id
+	ProjectId   int64  `json:"projectId"`   //项目id
+	MsgType     int64  `json:"msgType"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `json:"status"`      //状态:0合法，1违规
+	IsRead      int64  `json:"isRead"`      //是否已读:0未读，1已读
+	IsSend      int64  `json:"isSend"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `json:"sendTime"`    //发送时间
+	ExpireTime  int64  `json:"expireTime"`  //缓存过期时间, 默认为3天
 }
 
 type PutMessageReq struct {
-	Id         int64  `json:"id"`         //表主键
-	Uuid       string `json:"uuid"`       //UUID
-	Content    string `json:"content"`    //消息内容
-	VisitorId  int64  `json:"visitorId"`  //游客id
-	KefuId     int64  `json:"kefuId"`     //客服id
-	MsgType    int64  `json:"msgType"`    //0游客消息，1客服消息，2公告消息，3系统消息
-	Status     int64  `json:"status"`     //状态:0合法，1违规
-	IsRead     int64  `json:"isRead"`     //状态:0未读，1已读
-	IsSend     int64  `json:"isSend"`     //状态:0未发送，1已发送
-	SendTime   int64  `json:"sendTime"`   //发送时间
-	ExpireTime int64  `json:"expireTime"` //过期时间, 默认为3天
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	Content     string `json:"content"`     //消息内容
+	ContentType int64  `json:"contentType"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `json:"visitorId"`   //游客id
+	KefuId      int64  `json:"kefuId"`      //客服id
+	ProjectId   int64  `json:"projectId"`   //项目id
+	MsgType     int64  `json:"msgType"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `json:"status"`      //状态:0合法，1违规
+	IsRead      int64  `json:"isRead"`      //是否已读:0未读，1已读
+	IsSend      int64  `json:"isSend"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `json:"sendTime"`    //发送时间
+	ExpireTime  int64  `json:"expireTime"`  //缓存过期时间, 默认为3天
 }
 
 type DelMessageReq struct {
@@ -319,45 +333,92 @@ type GetMessageReq struct {
 }
 
 type GetMessageListReq struct {
-	PageSize   int64  `form:"pageSize,optional,default=20"`   //页面容量，默认20，可选
-	Page       int64  `form:"page,optional,default=1"`        //当前页码，默认1，可选
-	Current    int64  `form:"current,optional,default=1"`     //当前页码，默认1，用于对接umijs，可选
-	Keyword    string `form:"keyword,optional"`               //关键词，可选
-	Id         int64  `form:"id,optional,default=-1"`         //表主键
-	Uuid       string `form:"uuid,optional"`                  //UUID
-	Content    string `form:"content,optional"`               //消息内容
-	VisitorId  int64  `form:"visitorId,optional,default=-1"`  //游客id
-	KefuId     int64  `form:"kefuId,optional,default=-1"`     //客服id
-	MsgType    int64  `form:"msgType,optional,default=-1"`    //0游客消息，1客服消息，2公告消息，3系统消息
-	Status     int64  `form:"status,optional,default=-1"`     //状态:0合法，1违规
-	IsRead     int64  `form:"isRead,optional,default=-1"`     //状态:0未读，1已读
-	IsSend     int64  `form:"isSend,optional,default=-1"`     //状态:0未发送，1已发送
-	SendTime   int64  `form:"sendTime,optional,default=-1"`   //发送时间
-	ExpireTime int64  `form:"expireTime,optional,default=-1"` //过期时间, 默认为3天
+	PageSize    int64  `form:"pageSize,optional,default=20"`    //页面容量，默认20，可选
+	Page        int64  `form:"page,optional,default=1"`         //当前页码，默认1，可选
+	Current     int64  `form:"current,optional,default=1"`      //当前页码，默认1，用于对接umijs，可选
+	Keyword     string `form:"keyword,optional"`                //关键词，可选
+	Id          int64  `form:"id,optional,default=-1"`          //表主键
+	Uuid        string `form:"uuid,optional"`                   //UUID
+	Content     string `form:"content,optional"`                //消息内容
+	ContentType int64  `form:"contentType,optional,default=-1"` //0文本，1图片，2表情，3视频, 4错误信息
+	VisitorId   int64  `form:"visitorId,optional,default=-1"`   //游客id
+	KefuId      int64  `form:"kefuId,optional,default=-1"`      //客服id
+	ProjectId   int64  `form:"projectId,optional,default=-1"`   //项目id
+	MsgType     int64  `form:"msgType,optional,default=-1"`     //0游客消息，1客服消息，2公告消息，3系统消息
+	Status      int64  `form:"status,optional,default=-1"`      //状态:0合法，1违规
+	IsRead      int64  `form:"isRead,optional,default=-1"`      //是否已读:0未读，1已读
+	IsSend      int64  `form:"isSend,optional,default=-1"`      //是否已发送:0未发送，1已发送
+	SendTime    int64  `form:"sendTime,optional,default=-1"`    //发送时间
+	ExpireTime  int64  `form:"expireTime,optional,default=-1"`  //缓存过期时间, 默认为3天
 }
 
 type GetMessageEnumsReq struct {
 	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
+type Project struct {
+	Id     int64  `json:"id"`     //表主键
+	Uuid   string `json:"uuid"`   //UUID
+	Name   string `json:"name"`   //项目名称
+	Status int64  `json:"status"` //项目状态
+}
+
+type AddProjectReq struct {
+	Name   string `json:"name"`   //项目名称
+	Status int64  `json:"status"` //项目状态
+}
+
+type PutProjectReq struct {
+	Id     int64  `json:"id"`     //表主键
+	Uuid   string `json:"uuid"`   //UUID
+	Name   string `json:"name"`   //项目名称
+	Status int64  `json:"status"` //项目状态
+}
+
+type DelProjectReq struct {
+	Id int64 `json:"id"` //项目 ID
+}
+
+type GetProjectReq struct {
+	Id int64 `json:"id"` //项目 ID
+}
+
+type GetProjectListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Uuid     string `form:"uuid,optional"`                //UUID
+	Name     string `form:"name,optional"`                //项目名称
+	Status   int64  `form:"status,optional,default=-1"`   //项目状态
+}
+
+type GetProjectEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
 type MessageConfig struct {
-	Id      int64  `json:"id"`      //主键
-	Name    string `json:"name"`    //名字
-	Msgkey  string `json:"msgkey"`  //消息密匙
-	Content string `json:"content"` //消息内容
+	Id        int64  `json:"id"`        //主键
+	ProjectId int64  `json:"projectId"` //项目id
+	Name      string `json:"name"`      //名字
+	Msgkey    string `json:"msgkey"`    //消息密匙
+	Content   string `json:"content"`   //消息内容
 }
 
 type AddMessageConfigReq struct {
-	Name    string `json:"name"`    //名字
-	Msgkey  string `json:"msgkey"`  //消息密匙
-	Content string `json:"content"` //消息内容
+	ProjectId int64  `json:"projectId"` //项目id
+	Name      string `json:"name"`      //名字
+	Msgkey    string `json:"msgkey"`    //消息密匙
+	Content   string `json:"content"`   //消息内容
 }
 
 type PutMessageConfigReq struct {
-	Id      int64  `json:"id"`      //主键
-	Name    string `json:"name"`    //名字
-	Msgkey  string `json:"msgkey"`  //消息密匙
-	Content string `json:"content"` //消息内容
+	Id        int64  `json:"id"`        //主键
+	ProjectId int64  `json:"projectId"` //项目id
+	Name      string `json:"name"`      //名字
+	Msgkey    string `json:"msgkey"`    //消息密匙
+	Content   string `json:"content"`   //消息内容
 }
 
 type DelMessageConfigReq struct {
@@ -369,14 +430,15 @@ type GetMessageConfigReq struct {
 }
 
 type GetMessageConfigListReq struct {
-	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `form:"keyword,optional"`             //关键词，可选
-	Id       int64  `form:"id,optional,default=-1"`       //主键
-	Name     string `form:"name,optional"`                //名字
-	Msgkey   string `form:"msgkey,optional"`              //消息密匙
-	Content  string `form:"content,optional"`             //消息内容
+	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
+	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
+	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
+	Keyword   string `form:"keyword,optional"`              //关键词，可选
+	Id        int64  `form:"id,optional,default=-1"`        //主键
+	ProjectId int64  `form:"projectId,optional,default=-1"` //项目id
+	Name      string `form:"name,optional"`                 //名字
+	Msgkey    string `form:"msgkey,optional"`               //消息密匙
+	Content   string `form:"content,optional"`              //消息内容
 }
 
 type GetMessageConfigEnumsReq struct {
@@ -384,49 +446,52 @@ type GetMessageConfigEnumsReq struct {
 }
 
 type Visitor struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Name     string `json:"name"`     //游客名
-	Ip       string `json:"ip"`       //IP
-	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
-	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
-	Region   string `json:"region"`   //地区
-	City     string `json:"city"`     //城市
-	Platform string `json:"platform"` //设备平台:移动设备,电脑,平板,Xbox
-	Os       string `json:"os"`       //系统: andriod,ios,macOS,windows
-	Browser  string `json:"browser"`  //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language string `json:"language"` //语言
+	Id        int64  `json:"id"`        //表主键
+	Uuid      string `json:"uuid"`      //UUID
+	Name      string `json:"name"`      //游客名
+	Ip        string `json:"ip"`        //IP
+	KefuId    int64  `json:"kefuId"`    //客服id，0表示没有客服接待
+	ProjectId int64  `json:"projectId"` //项目id
+	Status    int64  `json:"status"`    //状态:0离线，1在线，2拉黑
+	Referer   string `json:"referer"`   //来源，从哪个网址发起的聊天
+	Region    string `json:"region"`    //地区
+	City      string `json:"city"`      //城市
+	Platform  string `json:"platform"`  //设备平台:移动设备,电脑,平板,Xbox
+	Os        string `json:"os"`        //系统: andriod,ios,macOS,windows
+	Browser   string `json:"browser"`   //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language  string `json:"language"`  //语言
 }
 
 type AddVisitorReq struct {
-	Name     string `json:"name"`     //游客名
-	Ip       string `json:"ip"`       //IP
-	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
-	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
-	Region   string `json:"region"`   //地区
-	City     string `json:"city"`     //城市
-	Platform string `json:"platform"` //设备平台:移动设备,电脑,平板,Xbox
-	Os       string `json:"os"`       //系统: andriod,ios,macOS,windows
-	Browser  string `json:"browser"`  //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language string `json:"language"` //语言
+	Name      string `json:"name"`      //游客名
+	Ip        string `json:"ip"`        //IP
+	KefuId    int64  `json:"kefuId"`    //客服id，0表示没有客服接待
+	ProjectId int64  `json:"projectId"` //项目id
+	Status    int64  `json:"status"`    //状态:0离线，1在线，2拉黑
+	Referer   string `json:"referer"`   //来源，从哪个网址发起的聊天
+	Region    string `json:"region"`    //地区
+	City      string `json:"city"`      //城市
+	Platform  string `json:"platform"`  //设备平台:移动设备,电脑,平板,Xbox
+	Os        string `json:"os"`        //系统: andriod,ios,macOS,windows
+	Browser   string `json:"browser"`   //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language  string `json:"language"`  //语言
 }
 
 type PutVisitorReq struct {
-	Id       int64  `json:"id"`       //表主键
-	Uuid     string `json:"uuid"`     //UUID
-	Name     string `json:"name"`     //游客名
-	Ip       string `json:"ip"`       //IP
-	KefuId   int64  `json:"kefuId"`   //客服id，-1表示没有客服接待
-	Status   int64  `json:"status"`   //状态:0离线，1在线，2拉黑
-	Referer  string `json:"referer"`  //来源，从哪个网址发起的聊天
-	Region   string `json:"region"`   //地区
-	City     string `json:"city"`     //城市
-	Platform string `json:"platform"` //设备平台:移动设备,电脑,平板,Xbox
-	Os       string `json:"os"`       //系统: andriod,ios,macOS,windows
-	Browser  string `json:"browser"`  //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language string `json:"language"` //语言
+	Id        int64  `json:"id"`        //表主键
+	Uuid      string `json:"uuid"`      //UUID
+	Name      string `json:"name"`      //游客名
+	Ip        string `json:"ip"`        //IP
+	KefuId    int64  `json:"kefuId"`    //客服id，0表示没有客服接待
+	ProjectId int64  `json:"projectId"` //项目id
+	Status    int64  `json:"status"`    //状态:0离线，1在线，2拉黑
+	Referer   string `json:"referer"`   //来源，从哪个网址发起的聊天
+	Region    string `json:"region"`    //地区
+	City      string `json:"city"`      //城市
+	Platform  string `json:"platform"`  //设备平台:移动设备,电脑,平板,Xbox
+	Os        string `json:"os"`        //系统: andriod,ios,macOS,windows
+	Browser   string `json:"browser"`   //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language  string `json:"language"`  //语言
 }
 
 type DelVisitorReq struct {
@@ -438,23 +503,24 @@ type GetVisitorReq struct {
 }
 
 type GetVisitorListReq struct {
-	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
-	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
-	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
-	Keyword  string `form:"keyword,optional"`             //关键词，可选
-	Id       int64  `form:"id,optional,default=-1"`       //表主键
-	Uuid     string `form:"uuid,optional"`                //UUID
-	Name     string `form:"name,optional"`                //游客名
-	Ip       string `form:"ip,optional"`                  //IP
-	KefuId   int64  `form:"kefuId,optional,default=-1"`   //客服id，-1表示没有客服接待
-	Status   int64  `form:"status,optional,default=-1"`   //状态:0离线，1在线，2拉黑
-	Referer  string `form:"referer,optional"`             //来源，从哪个网址发起的聊天
-	Region   string `form:"region,optional"`              //地区
-	City     string `form:"city,optional"`                //城市
-	Platform string `form:"platform,optional"`            //设备平台:移动设备,电脑,平板,Xbox
-	Os       string `form:"os,optional"`                  //系统: andriod,ios,macOS,windows
-	Browser  string `form:"browser,optional"`             //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language string `form:"language,optional"`            //语言
+	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
+	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
+	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
+	Keyword   string `form:"keyword,optional"`              //关键词，可选
+	Id        int64  `form:"id,optional,default=-1"`        //表主键
+	Uuid      string `form:"uuid,optional"`                 //UUID
+	Name      string `form:"name,optional"`                 //游客名
+	Ip        string `form:"ip,optional"`                   //IP
+	KefuId    int64  `form:"kefuId,optional,default=-1"`    //客服id，0表示没有客服接待
+	ProjectId int64  `form:"projectId,optional,default=-1"` //项目id
+	Status    int64  `form:"status,optional,default=-1"`    //状态:0离线，1在线，2拉黑
+	Referer   string `form:"referer,optional"`              //来源，从哪个网址发起的聊天
+	Region    string `form:"region,optional"`               //地区
+	City      string `form:"city,optional"`                 //城市
+	Platform  string `form:"platform,optional"`             //设备平台:移动设备,电脑,平板,Xbox
+	Os        string `form:"os,optional"`                   //系统: andriod,ios,macOS,windows
+	Browser   string `form:"browser,optional"`              //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language  string `form:"language,optional"`             //语言
 }
 
 type GetVisitorEnumsReq struct {

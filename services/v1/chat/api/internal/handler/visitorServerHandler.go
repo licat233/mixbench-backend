@@ -5,17 +5,15 @@ import (
 
 	"mixbench/services/v1/chat/api/internal/logic"
 	"mixbench/services/v1/chat/api/internal/svc"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func VisitorServerHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := logic.NewVisitorServerLogic(r.Context(), svcCtx, w, r)
-		err := l.VisitorServer()
-		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
-		}
+		_ = l.VisitorServer()
+		// if err != nil {
+		// 	httpx.ErrorCtx(r.Context(), w, err)
+		// }
 		// if err == nil {
 		// 	httpx.Ok(w)
 		// }

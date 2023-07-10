@@ -38,7 +38,7 @@ func (l *ParseJwtTokenLogic) ParseJwtToken(in *admin_pb.ParseJwtTokenReq) (*admi
 	if err != nil {
 		return nil, errorx.SecRpcErr(err)
 	}
-	data := jwtx.ClaimsToMap(*claims)
+	data := jwtx.ClaimsToMap(claims)
 	return &admin_pb.ParseJwtTokenResp{
 		Claims: data,
 	}, nil

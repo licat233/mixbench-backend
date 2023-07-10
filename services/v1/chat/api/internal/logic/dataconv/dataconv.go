@@ -10,16 +10,18 @@ func MdChatRecordToApiChatRecord(md *model.ChatRecord) *types.ChatRecord {
 		return nil
 	}
 	return &types.ChatRecord{
-		Id:        md.Id,
-		Uuid:      md.Uuid,
-		Content:   md.Content,
-		VisitorId: md.VisitorId,
-		KefuId:    md.KefuId,
-		MsgType:   md.MsgType,
-		Status:    md.Status,
-		IsRead:    md.IsRead,
-		IsSend:    md.IsSend,
-		SendTime:  md.SendTime.Unix(),
+		Id:          md.Id,
+		Uuid:        md.Uuid,
+		Content:     md.Content,
+		ContentType: md.ContentType,
+		VisitorId:   md.VisitorId,
+		KefuId:      md.KefuId,
+		ProjectId:   md.ProjectId,
+		MsgType:     md.MsgType,
+		Status:      md.Status,
+		IsRead:      md.IsRead,
+		IsSend:      md.IsSend,
+		SendTime:    md.SendTime.Unix(),
 	}
 }
 
@@ -39,9 +41,8 @@ func MdIpblackToApiIpblack(md *model.Ipblack) *types.Ipblack {
 		return nil
 	}
 	return &types.Ipblack{
-		Id:     md.Id,
-		Ip:     md.Ip,
-		KefuId: md.KefuId,
+		Id: md.Id,
+		Ip: md.Ip,
 	}
 }
 
@@ -61,12 +62,13 @@ func MdKefuToApiKefu(md *model.Kefu) *types.Kefu {
 		return nil
 	}
 	return &types.Kefu{
-		Id:       md.Id,
-		Uuid:     md.Uuid,
-		Passport: md.Passport,
-		Username: md.Username,
-		Password: md.Password,
-		Status:   md.Status,
+		Id:        md.Id,
+		Uuid:      md.Uuid,
+		ProjectId: md.ProjectId,
+		Passport:  md.Passport,
+		Username:  md.Username,
+		Password:  md.Password,
+		Status:    md.Status,
 	}
 }
 
@@ -86,17 +88,19 @@ func MdMessageToApiMessage(md *model.Message) *types.Message {
 		return nil
 	}
 	return &types.Message{
-		Id:         md.Id,
-		Uuid:       md.Uuid,
-		Content:    md.Content,
-		VisitorId:  md.VisitorId,
-		KefuId:     md.KefuId,
-		MsgType:    md.MsgType,
-		Status:     md.Status,
-		IsRead:     md.IsRead,
-		IsSend:     md.IsSend,
-		SendTime:   md.SendTime.Unix(),
-		ExpireTime: md.ExpireTime.Unix(),
+		Id:          md.Id,
+		Uuid:        md.Uuid,
+		Content:     md.Content,
+		ContentType: md.ContentType,
+		VisitorId:   md.VisitorId,
+		KefuId:      md.KefuId,
+		ProjectId:   md.ProjectId,
+		MsgType:     md.MsgType,
+		Status:      md.Status,
+		IsRead:      md.IsRead,
+		IsSend:      md.IsSend,
+		SendTime:    md.SendTime.Unix(),
+		ExpireTime:  md.ExpireTime.Unix(),
 	}
 }
 
@@ -111,15 +115,39 @@ func MdMessages2ApiMessages(mdList []*model.Message) []*types.Message {
 	return data
 }
 
+func MdProjectToApiProject(md *model.Project) *types.Project {
+	if md == nil {
+		return nil
+	}
+	return &types.Project{
+		Id:     md.Id,
+		Uuid:   md.Uuid,
+		Name:   md.Name,
+		Status: md.Status,
+	}
+}
+
+func MdProjects2ApiProjects(mdList []*model.Project) []*types.Project {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Project, 0)
+	for _, v := range mdList {
+		data = append(data, MdProjectToApiProject(v))
+	}
+	return data
+}
+
 func MdMessageConfigToApiMessageConfig(md *model.MessageConfig) *types.MessageConfig {
 	if md == nil {
 		return nil
 	}
 	return &types.MessageConfig{
-		Id:      md.Id,
-		Name:    md.Name,
-		Msgkey:  md.Msgkey,
-		Content: md.Content,
+		Id:        md.Id,
+		ProjectId: md.ProjectId,
+		Name:      md.Name,
+		Msgkey:    md.Msgkey,
+		Content:   md.Content,
 	}
 }
 
@@ -139,19 +167,20 @@ func MdVisitorToApiVisitor(md *model.Visitor) *types.Visitor {
 		return nil
 	}
 	return &types.Visitor{
-		Id:       md.Id,
-		Uuid:     md.Uuid,
-		Name:     md.Name,
-		Ip:       md.Ip,
-		KefuId:   md.KefuId,
-		Status:   md.Status,
-		Referer:  md.Referer,
-		Region:   md.Region,
-		City:     md.City,
-		Platform: md.Platform,
-		Os:       md.Os,
-		Browser:  md.Browser,
-		Language: md.Language,
+		Id:        md.Id,
+		Uuid:      md.Uuid,
+		Name:      md.Name,
+		Ip:        md.Ip,
+		KefuId:    md.KefuId,
+		ProjectId: md.ProjectId,
+		Status:    md.Status,
+		Referer:   md.Referer,
+		Region:    md.Region,
+		City:      md.City,
+		Platform:  md.Platform,
+		Os:        md.Os,
+		Browser:   md.Browser,
+		Language:  md.Language,
 	}
 }
 

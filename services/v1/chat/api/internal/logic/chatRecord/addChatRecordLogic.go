@@ -30,13 +30,17 @@ func NewAddChatRecordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Add
 
 func (l *AddChatRecordLogic) AddChatRecord(req *types.AddChatRecordReq) (any, error) {
 	in := &model.ChatRecord{
-		Uuid:      uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
-		VisitorId: req.VisitorId,
-		KefuId:    req.KefuId,
-		Status:    req.Status,
-		IsRead:    req.IsRead,
-		IsSend:    req.IsSend,
-		SendTime:  time.Unix(req.SendTime, 0).Local(),
+		Uuid:        uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
+		Content:     req.Content,
+		ContentType: req.ContentType,
+		VisitorId:   req.VisitorId,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		MsgType:     req.MsgType,
+		Status:      req.Status,
+		IsRead:      req.IsRead,
+		IsSend:      req.IsSend,
+		SendTime:    time.Unix(req.SendTime, 0).Local(),
 	}
 	if _, err := l.svcCtx.ChatRecordModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert chatRecord, error: ", err)

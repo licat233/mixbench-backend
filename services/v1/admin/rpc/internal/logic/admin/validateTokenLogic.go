@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
@@ -31,10 +30,10 @@ func (l *ValidateTokenLogic) ValidateToken(in *admin_pb.ValidateTokenReq) (*admi
 	if in.JwtToken = strings.TrimSpace(in.JwtToken); in.JwtToken == "" {
 		return &admin_pb.ValidateTokenResp{Ok: false}, nil
 	}
-	ok, err := jwtx.ValidateToken(in.JwtToken, l.svcCtx.Config.JwtAuth.AccessSecret)
-	if err != nil {
-		l.Logger.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
+	_, ok := jwtx.ValidateToken(in.JwtToken, l.svcCtx.Config.JwtAuth.AccessSecret)
+	// if !ok {
+	// 	l.Logger.Error(err)
+	// 	return nil, errorx.IntRpcErr(err)
+	// }
 	return &admin_pb.ValidateTokenResp{Ok: ok}, nil
 }

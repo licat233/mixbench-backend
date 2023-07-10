@@ -1,6 +1,6 @@
 Name: luckydraw-mq
 Host: 0.0.0.0
-Port: ${LUCKDRAW_MQ_PORT}
+Port: ${LUCKYDRAW_MQ_PORT}
 Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
@@ -11,7 +11,7 @@ Log:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: ${PROMETHEUS_LUCKDRAW_MQ_PORT}
+  Port: ${PROMETHEUS_LUCKYDRAW_MQ_PORT}
   Path: /metrics
 
 #链路追踪
@@ -36,7 +36,7 @@ CacheRedis:
 
 LuckydrawRpc:
   Endpoints:
-    - 127.0.0.1:${LUCKDRAW_RPC_PORT}
+    - 127.0.0.1:${LUCKYDRAW_RPC_PORT}
   NonBlock: true
   # Etcd:
   #   Hosts:

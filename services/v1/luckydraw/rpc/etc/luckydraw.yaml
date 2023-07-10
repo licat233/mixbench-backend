@@ -1,5 +1,5 @@
 Name: luckydraw-rpc
-ListenOn: 127.0.0.1:${LUCKDRAW_RPC_PORT}
+ListenOn: 127.0.0.1:${LUCKYDRAW_RPC_PORT}
 Mode: ${SERVICE_MODE}
 Debug: ${SERVICE_DEBUG}
 
@@ -23,7 +23,7 @@ Log:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: ${PROMETHEUS_LUCKDRAW_RPC_PORT}
+  Port: ${PROMETHEUS_LUCKYDRAW_RPC_PORT}
   Path: /metrics
 
 #链路追踪

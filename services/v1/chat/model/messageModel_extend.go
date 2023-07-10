@@ -21,8 +21,10 @@ type message_model interface {
 	TableName() string
 	FindByUuid(ctx context.Context, uuid string) (*Message, error)
 	FindByContent(ctx context.Context, content string) (*Message, error)
+	FindByContentType(ctx context.Context, contentType int64) (*Message, error)
 	FindByVisitorId(ctx context.Context, visitorId int64) (*Message, error)
 	FindByKefuId(ctx context.Context, kefuId int64) (*Message, error)
+	FindByProjectId(ctx context.Context, projectId int64) (*Message, error)
 	FindByMsgType(ctx context.Context, msgType int64) (*Message, error)
 	FindByStatus(ctx context.Context, status int64) (*Message, error)
 	FindByIsRead(ctx context.Context, isRead int64) (*Message, error)
@@ -32,8 +34,10 @@ type message_model interface {
 	FindsByIds(ctx context.Context, ids []int64) ([]*Message, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Message, error)
 	FindsByContents(ctx context.Context, contents []string) ([]*Message, error)
+	FindsByContentTypes(ctx context.Context, contentTypes []int64) ([]*Message, error)
 	FindsByVisitorIds(ctx context.Context, visitorIds []int64) ([]*Message, error)
 	FindsByKefuIds(ctx context.Context, kefuIds []int64) ([]*Message, error)
+	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Message, error)
 	FindsByMsgTypes(ctx context.Context, msgTypes []int64) ([]*Message, error)
 	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Message, error)
 	FindsByIsReads(ctx context.Context, isReads []int64) ([]*Message, error)
@@ -44,8 +48,10 @@ type message_model interface {
 	FindsById(ctx context.Context, id int64) ([]*Message, error)
 	FindsByUuid(ctx context.Context, uuid string) ([]*Message, error)
 	FindsByContent(ctx context.Context, content string) ([]*Message, error)
+	FindsByContentType(ctx context.Context, contentType int64) ([]*Message, error)
 	FindsByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
 	FindsByKefuId(ctx context.Context, kefuId int64) ([]*Message, error)
+	FindsByProjectId(ctx context.Context, projectId int64) ([]*Message, error)
 	FindsByMsgType(ctx context.Context, msgType int64) ([]*Message, error)
 	FindsByStatus(ctx context.Context, status int64) ([]*Message, error)
 	FindsByIsRead(ctx context.Context, isRead int64) ([]*Message, error)
@@ -90,11 +96,17 @@ func (m *defaultMessageModel) FindList(ctx context.Context, pageSize, page int64
 		if message.Content != "" {
 			sq = sq.Where("`content` = ?", message.Content)
 		}
+		if message.ContentType >= 0 {
+			sq = sq.Where("`content_type` = ?", message.ContentType)
+		}
 		if message.VisitorId > 0 {
 			sq = sq.Where("`visitor_id` = ?", message.VisitorId)
 		}
 		if message.KefuId > 0 {
 			sq = sq.Where("`kefu_id` = ?", message.KefuId)
+		}
+		if message.ProjectId > 0 {
+			sq = sq.Where("`project_id` = ?", message.ProjectId)
 		}
 		if message.MsgType >= 0 {
 			sq = sq.Where("`msg_type` = ?", message.MsgType)
@@ -108,10 +120,10 @@ func (m *defaultMessageModel) FindList(ctx context.Context, pageSize, page int64
 		if message.IsSend >= 0 {
 			sq = sq.Where("`is_send` = ?", message.IsSend)
 		}
-		if message.SendTime.IsZero() {
+		if !message.SendTime.IsZero() {
 			sq = sq.Where("`send_time` = ?", message.SendTime.Format("2006-01-02 15:04:05"))
 		}
-		if message.ExpireTime.IsZero() {
+		if !message.ExpireTime.IsZero() {
 			sq = sq.Where("`expire_time` = ?", message.ExpireTime.Format("2006-01-02 15:04:05"))
 		}
 	}
@@ -171,6 +183,20 @@ func (m *defaultMessageModel) FindByContent(ctx context.Context, content string)
 	}
 }
 
+func (m *defaultMessageModel) FindByContentType(ctx context.Context, contentType int64) (*Message, error) {
+	var resp Message
+	query := fmt.Sprintf("select %s from %s where `content_type` = ? and `is_deleted` = '0' limit 1", messageRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, contentType)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultMessageModel) FindByVisitorId(ctx context.Context, visitorId int64) (*Message, error) {
 	var resp Message
 	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `is_deleted` = '0' limit 1", messageRows, m.table)
@@ -189,6 +215,20 @@ func (m *defaultMessageModel) FindByKefuId(ctx context.Context, kefuId int64) (*
 	var resp Message
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `is_deleted` = '0' limit 1", messageRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, kefuId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultMessageModel) FindByProjectId(ctx context.Context, projectId int64) (*Message, error) {
+	var resp Message
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' limit 1", messageRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, projectId)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -313,6 +353,16 @@ func (m *defaultMessageModel) FindsByContents(ctx context.Context, contents []st
 	return resp, err
 }
 
+func (m *defaultMessageModel) FindsByContentTypes(ctx context.Context, contentTypes []int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	if len(contentTypes) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `content_type` in (?) and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contentTypes)
+	return resp, err
+}
+
 func (m *defaultMessageModel) FindsByVisitorIds(ctx context.Context, visitorIds []int64) ([]*Message, error) {
 	var resp = make([]*Message, 0)
 	if len(visitorIds) == 0 {
@@ -330,6 +380,16 @@ func (m *defaultMessageModel) FindsByKefuIds(ctx context.Context, kefuIds []int6
 	}
 	query := fmt.Sprintf("select %s from %s where `kefu_id` in (?) and `is_deleted` = '0' ", messageRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
+	return resp, err
+}
+
+func (m *defaultMessageModel) FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	if len(projectIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
 	return resp, err
 }
 
@@ -414,6 +474,13 @@ func (m *defaultMessageModel) FindsByContent(ctx context.Context, content string
 	return resp, err
 }
 
+func (m *defaultMessageModel) FindsByContentType(ctx context.Context, contentType int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `content_type` = ? and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contentType)
+	return resp, err
+}
+
 func (m *defaultMessageModel) FindsByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error) {
 	var resp = make([]*Message, 0)
 	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `is_deleted` = '0' ", messageRows, m.table)
@@ -425,6 +492,13 @@ func (m *defaultMessageModel) FindsByKefuId(ctx context.Context, kefuId int64) (
 	var resp = make([]*Message, 0)
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `is_deleted` = '0' ", messageRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
+	return resp, err
+}
+
+func (m *defaultMessageModel) FindsByProjectId(ctx context.Context, projectId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectId)
 	return resp, err
 }
 

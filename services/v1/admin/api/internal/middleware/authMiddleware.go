@@ -70,13 +70,13 @@ func AuthLogic(ctx context.Context, r *http.Request, config config.Config, admin
 		return nil, errorx.ErrPlatform
 	}
 
-	jwtPlatform := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtPlatform, *claims)
+	jwtPlatform := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtPlatform, claims)
 	//设备 校验
 	if reqPlatform != jwtPlatform {
 		return nil, errorx.ErrPlatform
 	}
 
-	jwtIp := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtIp, *claims)
+	jwtIp := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtIp, claims)
 	//获取请求ip
 	reqIp := utils.RemoteIp(r)
 	//ip 校验
@@ -85,7 +85,7 @@ func AuthLogic(ctx context.Context, r *http.Request, config config.Config, admin
 	}
 
 	//检查用户状态
-	uidValue := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtUserId, *claims)
+	uidValue := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtUserId, claims)
 	if uidValue == "" {
 		return nil, errorx.ErrAuth
 	}

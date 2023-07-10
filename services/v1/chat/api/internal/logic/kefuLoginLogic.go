@@ -65,6 +65,16 @@ func (l *KefuLoginLogic) KefuLogin(req *types.KefuLoginReq) (any, error) {
 		return nil, errorx.ExternalError(errors.New("account does not exist"))
 	}
 
+	//查找项目是否还在
+	_, err = l.svcCtx.ProjectModel.FindOne(l.ctx, kefu.ProjectId)
+	if err != nil && err != model.ErrNotFound {
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
+	if err == model.ErrNotFound {
+		return nil, errorx.ExternalError(errors.New("peoject does not exist"))
+	}
+
 	if !xcrypt.CheckPassword(req.Password, kefu.Password) {
 		return nil, errorx.ExternalError(errors.New("account and password do not match"))
 	}

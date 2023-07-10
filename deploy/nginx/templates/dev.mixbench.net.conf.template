@@ -1,6 +1,5 @@
 server {
     listen 80;
-    listen 443;
     server_name ${DEV_HOST};
     index index.php index.html index.htm default.php default.htm default.html;
     root /www/${DEV_HOST}/grid-card;

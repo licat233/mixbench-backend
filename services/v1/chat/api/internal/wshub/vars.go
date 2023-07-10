@@ -33,10 +33,18 @@ const (
 	// 公告信息 key，务必保持与 数据库 中的key一致
 	PublicMessageKey = "public_message"
 
+	//消息来源
 	VisitorMsgType = 0
 	KefuMsgType    = 1
 	PublicMsgType  = 2
 	SystemMsgType  = 3
+
+	//消息内容类型:0文本，1图片，2表情，3视频, 4错误信息
+	TextContentType  = 0
+	ImgContentType   = 1
+	EmojiContentType = 2
+	VideoContentType = 3
+	ErrorContentType = 4
 )
 
 var (

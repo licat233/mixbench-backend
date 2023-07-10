@@ -26,8 +26,8 @@ func NewDelIpblackLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DelIpb
 }
 
 func (l *DelIpblackLogic) DelIpblack(req *types.DelIpblackReq) (any, error) {
-	if err := l.svcCtx.IpblackModel.Delete(l.ctx, req.Id); err != nil {
-		l.Logger.Error("failed to delete ipblack, error: ", err)
+	if err := l.svcCtx.IpblackModel.SoftDelete(l.ctx, req.Id); err != nil {
+		l.Logger.Error("failed to soft delete ipblack, error: ", err)
 		return nil, errorx.InternalError(err)
 	}
 

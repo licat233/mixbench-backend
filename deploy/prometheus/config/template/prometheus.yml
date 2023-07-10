@@ -43,7 +43,7 @@ scrape_configs:
           app: admin-rpc
           env: dev
   - job_name: 'captcha-api'
-    static_configs:   
+    static_configs:
       - targets: [ 'app:${PROMETHEUS_CAPTCHA_API_PORT}' ]
         labels:
           job: captcha-api
@@ -58,21 +58,21 @@ scrape_configs:
           env: dev
   - job_name: 'luckdarw-api'
     static_configs:
-      - targets: [ 'app:${PROMETHEUS_LUCKDRAW_API_PORT}' ]
+      - targets: [ 'app:${PROMETHEUS_LUCKYDRAW_API_PORT}' ]
         labels:
           job: luckdarw-api
           app: luckdarw-api
           env: dev
   - job_name: 'luckdarw-rpc'
     static_configs:
-      - targets: [ 'app:${PROMETHEUS_LUCKDRAW_RPC_PORT}' ]
+      - targets: [ 'app:${PROMETHEUS_LUCKYDRAW_RPC_PORT}' ]
         labels:
           job: luckdarw-rpc
           app: luckdarw-rpc
           env: dev
   - job_name: 'luckdarw-mq'
     static_configs:
-      - targets: [ 'app:${PROMETHEUS_LUCKDRAW_MQ_PORT}' ]
+      - targets: [ 'app:${PROMETHEUS_LUCKYDRAW_MQ_PORT}' ]
         labels:
           job: luckdarw-mq
           app: luckdarw-mq

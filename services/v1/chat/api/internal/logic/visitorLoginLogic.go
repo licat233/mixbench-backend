@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
+	"net/url"
 	"strings"
 
 	"mixbench/common/errorx"
@@ -25,34 +25,38 @@ import (
 
 type VisitorLoginLogic struct {
 	logx.Logger
-	ctx      context.Context
-	svcCtx   *svc.ServiceContext
-	req      *http.Request
-	id       int64
-	ip       string
-	address  *utils.AddressInfo
-	referer  string
-	ua       *useragent.UserAgent
-	language string
+	ctx       context.Context
+	svcCtx    *svc.ServiceContext
+	req       *http.Request
+	id        int64
+	ip        string
+	address   *utils.AddressInfo
+	referer   string
+	ua        *useragent.UserAgent
+	language  string
+	token     string
+	ProjectId int64
 }
 
 func NewVisitorLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, req *http.Request) *VisitorLoginLogic {
 	return &VisitorLoginLogic{
-		Logger:   logx.WithContext(ctx),
-		ctx:      ctx,
-		svcCtx:   svcCtx,
-		req:      req,
-		id:       0,
-		ip:       "",
-		address:  nil,
-		referer:  "",
-		ua:       nil,
-		language: "",
+		Logger:    logx.WithContext(ctx),
+		ctx:       ctx,
+		svcCtx:    svcCtx,
+		req:       req,
+		id:        0,
+		ip:        "",
+		address:   nil,
+		referer:   "",
+		ua:        nil,
+		language:  "",
+		token:     "",
+		ProjectId: 0,
 	}
 }
 
-const VisitorTokenKey = "jwt-token"
-const KefuJwtKey = "kefuId"
+const VisitorTokenKey = "Authorization"
+const KefuJwtKey2 = "kefuId"
 
 // 该接口主要用于生成 jwt-token
 func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error) {
@@ -77,6 +81,25 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 	// }
 	// 获取来源
 	l.referer = utils.RemoteReferer(l.req)
+	parsedURL, err := url.Parse(l.referer)
+	if err != nil {
+		return nil, errorx.InternalError(fmt.Errorf("failed to parse URL: %s", err.Error()))
+	}
+
+	host := parsedURL.Host
+
+	//获取当前origin的归属项目
+	// origin := utils.RemoteOrigin(l.req)
+
+	// TODO: 根据host查找项目的逻辑，未实现，暂时设为 1
+	if len(host) > 0 {
+		l.ProjectId = 1
+	}
+
+	//如果不存在项目，或者不是我方的连接，则不能注册
+	if l.ProjectId <= 0 {
+		return nil, errorx.ExternalError("unknown domain")
+	}
 
 	// 获取游客可能存在的id
 	var visitorId int64
@@ -85,26 +108,40 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 	jwtToken := l.req.Header.Get(VisitorTokenKey)
 	jwtToken = strings.TrimSpace(jwtToken)
 	if jwtToken != "" {
-		// 存在，解析
-		claims, err := jwtx.ParseToken(jwtToken, l.svcCtx.Config.VisitorAuthSecret)
-		if err == nil {
-			visitorIdV := jwtx.GetClaimsValue("id", *claims)
-			if visitorIdV != "" {
-				id, err := strconv.ParseInt(visitorIdV, 10, 64)
-				if err != nil {
-					// 值错误，算作新客户
-					l.Logger.Error(err)
-				} else {
-					// visitorId = id
+		// 存在, 验证
+		claims, ok := jwtx.ValidateToken(jwtToken, l.svcCtx.Config.VisitorAuthSecret)
+		if ok {
+			id, ok := jwtx.GetId(claims)
+			if ok {
+				//id值存在
+				//合法性
+				if id > 0 {
 					//查一下这个id是否存在
-					_, err = l.svcCtx.VisitorModel.FindOne(l.ctx, id)
+					visitor, err := l.svcCtx.VisitorModel.FindOne(l.ctx, id)
 					if err != nil && err != model.ErrNotFound {
 						l.Logger.Error(err)
 						return nil, errorx.InternalError(err)
 					}
-					//表示存在该visitor
+					// 表示存在该visitor
 					if err == nil {
 						visitorId = id
+						//查找项目是否还在
+						_, err = l.svcCtx.ProjectModel.FindOne(l.ctx, visitor.ProjectId)
+						if err != nil && err != model.ErrNotFound {
+							l.Logger.Error(err)
+							return nil, errorx.InternalError(err)
+						}
+						if err == model.ErrNotFound {
+							//项目已不存在，游客将重新注册
+							visitorId = -1
+						}
+						if err == nil {
+							//如果存在，应该检验是否符合当前的project
+							if l.ProjectId != visitor.ProjectId {
+								//如果不符合，游客将重新注册
+								visitorId = -1
+							}
+						}
 					}
 				}
 			}
@@ -124,6 +161,7 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 
 	// 如果存在 visitorId，则表示老客户
 	if visitorId > 0 {
+		l.token = jwtToken
 		return l.isOldVisitor()
 	} else {
 		return l.isNewVisitor()
@@ -149,7 +187,7 @@ func (l *VisitorLoginLogic) isOldVisitor() (any, error) {
 	//客服如果不在线，
 	if kefuCli == nil {
 		// 分配给其它客服
-		kefuCli = wshub.HubSvc.AssignKefu()
+		kefuCli = wshub.HubSvc.AssignKefu(l.ProjectId)
 		// 表明没有客服在线
 		if kefuCli == nil {
 			// 则保留其原来的客服, 不更新visitor
@@ -172,24 +210,24 @@ func (l *VisitorLoginLogic) isOldVisitor() (any, error) {
 		}
 	}
 
-	// 如果该客服在线，则没啥事了，直接生成新的 token 返回
-	token, err := GenVisitorToken(l.svcCtx.Config.VisitorAuthSecret, visitor)
-	if err != nil {
-		l.Logger.Error(err)
-		return nil, errorx.InternalError(err)
-	}
-	return respx.NewData(token), nil
+	// 如果该客服在线，则没啥事了，因为这里的token是永久有效的，所以无需生产新的token
+	// token, err := GenVisitorToken(l.svcCtx.Config.VisitorAuthSecret, visitor)
+	// if err != nil {
+	// 	l.Logger.Error(err)
+	// 	return nil, errorx.InternalError(err)
+	// }
+	return respx.NewData(l.token), nil
 }
 
 func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 	// 获取接待的客服id
 	var kefuId int64
 	//表示为新客户，接下来为其分配客服
-	kefuCli := wshub.HubSvc.AssignKefu()
+	kefuCli := wshub.HubSvc.AssignKefu(l.ProjectId)
 	// 表明没有客服在线
 	if kefuCli == nil {
-		// 没有客服在线，将其id设为 -1 表示其没有分配到客服
-		kefuId = -1
+		// 没有客服在线，将其id设为 0 表示其没有分配到客服
+		kefuId = 0
 	} else {
 		kefuId = kefuCli.Kefu.Id
 	}
@@ -207,30 +245,51 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 
 	// 构建 visitor 信息
 	visitor := &model.Visitor{
-		Id:       kefuId,
-		Uuid:     uniqueid.NewUUID(),
-		Name:     name,
-		Ip:       l.ip,
-		KefuId:   kefuId,
-		Status:   1,
-		Referer:  l.referer,
-		Region:   l.address.Country,
-		City:     l.address.City,
-		Platform: l.ua.Platform(),
-		Os:       l.ua.OS(),
-		Browser:  browser,
-		Language: l.language,
+		Id:        0,
+		Uuid:      uniqueid.NewUUID(),
+		Name:      name,
+		Ip:        l.ip,
+		KefuId:    kefuId,
+		ProjectId: l.ProjectId,
+		Status:    1,
+		Referer:   l.referer,
+		Region:    l.address.Country,
+		City:      l.address.City,
+		Platform:  l.ua.Platform(),
+		Os:        l.ua.OS(),
+		Browser:   browser,
+		Language:  l.language,
 	}
 
-	// 生成 token
-	token, err := GenVisitorToken(l.svcCtx.Config.VisitorAuthSecret, visitor)
+	// 存入数据库
+	res, err := l.svcCtx.VisitorModel.Insert(l.ctx, visitor)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
 	}
 
-	// 存入数据库
-	_, err = l.svcCtx.VisitorModel.Insert(l.ctx, visitor)
+	//获取id
+	newId, err := res.LastInsertId()
+	if err != nil {
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
+
+	//取出数据库中的记录
+	visitorMd, err := l.svcCtx.VisitorModel.FindOne(l.ctx, newId)
+	if err != nil && err != model.ErrNotFound {
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
+	if err == model.ErrNotFound {
+		//见鬼了
+		err = errors.New("the newly inserted data in the MySQL database is missing")
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
+
+	// 生成 token
+	token, err := GenVisitorToken(l.svcCtx.Config.VisitorAuthSecret, visitorMd)
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.InternalError(err)
@@ -241,7 +300,6 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 
 func GenVisitorToken(secret string, visitor *model.Visitor) (string, error) {
 	claims := make(jwt.MapClaims)
-	claims[KefuJwtKey] = visitor.KefuId
 	claims["id"] = visitor.Id
 	claims["platform"] = visitor.Platform
 	return jwtx.CreateToken(claims, secret)

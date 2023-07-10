@@ -219,6 +219,15 @@
             "type": "string"
           },
           {
+            "name": "contentType",
+            "description": "0文本，1图片，2表情，3视频, 4错误信息",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
             "name": "visitorId",
             "description": "游客id",
             "in": "query",
@@ -229,7 +238,16 @@
           },
           {
             "name": "kefuId",
-            "description": "客服id， -1表示没有分配到客服",
+            "description": "客服id， 0表示没有分配到客服",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "projectId",
+            "description": "项目id",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -256,7 +274,7 @@
           },
           {
             "name": "isRead",
-            "description": "状态:0未读，1已读",
+            "description": "是否已读:0未读，1已读",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -265,7 +283,7 @@
           },
           {
             "name": "isSend",
-            "description": "状态:0未发送，1已发送",
+            "description": "是否已发送:0未发送，1已发送",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -481,13 +499,6 @@
             "in": "query",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "kefuId",
-            "description": "客服id",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -690,6 +701,15 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "projectId",
+            "description": "项目id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
           },
           {
             "name": "passport",
@@ -958,6 +978,15 @@
             "type": "string"
           },
           {
+            "name": "contentType",
+            "description": "0文本，1图片，2表情，3视频, 4错误信息",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
             "name": "visitorId",
             "description": "游客id",
             "in": "query",
@@ -969,6 +998,15 @@
           {
             "name": "kefuId",
             "description": "客服id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "projectId",
+            "description": "项目id",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -995,7 +1033,7 @@
           },
           {
             "name": "isRead",
-            "description": "状态:0未读，1已读",
+            "description": "是否已读:0未读，1已读",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1004,7 +1042,7 @@
           },
           {
             "name": "isSend",
-            "description": "状态:0未发送，1已发送",
+            "description": "是否已发送:0未发送，1已发送",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1022,7 +1060,7 @@
           },
           {
             "name": "expireTime",
-            "description": "过期时间, 默认为3天",
+            "description": "缓存过期时间, 默认为3天",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1225,6 +1263,15 @@
             "default": "-1"
           },
           {
+            "name": "projectId",
+            "description": "项目id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
             "name": "name",
             "description": "名字",
             "in": "query",
@@ -1248,6 +1295,224 @@
         ],
         "tags": [
           "messageConfig"
+        ]
+      }
+    },
+    "/v1/api/chat/project/": {
+      "get": {
+        "summary": "获取项目 基础API",
+        "operationId": "GetProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "项目 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "project"
+        ]
+      },
+      "delete": {
+        "summary": "删除项目 基础API",
+        "operationId": "DelProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除项目请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelProjectReq"
+            }
+          }
+        ],
+        "tags": [
+          "project"
+        ]
+      },
+      "post": {
+        "summary": "添加项目 基础API",
+        "operationId": "AddProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加项目请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddProjectReq"
+            }
+          }
+        ],
+        "tags": [
+          "project"
+        ]
+      },
+      "put": {
+        "summary": "更新项目 基础API",
+        "operationId": "PutProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新项目请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutProjectReq"
+            }
+          }
+        ],
+        "tags": [
+          "project"
+        ]
+      }
+    },
+    "/v1/api/chat/project/enums": {
+      "get": {
+        "summary": "获取项目枚举列表 基础API",
+        "operationId": "GetProjectEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "project"
+        ]
+      }
+    },
+    "/v1/api/chat/project/list": {
+      "get": {
+        "summary": "获取项目列表 基础API",
+        "operationId": "GetProjectList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "项目名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "项目状态",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "project"
         ]
       }
     },
@@ -1542,7 +1807,16 @@
           },
           {
             "name": "kefuId",
-            "description": "客服id，-1表示没有客服接待",
+            "description": "客服id，0表示没有客服接待",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "projectId",
+            "description": "项目id",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1707,6 +1981,11 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -1715,7 +1994,12 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id， -1表示没有分配到客服"
+          "description": "客服id， 0表示没有分配到客服"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -1730,12 +2014,12 @@
         "isRead": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -1746,8 +2030,10 @@
       "title": "AddChatRecordReq",
       "required": [
         "content",
+        "contentType",
         "visitorId",
         "kefuId",
+        "projectId",
         "msgType",
         "status",
         "isRead",
@@ -1761,21 +2047,21 @@
         "ip": {
           "type": "string",
           "description": "IP"
-        },
-        "kefuId": {
-          "type": "string",
-          "description": "客服id"
         }
       },
       "title": "AddIpblackReq",
       "required": [
-        "ip",
-        "kefuId"
+        "ip"
       ]
     },
     "AddKefuReq": {
       "type": "object",
       "properties": {
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
         "passport": {
           "type": "string",
           "description": "客服账号"
@@ -1796,6 +2082,7 @@
       },
       "title": "AddKefuReq",
       "required": [
+        "projectId",
         "passport",
         "username",
         "password",
@@ -1805,6 +2092,11 @@
     "AddMessageConfigReq": {
       "type": "object",
       "properties": {
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
         "name": {
           "type": "string",
           "description": "名字"
@@ -1820,6 +2112,7 @@
       },
       "title": "AddMessageConfigReq",
       "required": [
+        "projectId",
         "name",
         "msgkey",
         "content"
@@ -1832,6 +2125,11 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -1841,6 +2139,11 @@
           "type": "integer",
           "format": "int64",
           "description": "客服id"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -1855,12 +2158,12 @@
         "isRead": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -1870,20 +2173,41 @@
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "description": "过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为3天"
         }
       },
       "title": "AddMessageReq",
       "required": [
         "content",
+        "contentType",
         "visitorId",
         "kefuId",
+        "projectId",
         "msgType",
         "status",
         "isRead",
         "isSend",
         "sendTime",
         "expireTime"
+      ]
+    },
+    "AddProjectReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态"
+        }
+      },
+      "title": "AddProjectReq",
+      "required": [
+        "name",
+        "status"
       ]
     },
     "AddVisitorReq": {
@@ -1900,7 +2224,12 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id，-1表示没有客服接待"
+          "description": "客服id，0表示没有客服接待"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "status": {
           "type": "integer",
@@ -1941,6 +2270,7 @@
         "name",
         "ip",
         "kefuId",
+        "projectId",
         "status",
         "referer",
         "region",
@@ -2079,6 +2409,11 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -2087,7 +2422,12 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id， -1表示没有分配到客服"
+          "description": "客服id， 0表示没有分配到客服"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -2102,12 +2442,12 @@
         "isRead": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -2120,8 +2460,10 @@
         "id",
         "uuid",
         "content",
+        "contentType",
         "visitorId",
         "kefuId",
+        "projectId",
         "msgType",
         "status",
         "isRead",
@@ -2195,6 +2537,20 @@
         }
       },
       "title": "DelMessageReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DelProjectReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目 ID"
+        }
+      },
+      "title": "DelProjectReq",
       "required": [
         "id"
       ]
@@ -2298,6 +2654,12 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -2308,7 +2670,13 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "客服id， -1表示没有分配到客服"
+          "description": "客服id， 0表示没有分配到客服"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -2326,13 +2694,13 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -2402,10 +2770,6 @@
         "ip": {
           "type": "string",
           "description": "IP"
-        },
-        "kefuId": {
-          "type": "string",
-          "description": "客服id"
         }
       },
       "title": "GetIpblackListReq"
@@ -2470,6 +2834,12 @@
         "uuid": {
           "type": "string",
           "description": "UUID"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
         },
         "passport": {
           "type": "string",
@@ -2548,6 +2918,12 @@
           "format": "int64",
           "default": "-1",
           "description": "主键"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
         },
         "name": {
           "type": "string",
@@ -2629,6 +3005,12 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -2640,6 +3022,12 @@
           "format": "int64",
           "default": "-1",
           "description": "客服id"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -2657,13 +3045,13 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -2675,7 +3063,7 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为3天"
         }
       },
       "title": "GetMessageListReq"
@@ -2690,6 +3078,80 @@
         }
       },
       "title": "GetMessageReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetProjectEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetProjectEnumsReq"
+    },
+    "GetProjectListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目状态"
+        }
+      },
+      "title": "GetProjectListReq"
+    },
+    "GetProjectReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目 ID"
+        }
+      },
+      "title": "GetProjectReq",
       "required": [
         "id"
       ]
@@ -2753,7 +3215,13 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "客服id，-1表示没有客服接待"
+          "description": "客服id，0表示没有客服接待"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
         },
         "status": {
           "type": "integer",
@@ -2816,17 +3284,12 @@
         "ip": {
           "type": "string",
           "description": "IP"
-        },
-        "kefuId": {
-          "type": "string",
-          "description": "客服id"
         }
       },
       "title": "Ipblack",
       "required": [
         "id",
-        "ip",
-        "kefuId"
+        "ip"
       ]
     },
     "JwtToken": {
@@ -2866,6 +3329,11 @@
           "type": "string",
           "description": "UUID"
         },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
         "passport": {
           "type": "string",
           "description": "客服账号"
@@ -2888,6 +3356,7 @@
       "required": [
         "id",
         "uuid",
+        "projectId",
         "passport",
         "username",
         "password",
@@ -2970,6 +3439,11 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -2979,6 +3453,11 @@
           "type": "integer",
           "format": "int64",
           "description": "客服id"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -2993,12 +3472,12 @@
         "isRead": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -3008,7 +3487,7 @@
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "description": "过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为3天"
         }
       },
       "title": "Message",
@@ -3016,8 +3495,10 @@
         "id",
         "uuid",
         "content",
+        "contentType",
         "visitorId",
         "kefuId",
+        "projectId",
         "msgType",
         "status",
         "isRead",
@@ -3033,6 +3514,11 @@
           "type": "integer",
           "format": "int64",
           "description": "主键"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "name": {
           "type": "string",
@@ -3050,6 +3536,7 @@
       "title": "MessageConfig",
       "required": [
         "id",
+        "projectId",
         "name",
         "msgkey",
         "content"
@@ -3115,6 +3602,36 @@
         "list"
       ]
     },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态"
+        }
+      },
+      "title": "Project",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status"
+      ]
+    },
     "PutChatRecordReq": {
       "type": "object",
       "properties": {
@@ -3131,6 +3648,11 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -3139,7 +3661,12 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id， -1表示没有分配到客服"
+          "description": "客服id， 0表示没有分配到客服"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -3154,12 +3681,12 @@
         "isRead": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -3172,8 +3699,10 @@
         "id",
         "uuid",
         "content",
+        "contentType",
         "visitorId",
         "kefuId",
+        "projectId",
         "msgType",
         "status",
         "isRead",
@@ -3191,17 +3720,12 @@
         "ip": {
           "type": "string",
           "description": "IP"
-        },
-        "kefuId": {
-          "type": "string",
-          "description": "客服id"
         }
       },
       "title": "PutIpblackReq",
       "required": [
         "id",
-        "ip",
-        "kefuId"
+        "ip"
       ]
     },
     "PutKefuReq": {
@@ -3215,6 +3739,11 @@
         "uuid": {
           "type": "string",
           "description": "UUID"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "passport": {
           "type": "string",
@@ -3238,6 +3767,7 @@
       "required": [
         "id",
         "uuid",
+        "projectId",
         "passport",
         "username",
         "password",
@@ -3251,6 +3781,11 @@
           "type": "integer",
           "format": "int64",
           "description": "主键"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "name": {
           "type": "string",
@@ -3268,6 +3803,7 @@
       "title": "PutMessageConfigReq",
       "required": [
         "id",
+        "projectId",
         "name",
         "msgkey",
         "content"
@@ -3289,6 +3825,11 @@
           "type": "string",
           "description": "消息内容"
         },
+        "contentType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0文本，1图片，2表情，3视频, 4错误信息"
+        },
         "visitorId": {
           "type": "integer",
           "format": "int64",
@@ -3298,6 +3839,11 @@
           "type": "integer",
           "format": "int64",
           "description": "客服id"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "msgType": {
           "type": "integer",
@@ -3312,12 +3858,12 @@
         "isRead": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未读，1已读"
+          "description": "是否已读:0未读，1已读"
         },
         "isSend": {
           "type": "integer",
           "format": "int64",
-          "description": "状态:0未发送，1已发送"
+          "description": "是否已发送:0未发送，1已发送"
         },
         "sendTime": {
           "type": "integer",
@@ -3327,7 +3873,7 @@
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "description": "过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为3天"
         }
       },
       "title": "PutMessageReq",
@@ -3335,14 +3881,46 @@
         "id",
         "uuid",
         "content",
+        "contentType",
         "visitorId",
         "kefuId",
+        "projectId",
         "msgType",
         "status",
         "isRead",
         "isSend",
         "sendTime",
         "expireTime"
+      ]
+    },
+    "PutProjectReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "项目名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态"
+        }
+      },
+      "title": "PutProjectReq",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status"
       ]
     },
     "PutVisitorReq": {
@@ -3368,7 +3946,12 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id，-1表示没有客服接待"
+          "description": "客服id，0表示没有客服接待"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "status": {
           "type": "integer",
@@ -3411,6 +3994,7 @@
         "name",
         "ip",
         "kefuId",
+        "projectId",
         "status",
         "referer",
         "region",
@@ -3523,7 +4107,12 @@
         "kefuId": {
           "type": "integer",
           "format": "int64",
-          "description": "客服id，-1表示没有客服接待"
+          "description": "客服id，0表示没有客服接待"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
         },
         "status": {
           "type": "integer",
@@ -3566,6 +4155,7 @@
         "name",
         "ip",
         "kefuId",
+        "projectId",
         "status",
         "referer",
         "region",

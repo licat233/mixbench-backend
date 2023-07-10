@@ -4,16 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/utils"
-	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/wshub"
-	"mixbench/services/v1/chat/model"
 
 	"github.com/gorilla/websocket"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 type KefuServerLogic struct {
@@ -40,24 +38,21 @@ func NewKefuServerLogic(ctx context.Context, svcCtx *svc.ServiceContext, w http.
 
 func (l *KefuServerLogic) KefuServer() error {
 	if !utils.IsWebsocketRequest(l.r) {
-		return errorx.ExternalError("the current request is not a WebSocket request")
+		err := errorx.ExternalError("the current request is not a WebSocket request")
+		httpx.ErrorCtx(l.r.Context(), l.w, err)
+		return nil
 	}
-	// 获取 id
-	id := ctxdata.GetInt64FromCtx(l.ctx, "id")
-
-	kefuM, err := l.svcCtx.KefuModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
-		l.Logger.Error(err)
-		return errorx.InternalError(err)
-	}
-
-	kefuA := dataconv.MdKefuToApiKefu(kefuM)
 
 	// 创建一个kefu client
-	cli, err := wshub.NewKefuClient(l.ctx, wshub.HubSvc, l.w, l.r, kefuA)
+	cli, err := wshub.NewKefuClient(l.ctx, wshub.HubSvc, l.w, l.r)
 	if err != nil {
 		//可能因为r不是ws请求，导致的报错
 		return errorx.ExternalError(err)
+	}
+
+	if cli == nil {
+		//初始化失败
+		return nil
 	}
 
 	// 开始收发ws信息

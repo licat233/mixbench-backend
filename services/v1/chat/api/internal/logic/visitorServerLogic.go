@@ -4,15 +4,13 @@ import (
 	"context"
 	"net/http"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/utils"
-	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/wshub"
-	"mixbench/services/v1/chat/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 type VisitorServerLogic struct {
@@ -35,31 +33,20 @@ func NewVisitorServerLogic(ctx context.Context, svcCtx *svc.ServiceContext, w ht
 
 func (l *VisitorServerLogic) VisitorServer() error {
 	if !utils.IsWebsocketRequest(l.r) {
-		return errorx.ExternalError("the current request is not a WebSocket request")
+		err := errorx.ExternalError("the current request is not a WebSocket request")
+		httpx.ErrorCtx(l.r.Context(), l.w, err)
+		return nil
 	}
-
-	// 获取 id
-	id := ctxdata.GetInt64FromCtx(l.ctx, "id")
-
-	//如果 游客 id 不存在，即 0
-	if id == 0 {
-		// 测试期间, 设置为 1
-		id = 1
-	}
-
-	kefuM, err := l.svcCtx.VisitorModel.FindOne(l.ctx, id)
-	if err != nil && err != model.ErrNotFound {
-		l.Logger.Error(err)
-		return errorx.InternalError(err)
-	}
-
-	kefuA := dataconv.MdVisitorToApiVisitor(kefuM)
 
 	// 创建一个visitor client
-	cli, err := wshub.NewVisitorClient(l.ctx, wshub.HubSvc, l.w, l.r, kefuA)
+	cli, err := wshub.NewVisitorClient(l.ctx, wshub.HubSvc, l.w, l.r)
 	if err != nil {
-		//可能因为r不是ws请求，导致的报错
 		return errorx.ExternalError(err)
+	}
+
+	if cli == nil {
+		//初始化失败
+		return nil
 	}
 
 	// 开始收发ws信息
