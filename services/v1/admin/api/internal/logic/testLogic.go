@@ -10,7 +10,7 @@ import (
 	"mixbench/common/utils"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
-	"mixbench/services/v1/captcha/rpc/captcha_pb"
+	"mixbench/services/v1/authentication/rpc/authentication_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -38,7 +38,7 @@ func (l *TestLogic) Test(req *types.TestReq) (any, error) {
 
 	addrDetail := utils.QueryAddress(ip)
 	address := fmt.Sprintf("%s-%s-%s", addrDetail.Continent, addrDetail.Country, addrDetail.City)
-	resp, err := l.svcCtx.CaptchaRpc.SendEmailCaptcha(l.ctx, &captcha_pb.SendEmailCaptchaReq{
+	resp, err := l.svcCtx.AuthenticationRpc.SendEmailCaptcha(l.ctx, &authentication_pb.SendEmailCaptchaReq{
 		Email:    "1697470538@qq.com",
 		Account:  "licat233",
 		Datetime: time.Now().Local().Format("2006-01-02 15:04:05"),

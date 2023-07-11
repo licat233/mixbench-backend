@@ -13,7 +13,7 @@ cd $current_path
 COMMENT="$1"
 
 if [ "$COMMENT" == "" ] || [ "$COMMENT" == "," ]; then
-    COMMENT="update"
+    COMMENT="captcha -> authentication"
 fi
 
 git add .

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 
-	"mixbench/common/errorx"
 	"mixbench/services/v1/luckydraw/rpc/internal/config"
 	baseluckydrawServer "mixbench/services/v1/luckydraw/rpc/internal/server/base"
 	luckydrawServer "mixbench/services/v1/luckydraw/rpc/internal/server/luckydraw"
@@ -26,8 +25,6 @@ func main() {
 	var c config.Config
 	//加载配置文件
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
-	//配置debug模式
-	errorx.Debug = c.Debug
 
 	ctx := svc.NewServiceContext(c)
 

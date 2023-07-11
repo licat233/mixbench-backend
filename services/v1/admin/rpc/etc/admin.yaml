@@ -1,8 +1,6 @@
 Name: admin-rpc
 ListenOn: 127.0.0.1:${ADMIN_RPC_PORT}
-
 Mode: ${SERVICE_MODE}
-Debug: ${SERVICE_DEBUG}
 
 Redis:
   Host: ${REDIS_HOST}:${REDIS_PORT}

@@ -18,7 +18,7 @@ import (
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
 	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/captcha/rpc/captcha_pb"
+	"mixbench/services/v1/authentication/rpc/authentication_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -49,7 +49,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (any, error) {
 	reqIp := utils.RemoteIp(l.Request)
 
 	//调用captcha.rpc服务校验验证码
-	res, err := l.svcCtx.CaptchaRpc.VerifyCaptcha(l.ctx, &captcha_pb.VerifyCaptchaReq{
+	res, err := l.svcCtx.AuthenticationRpc.VerifyCaptcha(l.ctx, &authentication_pb.VerifyCaptchaReq{
 		CaptchaId: req.CaptchaId,
 		Solution:  req.Solution,
 	})

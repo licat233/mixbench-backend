@@ -28,8 +28,6 @@ func main() {
 	//加载配置文件
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 	c.RootDir = *rootDir
-	//配置debug模式
-	errorx.Debug = c.Debug
 
 	//jwt认证错误处理
 	// jwtErrHandler := rest.WithUnauthorizedCallback(func(w http.ResponseWriter, r *http.Request, err error) {

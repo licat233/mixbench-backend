@@ -13,8 +13,8 @@ upstream admin_server {
     keepalive 1000; # 默认值100，可能不够用
 }
 
-upstream captcha_server {
-    server app:${CAPTCHA_API_PORT};
+upstream authentication_server {
+    server app:${AUTHENTICATION_API_PORT};
 }
 
 upstream luckydraw_server {
@@ -64,10 +64,10 @@ server {
         proxy_pass http://admin_server;
     }
 
-    location /v1/api/captcha/ {
+    location /v1/api/authentication/ {
         # 该服务不需要鉴权
         # auth_request /v1/api/admin/auth;
-        proxy_pass http://captcha_server;
+        proxy_pass http://authentication_server;
     }
 
     location /v1/api/luckydraw/ {
@@ -88,8 +88,8 @@ server {
         add_header Cache-Control public;
     }
 
-    location /v1/static/captcha/ {
-        proxy_pass http://captcha_server;
+    location /v1/static/authentication/ {
+        proxy_pass http://authentication_server;
         add_header Cache-Control public;
     }
 

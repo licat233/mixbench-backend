@@ -15,7 +15,7 @@ import (
 	"mixbench/services/v1/admin/api/internal/middleware"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/captcha/rpc/captcha"
+	"mixbench/services/v1/authentication/rpc/authentication"
 	"path"
 
 	"github.com/casbin/casbin/v2"
@@ -33,9 +33,9 @@ type ServiceContext struct {
 	AuthMiddleware rest.Middleware
 	RbacMiddleware rest.Middleware
 
-	CaptchaRpc     captcha.Captcha
-	AdminRpc       AdminRpc
-	CasbinEnforcer *casbin.SyncedEnforcer
+	AuthenticationRpc authentication.Authentication
+	AdminRpc          AdminRpc
+	CasbinEnforcer    *casbin.SyncedEnforcer
 
 	AdminerModel      model.AdminerModel
 	JwtBlacklistModel model.JwtBlacklistModel
@@ -63,7 +63,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:            c,
 		AuthMiddleware:    middleware.NewAuthMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
 		RbacMiddleware:    middleware.NewRbacMiddleware(enforcer, &adminRpc.BaseClient).Handle,
-		CaptchaRpc:        captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
+		AuthenticationRpc: authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
 		AdminRpc:          adminRpc,
 		CasbinEnforcer:    enforcer,
 		AdminerModel:      AdminerModel,

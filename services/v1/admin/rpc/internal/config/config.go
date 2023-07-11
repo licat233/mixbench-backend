@@ -14,7 +14,6 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	Debug bool
 	Mysql struct {
 		DataSource string
 	}

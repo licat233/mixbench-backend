@@ -1,0 +1,57 @@
+Name: authentication-rpc
+ListenOn: 127.0.0.1:${AUTHENTICATION_RPC_PORT}
+
+Mode: ${SERVICE_MODE}
+
+# Etcd:
+#   Hosts:
+#     - 127.0.0.1:2379
+#   Key: auth.rpc
+
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+  Key: ""
+
+Log:
+  ServiceName: authentication-rpc
+  Level: error
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_AUTHENTICATION_RPC_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: authentication-rpc
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Email:
+  Username: licat233@sina.com
+  Secret: 5e8bc93914101e81
+  Host: smtp.sina.com
+  Port: 465
+  Subject: 系统邮件
+  Receiver:
+    - "1697470538@qq.com"
+
+#验证码配置
+Captcha:
+  #验证码有效期，单位s, 5分钟
+  Expire: 300
+
+#kafka配置
+KqConf:
+    Name: kqConsumer
+    Brokers:
+      - kafka:9092
+    Group: kqConsumer
+    Topic: send-email
+    Offset: first
+    Consumers: 8
+    Processors: 2

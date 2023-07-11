@@ -8,7 +8,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Debug bool
 	Mysql struct {
 		DataSource string
 	}
@@ -23,7 +22,7 @@ type Config struct {
 		Root   string
 	}
 
-	CaptchaRpc zrpc.RpcClientConf
+	AuthenticationRpc zrpc.RpcClientConf
 
 	RootDir string
 }

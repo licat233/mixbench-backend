@@ -1,0 +1,56 @@
+Name: authentication-mq
+Host: 0.0.0.0
+Port: ${AUTHENTICATION_MQ_PORT}
+Mode: ${SERVICE_MODE}
+
+Log:
+  ServiceName: authentication-mq
+  Level: error
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_AUTHENTICATION_MQ_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: authentication-mq
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+# 为了保证模块独立性，这里不应该直接操作admin数据库，应该调用admin rpc去操作
+# Mysql:
+#   DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE_PREFIX}_admin?${MYSQL_CONN_OPTIONS}
+
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+#kafka配置
+KqConf:
+    Name: kqConsumer
+    Brokers:
+      - kafka:9092
+    Group: kqConsumer
+    Topic: send-email
+    Offset: first
+    Consumers: 8
+    Processors: 2
+
+AuthenticationRpc:
+  Endpoints:
+    - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
+  NonBlock: true
+
+AdminRpc:
+  Endpoints:
+    - 127.0.0.1:${ADMIN_RPC_PORT}
+  NonBlock: true

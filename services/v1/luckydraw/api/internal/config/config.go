@@ -14,14 +14,13 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Debug   bool
 	RootDir string
 	Auth    struct {
 		AccessSecret string
 	}
-	CaptchaRpc   zrpc.RpcClientConf
-	LuckydrawRpc zrpc.RpcClientConf
-	StaticConfig struct {
+	AuthenticationRpc zrpc.RpcClientConf
+	LuckydrawRpc      zrpc.RpcClientConf
+	StaticConfig      struct {
 		Domain string
 		Root   string
 	}

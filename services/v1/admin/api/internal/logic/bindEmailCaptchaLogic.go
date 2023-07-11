@@ -16,7 +16,7 @@ import (
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
 	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/captcha/rpc/captcha_pb"
+	"mixbench/services/v1/authentication/rpc/authentication_pb"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -47,7 +47,7 @@ func (l *BindEmailCaptchaLogic) BindEmailCaptcha(req *types.BindEmailCaptchaReq)
 	}
 
 	//校验图片验证码
-	res, err := l.svcCtx.CaptchaRpc.VerifyCaptcha(l.ctx, &captcha_pb.VerifyCaptchaReq{
+	res, err := l.svcCtx.AuthenticationRpc.VerifyCaptcha(l.ctx, &authentication_pb.VerifyCaptchaReq{
 		CaptchaId: req.CaptchaId,
 		Solution:  req.Solution,
 	})
@@ -70,7 +70,7 @@ func (l *BindEmailCaptchaLogic) BindEmailCaptcha(req *types.BindEmailCaptchaReq)
 	}
 
 	//开始发送邮件
-	result, err := l.svcCtx.CaptchaRpc.SendEmailCaptcha(l.ctx, &captcha_pb.SendEmailCaptchaReq{
+	result, err := l.svcCtx.AuthenticationRpc.SendEmailCaptcha(l.ctx, &authentication_pb.SendEmailCaptchaReq{
 		Email: email,
 	})
 	if err != nil {

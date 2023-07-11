@@ -32,7 +32,7 @@ func NewSuperAdminLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *S
 // 超级管理员/开发员登录
 func (l *SuperAdminLoginLogic) SuperAdminLogin(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	if len(in.Passport) == 0 {
-		return nil, errorx.ExtRpcErr(errorx.New("passport is empty"))
+		return nil, errorx.ExtRpcErr(errors.New("passport is empty"))
 	}
 	err := xcrypt.PasswordValidator(in.Password)
 	if err != nil {

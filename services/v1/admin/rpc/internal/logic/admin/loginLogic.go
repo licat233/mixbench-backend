@@ -39,7 +39,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 // 账号登录
 func (l *LoginLogic) Login(in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
 	if len(in.Passport) == 0 {
-		return nil, errorx.ExtRpcErr(errorx.New("passport is empty"))
+		return nil, errorx.ExtRpcErr(errors.New("passport is empty"))
 	}
 	err := xcrypt.PasswordValidator(in.Password)
 	if err != nil {

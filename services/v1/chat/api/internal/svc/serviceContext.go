@@ -3,7 +3,7 @@ package svc
 import (
 	"fmt"
 	"mixbench/common/utils"
-	"mixbench/services/v1/captcha/rpc/captcha"
+	"mixbench/services/v1/authentication/rpc/authentication"
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/middleware"
 	"mixbench/services/v1/chat/model"
@@ -17,7 +17,7 @@ type ServiceContext struct {
 
 	VisitorAuth rest.Middleware
 
-	CaptchaRpc captcha.Captcha
+	AuthenticationRpc authentication.Authentication
 
 	ChatRecordModel    model.ChatRecordModel
 	IpblackModel       model.IpblackModel
@@ -36,7 +36,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	svc := &ServiceContext{
 		Config:             c,
 		VisitorAuth:        middleware.NewVisitorAuthMiddleware().Handle,
-		CaptchaRpc:         captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
+		AuthenticationRpc:  authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
 		ChatRecordModel:    model.NewChatRecordModel(sqlConn, c.CacheRedis),
 		IpblackModel:       model.NewIpblackModel(sqlConn, c.CacheRedis),
 		KefuModel:          model.NewKefuModel(sqlConn, c.CacheRedis),

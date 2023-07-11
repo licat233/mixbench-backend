@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mixbench/common/errorx"
 	"mixbench/services/v1/luckydraw/mq/internal/config"
 	"mixbench/services/v1/luckydraw/mq/internal/listen"
 
@@ -19,8 +18,6 @@ func main() {
 	var c config.Config
 	//加载配置文件
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
-	//配置debug模式
-	errorx.Debug = c.Debug
 
 	if err := c.SetUp(); err != nil {
 		panic(err)

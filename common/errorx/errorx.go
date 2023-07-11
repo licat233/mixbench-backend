@@ -50,7 +50,7 @@ const (
 	SHOW_TYPE                   = 2    //信息错误
 )
 
-var Debug = os.Getenv("SERVICE_DEBUG") == "true"
+var Debug = os.Getenv("SERVICE_MODE") == "dev"
 var Mode = os.Getenv("SERVICE_MODE")
 var ServerError = InternalError
 var RequestError = ExternalError
@@ -267,7 +267,7 @@ func Convert(err error) (errorx *Errorx) {
  * alertErr string 提示信息
  * traceErr string 调试信息
  */
-func New(errs ...string) (errorx *Errorx) {
+func New(errs ...string) error {
 	alertErr := RequestErrorMsg
 	n := len(errs)
 	if n > 0 {
@@ -277,8 +277,7 @@ func New(errs ...string) (errorx *Errorx) {
 	if n > 1 {
 		traceErr = errs[1]
 	}
-	errorx = externalError(alertErr, errors.New(traceErr))
-	return
+	return externalError(alertErr, errors.New(traceErr))
 }
 
 /** ResponseErrorHandler 对接go-zero的错误处理函数，将原生错误转化为 Errorx

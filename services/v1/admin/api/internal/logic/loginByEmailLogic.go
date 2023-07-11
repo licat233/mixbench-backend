@@ -18,7 +18,7 @@ import (
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
 	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/captcha/rpc/captcha_pb"
+	"mixbench/services/v1/authentication/rpc/authentication_pb"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -55,7 +55,7 @@ func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq) (any, error
 	reqIp := utils.RemoteIp(l.Request)
 
 	//调用captcha.rpc服务校验验证码
-	res, err := l.svcCtx.CaptchaRpc.AuthEmailCaptcha(l.ctx, &captcha_pb.AuthEmailCaptchaReq{
+	res, err := l.svcCtx.AuthenticationRpc.VerifyEmailCaptcha(l.ctx, &authentication_pb.VerifyEmailCaptchaReq{
 		Email:     req.Email,
 		CaptchaId: req.CaptchaId,
 		Solution:  req.Solution,

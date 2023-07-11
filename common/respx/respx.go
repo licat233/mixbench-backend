@@ -183,7 +183,7 @@ func DefaultBoolResp(ok bool, err error) (*StatusData, error) {
 		}, nil
 	}
 	if err == nil {
-		err = errorx.New("Request failed! But the server has no error prompt")
+		err = errorx.ExternalError("Request failed! But the server has no error prompt")
 	}
 	return nil, errorx.Convert(err)
 }

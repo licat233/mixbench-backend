@@ -1,0 +1,45 @@
+Name: authentication-api
+Host: 0.0.0.0
+Port: ${AUTHENTICATION_API_PORT}
+
+Mode: ${SERVICE_MODE}
+
+Log:
+  ServiceName: authentication-api
+  Level: error
+
+RootDir: ./
+
+#静态资源服务配置
+StaticConfig:
+  Domain: ${STATIC_HOST}
+  Root: ${STATIC_ROOT}
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: ${PROMETHEUS_AUTHENTICATION_API_PORT}
+  Path: /metrics
+
+#链路追踪
+Telemetry:
+  Name: authentication-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Redis:
+  Addr: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+  DB: 1
+
+AuthenticationRpc:
+  Endpoints:
+    - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
+  NonBlock: true
+
+AdminRpc:
+  Endpoints:
+    - 127.0.0.1:${ADMIN_RPC_PORT}
+  NonBlock: true

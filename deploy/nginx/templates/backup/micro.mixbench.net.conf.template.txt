@@ -53,8 +53,8 @@ server {
         proxy_pass http://admin_server; # 负载均衡
     }
 
-    location /v1/api/captcha/ {
-        proxy_pass http://mixbench:${CAPTCHA_API_PORT};
+    location /v1/api/auth/ {
+        proxy_pass http://mixbench:${AUTHENTICATION_API_PORT};
     }
     location /v1/api/luckydraw/ {
         proxy_pass http://mixbench:${LUCKYDRAW_API_PORT};

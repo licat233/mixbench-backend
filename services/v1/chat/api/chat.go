@@ -29,8 +29,6 @@ func main() {
 	//加载配置文件
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 	c.RootDir = *rootDir
-	//配置debug模式
-	errorx.Debug = c.Debug
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()

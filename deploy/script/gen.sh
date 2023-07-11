@@ -11,6 +11,8 @@ current_path=$(
 # project_root="${current_path%%mixbench-backend*}mixbench-backend"
 project_root="${current_path%%deploy*}"
 
+nohup=$($project_root/genModd.sh);
+
 # 创建build目录
 if [ ! -d "${project_root}/build" ]; then
     mkdir "${project_root}/build"
@@ -94,6 +96,9 @@ gen_rpc() {
     fi
     cd $docs_path
     filename="${name}.proto"
+    if [ "${name}" == "auth" ]; then
+        filename="authx.proto"
+    fi
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
         echo -e "\n提示: 文件${filename} 不存在, 无需生成${name}-rpc服务"

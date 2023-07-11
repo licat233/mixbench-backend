@@ -9,7 +9,7 @@ import (
 	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/common/xcrypt"
-	"mixbench/services/v1/captcha/rpc/captcha_pb"
+	"mixbench/services/v1/authentication/rpc/authentication_pb"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
 	"mixbench/services/v1/chat/model"
@@ -34,7 +34,7 @@ func NewKefuLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *KefuLog
 
 func (l *KefuLoginLogic) KefuLogin(req *types.KefuLoginReq) (any, error) {
 	//调用captcha.rpc服务校验验证码
-	res, err := l.svcCtx.CaptchaRpc.VerifyCaptcha(l.ctx, &captcha_pb.VerifyCaptchaReq{
+	res, err := l.svcCtx.AuthenticationRpc.VerifyCaptcha(l.ctx, &authentication_pb.VerifyCaptchaReq{
 		CaptchaId: req.CaptchaId,
 		Solution:  req.Solution,
 	})
@@ -46,7 +46,7 @@ func (l *KefuLoginLogic) KefuLogin(req *types.KefuLoginReq) (any, error) {
 	}
 
 	if len(req.Passport) == 0 {
-		return nil, errorx.ExternalError(errorx.New("passport is empty"))
+		return nil, errorx.ExternalError(errors.New("passport is empty"))
 	}
 	err = xcrypt.PasswordValidator(req.Password)
 	if err != nil {

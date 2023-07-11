@@ -10,7 +10,7 @@ import (
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
 	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/captcha/rpc/captcha_pb"
+	"mixbench/services/v1/authentication/rpc/authentication_pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -45,7 +45,7 @@ func (l *DevPanelLoginLogic) DevPanelLogin(req *types.DevPanelLoginReq) (resp *t
 	reqIp := utils.RemoteIp(l.r)
 
 	//先进行验证码校验
-	res, err := l.svcCtx.CaptchaRpc.VerifyCaptcha(l.ctx, &captcha_pb.VerifyCaptchaReq{
+	res, err := l.svcCtx.AuthenticationRpc.VerifyCaptcha(l.ctx, &authentication_pb.VerifyCaptchaReq{
 		CaptchaId: req.CaptchaId,
 		Solution:  req.Solution,
 	})

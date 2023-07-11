@@ -1,9 +1,7 @@
 Name: admin-api
 Host: 0.0.0.0
 Port: ${ADMIN_API_PORT}
-
 Mode: ${SERVICE_MODE}
-Debug: ${SERVICE_DEBUG}
 
 Mysql:
   DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE_PREFIX}_admin?${MYSQL_CONN_OPTIONS}
@@ -43,9 +41,9 @@ StaticConfig:
   Root: ${STATIC_ROOT}
 
 #rpc
-CaptchaRpc:
+AuthenticationRpc:
   Endpoints:
-    - 127.0.0.1:${CAPTCHA_RPC_PORT}
+    - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
   NonBlock: true
 
 AdminRpc:

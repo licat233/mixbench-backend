@@ -2,7 +2,6 @@ Name: luckydraw-api
 Host: 0.0.0.0
 Port: ${LUCKYDRAW_API_PORT}
 Mode: ${SERVICE_MODE}
-Debug: ${SERVICE_DEBUG}
 
 Log:
   ServiceName: luckydraw-api
@@ -32,9 +31,9 @@ Auth:
   AccessSecret: ${JWT_SECRET}
   AccessExpire: 86400
 
-CaptchaRpc:
+AuthenticationRpc:
   Endpoints:
-    - 127.0.0.1:${CAPTCHA_RPC_PORT}
+    - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
   NonBlock: true
   # Etcd:
   #   Hosts:

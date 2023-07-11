@@ -4,6 +4,7 @@ import "errors"
 
 var (
 	ErrInvalidEmail    = New("invalid email")
+	ErrInvalidIp       = New("invalid ip addrees")
 	ErrEmptyParam      = New("Parameter cannot be empty")
 	ErrNotFound        = New("not found")
 	ErrInvalidParam    = New("invalid parameter")

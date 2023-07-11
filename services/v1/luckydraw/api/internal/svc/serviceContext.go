@@ -8,7 +8,7 @@
 package svc
 
 import (
-	"mixbench/services/v1/captcha/rpc/captcha"
+	"mixbench/services/v1/authentication/rpc/authentication"
 	"mixbench/services/v1/luckydraw"
 	"mixbench/services/v1/luckydraw/api/internal/config"
 	"mixbench/services/v1/luckydraw/api/internal/middleware"
@@ -19,7 +19,7 @@ import (
 
 type ServiceContext struct {
 	Config              config.Config
-	CaptchaRpc          captcha.Captcha
+	AuthenticationRpc   authentication.Authentication
 	LuckydrawRpc        luckydraw.LuckydrawRpc
 	AdminAuthMiddleware rest.Middleware
 	UserAuthMiddleware  rest.Middleware
@@ -29,7 +29,7 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:              c,
-		CaptchaRpc:          captcha.NewCaptcha(zrpc.MustNewClient(c.CaptchaRpc)),
+		AuthenticationRpc:   authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
 		LuckydrawRpc:        luckydraw.NewLuckydrawRpc(zrpc.MustNewClient(c.LuckydrawRpc)),
 		AdminAuthMiddleware: middleware.NewAdminAuthMiddleware(c).Handle,
 		UserAuthMiddleware:  middleware.NewUserAuthMiddleware(c).Handle,

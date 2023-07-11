@@ -1,0 +1,134 @@
+info(
+	title: "authentication服务"
+	author: "licat"
+	email: "1697470538@qq.com"
+	version: "v1"
+)
+
+//规范返回格式
+type BaseResp {
+	//响应成功的基本格式
+	Status  bool        `json:"success"`          //【响应状态】
+	Message string      `json:"message,optional"` //【给予的提示信息】
+	Data    interface{} `json:"data,optional"`    //【选填】响应的业务数据
+	//涉及列表请求
+	Total     int64 `json:"total,optional"`     // 【选填】数据总个数
+	PageSize  int64 `json:"pageSize,optional"`  // 【选填】单页数量
+	Page      int64 `json:"current,optional"`   // 【选填】当前页码，current与antd前端对接
+	TotalPage int64 `json:"totalPage,optional"` // 【自己加上去的】总共有多少页，根据前端的pageSize来计算
+	//如果是失败响应，附带debug信息
+	ErrorCode    int    `json:"errorCode,optional"`          // 【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功
+	ErrorMessage string `json:"errorMessage,optional"`       // 【选填】向用户显示消息
+	TraceMessage string `json:"traceMessage,optional"`       // 【选填】调试错误信息，请勿在生产环境下使用，可有可无
+	ShowType     int    `json:"showType,optional,default=2"` // 【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转
+	TraceId      string `json:"traceId,optional"`            // 【选填】方便后端故障排除：唯一的请求ID
+	Host         string `json:"host,optional"`               // 【选填】方便后端故障排除：当前访问服务器的主机
+}
+
+//--------captcha----------
+
+//图片验证码背景颜色
+type CaptchaBgColor {
+	R uint8 `json:"R,optional,default=254,range=[0:254]"`
+	G uint8 `json:"G,optional,default=254,range=[0:254]"`
+	B uint8 `json:"B,optional,default=254,range=[0:254]"`
+	A uint8 `json:"A,optional,default=254,range=[0:254]"`
+}
+
+//图片验证码请求
+type CaptchaReq {
+	//Height png height in pixel.
+	Height int `json:"height,optional,default=60"`
+
+	// Width Captcha png width in pixel.
+	Width int `json:"width,optional,default=200"`
+
+	//BgColor captcha image background color (optional)
+	BgColor CaptchaBgColor `json:"BgColor"`
+}
+
+//获取邮箱验证码请求
+type EmailCaptchaReq {
+	CaptchaId string `json:"captchaId"`
+	Solution  string `json:"solution"`
+	Email     string `json:"email"` //接收验证码的邮箱地址
+}
+
+//获取邮箱验证码响应
+type EmailCaptchaResp {
+	CaptchaId string `json:"captchaId"`
+	ExpiresAt int64  `json:"expiresAt"`
+}
+
+//邮箱验证码校验请求
+type EmailCaptchaVerifyReq {
+	Email     string `json:"email"`
+	CaptchaId string `json:"captchaId"`
+	Solution  string `json:"solution"`
+}
+
+//图片验证码信息
+type CaptchaInfo {
+	CaptchaId   string `json:"captchaId"`   //验证码Key
+	Base64Image string `json:"base64Image"` //base46图片数据
+}
+
+//校验验证码请求
+type ProcessCaptchaReq {
+	CaptchaId string `json:"captchaId"`
+	Solution  string `json:"solution"`
+}
+
+//预留的调试端口
+type testReq {
+	Data string `form:"data,optional"` //数据
+}
+
+//--------end captcha----------
+
+@server(
+	prefix: /v1/api/authentication
+)
+service Authentication {
+	@doc(
+		summary: "预留的调试端口"
+	)
+	@handler test
+	get /test(testReq) returns(BaseResp)
+}
+
+@server(
+	group: captcha
+	prefix: /v1/api/authentication/captcha
+)
+service Authentication {
+	@doc(
+		summary: "获取数学验证码"
+	)
+	@handler GetMathCaptcha
+	post /math(CaptchaReq) returns(BaseResp)
+
+	@doc(
+		summary: "验证码图片"
+	)
+	@handler ShowCaptchaImage
+	get /show
+
+	@doc(
+		summary: "验证码校验"
+	)
+	@handler VerifyCaptcha
+	post /process(ProcessCaptchaReq) returns(BaseResp)
+
+	@doc(
+		summary: "向邮箱发送验证码"
+	)
+	@handler SendEmailCaptcha
+	post /email(EmailCaptchaReq) returns(BaseResp)
+
+	@doc(
+		summary: "邮箱验证码校验"
+	)
+	@handler VerifyEmailCaptcha
+	post /email/process (EmailCaptchaVerifyReq) returns(EmailCaptchaResp)
+}

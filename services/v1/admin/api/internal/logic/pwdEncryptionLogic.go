@@ -29,11 +29,11 @@ func NewPwdEncryptionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pwd
 func (l *PwdEncryptionLogic) PwdEncryption(req *types.PwdEncryptionReq) (any, error) {
 	err := xcrypt.PasswordValidator(req.Password)
 	if err != nil {
-		return nil, errorx.New(err.Error())
+		return nil, errorx.ExternalError(err.Error())
 	}
 	hashPwd, err := xcrypt.HashPassword(req.Password)
 	if err != nil {
-		return nil, errorx.New(err.Error())
+		return nil, errorx.ExternalError(err.Error())
 	}
 	return respx.NewData(hashPwd), nil
 }

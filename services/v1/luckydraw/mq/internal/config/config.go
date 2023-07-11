@@ -10,7 +10,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Debug bool
 
 	Redis redis.RedisConf
 

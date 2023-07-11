@@ -15,7 +15,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	Debug bool
 	Mysql struct {
 		DataSource string
 	}
@@ -26,9 +25,9 @@ type Config struct {
 
 	CacheRedis cache.CacheConf
 
-	CaptchaRpc   zrpc.RpcClientConf
-	AdminRpc     zrpc.RpcClientConf
-	StaticConfig struct {
+	AuthenticationRpc zrpc.RpcClientConf
+	AdminRpc          zrpc.RpcClientConf
+	StaticConfig      struct {
 		Domain string
 		Root   string
 	}
