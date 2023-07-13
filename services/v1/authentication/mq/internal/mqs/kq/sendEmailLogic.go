@@ -38,10 +38,7 @@ func (l *SendEmailLogic) Consume(key, val string) error {
 		l.Logger.Errorf("Consume unmarshal error, err: %+v", err)
 		return err
 	}
-	if err := l.SendEmailCaptchaLogic(&req); err != nil {
-		l.Logger.Error(err)
-		return err
-	}
+	return l.execService(&req)
 	// switch key {
 	// case types.SendEmailCaptchaKey:
 	// 	var req types.SendEmailCaptchaReq
@@ -49,21 +46,17 @@ func (l *SendEmailLogic) Consume(key, val string) error {
 	// 		l.Logger.Errorf("Consume unmarshal error, err: %+v", err)
 	// 		return err
 	// 	}
-	// 	if err := l.SendEmailCaptchaLogic(&req); err != nil {
-	// 		l.Logger.Error(err)
-	// 		return err
-	// 	}
+	// 	return l.execService(&req)
 	// default:
 	// 	return fmt.Errorf("unexpected task type: %s", key)
 	// }
-	return nil
 }
 
-func (l *SendEmailLogic) SendEmailCaptchaLogic(req *types.SendEmailCaptchaReq) error {
+func (l *SendEmailLogic) execService(req *types.SendEmailCaptchaReq) error {
 	emails := req.EmailAddrees
 	message := req.Message
 	key := req.RedisKey
-	err := emailx.SendCaptcha(l.ctx, "mixbench平台验证码", &message, emails)
+	err := emailx.SendCaptcha(l.ctx, "mixbench平台验证码", message, emails)
 	if err != nil {
 		l.Logger.Error(err)
 		// 如果发送失败了，就要删除刚刚存入redis的数据

@@ -1,10 +1,3 @@
-/*
- * @Author: licat
- * @Date: 2022-11-17 14:55:33
- * @LastEditors: licat
- * @LastEditTime: 2023-02-02 10:23:23
- * @Description: licat233@gmail.com
- */
 package consumer
 
 import (
@@ -12,11 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"mixbench/services/v1/chat/model"
 	"mixbench/services/v1/chat/mq/internal/svc"
 	"mixbench/services/v1/chat/mq/types"
 
 	"github.com/hibiken/asynq"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/service"
 )
 
@@ -27,6 +20,7 @@ type AsynqConsumer struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	Server *asynq.Server
+	logx.Logger
 }
 
 func NewAsynqConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *AsynqConsumer {
@@ -34,10 +28,11 @@ func NewAsynqConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *AsynqCon
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Server: asynq.NewServer(svcCtx.RedisClientOpt, asynq.Config{Concurrency: 10}),
+		Logger: logx.WithContext(ctx),
 	}
 }
 
-var _ service.Service = &AsynqConsumer{}
+var _ service.Service = (*AsynqConsumer)(nil)
 
 func (p *AsynqConsumer) Start() {
 	if err := p.Server.Run(asynq.HandlerFunc(p.handler)); err != nil {
@@ -51,18 +46,24 @@ func (p *AsynqConsumer) Stop() {
 
 func (p *AsynqConsumer) handler(ctx context.Context, t *asynq.Task) error {
 	switch t.Type() {
-	case types.MessageTypename:
-		var msg model.Message
+	case types.TaskTypeSendMessage:
+		var msg types.SendMessageReq
 		if err := json.Unmarshal(t.Payload(), &msg); err != nil {
 			return err
 		}
-		return p.LuckydrawResultHandler(msg)
+		if err := p.SendMessageMq(&msg); err != nil {
+			p.Logger.Error(err)
+			return err
+		}
 	default:
 		return fmt.Errorf("unexpected task type: %s", t.Type())
 	}
+	return nil
 }
 
-func (p *AsynqConsumer) LuckydrawResultHandler(msg model.Message) (err error) {
-	//todo: logic
-	return
+func (p *AsynqConsumer) SendMessageMq(msg *types.SendMessageReq) error {
+	if msg == nil || msg.Message == nil {
+		return nil
+	}
+	return nil
 }

@@ -30,6 +30,7 @@ type adminer_model interface {
 	FindByEmail(ctx context.Context, email string) (*Adminer, error)
 	FindByStatus(ctx context.Context, status int64) (*Adminer, error)
 	FindByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) (*Adminer, error)
+	FindByProjectId(ctx context.Context, projectId int64) (*Adminer, error)
 	FindByLoginCount(ctx context.Context, loginCount int64) (*Adminer, error)
 	FindByLastLogin(ctx context.Context, lastLogin time.Time) (*Adminer, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Adminer, error)
@@ -42,6 +43,7 @@ type adminer_model interface {
 	FindsByEmails(ctx context.Context, emails []string) ([]*Adminer, error)
 	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Adminer, error)
 	FindsByIsSuperAdmins(ctx context.Context, isSuperAdmins []int64) ([]*Adminer, error)
+	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Adminer, error)
 	FindsByLoginCounts(ctx context.Context, loginCounts []int64) ([]*Adminer, error)
 	FindsByLastLogins(ctx context.Context, lastLogins []time.Time) ([]*Adminer, error)
 
@@ -55,6 +57,7 @@ type adminer_model interface {
 	FindsByEmail(ctx context.Context, email string) ([]*Adminer, error)
 	FindsByStatus(ctx context.Context, status int64) ([]*Adminer, error)
 	FindsByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) ([]*Adminer, error)
+	FindsByProjectId(ctx context.Context, projectId int64) ([]*Adminer, error)
 	FindsByLoginCount(ctx context.Context, loginCount int64) ([]*Adminer, error)
 	FindsByLastLogin(ctx context.Context, lastLogin time.Time) ([]*Adminer, error)
 
@@ -117,6 +120,9 @@ func (m *defaultAdminerModel) FindList(ctx context.Context, pageSize, page int64
 		}
 		if adminer.IsSuperAdmin >= 0 {
 			sq = sq.Where("`is_super_admin` = ?", adminer.IsSuperAdmin)
+		}
+		if adminer.ProjectId > 0 {
+			sq = sq.Where("`project_id` = ?", adminer.ProjectId)
 		}
 		if adminer.LoginCount >= 0 {
 			sq = sq.Where("`login_count` = ?", adminer.LoginCount)
@@ -299,6 +305,20 @@ func (m *defaultAdminerModel) FindByIsSuperAdmin(ctx context.Context, isSuperAdm
 	}
 }
 
+func (m *defaultAdminerModel) FindByProjectId(ctx context.Context, projectId int64) (*Adminer, error) {
+	var resp Adminer
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, projectId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultAdminerModel) FindByLoginCount(ctx context.Context, loginCount int64) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `login_count` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
@@ -427,6 +447,16 @@ func (m *defaultAdminerModel) FindsByIsSuperAdmins(ctx context.Context, isSuperA
 	return resp, err
 }
 
+func (m *defaultAdminerModel) FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	if len(projectIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	return resp, err
+}
+
 func (m *defaultAdminerModel) FindsByLoginCounts(ctx context.Context, loginCounts []int64) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
 	if len(loginCounts) == 0 {
@@ -514,6 +544,13 @@ func (m *defaultAdminerModel) FindsByIsSuperAdmin(ctx context.Context, isSuperAd
 	var resp = make([]*Adminer, 0)
 	query := fmt.Sprintf("select %s from %s where `is_super_admin` = ? and `is_deleted` = '0' ", adminerRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isSuperAdmin)
+	return resp, err
+}
+
+func (m *defaultAdminerModel) FindsByProjectId(ctx context.Context, projectId int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectId)
 	return resp, err
 }
 

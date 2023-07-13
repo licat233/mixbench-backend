@@ -105,3 +105,8 @@ func (s *AdminServer) ForgotPassword(ctx context.Context, in *admin_pb.ForgotPas
 	l := adminlogic.NewForgotPasswordLogic(ctx, s.svcCtx)
 	return l.ForgotPassword(in)
 }
+
+func (s *AdminServer) GetWebByUrl(ctx context.Context, in *admin_pb.GetWebByUrlReq) (*admin_pb.GetWebByUrlResp, error) {
+	l := adminlogic.NewGetWebByUrlLogic(ctx, s.svcCtx)
+	return l.GetWebByUrl(in)
+}

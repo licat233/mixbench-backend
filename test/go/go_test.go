@@ -7,7 +7,12 @@
  */
 package gotest
 
-import "testing"
+import (
+	"fmt"
+	"net/url"
+	"strings"
+	"testing"
+)
 
 type Animal interface {
 	Cry() string
@@ -19,6 +24,10 @@ type Cat struct {
 
 type Dog struct {
 	Name string
+}
+
+type Room struct {
+	*Cat
 }
 
 func (c Cat) Cry() string {
@@ -34,6 +43,22 @@ func Demo() Animal {
 	return p
 }
 
-func Test_go(t *testing.T) {
+func (r *Room) Do() error {
+	panic("发生了恐慌")
+}
 
+func Test_go(t *testing.T) {
+	rawURL := "https://example.com/path/to/resource"
+	parsedURL, err := url.Parse(rawURL)
+	if err != nil {
+		fmt.Println("URL 解析失败:", err)
+		return
+	}
+
+	hostParts := strings.Split(parsedURL.Hostname(), ".")
+	numParts := len(hostParts)
+
+	// 提取主域名
+	mainDomain := hostParts[numParts-2] + "." + hostParts[numParts-1]
+	fmt.Println("主域名:", mainDomain)
 }

@@ -120,173 +120,10 @@ export interface TransferVisitorReq {
 	kefuId?: number // 接待游客的客服id
 }
 
-export interface ChatRecord {
-	id: number // 表主键
-	uuid: string // UUID
-	content: string // 消息内容
-	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
-	visitorId: number // 游客id
-	kefuId: number // 客服id， 0表示没有分配到客服
-	projectId: number // 项目id
-	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
-	status: number // 状态:0合法，1违规
-	isRead: number // 是否已读:0未读，1已读
-	isSend: number // 是否已发送:0未发送，1已发送
-	sendTime: number // 发送时间
+export interface ConnWebsocketReq {
 }
-
-export interface AddChatRecordReq {
-	content: string // 消息内容
-	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
-	visitorId: number // 游客id
-	kefuId: number // 客服id， 0表示没有分配到客服
-	projectId: number // 项目id
-	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
-	status: number // 状态:0合法，1违规
-	isRead: number // 是否已读:0未读，1已读
-	isSend: number // 是否已发送:0未发送，1已发送
-	sendTime: number // 发送时间
-}
-
-export interface PutChatRecordReq {
-	id: number // 表主键
-	uuid: string // UUID
-	content: string // 消息内容
-	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
-	visitorId: number // 游客id
-	kefuId: number // 客服id， 0表示没有分配到客服
-	projectId: number // 项目id
-	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
-	status: number // 状态:0合法，1违规
-	isRead: number // 是否已读:0未读，1已读
-	isSend: number // 是否已发送:0未发送，1已发送
-	sendTime: number // 发送时间
-}
-
-export interface DelChatRecordReq {
-	id: number // 聊天记录 ID
-}
-
-export interface GetChatRecordReq {
-	id: number // 聊天记录 ID
-}
-
-export interface GetChatRecordListReq {
-}
-export interface GetChatRecordListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 表主键
-	uuid: string // UUID
-	content: string // 消息内容
-	contentType: number // 0文本，1图片，2表情，3视频, 4错误信息
-	visitorId: number // 游客id
-	kefuId: number // 客服id， 0表示没有分配到客服
-	projectId: number // 项目id
-	msgType: number // 0游客消息，1客服消息，2公告消息，3系统消息
-	status: number // 状态:0合法，1违规
-	isRead: number // 是否已读:0未读，1已读
-	isSend: number // 是否已发送:0未发送，1已发送
-	sendTime: number // 发送时间
-}
-
-export interface GetChatRecordEnumsReq {
-	parentId?: number // 父级ID
-}
-
-export interface Ipblack {
-	id: number // 
-	ip: string // IP
-}
-
-export interface AddIpblackReq {
-	ip: string // IP
-}
-
-export interface PutIpblackReq {
-	id: number // 
-	ip: string // IP
-}
-
-export interface DelIpblackReq {
-	id: number // IP黑名单 ID
-}
-
-export interface GetIpblackReq {
-	id: number // IP黑名单 ID
-}
-
-export interface GetIpblackListReq {
-}
-export interface GetIpblackListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 
-	ip: string // IP
-}
-
-export interface GetIpblackEnumsReq {
-	parentId?: number // 父级ID
-}
-
-export interface Kefu {
-	id: number // 表主键
-	uuid: string // UUID
-	projectId: number // 项目id
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface AddKefuReq {
-	projectId: number // 项目id
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface PutKefuReq {
-	id: number // 表主键
-	uuid: string // UUID
-	projectId: number // 项目id
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface DelKefuReq {
-	id: number // 客服 ID
-}
-
-export interface GetKefuReq {
-	id: number // 客服 ID
-}
-
-export interface GetKefuListReq {
-}
-export interface GetKefuListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 表主键
-	uuid: string // UUID
-	projectId: number // 项目id
-	passport: string // 客服账号
-	username: string // 客服名
-	password: string // 密码
-	status: number // 状态:0离线，1在线，2冻结
-}
-
-export interface GetKefuEnumsReq {
-	parentId?: number // 父级ID
+export interface ConnWebsocketReqParams {
+	token: string
 }
 
 export interface Message {
@@ -302,7 +139,7 @@ export interface Message {
 	isRead: number // 是否已读:0未读，1已读
 	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 缓存过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为30天
 }
 
 export interface AddMessageReq {
@@ -316,7 +153,7 @@ export interface AddMessageReq {
 	isRead: number // 是否已读:0未读，1已读
 	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 缓存过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为30天
 }
 
 export interface PutMessageReq {
@@ -332,15 +169,15 @@ export interface PutMessageReq {
 	isRead: number // 是否已读:0未读，1已读
 	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 缓存过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为30天
 }
 
 export interface DelMessageReq {
-	id: number // 消息, 主要用于缓存未发送成功的消息 ID
+	id: number // 消息 ID
 }
 
 export interface GetMessageReq {
-	id: number // 消息, 主要用于缓存未发送成功的消息 ID
+	id: number // 消息 ID
 }
 
 export interface GetMessageListReq {
@@ -362,54 +199,10 @@ export interface GetMessageListReqParams {
 	isRead: number // 是否已读:0未读，1已读
 	isSend: number // 是否已发送:0未发送，1已发送
 	sendTime: number // 发送时间
-	expireTime: number // 缓存过期时间, 默认为3天
+	expireTime: number // 缓存过期时间, 默认为30天
 }
 
 export interface GetMessageEnumsReq {
-	parentId?: number // 父级ID
-}
-
-export interface Project {
-	id: number // 表主键
-	uuid: string // UUID
-	name: string // 项目名称
-	status: number // 项目状态
-}
-
-export interface AddProjectReq {
-	name: string // 项目名称
-	status: number // 项目状态
-}
-
-export interface PutProjectReq {
-	id: number // 表主键
-	uuid: string // UUID
-	name: string // 项目名称
-	status: number // 项目状态
-}
-
-export interface DelProjectReq {
-	id: number // 项目 ID
-}
-
-export interface GetProjectReq {
-	id: number // 项目 ID
-}
-
-export interface GetProjectListReq {
-}
-export interface GetProjectListReqParams {
-	pageSize: number // 页面容量，默认20，可选
-	page: number // 当前页码，默认1，可选
-	current: number // 当前页码，默认1，用于对接umijs，可选
-	keyword: string // 关键词，可选
-	id: number // 表主键
-	uuid: string // UUID
-	name: string // 项目名称
-	status: number // 项目状态
-}
-
-export interface GetProjectEnumsReq {
 	parentId?: number // 父级ID
 }
 

@@ -15,768 +15,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/api/chat/chatRecord/": {
-      "get": {
-        "summary": "获取聊天记录 基础API",
-        "operationId": "GetChatRecord",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "聊天记录 ID",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "chatRecord"
-        ]
-      },
-      "delete": {
-        "summary": "删除聊天记录 基础API",
-        "operationId": "DelChatRecord",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "删除聊天记录请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/DelChatRecordReq"
-            }
-          }
-        ],
-        "tags": [
-          "chatRecord"
-        ]
-      },
-      "post": {
-        "summary": "添加聊天记录 基础API",
-        "operationId": "AddChatRecord",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "添加聊天记录请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AddChatRecordReq"
-            }
-          }
-        ],
-        "tags": [
-          "chatRecord"
-        ]
-      },
-      "put": {
-        "summary": "更新聊天记录 基础API",
-        "operationId": "PutChatRecord",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "更新聊天记录请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PutChatRecordReq"
-            }
-          }
-        ],
-        "tags": [
-          "chatRecord"
-        ]
-      }
-    },
-    "/v1/api/chat/chatRecord/enums": {
-      "get": {
-        "summary": "获取聊天记录枚举列表 基础API",
-        "operationId": "GetChatRecordEnums",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parentId",
-            "description": "父级ID",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "chatRecord"
-        ]
-      }
-    },
-    "/v1/api/chat/chatRecord/list": {
-      "get": {
-        "summary": "获取聊天记录列表 基础API",
-        "operationId": "GetChatRecordList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面容量，默认20，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "page",
-            "description": "当前页码，默认1，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "current",
-            "description": "当前页码，默认1，用于对接umijs，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "表主键",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "uuid",
-            "description": "UUID",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "content",
-            "description": "消息内容",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "contentType",
-            "description": "0文本，1图片，2表情，3视频, 4错误信息",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "visitorId",
-            "description": "游客id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "kefuId",
-            "description": "客服id， 0表示没有分配到客服",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "projectId",
-            "description": "项目id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "msgType",
-            "description": "0游客消息，1客服消息，2公告消息，3系统消息",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "status",
-            "description": "状态:0合法，1违规",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "isRead",
-            "description": "是否已读:0未读，1已读",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "isSend",
-            "description": "是否已发送:0未发送，1已发送",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "sendTime",
-            "description": "发送时间",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "chatRecord"
-        ]
-      }
-    },
-    "/v1/api/chat/ipblack/": {
-      "get": {
-        "summary": "获取IP黑名单 基础API",
-        "operationId": "GetIpblack",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "IP黑名单 ID",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "ipblack"
-        ]
-      },
-      "delete": {
-        "summary": "删除IP黑名单 基础API",
-        "operationId": "DelIpblack",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "删除IP黑名单请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/DelIpblackReq"
-            }
-          }
-        ],
-        "tags": [
-          "ipblack"
-        ]
-      },
-      "post": {
-        "summary": "添加IP黑名单 基础API",
-        "operationId": "AddIpblack",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "添加IP黑名单请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AddIpblackReq"
-            }
-          }
-        ],
-        "tags": [
-          "ipblack"
-        ]
-      },
-      "put": {
-        "summary": "更新IP黑名单 基础API",
-        "operationId": "PutIpblack",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "更新IP黑名单请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PutIpblackReq"
-            }
-          }
-        ],
-        "tags": [
-          "ipblack"
-        ]
-      }
-    },
-    "/v1/api/chat/ipblack/enums": {
-      "get": {
-        "summary": "获取IP黑名单枚举列表 基础API",
-        "operationId": "GetIpblackEnums",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parentId",
-            "description": "父级ID",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "ipblack"
-        ]
-      }
-    },
-    "/v1/api/chat/ipblack/list": {
-      "get": {
-        "summary": "获取IP黑名单列表 基础API",
-        "operationId": "GetIpblackList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面容量，默认20，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "page",
-            "description": "当前页码，默认1，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "current",
-            "description": "当前页码，默认1，用于对接umijs，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "ip",
-            "description": "IP",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ipblack"
-        ]
-      }
-    },
-    "/v1/api/chat/kefu/": {
-      "get": {
-        "summary": "获取客服 基础API",
-        "operationId": "GetKefu",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "客服 ID",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "kefu"
-        ]
-      },
-      "delete": {
-        "summary": "删除客服 基础API",
-        "operationId": "DelKefu",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "删除客服请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/DelKefuReq"
-            }
-          }
-        ],
-        "tags": [
-          "kefu"
-        ]
-      },
-      "post": {
-        "summary": "添加客服 基础API",
-        "operationId": "AddKefu",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "添加客服请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AddKefuReq"
-            }
-          }
-        ],
-        "tags": [
-          "kefu"
-        ]
-      },
-      "put": {
-        "summary": "更新客服 基础API",
-        "operationId": "PutKefu",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "更新客服请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PutKefuReq"
-            }
-          }
-        ],
-        "tags": [
-          "kefu"
-        ]
-      }
-    },
-    "/v1/api/chat/kefu/enums": {
-      "get": {
-        "summary": "获取客服枚举列表 基础API",
-        "operationId": "GetKefuEnums",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parentId",
-            "description": "父级ID",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "kefu"
-        ]
-      }
-    },
-    "/v1/api/chat/kefu/list": {
-      "get": {
-        "summary": "获取客服列表 基础API",
-        "operationId": "GetKefuList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面容量，默认20，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "page",
-            "description": "当前页码，默认1，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "current",
-            "description": "当前页码，默认1，用于对接umijs，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "表主键",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "uuid",
-            "description": "UUID",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "projectId",
-            "description": "项目id",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "passport",
-            "description": "客服账号",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "username",
-            "description": "客服名",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "description": "密码",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "description": "状态:0离线，1在线，2冻结",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "kefu"
-        ]
-      }
-    },
-    "/v1/api/chat/kefuLogin": {
-      "post": {
-        "summary": "客服登录",
-        "operationId": "KefuLogin",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/KefuLoginReq"
-            }
-          }
-        ],
-        "tags": [
-          "chat"
-        ]
-      }
-    },
     "/v1/api/chat/message/": {
       "get": {
-        "summary": "获取消息, 主要用于缓存未发送成功的消息 基础API",
+        "summary": "获取消息 基础API",
         "operationId": "GetMessage",
         "responses": {
           "200": {
@@ -789,7 +30,7 @@
         "parameters": [
           {
             "name": "id",
-            "description": "消息, 主要用于缓存未发送成功的消息 ID",
+            "description": "消息 ID",
             "in": "query",
             "required": true,
             "type": "integer",
@@ -801,7 +42,7 @@
         ]
       },
       "delete": {
-        "summary": "删除消息, 主要用于缓存未发送成功的消息 基础API",
+        "summary": "删除消息 基础API",
         "operationId": "DelMessage",
         "responses": {
           "200": {
@@ -814,7 +55,7 @@
         "parameters": [
           {
             "name": "body",
-            "description": "删除消息, 主要用于缓存未发送成功的消息请求",
+            "description": "删除消息请求",
             "in": "body",
             "required": true,
             "schema": {
@@ -827,7 +68,7 @@
         ]
       },
       "post": {
-        "summary": "添加消息, 主要用于缓存未发送成功的消息 基础API",
+        "summary": "添加消息 基础API",
         "operationId": "AddMessage",
         "responses": {
           "200": {
@@ -840,7 +81,7 @@
         "parameters": [
           {
             "name": "body",
-            "description": "添加消息, 主要用于缓存未发送成功的消息请求",
+            "description": "添加消息请求",
             "in": "body",
             "required": true,
             "schema": {
@@ -853,7 +94,7 @@
         ]
       },
       "put": {
-        "summary": "更新消息, 主要用于缓存未发送成功的消息 基础API",
+        "summary": "更新消息 基础API",
         "operationId": "PutMessage",
         "responses": {
           "200": {
@@ -866,7 +107,7 @@
         "parameters": [
           {
             "name": "body",
-            "description": "更新消息, 主要用于缓存未发送成功的消息请求",
+            "description": "更新消息请求",
             "in": "body",
             "required": true,
             "schema": {
@@ -881,7 +122,7 @@
     },
     "/v1/api/chat/message/enums": {
       "get": {
-        "summary": "获取消息, 主要用于缓存未发送成功的消息枚举列表 基础API",
+        "summary": "获取消息枚举列表 基础API",
         "operationId": "GetMessageEnums",
         "responses": {
           "200": {
@@ -909,7 +150,7 @@
     },
     "/v1/api/chat/message/list": {
       "get": {
-        "summary": "获取消息, 主要用于缓存未发送成功的消息列表 基础API",
+        "summary": "获取消息列表 基础API",
         "operationId": "GetMessageList",
         "responses": {
           "200": {
@@ -1060,7 +301,7 @@
           },
           {
             "name": "expireTime",
-            "description": "缓存过期时间, 默认为3天",
+            "description": "缓存过期时间, 默认为30天",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1298,224 +539,6 @@
         ]
       }
     },
-    "/v1/api/chat/project/": {
-      "get": {
-        "summary": "获取项目 基础API",
-        "operationId": "GetProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "description": "项目 ID",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "project"
-        ]
-      },
-      "delete": {
-        "summary": "删除项目 基础API",
-        "operationId": "DelProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "删除项目请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/DelProjectReq"
-            }
-          }
-        ],
-        "tags": [
-          "project"
-        ]
-      },
-      "post": {
-        "summary": "添加项目 基础API",
-        "operationId": "AddProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "添加项目请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AddProjectReq"
-            }
-          }
-        ],
-        "tags": [
-          "project"
-        ]
-      },
-      "put": {
-        "summary": "更新项目 基础API",
-        "operationId": "PutProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "更新项目请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/PutProjectReq"
-            }
-          }
-        ],
-        "tags": [
-          "project"
-        ]
-      }
-    },
-    "/v1/api/chat/project/enums": {
-      "get": {
-        "summary": "获取项目枚举列表 基础API",
-        "operationId": "GetProjectEnums",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parentId",
-            "description": "父级ID",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "project"
-        ]
-      }
-    },
-    "/v1/api/chat/project/list": {
-      "get": {
-        "summary": "获取项目列表 基础API",
-        "operationId": "GetProjectList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageSize",
-            "description": "页面容量，默认20，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "20"
-          },
-          {
-            "name": "page",
-            "description": "当前页码，默认1，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "current",
-            "description": "当前页码，默认1，用于对接umijs，可选",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "1"
-          },
-          {
-            "name": "keyword",
-            "description": "关键词，可选",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "description": "表主键",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          },
-          {
-            "name": "uuid",
-            "description": "UUID",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "description": "项目名称",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "description": "项目状态",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64",
-            "default": "-1"
-          }
-        ],
-        "tags": [
-          "project"
-        ]
-      }
-    },
     "/v1/api/chat/saveMsgConf": {
       "post": {
         "summary": "保存消息配置",
@@ -1586,7 +609,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/transferVisitorReq"
+              "$ref": "#/definitions/TransferVisitorReq"
             }
           }
         ],
@@ -1952,6 +975,14 @@
             "schema": {}
           }
         },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "chat"
         ]
@@ -1967,6 +998,14 @@
             "schema": {}
           }
         },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "chat"
         ]
@@ -1974,121 +1013,6 @@
     }
   },
   "definitions": {
-    "AddChatRecordReq": {
-      "type": "object",
-      "properties": {
-        "content": {
-          "type": "string",
-          "description": "消息内容"
-        },
-        "contentType": {
-          "type": "integer",
-          "format": "int64",
-          "description": "0文本，1图片，2表情，3视频, 4错误信息"
-        },
-        "visitorId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "游客id"
-        },
-        "kefuId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "客服id， 0表示没有分配到客服"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目id"
-        },
-        "msgType": {
-          "type": "integer",
-          "format": "int64",
-          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "状态:0合法，1违规"
-        },
-        "isRead": {
-          "type": "integer",
-          "format": "int64",
-          "description": "是否已读:0未读，1已读"
-        },
-        "isSend": {
-          "type": "integer",
-          "format": "int64",
-          "description": "是否已发送:0未发送，1已发送"
-        },
-        "sendTime": {
-          "type": "integer",
-          "format": "int64",
-          "description": "发送时间"
-        }
-      },
-      "title": "AddChatRecordReq",
-      "required": [
-        "content",
-        "contentType",
-        "visitorId",
-        "kefuId",
-        "projectId",
-        "msgType",
-        "status",
-        "isRead",
-        "isSend",
-        "sendTime"
-      ]
-    },
-    "AddIpblackReq": {
-      "type": "object",
-      "properties": {
-        "ip": {
-          "type": "string",
-          "description": "IP"
-        }
-      },
-      "title": "AddIpblackReq",
-      "required": [
-        "ip"
-      ]
-    },
-    "AddKefuReq": {
-      "type": "object",
-      "properties": {
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目id"
-        },
-        "passport": {
-          "type": "string",
-          "description": "客服账号"
-        },
-        "username": {
-          "type": "string",
-          "description": "客服名"
-        },
-        "password": {
-          "type": "string",
-          "description": "密码"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "状态:0离线，1在线，2冻结"
-        }
-      },
-      "title": "AddKefuReq",
-      "required": [
-        "projectId",
-        "passport",
-        "username",
-        "password",
-        "status"
-      ]
-    },
     "AddMessageConfigReq": {
       "type": "object",
       "properties": {
@@ -2173,7 +1097,7 @@
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "description": "缓存过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为30天"
         }
       },
       "title": "AddMessageReq",
@@ -2189,25 +1113,6 @@
         "isSend",
         "sendTime",
         "expireTime"
-      ]
-    },
-    "AddProjectReq": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "项目名称"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目状态"
-        }
-      },
-      "title": "AddProjectReq",
-      "required": [
-        "name",
-        "status"
       ]
     },
     "AddVisitorReq": {
@@ -2393,125 +1298,14 @@
         "expiresAt"
       ]
     },
-    "ChatRecord": {
+    "ConnWebsocketReq": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "content": {
-          "type": "string",
-          "description": "消息内容"
-        },
-        "contentType": {
-          "type": "integer",
-          "format": "int64",
-          "description": "0文本，1图片，2表情，3视频, 4错误信息"
-        },
-        "visitorId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "游客id"
-        },
-        "kefuId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "客服id， 0表示没有分配到客服"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目id"
-        },
-        "msgType": {
-          "type": "integer",
-          "format": "int64",
-          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "状态:0合法，1违规"
-        },
-        "isRead": {
-          "type": "integer",
-          "format": "int64",
-          "description": "是否已读:0未读，1已读"
-        },
-        "isSend": {
-          "type": "integer",
-          "format": "int64",
-          "description": "是否已发送:0未发送，1已发送"
-        },
-        "sendTime": {
-          "type": "integer",
-          "format": "int64",
-          "description": "发送时间"
+        "token": {
+          "type": "string"
         }
       },
-      "title": "ChatRecord",
-      "required": [
-        "id",
-        "uuid",
-        "content",
-        "contentType",
-        "visitorId",
-        "kefuId",
-        "projectId",
-        "msgType",
-        "status",
-        "isRead",
-        "isSend",
-        "sendTime"
-      ]
-    },
-    "DelChatRecordReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "聊天记录 ID"
-        }
-      },
-      "title": "DelChatRecordReq",
-      "required": [
-        "id"
-      ]
-    },
-    "DelIpblackReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "IP黑名单 ID"
-        }
-      },
-      "title": "DelIpblackReq",
-      "required": [
-        "id"
-      ]
-    },
-    "DelKefuReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "客服 ID"
-        }
-      },
-      "title": "DelKefuReq",
-      "required": [
-        "id"
-      ]
+      "title": "ConnWebsocketReq"
     },
     "DelMessageConfigReq": {
       "type": "object",
@@ -2533,24 +1327,10 @@
         "id": {
           "type": "integer",
           "format": "int64",
-          "description": "消息, 主要用于缓存未发送成功的消息 ID"
+          "description": "消息 ID"
         }
       },
       "title": "DelMessageReq",
-      "required": [
-        "id"
-      ]
-    },
-    "DelProjectReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目 ID"
-        }
-      },
-      "title": "DelProjectReq",
       "required": [
         "id"
       ]
@@ -2601,279 +1381,6 @@
       "title": "Enums",
       "required": [
         "list"
-      ]
-    },
-    "GetChatRecordEnumsReq": {
-      "type": "object",
-      "properties": {
-        "parentId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "父级ID"
-        }
-      },
-      "title": "GetChatRecordEnumsReq"
-    },
-    "GetChatRecordListReq": {
-      "type": "object",
-      "properties": {
-        "pageSize": {
-          "type": "integer",
-          "format": "int64",
-          "default": "20",
-          "description": "页面容量，默认20，可选"
-        },
-        "page": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，可选"
-        },
-        "current": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，用于对接umijs，可选"
-        },
-        "keyword": {
-          "type": "string",
-          "description": "关键词，可选"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "content": {
-          "type": "string",
-          "description": "消息内容"
-        },
-        "contentType": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "0文本，1图片，2表情，3视频, 4错误信息"
-        },
-        "visitorId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "游客id"
-        },
-        "kefuId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "客服id， 0表示没有分配到客服"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "项目id"
-        },
-        "msgType": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "状态:0合法，1违规"
-        },
-        "isRead": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "是否已读:0未读，1已读"
-        },
-        "isSend": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "是否已发送:0未发送，1已发送"
-        },
-        "sendTime": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "发送时间"
-        }
-      },
-      "title": "GetChatRecordListReq"
-    },
-    "GetChatRecordReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "聊天记录 ID"
-        }
-      },
-      "title": "GetChatRecordReq",
-      "required": [
-        "id"
-      ]
-    },
-    "GetIpblackEnumsReq": {
-      "type": "object",
-      "properties": {
-        "parentId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "父级ID"
-        }
-      },
-      "title": "GetIpblackEnumsReq"
-    },
-    "GetIpblackListReq": {
-      "type": "object",
-      "properties": {
-        "pageSize": {
-          "type": "integer",
-          "format": "int64",
-          "default": "20",
-          "description": "页面容量，默认20，可选"
-        },
-        "page": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，可选"
-        },
-        "current": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，用于对接umijs，可选"
-        },
-        "keyword": {
-          "type": "string",
-          "description": "关键词，可选"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1"
-        },
-        "ip": {
-          "type": "string",
-          "description": "IP"
-        }
-      },
-      "title": "GetIpblackListReq"
-    },
-    "GetIpblackReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "IP黑名单 ID"
-        }
-      },
-      "title": "GetIpblackReq",
-      "required": [
-        "id"
-      ]
-    },
-    "GetKefuEnumsReq": {
-      "type": "object",
-      "properties": {
-        "parentId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "父级ID"
-        }
-      },
-      "title": "GetKefuEnumsReq"
-    },
-    "GetKefuListReq": {
-      "type": "object",
-      "properties": {
-        "pageSize": {
-          "type": "integer",
-          "format": "int64",
-          "default": "20",
-          "description": "页面容量，默认20，可选"
-        },
-        "page": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，可选"
-        },
-        "current": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，用于对接umijs，可选"
-        },
-        "keyword": {
-          "type": "string",
-          "description": "关键词，可选"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "项目id"
-        },
-        "passport": {
-          "type": "string",
-          "description": "客服账号"
-        },
-        "username": {
-          "type": "string",
-          "description": "客服名"
-        },
-        "password": {
-          "type": "string",
-          "description": "密码"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "状态:0离线，1在线，2冻结"
-        }
-      },
-      "title": "GetKefuListReq"
-    },
-    "GetKefuReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "客服 ID"
-        }
-      },
-      "title": "GetKefuReq",
-      "required": [
-        "id"
       ]
     },
     "GetMessageConfigEnumsReq": {
@@ -3063,7 +1570,7 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "缓存过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为30天"
         }
       },
       "title": "GetMessageListReq"
@@ -3074,84 +1581,10 @@
         "id": {
           "type": "integer",
           "format": "int64",
-          "description": "消息, 主要用于缓存未发送成功的消息 ID"
+          "description": "消息 ID"
         }
       },
       "title": "GetMessageReq",
-      "required": [
-        "id"
-      ]
-    },
-    "GetProjectEnumsReq": {
-      "type": "object",
-      "properties": {
-        "parentId": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "父级ID"
-        }
-      },
-      "title": "GetProjectEnumsReq"
-    },
-    "GetProjectListReq": {
-      "type": "object",
-      "properties": {
-        "pageSize": {
-          "type": "integer",
-          "format": "int64",
-          "default": "20",
-          "description": "页面容量，默认20，可选"
-        },
-        "page": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，可选"
-        },
-        "current": {
-          "type": "integer",
-          "format": "int64",
-          "default": "1",
-          "description": "当前页码，默认1，用于对接umijs，可选"
-        },
-        "keyword": {
-          "type": "string",
-          "description": "关键词，可选"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "name": {
-          "type": "string",
-          "description": "项目名称"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "default": "-1",
-          "description": "项目状态"
-        }
-      },
-      "title": "GetProjectListReq"
-    },
-    "GetProjectReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目 ID"
-        }
-      },
-      "title": "GetProjectReq",
       "required": [
         "id"
       ]
@@ -3274,24 +1707,6 @@
         "id"
       ]
     },
-    "Ipblack": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "ip": {
-          "type": "string",
-          "description": "IP"
-        }
-      },
-      "title": "Ipblack",
-      "required": [
-        "id",
-        "ip"
-      ]
-    },
     "JwtToken": {
       "type": "object",
       "properties": {
@@ -3315,52 +1730,6 @@
         "accessToken",
         "accessExpire",
         "refreshAfter"
-      ]
-    },
-    "Kefu": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目id"
-        },
-        "passport": {
-          "type": "string",
-          "description": "客服账号"
-        },
-        "username": {
-          "type": "string",
-          "description": "客服名"
-        },
-        "password": {
-          "type": "string",
-          "description": "密码"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "状态:0离线，1在线，2冻结"
-        }
-      },
-      "title": "Kefu",
-      "required": [
-        "id",
-        "uuid",
-        "projectId",
-        "passport",
-        "username",
-        "password",
-        "status"
       ]
     },
     "KefuLoginReq": {
@@ -3487,7 +1856,7 @@
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "description": "缓存过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为30天"
         }
       },
       "title": "Message",
@@ -3602,178 +1971,6 @@
         "list"
       ]
     },
-    "Project": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "name": {
-          "type": "string",
-          "description": "项目名称"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目状态"
-        }
-      },
-      "title": "Project",
-      "required": [
-        "id",
-        "uuid",
-        "name",
-        "status"
-      ]
-    },
-    "PutChatRecordReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "content": {
-          "type": "string",
-          "description": "消息内容"
-        },
-        "contentType": {
-          "type": "integer",
-          "format": "int64",
-          "description": "0文本，1图片，2表情，3视频, 4错误信息"
-        },
-        "visitorId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "游客id"
-        },
-        "kefuId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "客服id， 0表示没有分配到客服"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目id"
-        },
-        "msgType": {
-          "type": "integer",
-          "format": "int64",
-          "description": "0游客消息，1客服消息，2公告消息，3系统消息"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "状态:0合法，1违规"
-        },
-        "isRead": {
-          "type": "integer",
-          "format": "int64",
-          "description": "是否已读:0未读，1已读"
-        },
-        "isSend": {
-          "type": "integer",
-          "format": "int64",
-          "description": "是否已发送:0未发送，1已发送"
-        },
-        "sendTime": {
-          "type": "integer",
-          "format": "int64",
-          "description": "发送时间"
-        }
-      },
-      "title": "PutChatRecordReq",
-      "required": [
-        "id",
-        "uuid",
-        "content",
-        "contentType",
-        "visitorId",
-        "kefuId",
-        "projectId",
-        "msgType",
-        "status",
-        "isRead",
-        "isSend",
-        "sendTime"
-      ]
-    },
-    "PutIpblackReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "ip": {
-          "type": "string",
-          "description": "IP"
-        }
-      },
-      "title": "PutIpblackReq",
-      "required": [
-        "id",
-        "ip"
-      ]
-    },
-    "PutKefuReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "projectId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目id"
-        },
-        "passport": {
-          "type": "string",
-          "description": "客服账号"
-        },
-        "username": {
-          "type": "string",
-          "description": "客服名"
-        },
-        "password": {
-          "type": "string",
-          "description": "密码"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "状态:0离线，1在线，2冻结"
-        }
-      },
-      "title": "PutKefuReq",
-      "required": [
-        "id",
-        "uuid",
-        "projectId",
-        "passport",
-        "username",
-        "password",
-        "status"
-      ]
-    },
     "PutMessageConfigReq": {
       "type": "object",
       "properties": {
@@ -3873,7 +2070,7 @@
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "description": "缓存过期时间, 默认为3天"
+          "description": "缓存过期时间, 默认为30天"
         }
       },
       "title": "PutMessageReq",
@@ -3891,36 +2088,6 @@
         "isSend",
         "sendTime",
         "expireTime"
-      ]
-    },
-    "PutProjectReq": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "description": "表主键"
-        },
-        "uuid": {
-          "type": "string",
-          "description": "UUID"
-        },
-        "name": {
-          "type": "string",
-          "description": "项目名称"
-        },
-        "status": {
-          "type": "integer",
-          "format": "int64",
-          "description": "项目状态"
-        }
-      },
-      "title": "PutProjectReq",
-      "required": [
-        "id",
-        "uuid",
-        "name",
-        "status"
       ]
     },
     "PutVisitorReq": {
@@ -4041,6 +2208,22 @@
         }
       },
       "title": "TestReq"
+    },
+    "TransferVisitorReq": {
+      "type": "object",
+      "properties": {
+        "visitorId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "转移的游客id"
+        },
+        "kefuId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "接待游客的客服id"
+        }
+      },
+      "title": "TransferVisitorReq"
     },
     "TreeOption": {
       "type": "object",
@@ -4197,22 +2380,6 @@
     "VisitorLoginReq": {
       "type": "object",
       "title": "VisitorLoginReq"
-    },
-    "transferVisitorReq": {
-      "type": "object",
-      "properties": {
-        "visitorId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "转移的游客id"
-        },
-        "kefuId": {
-          "type": "integer",
-          "format": "int64",
-          "description": "接待游客的客服id"
-        }
-      },
-      "title": "transferVisitorReq"
     }
   },
   "securityDefinitions": {

@@ -40,7 +40,7 @@ func NewAsynqConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *AsynqCon
 	}
 }
 
-var _ service.Service = &AsynqConsumer{}
+var _ service.Service = (*AsynqConsumer)(nil)
 
 func (p *AsynqConsumer) Start() {
 	if err := p.Server.Run(asynq.HandlerFunc(p.handler)); err != nil {
@@ -54,27 +54,23 @@ func (p *AsynqConsumer) Stop() {
 
 func (p *AsynqConsumer) handler(ctx context.Context, t *asynq.Task) error {
 	switch t.Type() {
-	case types.SendEmailCaptchaKey:
+	case types.TaskTypeSendEmailCaptcha:
 		var req types.SendEmailCaptchaReq
 		if err := json.Unmarshal(t.Payload(), &req); err != nil {
 			p.Logger.Error(err)
 			return err
 		}
-		if err := p.SendEmailCaptchaLogic(&req); err != nil {
-			p.Logger.Error(err)
-			return err
-		}
+		return p.SendEmailCaptchaLogic(&req)
 	default:
 		return fmt.Errorf("unexpected task type: %s", t.Type())
 	}
-	return nil
 }
 
 func (p *AsynqConsumer) SendEmailCaptchaLogic(req *types.SendEmailCaptchaReq) error {
 	emails := req.EmailAddrees
 	message := req.Message
 	key := req.RedisKey
-	err := emailx.SendCaptcha(p.ctx, "mixbench平台验证码", &message, emails)
+	err := emailx.SendCaptcha(p.ctx, "mixbench平台验证码", message, emails)
 	if err != nil {
 		p.Logger.Error(err)
 		// 如果发送失败了，就要删除刚刚存入redis的数据

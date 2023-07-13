@@ -22,6 +22,8 @@ type ServiceContext struct {
 	AdminerModel      model.AdminerModel
 	JwtBlacklistModel model.JwtBlacklistModel
 	ProjectModel      model.ProjectModel
+	CampaignModel     model.CampaignModel
+	WebModel          model.WebModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -38,5 +40,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		AdminerModel:      model.NewAdminerModel(sqlConn, c.CacheRedis),
 		JwtBlacklistModel: model.NewJwtBlacklistModel(sqlConn, c.CacheRedis),
 		ProjectModel:      model.NewProjectModel(sqlConn, c.CacheRedis),
+		CampaignModel:     model.NewCampaignModel(sqlConn, c.CacheRedis),
+		WebModel:          model.NewWebModel(sqlConn, c.CacheRedis),
 	}
 }

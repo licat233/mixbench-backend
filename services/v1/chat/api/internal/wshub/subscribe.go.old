@@ -1,0 +1,28 @@
+package wshub
+
+import (
+	"encoding/json"
+	"fmt"
+	"mixbench/services/v1/chat/model"
+)
+
+//消息订阅中心
+
+func (h *Hub) SubscribeMessage(message *model.Message) {
+	pubsub := h.SvcCtx.RedisCli.Subscribe(h.ctx, "channel")
+	defer pubsub.Close()
+
+	// 遍历消息通道
+	for msg := range pubsub.Channel() {
+		if msg.Payload == "" {
+			continue
+		}
+		var message model.Message
+		err := json.Unmarshal([]byte(msg.Payload), &message)
+		if err != nil {
+			h.Logger.Error(err)
+			return
+		}
+		fmt.Println("Received message:", msg.Payload)
+	}
+}

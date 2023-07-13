@@ -1,0 +1,58 @@
+api:
+    dir: ""
+    ignoreColumns: []
+    ignoreTables:
+        - jwt_blacklist
+        - casbin_rule
+    jsonStyle: genZero
+    jwt: Auth
+    middleware:
+        - AuthMiddleware
+        - RbacMiddleware
+    multiple: true
+    prefix: /v1/api/authentication
+    serviceName: Authentication
+    status: true
+    tables: []
+database:
+    dsn: ""
+    ignoreColumns: []
+    ignoreTables: []
+    src: ../../../../deploy/mysql/authentication.sql
+    tables: []
+logic:
+    api:
+        dir: ../api/internal/logic
+        fileStyle: genZero
+        ignoreTables: []
+        rpcMultiple: true
+        status: true
+        tables: []
+        useRpc: true
+    rpc:
+        dir: ../rpc/internal/logic
+        fileStyle: genZero
+        ignoreTables: []
+        multiple: true
+        status: true
+        tables: []
+    status: true
+model:
+    dir: ../model
+    ignoreColumns: []
+    ignoreTables: []
+    status: true
+    tables: []
+proto:
+    dir: ""
+    fileStyle: genZero
+    goPackage: ""
+    ignoreColumns: []
+    ignoreTables:
+        - jwt_blacklist
+        - casbin_rule
+    multiple: true
+    package: ""
+    serviceName: authentication
+    status: true
+    tables: []

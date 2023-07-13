@@ -28,7 +28,7 @@ func NewLuckydrawResultTask(msg types.LuckydrawResultMsg) (*asynq.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	return asynq.NewTask(types.TypeLuckydrawResult, payload), nil
+	return asynq.NewTask(types.TaskTypeLuckydrawResult, payload), nil
 }
 
 func (a *AsynqProducer) AddTask(msg types.LuckydrawResultMsg) error {

@@ -4,6 +4,13 @@ Port: ${AUTHENTICATION_API_PORT}
 
 Mode: ${SERVICE_MODE}
 
+Mysql:
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE_PREFIX}_authentication?${MYSQL_CONN_OPTIONS}
+
+Auth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400
+
 Log:
   ServiceName: authentication-api
   Level: error
@@ -33,6 +40,11 @@ Redis:
   Pass: ${REDIS_PASSWORD}
   Type: node
   DB: 1
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
 
 AuthenticationRpc:
   Endpoints:

@@ -18,6 +18,284 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
+// BaseClient is the client API for Base service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type BaseClient interface {
+	// 添加IP黑名单
+	AddIpblack(ctx context.Context, in *AddIpblackReq, opts ...grpc.CallOption) (*AddIpblackResp, error)
+	// 更新IP黑名单
+	PutIpblack(ctx context.Context, in *PutIpblackReq, opts ...grpc.CallOption) (*PutIpblackResp, error)
+	// 获取IP黑名单
+	GetIpblack(ctx context.Context, in *GetIpblackReq, opts ...grpc.CallOption) (*GetIpblackResp, error)
+	// 删除IP黑名单
+	DelIpblack(ctx context.Context, in *DelIpblackReq, opts ...grpc.CallOption) (*DelIpblackResp, error)
+	// 获取IP黑名单列表
+	GetIpblackList(ctx context.Context, in *GetIpblackListReq, opts ...grpc.CallOption) (*GetIpblackListResp, error)
+	// 获取IP黑名单枚举列表
+	GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+}
+
+type baseClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewBaseClient(cc grpc.ClientConnInterface) BaseClient {
+	return &baseClient{cc}
+}
+
+func (c *baseClient) AddIpblack(ctx context.Context, in *AddIpblackReq, opts ...grpc.CallOption) (*AddIpblackResp, error) {
+	out := new(AddIpblackResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/AddIpblack", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutIpblack(ctx context.Context, in *PutIpblackReq, opts ...grpc.CallOption) (*PutIpblackResp, error) {
+	out := new(PutIpblackResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/PutIpblack", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetIpblack(ctx context.Context, in *GetIpblackReq, opts ...grpc.CallOption) (*GetIpblackResp, error) {
+	out := new(GetIpblackResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpblack", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelIpblack(ctx context.Context, in *DelIpblackReq, opts ...grpc.CallOption) (*DelIpblackResp, error) {
+	out := new(DelIpblackResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/DelIpblack", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetIpblackList(ctx context.Context, in *GetIpblackListReq, opts ...grpc.CallOption) (*GetIpblackListResp, error) {
+	out := new(GetIpblackListResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpblackList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpblackEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// BaseServer is the server API for Base service.
+// All implementations must embed UnimplementedBaseServer
+// for forward compatibility
+type BaseServer interface {
+	// 添加IP黑名单
+	AddIpblack(context.Context, *AddIpblackReq) (*AddIpblackResp, error)
+	// 更新IP黑名单
+	PutIpblack(context.Context, *PutIpblackReq) (*PutIpblackResp, error)
+	// 获取IP黑名单
+	GetIpblack(context.Context, *GetIpblackReq) (*GetIpblackResp, error)
+	// 删除IP黑名单
+	DelIpblack(context.Context, *DelIpblackReq) (*DelIpblackResp, error)
+	// 获取IP黑名单列表
+	GetIpblackList(context.Context, *GetIpblackListReq) (*GetIpblackListResp, error)
+	// 获取IP黑名单枚举列表
+	GetIpblackEnums(context.Context, *GetIpblackEnumsReq) (*Enums, error)
+	mustEmbedUnimplementedBaseServer()
+}
+
+// UnimplementedBaseServer must be embedded to have forward compatible implementations.
+type UnimplementedBaseServer struct {
+}
+
+func (UnimplementedBaseServer) AddIpblack(context.Context, *AddIpblackReq) (*AddIpblackResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddIpblack not implemented")
+}
+func (UnimplementedBaseServer) PutIpblack(context.Context, *PutIpblackReq) (*PutIpblackResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutIpblack not implemented")
+}
+func (UnimplementedBaseServer) GetIpblack(context.Context, *GetIpblackReq) (*GetIpblackResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIpblack not implemented")
+}
+func (UnimplementedBaseServer) DelIpblack(context.Context, *DelIpblackReq) (*DelIpblackResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelIpblack not implemented")
+}
+func (UnimplementedBaseServer) GetIpblackList(context.Context, *GetIpblackListReq) (*GetIpblackListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIpblackList not implemented")
+}
+func (UnimplementedBaseServer) GetIpblackEnums(context.Context, *GetIpblackEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIpblackEnums not implemented")
+}
+func (UnimplementedBaseServer) mustEmbedUnimplementedBaseServer() {}
+
+// UnsafeBaseServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BaseServer will
+// result in compilation errors.
+type UnsafeBaseServer interface {
+	mustEmbedUnimplementedBaseServer()
+}
+
+func RegisterBaseServer(s grpc.ServiceRegistrar, srv BaseServer) {
+	s.RegisterService(&Base_ServiceDesc, srv)
+}
+
+func _Base_AddIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddIpblackReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddIpblack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/AddIpblack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddIpblack(ctx, req.(*AddIpblackReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutIpblackReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutIpblack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/PutIpblack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutIpblack(ctx, req.(*PutIpblackReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIpblackReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetIpblack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/GetIpblack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetIpblack(ctx, req.(*GetIpblackReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelIpblackReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelIpblack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/DelIpblack",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelIpblack(ctx, req.(*DelIpblackReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetIpblackList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIpblackListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetIpblackList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/GetIpblackList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetIpblackList(ctx, req.(*GetIpblackListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetIpblackEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIpblackEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetIpblackEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/GetIpblackEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetIpblackEnums(ctx, req.(*GetIpblackEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Base_ServiceDesc is the grpc.ServiceDesc for Base service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Base_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "authentication_proto.Base",
+	HandlerType: (*BaseServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddIpblack",
+			Handler:    _Base_AddIpblack_Handler,
+		},
+		{
+			MethodName: "PutIpblack",
+			Handler:    _Base_PutIpblack_Handler,
+		},
+		{
+			MethodName: "GetIpblack",
+			Handler:    _Base_GetIpblack_Handler,
+		},
+		{
+			MethodName: "DelIpblack",
+			Handler:    _Base_DelIpblack_Handler,
+		},
+		{
+			MethodName: "GetIpblackList",
+			Handler:    _Base_GetIpblackList_Handler,
+		},
+		{
+			MethodName: "GetIpblackEnums",
+			Handler:    _Base_GetIpblackEnums_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "authentication.proto",
+}
+
 // AuthenticationClient is the client API for Authentication service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
@@ -30,6 +308,10 @@ type AuthenticationClient interface {
 	SendEmailCaptcha(ctx context.Context, in *SendEmailCaptchaReq, opts ...grpc.CallOption) (*SendEmailCaptchaResp, error)
 	// 校验邮箱验证码
 	VerifyEmailCaptcha(ctx context.Context, in *VerifyEmailCaptchaReq, opts ...grpc.CallOption) (*VerifyEmailCaptchaResp, error)
+	// 生成jwt-token
+	GenToken(ctx context.Context, in *GenTokenReq, opts ...grpc.CallOption) (*GenTokenResp, error)
+	// jwt鉴权
+	Auth(ctx context.Context, in *AuthReq, opts ...grpc.CallOption) (*AuthResp, error)
 }
 
 type authenticationClient struct {
@@ -76,6 +358,24 @@ func (c *authenticationClient) VerifyEmailCaptcha(ctx context.Context, in *Verif
 	return out, nil
 }
 
+func (c *authenticationClient) GenToken(ctx context.Context, in *GenTokenReq, opts ...grpc.CallOption) (*GenTokenResp, error) {
+	out := new(GenTokenResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Authentication/GenToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authenticationClient) Auth(ctx context.Context, in *AuthReq, opts ...grpc.CallOption) (*AuthResp, error) {
+	out := new(AuthResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Authentication/Auth", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthenticationServer is the server API for Authentication service.
 // All implementations must embed UnimplementedAuthenticationServer
 // for forward compatibility
@@ -88,6 +388,10 @@ type AuthenticationServer interface {
 	SendEmailCaptcha(context.Context, *SendEmailCaptchaReq) (*SendEmailCaptchaResp, error)
 	// 校验邮箱验证码
 	VerifyEmailCaptcha(context.Context, *VerifyEmailCaptchaReq) (*VerifyEmailCaptchaResp, error)
+	// 生成jwt-token
+	GenToken(context.Context, *GenTokenReq) (*GenTokenResp, error)
+	// jwt鉴权
+	Auth(context.Context, *AuthReq) (*AuthResp, error)
 	mustEmbedUnimplementedAuthenticationServer()
 }
 
@@ -106,6 +410,12 @@ func (UnimplementedAuthenticationServer) SendEmailCaptcha(context.Context, *Send
 }
 func (UnimplementedAuthenticationServer) VerifyEmailCaptcha(context.Context, *VerifyEmailCaptchaReq) (*VerifyEmailCaptchaResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyEmailCaptcha not implemented")
+}
+func (UnimplementedAuthenticationServer) GenToken(context.Context, *GenTokenReq) (*GenTokenResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenToken not implemented")
+}
+func (UnimplementedAuthenticationServer) Auth(context.Context, *AuthReq) (*AuthResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
 }
 func (UnimplementedAuthenticationServer) mustEmbedUnimplementedAuthenticationServer() {}
 
@@ -192,6 +502,42 @@ func _Authentication_VerifyEmailCaptcha_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Authentication_GenToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenTokenReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServer).GenToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Authentication/GenToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServer).GenToken(ctx, req.(*GenTokenReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Authentication_Auth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthenticationServer).Auth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Authentication/Auth",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthenticationServer).Auth(ctx, req.(*AuthReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Authentication_ServiceDesc is the grpc.ServiceDesc for Authentication service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -214,6 +560,14 @@ var Authentication_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VerifyEmailCaptcha",
 			Handler:    _Authentication_VerifyEmailCaptcha_Handler,
+		},
+		{
+			MethodName: "GenToken",
+			Handler:    _Authentication_GenToken_Handler,
+		},
+		{
+			MethodName: "Auth",
+			Handler:    _Authentication_Auth_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

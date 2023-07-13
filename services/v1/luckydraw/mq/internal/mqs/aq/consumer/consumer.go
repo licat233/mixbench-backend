@@ -37,7 +37,7 @@ func NewAsynqConsumer(ctx context.Context, svcCtx *svc.ServiceContext) *AsynqCon
 	}
 }
 
-var _ service.Service = &AsynqConsumer{}
+var _ service.Service = (*AsynqConsumer)(nil)
 
 func (p *AsynqConsumer) Start() {
 	if err := p.Server.Run(asynq.HandlerFunc(p.handler)); err != nil {
@@ -51,7 +51,7 @@ func (p *AsynqConsumer) Stop() {
 
 func (p *AsynqConsumer) handler(ctx context.Context, t *asynq.Task) error {
 	switch t.Type() {
-	case types.TypeLuckydrawResult:
+	case types.TaskTypeLuckydrawResult:
 		var msg types.LuckydrawResultMsg
 		if err := json.Unmarshal(t.Payload(), &msg); err != nil {
 			return err

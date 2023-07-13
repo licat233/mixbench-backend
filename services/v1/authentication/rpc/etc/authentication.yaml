@@ -8,11 +8,23 @@ Mode: ${SERVICE_MODE}
 #     - 127.0.0.1:2379
 #   Key: auth.rpc
 
+Mysql:
+  DataSource: root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DATABASE_PREFIX}_authentication?${MYSQL_CONN_OPTIONS}
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+JwtAuth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400
+
 Redis:
   Host: ${REDIS_HOST}:${REDIS_PORT}
   Pass: ${REDIS_PASSWORD}
   Type: node
-  Key: ""
+  Key: "authentication"
 
 Log:
   ServiceName: authentication-rpc

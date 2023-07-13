@@ -49,6 +49,7 @@ type (
 		Email        string    `db:"email"`          // 邮箱
 		Status       int64     `db:"status"`         // 账号状态，是否可用
 		IsSuperAdmin int64     `db:"is_super_admin"` // 是否为超级管理员
+		ProjectId    int64     `db:"project_id"`     // 项目id
 		LoginCount   int64     `db:"login_count"`    // 登录次数
 		LastLogin    time.Time `db:"last_login"`     // 最后一次登录时间
 		CreateAt     time.Time `db:"create_at"`      // 创建时间
@@ -100,8 +101,8 @@ func (m *defaultAdminerModel) FindOne(ctx context.Context, id int64) (*Adminer, 
 func (m *defaultAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Result, error) {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.ProjectId, data.LoginCount, data.LastLogin, data.IsDeleted)
 	}, adminerIdKey)
 	return ret, err
 }
@@ -110,7 +111,7 @@ func (m *defaultAdminerModel) Update(ctx context.Context, data *Adminer) error {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, adminerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.LoginCount, data.LastLogin, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.ProjectId, data.LoginCount, data.LastLogin, data.IsDeleted, data.Id)
 	}, adminerIdKey)
 	return err
 }

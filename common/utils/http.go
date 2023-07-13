@@ -137,3 +137,12 @@ func IsWebsocketRequest(r *http.Request) bool {
 	}
 	return false
 }
+
+func GetDomain(host string) string {
+	hostParts := strings.Split(host, ".")
+	numParts := len(hostParts)
+
+	// 提取主域名
+	mainDomain := hostParts[numParts-2] + "." + hostParts[numParts-1]
+	return mainDomain
+}

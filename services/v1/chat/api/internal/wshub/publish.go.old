@@ -1,0 +1,15 @@
+package wshub
+
+import "mixbench/services/v1/chat/model"
+
+//消息发布
+
+func (h *Hub) PublishMessage(message *model.Message) error {
+	//该消息发给谁的，先确定好
+	err := h.SvcCtx.RedisCli.Publish(h.ctx, "channel", message).Err()
+	if err != nil {
+		h.Logger.Error(err)
+		return err
+	}
+	return nil
+}

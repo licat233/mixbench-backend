@@ -58,6 +58,42 @@ func (s *BaseServer) GetAdminerEnums(ctx context.Context, in *admin_pb.GetAdmine
 	return l.GetAdminerEnums(in)
 }
 
+// 添加活动
+func (s *BaseServer) AddCampaign(ctx context.Context, in *admin_pb.AddCampaignReq) (*admin_pb.AddCampaignResp, error) {
+	l := baselogic.NewAddCampaignLogic(ctx, s.svcCtx)
+	return l.AddCampaign(in)
+}
+
+// 更新活动
+func (s *BaseServer) PutCampaign(ctx context.Context, in *admin_pb.PutCampaignReq) (*admin_pb.PutCampaignResp, error) {
+	l := baselogic.NewPutCampaignLogic(ctx, s.svcCtx)
+	return l.PutCampaign(in)
+}
+
+// 获取活动
+func (s *BaseServer) GetCampaign(ctx context.Context, in *admin_pb.GetCampaignReq) (*admin_pb.GetCampaignResp, error) {
+	l := baselogic.NewGetCampaignLogic(ctx, s.svcCtx)
+	return l.GetCampaign(in)
+}
+
+// 删除活动
+func (s *BaseServer) DelCampaign(ctx context.Context, in *admin_pb.DelCampaignReq) (*admin_pb.DelCampaignResp, error) {
+	l := baselogic.NewDelCampaignLogic(ctx, s.svcCtx)
+	return l.DelCampaign(in)
+}
+
+// 获取活动列表
+func (s *BaseServer) GetCampaignList(ctx context.Context, in *admin_pb.GetCampaignListReq) (*admin_pb.GetCampaignListResp, error) {
+	l := baselogic.NewGetCampaignListLogic(ctx, s.svcCtx)
+	return l.GetCampaignList(in)
+}
+
+// 获取活动枚举列表
+func (s *BaseServer) GetCampaignEnums(ctx context.Context, in *admin_pb.GetCampaignEnumsReq) (*admin_pb.Enums, error) {
+	l := baselogic.NewGetCampaignEnumsLogic(ctx, s.svcCtx)
+	return l.GetCampaignEnums(in)
+}
+
 // 添加项目
 func (s *BaseServer) AddProject(ctx context.Context, in *admin_pb.AddProjectReq) (*admin_pb.AddProjectResp, error) {
 	l := baselogic.NewAddProjectLogic(ctx, s.svcCtx)
@@ -92,4 +128,40 @@ func (s *BaseServer) GetProjectList(ctx context.Context, in *admin_pb.GetProject
 func (s *BaseServer) GetProjectEnums(ctx context.Context, in *admin_pb.GetProjectEnumsReq) (*admin_pb.Enums, error) {
 	l := baselogic.NewGetProjectEnumsLogic(ctx, s.svcCtx)
 	return l.GetProjectEnums(in)
+}
+
+// 添加网站
+func (s *BaseServer) AddWeb(ctx context.Context, in *admin_pb.AddWebReq) (*admin_pb.AddWebResp, error) {
+	l := baselogic.NewAddWebLogic(ctx, s.svcCtx)
+	return l.AddWeb(in)
+}
+
+// 更新网站
+func (s *BaseServer) PutWeb(ctx context.Context, in *admin_pb.PutWebReq) (*admin_pb.PutWebResp, error) {
+	l := baselogic.NewPutWebLogic(ctx, s.svcCtx)
+	return l.PutWeb(in)
+}
+
+// 获取网站
+func (s *BaseServer) GetWeb(ctx context.Context, in *admin_pb.GetWebReq) (*admin_pb.GetWebResp, error) {
+	l := baselogic.NewGetWebLogic(ctx, s.svcCtx)
+	return l.GetWeb(in)
+}
+
+// 删除网站
+func (s *BaseServer) DelWeb(ctx context.Context, in *admin_pb.DelWebReq) (*admin_pb.DelWebResp, error) {
+	l := baselogic.NewDelWebLogic(ctx, s.svcCtx)
+	return l.DelWeb(in)
+}
+
+// 获取网站列表
+func (s *BaseServer) GetWebList(ctx context.Context, in *admin_pb.GetWebListReq) (*admin_pb.GetWebListResp, error) {
+	l := baselogic.NewGetWebListLogic(ctx, s.svcCtx)
+	return l.GetWebList(in)
+}
+
+// 获取网站枚举列表
+func (s *BaseServer) GetWebEnums(ctx context.Context, in *admin_pb.GetWebEnumsReq) (*admin_pb.Enums, error) {
+	l := baselogic.NewGetWebEnumsLogic(ctx, s.svcCtx)
+	return l.GetWebEnums(in)
 }

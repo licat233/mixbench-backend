@@ -34,6 +34,18 @@ type BaseClient interface {
 	GetAdminerList(ctx context.Context, in *GetAdminerListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error)
 	// 获取管理员枚举列表
 	GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加活动
+	AddCampaign(ctx context.Context, in *AddCampaignReq, opts ...grpc.CallOption) (*AddCampaignResp, error)
+	// 更新活动
+	PutCampaign(ctx context.Context, in *PutCampaignReq, opts ...grpc.CallOption) (*PutCampaignResp, error)
+	// 获取活动
+	GetCampaign(ctx context.Context, in *GetCampaignReq, opts ...grpc.CallOption) (*GetCampaignResp, error)
+	// 删除活动
+	DelCampaign(ctx context.Context, in *DelCampaignReq, opts ...grpc.CallOption) (*DelCampaignResp, error)
+	// 获取活动列表
+	GetCampaignList(ctx context.Context, in *GetCampaignListReq, opts ...grpc.CallOption) (*GetCampaignListResp, error)
+	// 获取活动枚举列表
+	GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 	// 添加项目
 	AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
 	// 更新项目
@@ -46,6 +58,18 @@ type BaseClient interface {
 	GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
 	// 获取项目枚举列表
 	GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加网站
+	AddWeb(ctx context.Context, in *AddWebReq, opts ...grpc.CallOption) (*AddWebResp, error)
+	// 更新网站
+	PutWeb(ctx context.Context, in *PutWebReq, opts ...grpc.CallOption) (*PutWebResp, error)
+	// 获取网站
+	GetWeb(ctx context.Context, in *GetWebReq, opts ...grpc.CallOption) (*GetWebResp, error)
+	// 删除网站
+	DelWeb(ctx context.Context, in *DelWebReq, opts ...grpc.CallOption) (*DelWebResp, error)
+	// 获取网站列表
+	GetWebList(ctx context.Context, in *GetWebListReq, opts ...grpc.CallOption) (*GetWebListResp, error)
+	// 获取网站枚举列表
+	GetWebEnums(ctx context.Context, in *GetWebEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 }
 
 type baseClient struct {
@@ -110,6 +134,60 @@ func (c *baseClient) GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq
 	return out, nil
 }
 
+func (c *baseClient) AddCampaign(ctx context.Context, in *AddCampaignReq, opts ...grpc.CallOption) (*AddCampaignResp, error) {
+	out := new(AddCampaignResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/AddCampaign", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutCampaign(ctx context.Context, in *PutCampaignReq, opts ...grpc.CallOption) (*PutCampaignResp, error) {
+	out := new(PutCampaignResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/PutCampaign", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetCampaign(ctx context.Context, in *GetCampaignReq, opts ...grpc.CallOption) (*GetCampaignResp, error) {
+	out := new(GetCampaignResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetCampaign", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelCampaign(ctx context.Context, in *DelCampaignReq, opts ...grpc.CallOption) (*DelCampaignResp, error) {
+	out := new(DelCampaignResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/DelCampaign", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetCampaignList(ctx context.Context, in *GetCampaignListReq, opts ...grpc.CallOption) (*GetCampaignListResp, error) {
+	out := new(GetCampaignListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetCampaignList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetCampaignEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *baseClient) AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
 	out := new(AddProjectResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Base/AddProject", in, out, opts...)
@@ -164,6 +242,60 @@ func (c *baseClient) GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq
 	return out, nil
 }
 
+func (c *baseClient) AddWeb(ctx context.Context, in *AddWebReq, opts ...grpc.CallOption) (*AddWebResp, error) {
+	out := new(AddWebResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/AddWeb", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutWeb(ctx context.Context, in *PutWebReq, opts ...grpc.CallOption) (*PutWebResp, error) {
+	out := new(PutWebResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/PutWeb", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetWeb(ctx context.Context, in *GetWebReq, opts ...grpc.CallOption) (*GetWebResp, error) {
+	out := new(GetWebResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetWeb", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelWeb(ctx context.Context, in *DelWebReq, opts ...grpc.CallOption) (*DelWebResp, error) {
+	out := new(DelWebResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/DelWeb", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetWebList(ctx context.Context, in *GetWebListReq, opts ...grpc.CallOption) (*GetWebListResp, error) {
+	out := new(GetWebListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetWebList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetWebEnums(ctx context.Context, in *GetWebEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetWebEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BaseServer is the server API for Base service.
 // All implementations must embed UnimplementedBaseServer
 // for forward compatibility
@@ -180,6 +312,18 @@ type BaseServer interface {
 	GetAdminerList(context.Context, *GetAdminerListReq) (*GetAdminerListResp, error)
 	// 获取管理员枚举列表
 	GetAdminerEnums(context.Context, *GetAdminerEnumsReq) (*Enums, error)
+	// 添加活动
+	AddCampaign(context.Context, *AddCampaignReq) (*AddCampaignResp, error)
+	// 更新活动
+	PutCampaign(context.Context, *PutCampaignReq) (*PutCampaignResp, error)
+	// 获取活动
+	GetCampaign(context.Context, *GetCampaignReq) (*GetCampaignResp, error)
+	// 删除活动
+	DelCampaign(context.Context, *DelCampaignReq) (*DelCampaignResp, error)
+	// 获取活动列表
+	GetCampaignList(context.Context, *GetCampaignListReq) (*GetCampaignListResp, error)
+	// 获取活动枚举列表
+	GetCampaignEnums(context.Context, *GetCampaignEnumsReq) (*Enums, error)
 	// 添加项目
 	AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error)
 	// 更新项目
@@ -192,6 +336,18 @@ type BaseServer interface {
 	GetProjectList(context.Context, *GetProjectListReq) (*GetProjectListResp, error)
 	// 获取项目枚举列表
 	GetProjectEnums(context.Context, *GetProjectEnumsReq) (*Enums, error)
+	// 添加网站
+	AddWeb(context.Context, *AddWebReq) (*AddWebResp, error)
+	// 更新网站
+	PutWeb(context.Context, *PutWebReq) (*PutWebResp, error)
+	// 获取网站
+	GetWeb(context.Context, *GetWebReq) (*GetWebResp, error)
+	// 删除网站
+	DelWeb(context.Context, *DelWebReq) (*DelWebResp, error)
+	// 获取网站列表
+	GetWebList(context.Context, *GetWebListReq) (*GetWebListResp, error)
+	// 获取网站枚举列表
+	GetWebEnums(context.Context, *GetWebEnumsReq) (*Enums, error)
 	mustEmbedUnimplementedBaseServer()
 }
 
@@ -217,6 +373,24 @@ func (UnimplementedBaseServer) GetAdminerList(context.Context, *GetAdminerListRe
 func (UnimplementedBaseServer) GetAdminerEnums(context.Context, *GetAdminerEnumsReq) (*Enums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAdminerEnums not implemented")
 }
+func (UnimplementedBaseServer) AddCampaign(context.Context, *AddCampaignReq) (*AddCampaignResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddCampaign not implemented")
+}
+func (UnimplementedBaseServer) PutCampaign(context.Context, *PutCampaignReq) (*PutCampaignResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutCampaign not implemented")
+}
+func (UnimplementedBaseServer) GetCampaign(context.Context, *GetCampaignReq) (*GetCampaignResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCampaign not implemented")
+}
+func (UnimplementedBaseServer) DelCampaign(context.Context, *DelCampaignReq) (*DelCampaignResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelCampaign not implemented")
+}
+func (UnimplementedBaseServer) GetCampaignList(context.Context, *GetCampaignListReq) (*GetCampaignListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCampaignList not implemented")
+}
+func (UnimplementedBaseServer) GetCampaignEnums(context.Context, *GetCampaignEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCampaignEnums not implemented")
+}
 func (UnimplementedBaseServer) AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddProject not implemented")
 }
@@ -234,6 +408,24 @@ func (UnimplementedBaseServer) GetProjectList(context.Context, *GetProjectListRe
 }
 func (UnimplementedBaseServer) GetProjectEnums(context.Context, *GetProjectEnumsReq) (*Enums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProjectEnums not implemented")
+}
+func (UnimplementedBaseServer) AddWeb(context.Context, *AddWebReq) (*AddWebResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddWeb not implemented")
+}
+func (UnimplementedBaseServer) PutWeb(context.Context, *PutWebReq) (*PutWebResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutWeb not implemented")
+}
+func (UnimplementedBaseServer) GetWeb(context.Context, *GetWebReq) (*GetWebResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWeb not implemented")
+}
+func (UnimplementedBaseServer) DelWeb(context.Context, *DelWebReq) (*DelWebResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelWeb not implemented")
+}
+func (UnimplementedBaseServer) GetWebList(context.Context, *GetWebListReq) (*GetWebListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWebList not implemented")
+}
+func (UnimplementedBaseServer) GetWebEnums(context.Context, *GetWebEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWebEnums not implemented")
 }
 func (UnimplementedBaseServer) mustEmbedUnimplementedBaseServer() {}
 
@@ -356,6 +548,114 @@ func _Base_GetAdminerEnums_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Base_AddCampaign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCampaignReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddCampaign(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/AddCampaign",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddCampaign(ctx, req.(*AddCampaignReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutCampaign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutCampaignReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutCampaign(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/PutCampaign",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutCampaign(ctx, req.(*PutCampaignReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetCampaign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCampaignReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetCampaign(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetCampaign",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetCampaign(ctx, req.(*GetCampaignReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelCampaign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelCampaignReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelCampaign(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/DelCampaign",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelCampaign(ctx, req.(*DelCampaignReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetCampaignList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCampaignListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetCampaignList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetCampaignList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetCampaignList(ctx, req.(*GetCampaignListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetCampaignEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCampaignEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetCampaignEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetCampaignEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetCampaignEnums(ctx, req.(*GetCampaignEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Base_AddProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddProjectReq)
 	if err := dec(in); err != nil {
@@ -464,6 +764,114 @@ func _Base_GetProjectEnums_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Base_AddWeb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddWebReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddWeb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/AddWeb",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddWeb(ctx, req.(*AddWebReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutWeb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutWebReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutWeb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/PutWeb",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutWeb(ctx, req.(*PutWebReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetWeb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWebReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetWeb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetWeb",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetWeb(ctx, req.(*GetWebReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelWeb_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelWebReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelWeb(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/DelWeb",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelWeb(ctx, req.(*DelWebReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetWebList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWebListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetWebList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetWebList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetWebList(ctx, req.(*GetWebListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetWebEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWebEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetWebEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetWebEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetWebEnums(ctx, req.(*GetWebEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Base_ServiceDesc is the grpc.ServiceDesc for Base service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -496,6 +904,30 @@ var Base_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Base_GetAdminerEnums_Handler,
 		},
 		{
+			MethodName: "AddCampaign",
+			Handler:    _Base_AddCampaign_Handler,
+		},
+		{
+			MethodName: "PutCampaign",
+			Handler:    _Base_PutCampaign_Handler,
+		},
+		{
+			MethodName: "GetCampaign",
+			Handler:    _Base_GetCampaign_Handler,
+		},
+		{
+			MethodName: "DelCampaign",
+			Handler:    _Base_DelCampaign_Handler,
+		},
+		{
+			MethodName: "GetCampaignList",
+			Handler:    _Base_GetCampaignList_Handler,
+		},
+		{
+			MethodName: "GetCampaignEnums",
+			Handler:    _Base_GetCampaignEnums_Handler,
+		},
+		{
 			MethodName: "AddProject",
 			Handler:    _Base_AddProject_Handler,
 		},
@@ -518,6 +950,30 @@ var Base_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetProjectEnums",
 			Handler:    _Base_GetProjectEnums_Handler,
+		},
+		{
+			MethodName: "AddWeb",
+			Handler:    _Base_AddWeb_Handler,
+		},
+		{
+			MethodName: "PutWeb",
+			Handler:    _Base_PutWeb_Handler,
+		},
+		{
+			MethodName: "GetWeb",
+			Handler:    _Base_GetWeb_Handler,
+		},
+		{
+			MethodName: "DelWeb",
+			Handler:    _Base_DelWeb_Handler,
+		},
+		{
+			MethodName: "GetWebList",
+			Handler:    _Base_GetWebList_Handler,
+		},
+		{
+			MethodName: "GetWebEnums",
+			Handler:    _Base_GetWebEnums_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -556,6 +1012,7 @@ type AdminClient interface {
 	PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
 	// 忘记密码，通过邮箱重置密码
 	ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
+	GetWebByUrl(ctx context.Context, in *GetWebByUrlReq, opts ...grpc.CallOption) (*GetWebByUrlResp, error)
 }
 
 type adminClient struct {
@@ -692,6 +1149,15 @@ func (c *adminClient) ForgotPassword(ctx context.Context, in *ForgotPasswordReq,
 	return out, nil
 }
 
+func (c *adminClient) GetWebByUrl(ctx context.Context, in *GetWebByUrlReq, opts ...grpc.CallOption) (*GetWebByUrlResp, error) {
+	out := new(GetWebByUrlResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GetWebByUrl", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServer is the server API for Admin service.
 // All implementations must embed UnimplementedAdminServer
 // for forward compatibility
@@ -724,6 +1190,7 @@ type AdminServer interface {
 	PutPassword(context.Context, *PutPasswordReq) (*StatusResp, error)
 	// 忘记密码，通过邮箱重置密码
 	ForgotPassword(context.Context, *ForgotPasswordReq) (*StatusResp, error)
+	GetWebByUrl(context.Context, *GetWebByUrlReq) (*GetWebByUrlResp, error)
 	mustEmbedUnimplementedAdminServer()
 }
 
@@ -772,6 +1239,9 @@ func (UnimplementedAdminServer) PutPassword(context.Context, *PutPasswordReq) (*
 }
 func (UnimplementedAdminServer) ForgotPassword(context.Context, *ForgotPasswordReq) (*StatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ForgotPassword not implemented")
+}
+func (UnimplementedAdminServer) GetWebByUrl(context.Context, *GetWebByUrlReq) (*GetWebByUrlResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWebByUrl not implemented")
 }
 func (UnimplementedAdminServer) mustEmbedUnimplementedAdminServer() {}
 
@@ -1038,6 +1508,24 @@ func _Admin_ForgotPassword_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_GetWebByUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWebByUrlReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).GetWebByUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/GetWebByUrl",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).GetWebByUrl(ctx, req.(*GetWebByUrlReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Admin_ServiceDesc is the grpc.ServiceDesc for Admin service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1100,6 +1588,10 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ForgotPassword",
 			Handler:    _Admin_ForgotPassword_Handler,
+		},
+		{
+			MethodName: "GetWebByUrl",
+			Handler:    _Admin_GetWebByUrl_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

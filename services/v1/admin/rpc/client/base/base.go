@@ -13,67 +13,93 @@ import (
 )
 
 type (
-	AddAdminerReq      = admin_pb.AddAdminerReq
-	AddAdminerResp     = admin_pb.AddAdminerResp
-	AddProjectReq      = admin_pb.AddProjectReq
-	AddProjectResp     = admin_pb.AddProjectResp
-	Adminer            = admin_pb.Adminer
-	ByIdReq            = admin_pb.ByIdReq
-	DelAdminerReq      = admin_pb.DelAdminerReq
-	DelAdminerResp     = admin_pb.DelAdminerResp
-	DelProjectReq      = admin_pb.DelProjectReq
-	DelProjectResp     = admin_pb.DelProjectResp
-	Enum               = admin_pb.Enum
-	Enums              = admin_pb.Enums
-	ExistsEmailReq     = admin_pb.ExistsEmailReq
-	ExistsEmailResp    = admin_pb.ExistsEmailResp
-	FindByEmailReq     = admin_pb.FindByEmailReq
-	FindByEmailResp    = admin_pb.FindByEmailResp
-	ForgotPasswordReq  = admin_pb.ForgotPasswordReq
-	GenerateTokenReq   = admin_pb.GenerateTokenReq
-	GenerateTokenResp  = admin_pb.GenerateTokenResp
-	GetAdminerEnumsReq = admin_pb.GetAdminerEnumsReq
-	GetAdminerListReq  = admin_pb.GetAdminerListReq
-	GetAdminerListResp = admin_pb.GetAdminerListResp
-	GetAdminerReq      = admin_pb.GetAdminerReq
-	GetAdminerResp     = admin_pb.GetAdminerResp
-	GetProjectEnumsReq = admin_pb.GetProjectEnumsReq
-	GetProjectListReq  = admin_pb.GetProjectListReq
-	GetProjectListResp = admin_pb.GetProjectListResp
-	GetProjectReq      = admin_pb.GetProjectReq
-	GetProjectResp     = admin_pb.GetProjectResp
-	IsLogoutReq        = admin_pb.IsLogoutReq
-	IsLogoutResp       = admin_pb.IsLogoutResp
-	JwtData            = admin_pb.JwtData
-	JwtToken           = admin_pb.JwtToken
-	ListReq            = admin_pb.ListReq
-	LoginByEmailReq    = admin_pb.LoginByEmailReq
-	LoginReq           = admin_pb.LoginReq
-	LoginResp          = admin_pb.LoginResp
-	LogoutReq          = admin_pb.LogoutReq
-	LogoutResp         = admin_pb.LogoutResp
-	NilReq             = admin_pb.NilReq
-	NilResp            = admin_pb.NilResp
-	Option             = admin_pb.Option
-	Options            = admin_pb.Options
-	ParseJwtTokenReq   = admin_pb.ParseJwtTokenReq
-	ParseJwtTokenResp  = admin_pb.ParseJwtTokenResp
-	Project            = admin_pb.Project
-	PutAdminerReq      = admin_pb.PutAdminerReq
-	PutAdminerResp     = admin_pb.PutAdminerResp
-	PutPasswordReq     = admin_pb.PutPasswordReq
-	PutProjectReq      = admin_pb.PutProjectReq
-	PutProjectResp     = admin_pb.PutProjectResp
-	ResetLuckValueReq  = admin_pb.ResetLuckValueReq
-	StatusResp         = admin_pb.StatusResp
-	TestReq            = admin_pb.TestReq
-	TestResp           = admin_pb.TestResp
-	TreeOption         = admin_pb.TreeOption
-	TreeOptions        = admin_pb.TreeOptions
-	ValidateTokenReq   = admin_pb.ValidateTokenReq
-	ValidateTokenResp  = admin_pb.ValidateTokenResp
-	VerifyPasswordReq  = admin_pb.VerifyPasswordReq
-	VerifyPasswordResp = admin_pb.VerifyPasswordResp
+	AddAdminerReq       = admin_pb.AddAdminerReq
+	AddAdminerResp      = admin_pb.AddAdminerResp
+	AddCampaignReq      = admin_pb.AddCampaignReq
+	AddCampaignResp     = admin_pb.AddCampaignResp
+	AddProjectReq       = admin_pb.AddProjectReq
+	AddProjectResp      = admin_pb.AddProjectResp
+	AddWebReq           = admin_pb.AddWebReq
+	AddWebResp          = admin_pb.AddWebResp
+	Adminer             = admin_pb.Adminer
+	ByIdReq             = admin_pb.ByIdReq
+	Campaign            = admin_pb.Campaign
+	DelAdminerReq       = admin_pb.DelAdminerReq
+	DelAdminerResp      = admin_pb.DelAdminerResp
+	DelCampaignReq      = admin_pb.DelCampaignReq
+	DelCampaignResp     = admin_pb.DelCampaignResp
+	DelProjectReq       = admin_pb.DelProjectReq
+	DelProjectResp      = admin_pb.DelProjectResp
+	DelWebReq           = admin_pb.DelWebReq
+	DelWebResp          = admin_pb.DelWebResp
+	Enum                = admin_pb.Enum
+	Enums               = admin_pb.Enums
+	ExistsEmailReq      = admin_pb.ExistsEmailReq
+	ExistsEmailResp     = admin_pb.ExistsEmailResp
+	FindByEmailReq      = admin_pb.FindByEmailReq
+	FindByEmailResp     = admin_pb.FindByEmailResp
+	ForgotPasswordReq   = admin_pb.ForgotPasswordReq
+	GenerateTokenReq    = admin_pb.GenerateTokenReq
+	GenerateTokenResp   = admin_pb.GenerateTokenResp
+	GetAdminerEnumsReq  = admin_pb.GetAdminerEnumsReq
+	GetAdminerListReq   = admin_pb.GetAdminerListReq
+	GetAdminerListResp  = admin_pb.GetAdminerListResp
+	GetAdminerReq       = admin_pb.GetAdminerReq
+	GetAdminerResp      = admin_pb.GetAdminerResp
+	GetCampaignEnumsReq = admin_pb.GetCampaignEnumsReq
+	GetCampaignListReq  = admin_pb.GetCampaignListReq
+	GetCampaignListResp = admin_pb.GetCampaignListResp
+	GetCampaignReq      = admin_pb.GetCampaignReq
+	GetCampaignResp     = admin_pb.GetCampaignResp
+	GetProjectEnumsReq  = admin_pb.GetProjectEnumsReq
+	GetProjectListReq   = admin_pb.GetProjectListReq
+	GetProjectListResp  = admin_pb.GetProjectListResp
+	GetProjectReq       = admin_pb.GetProjectReq
+	GetProjectResp      = admin_pb.GetProjectResp
+	GetWebByUrlReq      = admin_pb.GetWebByUrlReq
+	GetWebByUrlResp     = admin_pb.GetWebByUrlResp
+	GetWebEnumsReq      = admin_pb.GetWebEnumsReq
+	GetWebListReq       = admin_pb.GetWebListReq
+	GetWebListResp      = admin_pb.GetWebListResp
+	GetWebReq           = admin_pb.GetWebReq
+	GetWebResp          = admin_pb.GetWebResp
+	IsLogoutReq         = admin_pb.IsLogoutReq
+	IsLogoutResp        = admin_pb.IsLogoutResp
+	JwtData             = admin_pb.JwtData
+	JwtToken            = admin_pb.JwtToken
+	ListReq             = admin_pb.ListReq
+	LoginByEmailReq     = admin_pb.LoginByEmailReq
+	LoginReq            = admin_pb.LoginReq
+	LoginResp           = admin_pb.LoginResp
+	LogoutReq           = admin_pb.LogoutReq
+	LogoutResp          = admin_pb.LogoutResp
+	NilReq              = admin_pb.NilReq
+	NilResp             = admin_pb.NilResp
+	Option              = admin_pb.Option
+	Options             = admin_pb.Options
+	ParseJwtTokenReq    = admin_pb.ParseJwtTokenReq
+	ParseJwtTokenResp   = admin_pb.ParseJwtTokenResp
+	Project             = admin_pb.Project
+	PutAdminerReq       = admin_pb.PutAdminerReq
+	PutAdminerResp      = admin_pb.PutAdminerResp
+	PutCampaignReq      = admin_pb.PutCampaignReq
+	PutCampaignResp     = admin_pb.PutCampaignResp
+	PutPasswordReq      = admin_pb.PutPasswordReq
+	PutProjectReq       = admin_pb.PutProjectReq
+	PutProjectResp      = admin_pb.PutProjectResp
+	PutWebReq           = admin_pb.PutWebReq
+	PutWebResp          = admin_pb.PutWebResp
+	ResetLuckValueReq   = admin_pb.ResetLuckValueReq
+	StatusResp          = admin_pb.StatusResp
+	TestReq             = admin_pb.TestReq
+	TestResp            = admin_pb.TestResp
+	TreeOption          = admin_pb.TreeOption
+	TreeOptions         = admin_pb.TreeOptions
+	ValidateTokenReq    = admin_pb.ValidateTokenReq
+	ValidateTokenResp   = admin_pb.ValidateTokenResp
+	VerifyPasswordReq   = admin_pb.VerifyPasswordReq
+	VerifyPasswordResp  = admin_pb.VerifyPasswordResp
+	Web                 = admin_pb.Web
 
 	Base interface {
 		// 添加管理员
@@ -88,6 +114,18 @@ type (
 		GetAdminerList(ctx context.Context, in *GetAdminerListReq, opts ...grpc.CallOption) (*GetAdminerListResp, error)
 		// 获取管理员枚举列表
 		GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+		// 添加活动
+		AddCampaign(ctx context.Context, in *AddCampaignReq, opts ...grpc.CallOption) (*AddCampaignResp, error)
+		// 更新活动
+		PutCampaign(ctx context.Context, in *PutCampaignReq, opts ...grpc.CallOption) (*PutCampaignResp, error)
+		// 获取活动
+		GetCampaign(ctx context.Context, in *GetCampaignReq, opts ...grpc.CallOption) (*GetCampaignResp, error)
+		// 删除活动
+		DelCampaign(ctx context.Context, in *DelCampaignReq, opts ...grpc.CallOption) (*DelCampaignResp, error)
+		// 获取活动列表
+		GetCampaignList(ctx context.Context, in *GetCampaignListReq, opts ...grpc.CallOption) (*GetCampaignListResp, error)
+		// 获取活动枚举列表
+		GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 		// 添加项目
 		AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
 		// 更新项目
@@ -100,6 +138,18 @@ type (
 		GetProjectList(ctx context.Context, in *GetProjectListReq, opts ...grpc.CallOption) (*GetProjectListResp, error)
 		// 获取项目枚举列表
 		GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+		// 添加网站
+		AddWeb(ctx context.Context, in *AddWebReq, opts ...grpc.CallOption) (*AddWebResp, error)
+		// 更新网站
+		PutWeb(ctx context.Context, in *PutWebReq, opts ...grpc.CallOption) (*PutWebResp, error)
+		// 获取网站
+		GetWeb(ctx context.Context, in *GetWebReq, opts ...grpc.CallOption) (*GetWebResp, error)
+		// 删除网站
+		DelWeb(ctx context.Context, in *DelWebReq, opts ...grpc.CallOption) (*DelWebResp, error)
+		// 获取网站列表
+		GetWebList(ctx context.Context, in *GetWebListReq, opts ...grpc.CallOption) (*GetWebListResp, error)
+		// 获取网站枚举列表
+		GetWebEnums(ctx context.Context, in *GetWebEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 	}
 
 	defaultBase struct {
@@ -149,6 +199,42 @@ func (m *defaultBase) GetAdminerEnums(ctx context.Context, in *GetAdminerEnumsRe
 	return client.GetAdminerEnums(ctx, in, opts...)
 }
 
+// 添加活动
+func (m *defaultBase) AddCampaign(ctx context.Context, in *AddCampaignReq, opts ...grpc.CallOption) (*AddCampaignResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.AddCampaign(ctx, in, opts...)
+}
+
+// 更新活动
+func (m *defaultBase) PutCampaign(ctx context.Context, in *PutCampaignReq, opts ...grpc.CallOption) (*PutCampaignResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.PutCampaign(ctx, in, opts...)
+}
+
+// 获取活动
+func (m *defaultBase) GetCampaign(ctx context.Context, in *GetCampaignReq, opts ...grpc.CallOption) (*GetCampaignResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetCampaign(ctx, in, opts...)
+}
+
+// 删除活动
+func (m *defaultBase) DelCampaign(ctx context.Context, in *DelCampaignReq, opts ...grpc.CallOption) (*DelCampaignResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.DelCampaign(ctx, in, opts...)
+}
+
+// 获取活动列表
+func (m *defaultBase) GetCampaignList(ctx context.Context, in *GetCampaignListReq, opts ...grpc.CallOption) (*GetCampaignListResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetCampaignList(ctx, in, opts...)
+}
+
+// 获取活动枚举列表
+func (m *defaultBase) GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetCampaignEnums(ctx, in, opts...)
+}
+
 // 添加项目
 func (m *defaultBase) AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
 	client := admin_pb.NewBaseClient(m.cli.Conn())
@@ -183,4 +269,40 @@ func (m *defaultBase) GetProjectList(ctx context.Context, in *GetProjectListReq,
 func (m *defaultBase) GetProjectEnums(ctx context.Context, in *GetProjectEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
 	client := admin_pb.NewBaseClient(m.cli.Conn())
 	return client.GetProjectEnums(ctx, in, opts...)
+}
+
+// 添加网站
+func (m *defaultBase) AddWeb(ctx context.Context, in *AddWebReq, opts ...grpc.CallOption) (*AddWebResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.AddWeb(ctx, in, opts...)
+}
+
+// 更新网站
+func (m *defaultBase) PutWeb(ctx context.Context, in *PutWebReq, opts ...grpc.CallOption) (*PutWebResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.PutWeb(ctx, in, opts...)
+}
+
+// 获取网站
+func (m *defaultBase) GetWeb(ctx context.Context, in *GetWebReq, opts ...grpc.CallOption) (*GetWebResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetWeb(ctx, in, opts...)
+}
+
+// 删除网站
+func (m *defaultBase) DelWeb(ctx context.Context, in *DelWebReq, opts ...grpc.CallOption) (*DelWebResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.DelWeb(ctx, in, opts...)
+}
+
+// 获取网站列表
+func (m *defaultBase) GetWebList(ctx context.Context, in *GetWebListReq, opts ...grpc.CallOption) (*GetWebListResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetWebList(ctx, in, opts...)
+}
+
+// 获取网站枚举列表
+func (m *defaultBase) GetWebEnums(ctx context.Context, in *GetWebEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetWebEnums(ctx, in, opts...)
 }

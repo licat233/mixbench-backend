@@ -47,3 +47,15 @@ AuthenticationRpc:
   Endpoints:
     - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
   NonBlock: true
+
+RedisDB: 4
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+  Key: chat
+
+AdminRpc:
+  Endpoints:
+    - 127.0.0.1:${ADMIN_RPC_PORT}
+  NonBlock: true

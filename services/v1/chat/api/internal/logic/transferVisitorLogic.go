@@ -7,7 +7,9 @@ import (
 	"mixbench/common/respx"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
-	"mixbench/services/v1/chat/api/internal/wshub"
+	"mixbench/services/v1/chat/api/internal/ws"
+
+	// "mixbench/services/v1/chat/api/internal/wshub"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -36,10 +38,15 @@ func (l *TransferVisitorLogic) TransferVisitor(req *types.TransferVisitorReq) (a
 	// 	return nil, errorx.ExternalError("kefuId <=0", "kefuId must be greater than 0")
 	// }
 
-	err := wshub.HubSvc.TransferVisitor(visitorId, kefuId)
+	err := ws.TransferVisitor(l.ctx, l.svcCtx, visitorId, kefuId)
 	if err != nil {
 		return nil, err
 	}
+
+	// err := wshub.HubSvc.TransferVisitor(visitorId, kefuId)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	return respx.DefaultStatusResp(nil)
 }

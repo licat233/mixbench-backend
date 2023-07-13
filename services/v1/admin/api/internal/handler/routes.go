@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	adminer "mixbench/services/v1/admin/api/internal/handler/adminer"
+	campaign "mixbench/services/v1/admin/api/internal/handler/campaign"
 	project "mixbench/services/v1/admin/api/internal/handler/project"
 	upload "mixbench/services/v1/admin/api/internal/handler/upload"
+	web "mixbench/services/v1/admin/api/internal/handler/web"
 	"mixbench/services/v1/admin/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -187,6 +189,46 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				{
 					Method:  http.MethodPost,
 					Path:    "/",
+					Handler: campaign.AddCampaignHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: campaign.PutCampaignHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: campaign.GetCampaignHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: campaign.DelCampaignHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: campaign.GetCampaignListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/enums",
+					Handler: campaign.GetCampaignEnumsHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/campaign"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
 					Handler: project.AddProjectHandler(serverCtx),
 				},
 				{
@@ -218,6 +260,46 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin/project"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: web.AddWebHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: web.PutWebHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: web.GetWebHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: web.DelWebHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: web.GetWebListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/enums",
+					Handler: web.GetWebEnumsHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/admin/web"),
 	)
 
 	server.AddRoutes(

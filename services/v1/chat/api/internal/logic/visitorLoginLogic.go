@@ -13,9 +13,12 @@ import (
 	"mixbench/common/respx"
 	"mixbench/common/uniqueid"
 	"mixbench/common/utils"
+	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
-	"mixbench/services/v1/chat/api/internal/wshub"
+	"mixbench/services/v1/chat/api/internal/ws"
+
+	// "mixbench/services/v1/chat/api/internal/wshub"
 	"mixbench/services/v1/chat/model"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -88,18 +91,26 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 
 	host := parsedURL.Host
 
-	//获取当前origin的归属项目
-	// origin := utils.RemoteOrigin(l.req)
-
-	// TODO: 根据host查找项目的逻辑，未实现，暂时设为 1
-	if len(host) > 0 {
-		l.ProjectId = 1
+	if len(host) == 0 {
+		//未知host
+		return nil, errorx.ErrAuth
 	}
 
-	//如果不存在项目，或者不是我方的连接，则不能注册
-	if l.ProjectId <= 0 {
-		return nil, errorx.ExternalError("unknown domain")
+	//获取当前referer的归属项目
+	// TODO: 根据referer查找项目的逻辑
+	webResp, err := l.svcCtx.AdminRpc.GetWebByUrl(l.ctx, &admin_pb.GetWebByUrlReq{
+		Url: l.referer,
+	})
+	if err != nil {
+		return nil, err
 	}
+
+	if webResp.Web == nil {
+		//如果无此url对应的web，则返回
+		return nil, errorx.ExternalError("unknown referer")
+	}
+
+	l.ProjectId = webResp.Web.ProjectId
 
 	// 获取游客可能存在的id
 	var visitorId int64
@@ -125,17 +136,16 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 					// 表示存在该visitor
 					if err == nil {
 						visitorId = id
-						//查找项目是否还在
-						_, err = l.svcCtx.ProjectModel.FindById(l.ctx, visitor.ProjectId)
-						if err != nil && err != model.ErrNotFound {
+						//查找项目是否存在
+						projectResp, err := l.svcCtx.AdminRpc.GetProject(l.ctx, &admin_pb.GetProjectReq{Id: visitor.ProjectId})
+						if err != nil {
 							l.Logger.Error(err)
 							return nil, errorx.InternalError(err)
 						}
-						if err == model.ErrNotFound {
+						if projectResp.Project == nil {
 							//项目已不存在，游客将重新注册
 							visitorId = -1
-						}
-						if err == nil {
+						} else {
 							//如果存在，应该检验是否符合当前的project
 							if l.ProjectId != visitor.ProjectId {
 								//如果不符合，游客将重新注册
@@ -183,54 +193,29 @@ func (l *VisitorLoginLogic) isOldVisitor() (any, error) {
 	}
 	kefuId = visitor.KefuId
 
-	kefuCli := wshub.HubSvc.KefuClients.Get(kefuId)
-	//客服如果不在线，
-	if kefuCli == nil {
+	//判断客服是否在线，如果不在线，给分配新的在线客服
+	kefuOnline := ws.OnlineKefu.Exist(kefuId)
+	if !kefuOnline {
 		// 分配给其它客服
-		kefuCli = wshub.HubSvc.AssignKefu(l.ProjectId)
-		// 表明没有客服在线
-		if kefuCli == nil {
-			// 则保留其原来的客服, 不更新visitor
-		} else {
+		newKefuId := ws.OnlineKefu.AssignKefu()
+		// 表明有客服在线，则更新游客的接待客服，否则不更新，保留原来的客服
+		if newKefuId > 0 && newKefuId != kefuId {
 			// 更新 visitor 信息
-			visitor.KefuId = kefuId
+			visitor.KefuId = newKefuId
 			if err := l.svcCtx.VisitorModel.Update(l.ctx, visitor); err != nil {
 				l.Logger.Error(err)
 				return nil, errorx.InternalError(err)
-			}
-			//此时需要更新聊天记录，不然新客服无法看到过往的聊天记录
-			transferLogic := NewTransferVisitorLogic(l.ctx, l.svcCtx)
-			_, err := transferLogic.TransferVisitor(&types.TransferVisitorReq{
-				VisitorId: 0,
-				KefuId:    kefuId,
-			})
-			if err != nil {
-				return nil, err
 			}
 		}
 	}
 
 	// 如果该客服在线，则没啥事了，因为这里的token是永久有效的，所以无需生产新的token
-	// token, err := GenVisitorToken(l.svcCtx.Config.VisitorAuthSecret, visitor)
-	// if err != nil {
-	// 	l.Logger.Error(err)
-	// 	return nil, errorx.InternalError(err)
-	// }
 	return respx.NewData(l.token), nil
 }
 
 func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
-	// 获取接待的客服id
-	var kefuId int64
 	//表示为新客户，接下来为其分配客服
-	kefuCli := wshub.HubSvc.AssignKefu(l.ProjectId)
-	// 表明没有客服在线
-	if kefuCli == nil {
-		// 没有客服在线，将其id设为 0 表示其没有分配到客服
-		kefuId = 0
-	} else {
-		kefuId = kefuCli.Kefu.Id
-	}
+	kefuId := ws.OnlineKefu.AssignKefu()
 
 	browser, _ := l.ua.Browser()
 

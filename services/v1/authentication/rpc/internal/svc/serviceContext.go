@@ -2,6 +2,9 @@ package svc
 
 import (
 	"context"
+	"fmt"
+	"mixbench/common/utils"
+	"mixbench/services/v1/authentication/model"
 	"mixbench/services/v1/authentication/mq/asynqmq"
 	"mixbench/services/v1/authentication/rpc/internal/config"
 	"time"
@@ -20,9 +23,16 @@ type ServiceContext struct {
 
 	KqPusherClient *kq.Pusher
 	AsynqClient    *asynqmq.AsynqProducer
+
+	JwtBlacklistModel model.JwtBlacklistModel
+	IpblackModel      model.IpblackModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	if err != nil {
+		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+	}
 	redisConn := redis.New(c.Redis.Host, func(r *redis.Redis) {
 		r.Type = c.Redis.Type
 		r.Pass = c.Redis.Pass
@@ -41,5 +51,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			Password: c.Redis.Pass,
 			DB:       asynqmq.RedisDB,
 		}),
+		JwtBlacklistModel: model.NewJwtBlacklistModel(sqlConn, c.CacheRedis),
+		IpblackModel:      model.NewIpblackModel(sqlConn, c.CacheRedis),
 	}
 }

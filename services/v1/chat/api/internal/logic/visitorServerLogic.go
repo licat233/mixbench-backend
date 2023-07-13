@@ -3,14 +3,16 @@ package logic
 import (
 	"context"
 	"net/http"
+	"strings"
 
-	"mixbench/common/errorx"
-	"mixbench/common/utils"
+	"mixbench/common/jwtx"
+	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/chat/api/internal/svc"
-	"mixbench/services/v1/chat/api/internal/wshub"
+	"mixbench/services/v1/chat/api/internal/types"
+	"mixbench/services/v1/chat/api/internal/ws"
+	"mixbench/services/v1/chat/model"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 type VisitorServerLogic struct {
@@ -31,28 +33,65 @@ func NewVisitorServerLogic(ctx context.Context, svcCtx *svc.ServiceContext, w ht
 	}
 }
 
-func (l *VisitorServerLogic) VisitorServer() error {
-	if !utils.IsWebsocketRequest(l.r) {
-		err := errorx.ExternalError("the current request is not a WebSocket request")
-		httpx.ErrorCtx(l.r.Context(), l.w, err)
-		return nil
+func (l *VisitorServerLogic) VisitorServer(req *types.ConnWebsocketReq) (_ error) {
+	//鉴权
+	token := req.Token
+	if token = strings.TrimSpace(token); token == "" {
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	claims, ok := jwtx.ValidateToken(string(token), l.svcCtx.Config.VisitorAuthSecret)
+	if !ok {
+		//鉴权失败
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
 	}
 
-	// 创建一个visitor client
-	cli, err := wshub.NewVisitorClient(l.ctx, wshub.HubSvc, l.w, l.r)
+	id, ok := jwtx.GetId(claims)
+	if !ok {
+		//鉴权失败
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	//查找游客是否存在
+	visitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, id)
+	if err == model.ErrNotFound {
+		//游客不存在
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	} else if err != nil {
+		l.Logger.Error(err)
+		l.w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	//查找项目是否存在
+	projectResp, err := l.svcCtx.AdminRpc.GetProject(l.ctx, &admin_pb.GetProjectReq{
+		Id: visitor.ProjectId,
+	})
 	if err != nil {
-		return errorx.ExternalError(err)
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	if projectResp.Project == nil {
+		//不存在
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
 	}
 
-	if cli == nil {
-		//初始化失败
-		return nil
+	defer func() {
+		ws.OnlineVisitor.Del(id)
+	}()
+
+	cli, err := ws.NewVisitorClient(l.ctx, l.svcCtx, l.w, l.r, &ws.VisitorInfo{Visitor: visitor})
+	if err != nil {
+		l.Logger.Error(err)
+		l.w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	// 开始收发ws信息
-	err = cli.Run()
-	if err != nil {
-		return errorx.InternalError(err)
-	}
-	return nil
+	cli.Run()
+	return
 }

@@ -1,7 +1,7 @@
 package types
 
 const (
-	TypeLuckydrawResult = "handle_luckydraw_result"
+	TaskTypeLuckydrawResult = "handle_luckydraw_result"
 )
 
 type LuckydrawResultMsg struct {

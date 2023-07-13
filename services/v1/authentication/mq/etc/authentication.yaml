@@ -28,6 +28,7 @@ Redis:
   Host: ${REDIS_HOST}:${REDIS_PORT}
   Pass: ${REDIS_PASSWORD}
   Type: node
+  Key: authentication
 
 CacheRedis:
   - Host: ${REDIS_HOST}:${REDIS_PORT}

@@ -51,7 +51,7 @@ type (
 		IsRead      int64     `db:"is_read"`      // 是否已读:0未读，1已读
 		IsSend      int64     `db:"is_send"`      // 是否已发送:0未发送，1已发送
 		SendTime    time.Time `db:"send_time"`    // 发送时间
-		ExpireTime  time.Time `db:"expire_time"`  // 缓存过期时间, 默认为3天
+		ExpireTime  time.Time `db:"expire_time"`  // 缓存过期时间, 默认为30天
 		CreateAt    time.Time `db:"create_at"`    // 创建时间
 		UpdateAt    time.Time `db:"update_at"`    // 更新时间
 		IsDeleted   int64     `db:"is_deleted"`   // 是否已删除

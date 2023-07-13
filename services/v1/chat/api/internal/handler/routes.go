@@ -4,12 +4,8 @@ package handler
 import (
 	"net/http"
 
-	chatRecord "mixbench/services/v1/chat/api/internal/handler/chatRecord"
-	ipblack "mixbench/services/v1/chat/api/internal/handler/ipblack"
-	kefu "mixbench/services/v1/chat/api/internal/handler/kefu"
 	message "mixbench/services/v1/chat/api/internal/handler/message"
 	messageConfig "mixbench/services/v1/chat/api/internal/handler/messageConfig"
-	project "mixbench/services/v1/chat/api/internal/handler/project"
 	visitor "mixbench/services/v1/chat/api/internal/handler/visitor"
 	"mixbench/services/v1/chat/api/internal/svc"
 
@@ -23,11 +19,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/visitorLogin",
 				Handler: VisitorLoginHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/kefuLogin",
-				Handler: KefuLoginHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
@@ -89,114 +80,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/",
-				Handler: chatRecord.AddChatRecordHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: chatRecord.PutChatRecordHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: chatRecord.GetChatRecordHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: chatRecord.DelChatRecordHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: chatRecord.GetChatRecordListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: chatRecord.GetChatRecordEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/chatRecord"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: ipblack.AddIpblackHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: ipblack.PutIpblackHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: ipblack.GetIpblackHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: ipblack.DelIpblackHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: ipblack.GetIpblackListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: ipblack.GetIpblackEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/ipblack"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: kefu.AddKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: kefu.PutKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: kefu.GetKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: kefu.DelKefuHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: kefu.GetKefuListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: kefu.GetKefuEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/kefu"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
 				Handler: message.AddMessageHandler(serverCtx),
 			},
 			{
@@ -226,42 +109,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/v1/api/chat/message"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: project.AddProjectHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPut,
-				Path:    "/",
-				Handler: project.PutProjectHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/",
-				Handler: project.GetProjectHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodDelete,
-				Path:    "/",
-				Handler: project.DelProjectHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/list",
-				Handler: project.GetProjectListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/enums",
-				Handler: project.GetProjectEnumsHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/chat/project"),
 	)
 
 	server.AddRoutes(

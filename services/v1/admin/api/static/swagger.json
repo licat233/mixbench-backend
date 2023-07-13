@@ -351,6 +351,15 @@
             "default": "-1"
           },
           {
+            "name": "projectId",
+            "description": "项目id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
             "name": "loginCount",
             "description": "登录次数",
             "in": "query",
@@ -515,6 +524,308 @@
         ],
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/campaign/": {
+      "get": {
+        "summary": "获取活动 基础API",
+        "operationId": "GetCampaign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "活动 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "campaign"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "删除活动 基础API",
+        "operationId": "DelCampaign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除活动请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelCampaignReq"
+            }
+          }
+        ],
+        "tags": [
+          "campaign"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "添加活动 基础API",
+        "operationId": "AddCampaign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加活动请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCampaignReq"
+            }
+          }
+        ],
+        "tags": [
+          "campaign"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "更新活动 基础API",
+        "operationId": "PutCampaign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新活动请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutCampaignReq"
+            }
+          }
+        ],
+        "tags": [
+          "campaign"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/campaign/enums": {
+      "get": {
+        "summary": "获取活动枚举列表 基础API",
+        "operationId": "GetCampaignEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "campaign"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/campaign/list": {
+      "get": {
+        "summary": "获取活动列表 基础API",
+        "operationId": "GetCampaignList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "活动名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "projectId",
+            "description": "项目id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "status",
+            "description": "活动状态，是否在举办，默认关闭，需手动开启",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "pattern",
+            "description": "方案: 0会员制，1公开制，2会员需授权",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "maxCount",
+            "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "maxPrizes",
+            "description": "最大抽奖次数：-1表示无限制，0表示不可中奖",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "startTime",
+            "description": "活动开始时间",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "endTime",
+            "description": "活动结束时间",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "campaign"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
@@ -1144,6 +1455,275 @@
           }
         ]
       }
+    },
+    "/v1/api/admin/web/": {
+      "get": {
+        "summary": "获取网站 基础API",
+        "operationId": "GetWeb",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "网站 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "web"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "删除网站 基础API",
+        "operationId": "DelWeb",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除网站请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelWebReq"
+            }
+          }
+        ],
+        "tags": [
+          "web"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "添加网站 基础API",
+        "operationId": "AddWeb",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加网站请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddWebReq"
+            }
+          }
+        ],
+        "tags": [
+          "web"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "更新网站 基础API",
+        "operationId": "PutWeb",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新网站请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutWebReq"
+            }
+          }
+        ],
+        "tags": [
+          "web"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/web/enums": {
+      "get": {
+        "summary": "获取网站枚举列表 基础API",
+        "operationId": "GetWebEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "web"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/admin/web/list": {
+      "get": {
+        "summary": "获取网站列表 基础API",
+        "operationId": "GetWebList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "projectId",
+            "description": "项目id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "url",
+            "description": "连接",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "host",
+            "description": "域名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "description": "备注",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "code",
+            "description": "代码",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "web"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
     }
   },
   "definitions": {
@@ -1184,6 +1764,11 @@
           "format": "int64",
           "description": "是否为超级管理员"
         },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
         "loginCount": {
           "type": "integer",
           "format": "int64",
@@ -1205,8 +1790,64 @@
         "email",
         "status",
         "isSuperAdmin",
+        "projectId",
         "loginCount",
         "lastLogin"
+      ]
+    },
+    "AddCampaignReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "活动名称"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动状态，是否在举办，默认关闭，需手动开启"
+        },
+        "pattern": {
+          "type": "integer",
+          "format": "int64",
+          "description": "方案: 0会员制，1公开制，2会员需授权"
+        },
+        "maxCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "maxPrizes": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可中奖"
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动开始时间"
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动结束时间"
+        }
+      },
+      "title": "AddCampaignReq",
+      "required": [
+        "name",
+        "projectId",
+        "status",
+        "pattern",
+        "maxCount",
+        "maxPrizes",
+        "startTime",
+        "endTime"
       ]
     },
     "AddProjectReq": {
@@ -1226,6 +1867,40 @@
       "required": [
         "name",
         "status"
+      ]
+    },
+    "AddWebReq": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
+        "url": {
+          "type": "string",
+          "description": "连接"
+        },
+        "host": {
+          "type": "string",
+          "description": "域名"
+        },
+        "description": {
+          "type": "string",
+          "description": "备注"
+        },
+        "code": {
+          "type": "string",
+          "description": "代码"
+        }
+      },
+      "title": "AddWebReq",
+      "required": [
+        "projectId",
+        "url",
+        "host",
+        "description",
+        "code"
       ]
     },
     "Adminer": {
@@ -1274,6 +1949,11 @@
           "format": "int64",
           "description": "是否为超级管理员"
         },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
         "loginCount": {
           "type": "integer",
           "format": "int64",
@@ -1297,6 +1977,7 @@
         "email",
         "status",
         "isSuperAdmin",
+        "projectId",
         "loginCount",
         "lastLogin"
       ]
@@ -1394,6 +2075,72 @@
         "id"
       ]
     },
+    "Campaign": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "活动名称"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动状态，是否在举办，默认关闭，需手动开启"
+        },
+        "pattern": {
+          "type": "integer",
+          "format": "int64",
+          "description": "方案: 0会员制，1公开制，2会员需授权"
+        },
+        "maxCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "maxPrizes": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可中奖"
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动开始时间"
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动结束时间"
+        }
+      },
+      "title": "Campaign",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "projectId",
+        "status",
+        "pattern",
+        "maxCount",
+        "maxPrizes",
+        "startTime",
+        "endTime"
+      ]
+    },
     "CaptchaResp": {
       "type": "object",
       "properties": {
@@ -1427,6 +2174,20 @@
         "id"
       ]
     },
+    "DelCampaignReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动 ID"
+        }
+      },
+      "title": "DelCampaignReq",
+      "required": [
+        "id"
+      ]
+    },
     "DelProjectReq": {
       "type": "object",
       "properties": {
@@ -1437,6 +2198,20 @@
         }
       },
       "title": "DelProjectReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DelWebReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "网站 ID"
+        }
+      },
+      "title": "DelWebReq",
       "required": [
         "id"
       ]
@@ -1581,6 +2356,12 @@
           "default": "-1",
           "description": "是否为超级管理员"
         },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
+        },
         "loginCount": {
           "type": "integer",
           "format": "int64",
@@ -1606,6 +2387,116 @@
         }
       },
       "title": "GetAdminerReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetCampaignEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetCampaignEnumsReq"
+    },
+    "GetCampaignListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "活动名称"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "活动状态，是否在举办，默认关闭，需手动开启"
+        },
+        "pattern": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "方案: 0会员制，1公开制，2会员需授权"
+        },
+        "maxCount": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "maxPrizes": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可中奖"
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "活动开始时间"
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "活动结束时间"
+        }
+      },
+      "title": "GetCampaignListReq"
+    },
+    "GetCampaignReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动 ID"
+        }
+      },
+      "title": "GetCampaignReq",
       "required": [
         "id"
       ]
@@ -1680,6 +2571,92 @@
         }
       },
       "title": "GetProjectReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetWebEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetWebEnumsReq"
+    },
+    "GetWebListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目id"
+        },
+        "url": {
+          "type": "string",
+          "description": "连接"
+        },
+        "host": {
+          "type": "string",
+          "description": "域名"
+        },
+        "description": {
+          "type": "string",
+          "description": "备注"
+        },
+        "code": {
+          "type": "string",
+          "description": "代码"
+        }
+      },
+      "title": "GetWebListReq"
+    },
+    "GetWebReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "网站 ID"
+        }
+      },
+      "title": "GetWebReq",
       "required": [
         "id"
       ]
@@ -1856,6 +2833,11 @@
           "format": "int64",
           "description": "是否为超级管理员"
         },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
         "loginCount": {
           "type": "integer",
           "format": "int64",
@@ -1879,8 +2861,75 @@
         "email",
         "status",
         "isSuperAdmin",
+        "projectId",
         "loginCount",
         "lastLogin"
+      ]
+    },
+    "PutCampaignReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "活动名称"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动状态，是否在举办，默认关闭，需手动开启"
+        },
+        "pattern": {
+          "type": "integer",
+          "format": "int64",
+          "description": "方案: 0会员制，1公开制，2会员需授权"
+        },
+        "maxCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可抽奖"
+        },
+        "maxPrizes": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最大抽奖次数：-1表示无限制，0表示不可中奖"
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动开始时间"
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "活动结束时间"
+        }
+      },
+      "title": "PutCampaignReq",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "projectId",
+        "status",
+        "pattern",
+        "maxCount",
+        "maxPrizes",
+        "startTime",
+        "endTime"
       ]
     },
     "PutCurrentReq": {
@@ -1969,6 +3018,51 @@
         "status"
       ]
     },
+    "PutWebReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
+        "url": {
+          "type": "string",
+          "description": "连接"
+        },
+        "host": {
+          "type": "string",
+          "description": "域名"
+        },
+        "description": {
+          "type": "string",
+          "description": "备注"
+        },
+        "code": {
+          "type": "string",
+          "description": "代码"
+        }
+      },
+      "title": "PutWebReq",
+      "required": [
+        "id",
+        "uuid",
+        "projectId",
+        "url",
+        "host",
+        "description",
+        "code"
+      ]
+    },
     "Resp": {
       "type": "object",
       "properties": {
@@ -2035,6 +3129,51 @@
       "title": "VerifyPasswordReq",
       "required": [
         "password"
+      ]
+    },
+    "Web": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目id"
+        },
+        "url": {
+          "type": "string",
+          "description": "连接"
+        },
+        "host": {
+          "type": "string",
+          "description": "域名"
+        },
+        "description": {
+          "type": "string",
+          "description": "备注"
+        },
+        "code": {
+          "type": "string",
+          "description": "代码"
+        }
+      },
+      "title": "Web",
+      "required": [
+        "id",
+        "uuid",
+        "projectId",
+        "url",
+        "host",
+        "description",
+        "code"
       ]
     },
     "bindEmailCaptchaReq": {

@@ -4,70 +4,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for chat_record
--- ----------------------------
-DROP TABLE IF EXISTS `chat_record`;
-CREATE TABLE `chat_record` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
-  `content` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '消息内容',
-  `content_type` tinyint NOT NULL DEFAULT '0' COMMENT '0文本，1图片，2表情，3视频, 4错误信息',
-  `visitor_id` int NOT NULL DEFAULT '0' COMMENT '游客id',
-  `kefu_id` int NOT NULL DEFAULT '0' COMMENT '客服id， 0表示没有分配到客服',
-  `project_id` int NOT NULL DEFAULT '0' COMMENT '项目id',
-  `msg_type` tinyint NOT NULL DEFAULT '0' COMMENT '0游客消息，1客服消息，2公告消息，3系统消息',
-  `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0合法，1违规',
-  `is_read` tinyint NOT NULL DEFAULT '0' COMMENT '是否已读:0未读，1已读',
-  `is_send` tinyint NOT NULL DEFAULT '0' COMMENT '是否已发送:0未发送，1已发送',
-  `send_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发送时间',
-  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  PRIMARY KEY (`id`),
-  KEY `uuid` (`uuid`),
-  KEY `visitor_id` (`visitor_id`),
-  KEY `kefu_id` (`kefu_id`),
-  KEY `msg_type` (`msg_type`),
-  KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='聊天记录';
-
--- ----------------------------
--- Table structure for ipblack
--- ----------------------------
-DROP TABLE IF EXISTS `ipblack`;
-CREATE TABLE `ipblack` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `ip` varchar(100) NOT NULL DEFAULT '' COMMENT 'IP',
-  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ip` (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='IP黑名单';
-
--- ----------------------------
--- Table structure for kefu
--- ----------------------------
-DROP TABLE IF EXISTS `kefu`;
-CREATE TABLE `kefu` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
-  `project_id` int NOT NULL DEFAULT '0' COMMENT '项目id',
-  `passport` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '客服账号',
-  `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '客服名',
-  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '密码',
-  `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态:0离线，1在线，2冻结',
-  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  PRIMARY KEY (`id`),
-  KEY `uuid` (`uuid`),
-  KEY `passport` (`passport`),
-  KEY `username` (`username`),
-  KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='客服';
-
--- ----------------------------
 -- Table structure for message
 -- ----------------------------
 DROP TABLE IF EXISTS `message`;
@@ -84,42 +20,19 @@ CREATE TABLE `message` (
   `is_read` tinyint NOT NULL DEFAULT '0' COMMENT '是否已读:0未读，1已读',
   `is_send` tinyint NOT NULL DEFAULT '0' COMMENT '是否已发送:0未发送，1已发送',
   `send_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发送时间',
-  `expire_time` datetime NOT NULL DEFAULT ((now() + interval 3 day)) COMMENT '缓存过期时间, 默认为3天',
+  `expire_time` datetime NOT NULL DEFAULT ((now() + interval 30 day)) COMMENT '缓存过期时间, 默认为30天',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `visitor_id` (`visitor_id`),
+  KEY `project_id` (`project_id`),
   KEY `kefu_id` (`kefu_id`),
   KEY `msg_type` (`msg_type`),
   KEY `expire_time` (`expire_time`),
   KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='消息, 主要用于缓存未发送成功的消息';
-
--- ----------------------------
--- Table structure for project
--- ----------------------------
-DROP TABLE IF EXISTS `project`;
-CREATE TABLE `project` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '表主键',
-  `uuid` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT 'UUID',
-  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '项目名称',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '项目状态',
-  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  PRIMARY KEY (`id`),
-  KEY `uuid` (`uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='项目';
-
--- ----------------------------
--- Records of project
--- ----------------------------
-BEGIN;
-INSERT INTO `project` VALUES (1,  '14a1d67c-97cc-463f-a366-65b5caa5e3aa','植题祛斑', 1, '2022-07-07 17:37:52', '2022-08-29 10:01:45', 0);
-INSERT INTO `project` VALUES (2, '24a1d67c-97cc-463f-a366-65b5caa5e3aa', '李中医祛斑', 0, '2022-08-29 10:08:57', '2022-08-29 10:08:57', 0);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='消息';
 
 -- ----------------------------
 -- Table structure for message_config

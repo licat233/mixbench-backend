@@ -8,10 +8,10 @@
 package svc
 
 import (
-	"mixbench/services/v1/authentication/rpc/authentication"
-	"mixbench/services/v1/luckydraw"
+	authenticationClient "mixbench/services/v1/authentication/rpc/client"
 	"mixbench/services/v1/luckydraw/api/internal/config"
 	"mixbench/services/v1/luckydraw/api/internal/middleware"
+	luckydrawClient "mixbench/services/v1/luckydraw/rpc/client"
 
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -19,8 +19,8 @@ import (
 
 type ServiceContext struct {
 	Config              config.Config
-	AuthenticationRpc   authentication.Authentication
-	LuckydrawRpc        luckydraw.LuckydrawRpc
+	AuthenticationRpc   *authenticationClient.AuthenticationRpc
+	LuckydrawRpc        *luckydrawClient.LuckydrawRpc
 	AdminAuthMiddleware rest.Middleware
 	UserAuthMiddleware  rest.Middleware
 	RbacMiddleware      rest.Middleware
@@ -29,8 +29,8 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:              c,
-		AuthenticationRpc:   authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
-		LuckydrawRpc:        luckydraw.NewLuckydrawRpc(zrpc.MustNewClient(c.LuckydrawRpc)),
+		AuthenticationRpc:   authenticationClient.NewAuthenticationRpc(zrpc.MustNewClient(c.AuthenticationRpc)),
+		LuckydrawRpc:        luckydrawClient.NewLuckydrawRpc(zrpc.MustNewClient(c.LuckydrawRpc)),
 		AdminAuthMiddleware: middleware.NewAdminAuthMiddleware(c).Handle,
 		UserAuthMiddleware:  middleware.NewUserAuthMiddleware(c).Handle,
 		RbacMiddleware:      nil,

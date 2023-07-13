@@ -3,11 +3,11 @@ package types
 import "mixbench/common/emailx"
 
 const (
-	SendEmailCaptchaKey = "handle_send_emailcaptcha"
+	TaskTypeSendEmailCaptcha = "handle_send_email_captcha"
 )
 
 type SendEmailCaptchaReq struct {
 	EmailAddrees []string
 	RedisKey     string
-	Message      emailx.CaptchaMessage
+	Message      *emailx.CaptchaMessage
 }

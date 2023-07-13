@@ -13,67 +13,93 @@ import (
 )
 
 type (
-	AddAdminerReq      = admin_pb.AddAdminerReq
-	AddAdminerResp     = admin_pb.AddAdminerResp
-	AddProjectReq      = admin_pb.AddProjectReq
-	AddProjectResp     = admin_pb.AddProjectResp
-	Adminer            = admin_pb.Adminer
-	ByIdReq            = admin_pb.ByIdReq
-	DelAdminerReq      = admin_pb.DelAdminerReq
-	DelAdminerResp     = admin_pb.DelAdminerResp
-	DelProjectReq      = admin_pb.DelProjectReq
-	DelProjectResp     = admin_pb.DelProjectResp
-	Enum               = admin_pb.Enum
-	Enums              = admin_pb.Enums
-	ExistsEmailReq     = admin_pb.ExistsEmailReq
-	ExistsEmailResp    = admin_pb.ExistsEmailResp
-	FindByEmailReq     = admin_pb.FindByEmailReq
-	FindByEmailResp    = admin_pb.FindByEmailResp
-	ForgotPasswordReq  = admin_pb.ForgotPasswordReq
-	GenerateTokenReq   = admin_pb.GenerateTokenReq
-	GenerateTokenResp  = admin_pb.GenerateTokenResp
-	GetAdminerEnumsReq = admin_pb.GetAdminerEnumsReq
-	GetAdminerListReq  = admin_pb.GetAdminerListReq
-	GetAdminerListResp = admin_pb.GetAdminerListResp
-	GetAdminerReq      = admin_pb.GetAdminerReq
-	GetAdminerResp     = admin_pb.GetAdminerResp
-	GetProjectEnumsReq = admin_pb.GetProjectEnumsReq
-	GetProjectListReq  = admin_pb.GetProjectListReq
-	GetProjectListResp = admin_pb.GetProjectListResp
-	GetProjectReq      = admin_pb.GetProjectReq
-	GetProjectResp     = admin_pb.GetProjectResp
-	IsLogoutReq        = admin_pb.IsLogoutReq
-	IsLogoutResp       = admin_pb.IsLogoutResp
-	JwtData            = admin_pb.JwtData
-	JwtToken           = admin_pb.JwtToken
-	ListReq            = admin_pb.ListReq
-	LoginByEmailReq    = admin_pb.LoginByEmailReq
-	LoginReq           = admin_pb.LoginReq
-	LoginResp          = admin_pb.LoginResp
-	LogoutReq          = admin_pb.LogoutReq
-	LogoutResp         = admin_pb.LogoutResp
-	NilReq             = admin_pb.NilReq
-	NilResp            = admin_pb.NilResp
-	Option             = admin_pb.Option
-	Options            = admin_pb.Options
-	ParseJwtTokenReq   = admin_pb.ParseJwtTokenReq
-	ParseJwtTokenResp  = admin_pb.ParseJwtTokenResp
-	Project            = admin_pb.Project
-	PutAdminerReq      = admin_pb.PutAdminerReq
-	PutAdminerResp     = admin_pb.PutAdminerResp
-	PutPasswordReq     = admin_pb.PutPasswordReq
-	PutProjectReq      = admin_pb.PutProjectReq
-	PutProjectResp     = admin_pb.PutProjectResp
-	ResetLuckValueReq  = admin_pb.ResetLuckValueReq
-	StatusResp         = admin_pb.StatusResp
-	TestReq            = admin_pb.TestReq
-	TestResp           = admin_pb.TestResp
-	TreeOption         = admin_pb.TreeOption
-	TreeOptions        = admin_pb.TreeOptions
-	ValidateTokenReq   = admin_pb.ValidateTokenReq
-	ValidateTokenResp  = admin_pb.ValidateTokenResp
-	VerifyPasswordReq  = admin_pb.VerifyPasswordReq
-	VerifyPasswordResp = admin_pb.VerifyPasswordResp
+	AddAdminerReq       = admin_pb.AddAdminerReq
+	AddAdminerResp      = admin_pb.AddAdminerResp
+	AddCampaignReq      = admin_pb.AddCampaignReq
+	AddCampaignResp     = admin_pb.AddCampaignResp
+	AddProjectReq       = admin_pb.AddProjectReq
+	AddProjectResp      = admin_pb.AddProjectResp
+	AddWebReq           = admin_pb.AddWebReq
+	AddWebResp          = admin_pb.AddWebResp
+	Adminer             = admin_pb.Adminer
+	ByIdReq             = admin_pb.ByIdReq
+	Campaign            = admin_pb.Campaign
+	DelAdminerReq       = admin_pb.DelAdminerReq
+	DelAdminerResp      = admin_pb.DelAdminerResp
+	DelCampaignReq      = admin_pb.DelCampaignReq
+	DelCampaignResp     = admin_pb.DelCampaignResp
+	DelProjectReq       = admin_pb.DelProjectReq
+	DelProjectResp      = admin_pb.DelProjectResp
+	DelWebReq           = admin_pb.DelWebReq
+	DelWebResp          = admin_pb.DelWebResp
+	Enum                = admin_pb.Enum
+	Enums               = admin_pb.Enums
+	ExistsEmailReq      = admin_pb.ExistsEmailReq
+	ExistsEmailResp     = admin_pb.ExistsEmailResp
+	FindByEmailReq      = admin_pb.FindByEmailReq
+	FindByEmailResp     = admin_pb.FindByEmailResp
+	ForgotPasswordReq   = admin_pb.ForgotPasswordReq
+	GenerateTokenReq    = admin_pb.GenerateTokenReq
+	GenerateTokenResp   = admin_pb.GenerateTokenResp
+	GetAdminerEnumsReq  = admin_pb.GetAdminerEnumsReq
+	GetAdminerListReq   = admin_pb.GetAdminerListReq
+	GetAdminerListResp  = admin_pb.GetAdminerListResp
+	GetAdminerReq       = admin_pb.GetAdminerReq
+	GetAdminerResp      = admin_pb.GetAdminerResp
+	GetCampaignEnumsReq = admin_pb.GetCampaignEnumsReq
+	GetCampaignListReq  = admin_pb.GetCampaignListReq
+	GetCampaignListResp = admin_pb.GetCampaignListResp
+	GetCampaignReq      = admin_pb.GetCampaignReq
+	GetCampaignResp     = admin_pb.GetCampaignResp
+	GetProjectEnumsReq  = admin_pb.GetProjectEnumsReq
+	GetProjectListReq   = admin_pb.GetProjectListReq
+	GetProjectListResp  = admin_pb.GetProjectListResp
+	GetProjectReq       = admin_pb.GetProjectReq
+	GetProjectResp      = admin_pb.GetProjectResp
+	GetWebByUrlReq      = admin_pb.GetWebByUrlReq
+	GetWebByUrlResp     = admin_pb.GetWebByUrlResp
+	GetWebEnumsReq      = admin_pb.GetWebEnumsReq
+	GetWebListReq       = admin_pb.GetWebListReq
+	GetWebListResp      = admin_pb.GetWebListResp
+	GetWebReq           = admin_pb.GetWebReq
+	GetWebResp          = admin_pb.GetWebResp
+	IsLogoutReq         = admin_pb.IsLogoutReq
+	IsLogoutResp        = admin_pb.IsLogoutResp
+	JwtData             = admin_pb.JwtData
+	JwtToken            = admin_pb.JwtToken
+	ListReq             = admin_pb.ListReq
+	LoginByEmailReq     = admin_pb.LoginByEmailReq
+	LoginReq            = admin_pb.LoginReq
+	LoginResp           = admin_pb.LoginResp
+	LogoutReq           = admin_pb.LogoutReq
+	LogoutResp          = admin_pb.LogoutResp
+	NilReq              = admin_pb.NilReq
+	NilResp             = admin_pb.NilResp
+	Option              = admin_pb.Option
+	Options             = admin_pb.Options
+	ParseJwtTokenReq    = admin_pb.ParseJwtTokenReq
+	ParseJwtTokenResp   = admin_pb.ParseJwtTokenResp
+	Project             = admin_pb.Project
+	PutAdminerReq       = admin_pb.PutAdminerReq
+	PutAdminerResp      = admin_pb.PutAdminerResp
+	PutCampaignReq      = admin_pb.PutCampaignReq
+	PutCampaignResp     = admin_pb.PutCampaignResp
+	PutPasswordReq      = admin_pb.PutPasswordReq
+	PutProjectReq       = admin_pb.PutProjectReq
+	PutProjectResp      = admin_pb.PutProjectResp
+	PutWebReq           = admin_pb.PutWebReq
+	PutWebResp          = admin_pb.PutWebResp
+	ResetLuckValueReq   = admin_pb.ResetLuckValueReq
+	StatusResp          = admin_pb.StatusResp
+	TestReq             = admin_pb.TestReq
+	TestResp            = admin_pb.TestResp
+	TreeOption          = admin_pb.TreeOption
+	TreeOptions         = admin_pb.TreeOptions
+	ValidateTokenReq    = admin_pb.ValidateTokenReq
+	ValidateTokenResp   = admin_pb.ValidateTokenResp
+	VerifyPasswordReq   = admin_pb.VerifyPasswordReq
+	VerifyPasswordResp  = admin_pb.VerifyPasswordResp
+	Web                 = admin_pb.Web
 
 	Admin interface {
 		// 预留的调试端口
@@ -104,6 +130,7 @@ type (
 		PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
 		// 忘记密码，通过邮箱重置密码
 		ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
+		GetWebByUrl(ctx context.Context, in *GetWebByUrlReq, opts ...grpc.CallOption) (*GetWebByUrlResp, error)
 	}
 
 	defaultAdmin struct {
@@ -199,4 +226,9 @@ func (m *defaultAdmin) PutPassword(ctx context.Context, in *PutPasswordReq, opts
 func (m *defaultAdmin) ForgotPassword(ctx context.Context, in *ForgotPasswordReq, opts ...grpc.CallOption) (*StatusResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.ForgotPassword(ctx, in, opts...)
+}
+
+func (m *defaultAdmin) GetWebByUrl(ctx context.Context, in *GetWebByUrlReq, opts ...grpc.CallOption) (*GetWebByUrlResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.GetWebByUrl(ctx, in, opts...)
 }

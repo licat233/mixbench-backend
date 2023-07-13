@@ -1,10 +1,3 @@
-/*
- * @Author: licat
- * @Date: 2023-02-17 15:41:34
- * @LastEditors: licat
- * @LastEditTime: 2023-02-20 16:04:44
- * @Description: licat233@gmail.com
- */
 package svc
 
 import (
@@ -14,8 +7,8 @@ import (
 	"mixbench/services/v1/admin/api/internal/config"
 	"mixbench/services/v1/admin/api/internal/middleware"
 	"mixbench/services/v1/admin/model"
-	"mixbench/services/v1/admin/rpc/admin_pb"
-	"mixbench/services/v1/authentication/rpc/authentication"
+	adminClient "mixbench/services/v1/admin/rpc/client"
+	authenticationClient "mixbench/services/v1/authentication/rpc/client"
 	"path"
 
 	"github.com/casbin/casbin/v2"
@@ -23,18 +16,13 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
-type AdminRpc struct {
-	admin_pb.AdminClient
-	admin_pb.BaseClient
-}
-
 type ServiceContext struct {
 	Config         config.Config
 	AuthMiddleware rest.Middleware
 	RbacMiddleware rest.Middleware
 
-	AuthenticationRpc authentication.Authentication
-	AdminRpc          AdminRpc
+	AuthenticationRpc *authenticationClient.AuthenticationRpc
+	AdminRpc          *adminClient.AdminRpc
 	CasbinEnforcer    *casbin.SyncedEnforcer
 
 	AdminerModel      model.AdminerModel
@@ -51,19 +39,14 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	JwtBlacklistsModel := model.NewJwtBlacklistModel(sqlConn, c.CacheRedis)
 	AdminerModel := model.NewAdminerModel(sqlConn, c.CacheRedis)
 
-	clientConn := zrpc.MustNewClient(c.AdminRpc).Conn()
-
-	adminRpc := AdminRpc{
-		admin_pb.NewAdminClient(clientConn),
-		admin_pb.NewBaseClient(clientConn),
-	}
 	casbinFile := path.Join(c.RootDir, "etc/rbac_with_domains_model.conf")
 	enforcer := rbacx.NewCasbinEnforcer(db, casbinFile)
+	adminRpc := adminClient.NewAdminRpc(zrpc.MustNewClient(c.AdminRpc))
 	return &ServiceContext{
 		Config:            c,
 		AuthMiddleware:    middleware.NewAuthMiddleware(c, JwtBlacklistsModel, AdminerModel).Handle,
 		RbacMiddleware:    middleware.NewRbacMiddleware(enforcer, &adminRpc.BaseClient).Handle,
-		AuthenticationRpc: authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
+		AuthenticationRpc: authenticationClient.NewAuthenticationRpc(zrpc.MustNewClient(c.AuthenticationRpc)),
 		AdminRpc:          adminRpc,
 		CasbinEnforcer:    enforcer,
 		AdminerModel:      AdminerModel,

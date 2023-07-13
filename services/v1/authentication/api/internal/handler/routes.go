@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	captcha "mixbench/services/v1/authentication/api/internal/handler/captcha"
+	ipblack "mixbench/services/v1/authentication/api/internal/handler/ipblack"
 	"mixbench/services/v1/authentication/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -17,6 +18,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/test",
 				Handler: testHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/auth",
+				Handler: authHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/api/authentication"),
@@ -51,5 +57,45 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/v1/api/authentication/captcha"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/",
+					Handler: ipblack.AddIpblackHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/",
+					Handler: ipblack.PutIpblackHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/",
+					Handler: ipblack.GetIpblackHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodDelete,
+					Path:    "/",
+					Handler: ipblack.DelIpblackHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/list",
+					Handler: ipblack.GetIpblackListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/enums",
+					Handler: ipblack.GetIpblackEnumsHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/authentication/ipblack"),
 	)
 }

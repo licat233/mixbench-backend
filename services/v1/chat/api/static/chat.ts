@@ -10,14 +10,6 @@ export function visitorLogin() {
 }
 
 /**
- * @description "客服登录"
- * @param req
- */
-export function kefuLogin(req: components.KefuLoginReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/kefuLogin`, req)
-}
-
-/**
  * @description "测试"
  * @param req
  */
@@ -27,16 +19,18 @@ export function test(req: components.TestReq) {
 
 /**
  * @description "visitor建立ws连接"
+ * @param params
  */
-export function visitorServer() {
-	return webapi.get<null>(`/v1/api/chat/ws/visitor`)
+export function visitorServer(params: components.ConnWebsocketReqParams) {
+	return webapi.get<null>(`/v1/api/chat/ws/visitor`, params)
 }
 
 /**
  * @description "kefu建立ws连接"
+ * @param params
  */
-export function kefuServer() {
-	return webapi.get<null>(`/v1/api/chat/ws/kefu`)
+export function kefuServer(params: components.ConnWebsocketReqParams) {
+	return webapi.get<null>(`/v1/api/chat/ws/kefu`, params)
 }
 
 /**
@@ -64,151 +58,7 @@ export function transferVisitor(req: components.TransferVisitorReq) {
 }
 
 /**
- * @description "添加聊天记录 基础API"
- * @param req
- */
-export function addChatRecord(req: components.AddChatRecordReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/chatRecord`, req)
-}
-
-/**
- * @description "更新聊天记录 基础API"
- * @param req
- */
-export function putChatRecord(req: components.PutChatRecordReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/chatRecord`, req)
-}
-
-/**
- * @description "获取聊天记录 基础API"
- * @param req
- */
-export function getChatRecord(req: components.GetChatRecordReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/chatRecord`, req)
-}
-
-/**
- * @description "删除聊天记录 基础API"
- * @param req
- */
-export function delChatRecord(req: components.DelChatRecordReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/chatRecord`, req)
-}
-
-/**
- * @description "获取聊天记录列表 基础API"
- * @param params
- */
-export function getChatRecordList(params: components.GetChatRecordListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/chatRecord/list`, params)
-}
-
-/**
- * @description "获取聊天记录枚举列表 基础API"
- * @param req
- */
-export function getChatRecordEnums(req: components.GetChatRecordEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/chatRecord/enums`, req)
-}
-
-/**
- * @description "添加IP黑名单 基础API"
- * @param req
- */
-export function addIpblack(req: components.AddIpblackReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/ipblack`, req)
-}
-
-/**
- * @description "更新IP黑名单 基础API"
- * @param req
- */
-export function putIpblack(req: components.PutIpblackReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/ipblack`, req)
-}
-
-/**
- * @description "获取IP黑名单 基础API"
- * @param req
- */
-export function getIpblack(req: components.GetIpblackReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/ipblack`, req)
-}
-
-/**
- * @description "删除IP黑名单 基础API"
- * @param req
- */
-export function delIpblack(req: components.DelIpblackReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/ipblack`, req)
-}
-
-/**
- * @description "获取IP黑名单列表 基础API"
- * @param params
- */
-export function getIpblackList(params: components.GetIpblackListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/ipblack/list`, params)
-}
-
-/**
- * @description "获取IP黑名单枚举列表 基础API"
- * @param req
- */
-export function getIpblackEnums(req: components.GetIpblackEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/ipblack/enums`, req)
-}
-
-/**
- * @description "添加客服 基础API"
- * @param req
- */
-export function addKefu(req: components.AddKefuReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "更新客服 基础API"
- * @param req
- */
-export function putKefu(req: components.PutKefuReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "获取客服 基础API"
- * @param req
- */
-export function getKefu(req: components.GetKefuReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "删除客服 基础API"
- * @param req
- */
-export function delKefu(req: components.DelKefuReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/kefu`, req)
-}
-
-/**
- * @description "获取客服列表 基础API"
- * @param params
- */
-export function getKefuList(params: components.GetKefuListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu/list`, params)
-}
-
-/**
- * @description "获取客服枚举列表 基础API"
- * @param req
- */
-export function getKefuEnums(req: components.GetKefuEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/kefu/enums`, req)
-}
-
-/**
- * @description "添加消息, 主要用于缓存未发送成功的消息 基础API"
+ * @description "添加消息 基础API"
  * @param req
  */
 export function addMessage(req: components.AddMessageReq) {
@@ -216,7 +66,7 @@ export function addMessage(req: components.AddMessageReq) {
 }
 
 /**
- * @description "更新消息, 主要用于缓存未发送成功的消息 基础API"
+ * @description "更新消息 基础API"
  * @param req
  */
 export function putMessage(req: components.PutMessageReq) {
@@ -224,7 +74,7 @@ export function putMessage(req: components.PutMessageReq) {
 }
 
 /**
- * @description "获取消息, 主要用于缓存未发送成功的消息 基础API"
+ * @description "获取消息 基础API"
  * @param req
  */
 export function getMessage(req: components.GetMessageReq) {
@@ -232,7 +82,7 @@ export function getMessage(req: components.GetMessageReq) {
 }
 
 /**
- * @description "删除消息, 主要用于缓存未发送成功的消息 基础API"
+ * @description "删除消息 基础API"
  * @param req
  */
 export function delMessage(req: components.DelMessageReq) {
@@ -240,7 +90,7 @@ export function delMessage(req: components.DelMessageReq) {
 }
 
 /**
- * @description "获取消息, 主要用于缓存未发送成功的消息列表 基础API"
+ * @description "获取消息列表 基础API"
  * @param params
  */
 export function getMessageList(params: components.GetMessageListReqParams) {
@@ -248,59 +98,11 @@ export function getMessageList(params: components.GetMessageListReqParams) {
 }
 
 /**
- * @description "获取消息, 主要用于缓存未发送成功的消息枚举列表 基础API"
+ * @description "获取消息枚举列表 基础API"
  * @param req
  */
 export function getMessageEnums(req: components.GetMessageEnumsReq) {
 	return webapi.get<components.BaseResp>(`/v1/api/chat/message/enums`, req)
-}
-
-/**
- * @description "添加项目 基础API"
- * @param req
- */
-export function addProject(req: components.AddProjectReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/project`, req)
-}
-
-/**
- * @description "更新项目 基础API"
- * @param req
- */
-export function putProject(req: components.PutProjectReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/chat/project`, req)
-}
-
-/**
- * @description "获取项目 基础API"
- * @param req
- */
-export function getProject(req: components.GetProjectReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/project`, req)
-}
-
-/**
- * @description "删除项目 基础API"
- * @param req
- */
-export function delProject(req: components.DelProjectReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/chat/project`, req)
-}
-
-/**
- * @description "获取项目列表 基础API"
- * @param params
- */
-export function getProjectList(params: components.GetProjectListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/project/list`, params)
-}
-
-/**
- * @description "获取项目枚举列表 基础API"
- * @param req
- */
-export function getProjectEnums(req: components.GetProjectEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/project/enums`, req)
 }
 
 /**

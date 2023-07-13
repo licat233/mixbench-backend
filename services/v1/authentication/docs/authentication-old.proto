@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package authentication_proto;
+
+option go_package = "./authentication_pb";
+
+message CaptchaBgColor {
+  uint32 r = 1;
+  uint32 g = 2;
+  uint32 b = 3;
+  uint32 a = 4;
+}
+
+message GetCaptchaReq {
+  int32 height = 1;
+  int32 width = 2;
+  CaptchaBgColor bg_color = 3;
+}
+
+message GetCaptchaResp {
+  string captcha_id = 1;
+  string base64_image = 2;
+}
+
+message VerifyCaptchaReq {
+  string captcha_id = 1;
+  string solution = 2;
+}
+
+message VerifyCaptchaResp {
+  bool success = 1;
+}
+
+message SendEmailCaptchaReq {
+  string email = 1;
+  string account = 2;
+  string datetime = 3;
+  string address = 4;
+  string ip = 5;
+}
+
+message SendEmailCaptchaResp {
+  string captcha_id = 1;
+  int64 expires_at = 2; //验证码过期时间
+}
+
+message VerifyEmailCaptchaReq {
+  string email = 1;
+  string captcha_id = 3;
+  string solution = 2;
+}
+
+message VerifyEmailCaptchaResp {
+  bool success = 1;
+}
+
+message GenTokenReq {
+
+}
+
+message GenTokenResp {
+
+}
+
+message AuthReq {
+  string token = 1;
+}
+message AuthResp {
+  bool ok = 1;
+}
+
+service Authentication {
+  //获取数学验证码
+  rpc GetMathCaptcha (GetCaptchaReq) returns (GetCaptchaResp);
+
+  //校验验证码
+  rpc VerifyCaptcha (VerifyCaptchaReq) returns (VerifyCaptchaResp);
+
+  //发送邮箱验证码
+  rpc SendEmailCaptcha (SendEmailCaptchaReq) returns (SendEmailCaptchaResp);
+
+  //校验邮箱验证码
+  rpc VerifyEmailCaptcha (VerifyEmailCaptchaReq) returns (VerifyEmailCaptchaResp);
+
+  //生成jwt-token
+  rpc GenToken (GenTokenReq) returns (GenTokenResp);
+
+  //jwt鉴权
+  rpc Auth (AuthReq) returns (AuthResp);
+}

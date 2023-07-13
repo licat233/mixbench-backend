@@ -76,6 +76,7 @@ func MdAdminerToApiAdminer(md *model.Adminer) *types.Adminer {
 		Email:        md.Email,
 		Status:       md.Status,
 		IsSuperAdmin: md.IsSuperAdmin,
+		ProjectId:    md.ProjectId,
 		LoginCount:   md.LoginCount,
 		LastLogin:    md.LastLogin.Unix(),
 	}
@@ -107,6 +108,7 @@ func PbAdminerToApiAdminer(pb *admin_pb.Adminer) *types.Adminer {
 		Email:        pb.Email,
 		Status:       pb.Status,
 		IsSuperAdmin: pb.IsSuperAdmin,
+		ProjectId:    pb.ProjectId,
 		LoginCount:   pb.LoginCount,
 		LastLogin:    pb.LastLogin,
 	}
@@ -119,6 +121,64 @@ func PbAdminers2ApiAdminers(pbList []*admin_pb.Adminer) []*types.Adminer {
 	data := make([]*types.Adminer, 0)
 	for _, v := range pbList {
 		data = append(data, PbAdminerToApiAdminer(v))
+	}
+	return data
+}
+
+func MdCampaignToApiCampaign(md *model.Campaign) *types.Campaign {
+	if md == nil {
+		return nil
+	}
+	return &types.Campaign{
+		Id:        md.Id,
+		Uuid:      md.Uuid,
+		Name:      md.Name,
+		ProjectId: md.ProjectId,
+		Status:    md.Status,
+		Pattern:   md.Pattern,
+		MaxCount:  md.MaxCount,
+		MaxPrizes: md.MaxPrizes,
+		StartTime: md.StartTime.Unix(),
+		EndTime:   md.EndTime.Unix(),
+	}
+}
+
+func MdCampaigns2ApiCampaigns(mdList []*model.Campaign) []*types.Campaign {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Campaign, 0)
+	for _, v := range mdList {
+		data = append(data, MdCampaignToApiCampaign(v))
+	}
+	return data
+}
+
+func PbCampaignToApiCampaign(pb *admin_pb.Campaign) *types.Campaign {
+	if pb == nil {
+		return nil
+	}
+	return &types.Campaign{
+		Id:        pb.Id,
+		Uuid:      pb.Uuid,
+		Name:      pb.Name,
+		ProjectId: pb.ProjectId,
+		Status:    pb.Status,
+		Pattern:   pb.Pattern,
+		MaxCount:  pb.MaxCount,
+		MaxPrizes: pb.MaxPrizes,
+		StartTime: pb.StartTime,
+		EndTime:   pb.EndTime,
+	}
+}
+
+func PbCampaigns2ApiCampaigns(pbList []*admin_pb.Campaign) []*types.Campaign {
+	if pbList == nil {
+		return nil
+	}
+	data := make([]*types.Campaign, 0)
+	for _, v := range pbList {
+		data = append(data, PbCampaignToApiCampaign(v))
 	}
 	return data
 }
@@ -165,6 +225,58 @@ func PbProjects2ApiProjects(pbList []*admin_pb.Project) []*types.Project {
 	data := make([]*types.Project, 0)
 	for _, v := range pbList {
 		data = append(data, PbProjectToApiProject(v))
+	}
+	return data
+}
+
+func MdWebToApiWeb(md *model.Web) *types.Web {
+	if md == nil {
+		return nil
+	}
+	return &types.Web{
+		Id:          md.Id,
+		Uuid:        md.Uuid,
+		ProjectId:   md.ProjectId,
+		Url:         md.Url,
+		Host:        md.Host,
+		Description: md.Description,
+		Code:        md.Code,
+	}
+}
+
+func MdWebs2ApiWebs(mdList []*model.Web) []*types.Web {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Web, 0)
+	for _, v := range mdList {
+		data = append(data, MdWebToApiWeb(v))
+	}
+	return data
+}
+
+func PbWebToApiWeb(pb *admin_pb.Web) *types.Web {
+	if pb == nil {
+		return nil
+	}
+	return &types.Web{
+		Id:          pb.Id,
+		Uuid:        pb.Uuid,
+		ProjectId:   pb.ProjectId,
+		Url:         pb.Url,
+		Host:        pb.Host,
+		Description: pb.Description,
+		Code:        pb.Code,
+	}
+}
+
+func PbWebs2ApiWebs(pbList []*admin_pb.Web) []*types.Web {
+	if pbList == nil {
+		return nil
+	}
+	data := make([]*types.Web, 0)
+	for _, v := range pbList {
+		data = append(data, PbWebToApiWeb(v))
 	}
 	return data
 }

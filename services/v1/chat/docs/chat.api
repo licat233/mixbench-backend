@@ -8,11 +8,7 @@ info (
 
 // ------------------------------ Import Start ------------------------------
 
-import "chatRecord.api";
-import "ipblack.api";
-import "kefu.api";
 import "message.api";
-import "project.api";
 import "messageConfig.api";
 import "visitor.api";
 
@@ -158,9 +154,13 @@ type VisitorListReq {
   Keyword  string `form:"keyword,optional"`             //关键词，可选
 }
 
-type transferVisitorReq {
+type TransferVisitorReq {
   VisitorId int64 `json:"visitorId,optional"` //转移的游客id
   KefuId    int64 `json:"kefuId,optional"`    //接待游客的客服id
+}
+
+type ConnWebsocketReq {
+  Token string `form:"token,optional"`
 }
 
 //[custom struct end]
@@ -179,9 +179,9 @@ service chat {
   @handler VisitorLogin
   post /visitorLogin(VisitorLoginReq) returns(BaseResp)
 
-  @doc "客服登录"
-  @handler KefuLogin
-  post /kefuLogin(KefuLoginReq) returns(BaseResp)
+  // @doc "客服登录"
+  // @handler KefuLogin
+  // post /kefuLogin(KefuLoginReq) returns(BaseResp)
 
   @doc "测试"
   @handler Test
@@ -195,7 +195,7 @@ service chat {
 service chat {
   @doc "visitor建立ws连接"
   @handler VisitorServer
-  get /visitor
+  get /visitor(ConnWebsocketReq)
 }
 
 @server(
@@ -205,7 +205,7 @@ service chat {
 service chat {
   @doc "kefu建立ws连接"
   @handler KefuServer
-  get /kefu
+  get /kefu(ConnWebsocketReq)
 }
 
 @server(
@@ -223,7 +223,7 @@ service chat {
 
   @doc "将游客转接给其他客服"
   @handler TransferVisitor
-  post /transferVisitor(transferVisitorReq) returns(BaseResp)
+  post /transferVisitor(TransferVisitorReq) returns(BaseResp)
 }
 
 //[custom service end]

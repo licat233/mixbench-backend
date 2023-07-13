@@ -2,7 +2,6 @@ package baselogic
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"mixbench/common/errorx"
@@ -27,17 +26,8 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 	}
 }
 
-// 更新管理员，
+// 更新管理员
 func (l *PutAdminerLogic) PutAdminer(in *admin_pb.PutAdminerReq) (*admin_pb.PutAdminerResp, error) {
-	// 不更新密码，密码需要通过单独端口进行更新
-	adminer, err := l.svcCtx.AdminerModel.FindById(l.ctx, in.Id)
-	if err != nil && err != model.ErrNotFound {
-		l.Logger.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return nil, errorx.ExtRpcErr(errors.New("the adminer does not exist"))
-	}
 	data := &model.Adminer{
 		Id:           in.Id,
 		Uuid:         in.Uuid,
@@ -45,10 +35,11 @@ func (l *PutAdminerLogic) PutAdminer(in *admin_pb.PutAdminerReq) (*admin_pb.PutA
 		Avatar:       in.Avatar,
 		Access:       in.Access,
 		Passport:     in.Passport,
-		Password:     adminer.Password,
+		Password:     in.Password,
 		Email:        in.Email,
 		Status:       in.Status,
 		IsSuperAdmin: in.IsSuperAdmin,
+		ProjectId:    in.ProjectId,
 		LoginCount:   in.LoginCount,
 		LastLogin:    time.Unix(in.LastLogin, 0).Local(),
 	}

@@ -2,8 +2,6 @@ package asynqmq
 
 import (
 	"context"
-	"encoding/json"
-	"mixbench/services/v1/chat/model"
 	"mixbench/services/v1/chat/mq/types"
 
 	"github.com/hibiken/asynq"
@@ -24,22 +22,14 @@ func NewAsynqProducer(ctx context.Context, redisClientOpt *asynq.RedisClientOpt)
 	}
 }
 
-func NewMessageTask(msg model.Message) (*asynq.Task, error) {
-	payload, err := json.Marshal(msg)
-	if err != nil {
-		return nil, err
-	}
-	return asynq.NewTask(types.MessageTypename, payload), nil
-}
-
-func (a *AsynqProducer) AddTask(msg model.Message) error {
-	task, err := NewMessageTask(msg)
-	if err != nil {
-		return err
-	}
-	_, err = a.Client.EnqueueContext(a.ctx, task)
+func (a *AsynqProducer) AddTask(task *asynq.Task) error {
+	_, err := a.Client.EnqueueContext(a.ctx, task)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func NewSendMessageTask(payload []byte) (*asynq.Task, error) {
+	return asynq.NewTask(types.TaskTypeSendMessage, payload), nil
 }

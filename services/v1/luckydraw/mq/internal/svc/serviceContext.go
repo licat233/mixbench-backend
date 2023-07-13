@@ -10,10 +10,10 @@ package svc
 import (
 	"fmt"
 	"mixbench/common/utils"
-	"mixbench/services/v1/luckydraw"
 	"mixbench/services/v1/luckydraw/model"
 	"mixbench/services/v1/luckydraw/mq/asynqmq"
 	"mixbench/services/v1/luckydraw/mq/internal/config"
+	luckydrawClient "mixbench/services/v1/luckydraw/rpc/client"
 
 	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -21,7 +21,7 @@ import (
 
 type ServiceContext struct {
 	Config         config.Config
-	LuckydrawRpc   luckydraw.LuckydrawRpc
+	LuckydrawRpc   *luckydrawClient.LuckydrawRpc
 	UserModel      model.UserModel
 	RedisClientOpt *asynq.RedisClientOpt
 }
@@ -38,7 +38,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 	return &ServiceContext{
 		Config:         c,
-		LuckydrawRpc:   luckydraw.NewLuckydrawRpc(zrpc.MustNewClient(c.LuckydrawRpc)),
+		LuckydrawRpc:   luckydrawClient.NewLuckydrawRpc(zrpc.MustNewClient(c.LuckydrawRpc)),
 		UserModel:      model.NewUserModel(sqlConn, c.CacheRedis),
 		RedisClientOpt: redisClientOpt,
 	}

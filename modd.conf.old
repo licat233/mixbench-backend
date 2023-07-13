@@ -64,4 +64,4 @@ services/v1/luckydraw/mq/**/*.go services/v1/luckydraw/model/**/*.go common/**/*
 
 # ======================== luckydraw end ========================
 
-# backup time: 2023-07-11 19:50:27
+# backup time: 2023-07-13 20:18:00

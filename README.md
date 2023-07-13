@@ -24,43 +24,44 @@
 
 ## 系统结构组成
 
-| 类别     | 服务名称      | 暴露端口 | 映射端口    | 说明                                             |
-| -------- | ------------- | -------- | ----------- | ------------------------------------------------ |
-| 数据库   | mysql         | 3306     | -           | mysql数据库                                      |
-| 数据库   | mysqlmanage   | 80       | -           | mysql管理面板 (ui)                               |
-| 缓存库   | redis         | 6379     | -           | redis缓存库                                      |
-| 缓存库   | redismanage   | 80       | -           | redis管理面板(ui)                                |
-| 公网网关 | nginx         | 80,443   | -           | nginx正向代理服务                                |
-| 内网网关 | nginx         | 80,443   | 11080,11443 | nginx反向代理服务                                |
-| 数据中心 | datacenter    | -        | -           | 数据卷容器，存储各个服务生产的数据(目前暂时弃用) |
-| 文件管理 | filebrowser   | 80       | -           | 文件管理服务，用于浏览数据中心文件(ui)           |
-| 链路追踪 | jaeger        | 6831/udp | -           | 接受jaeger.thriftThrift-compact 协议             |
-| 链路追踪 | jaeger        | 6832/udp | -           | 接受jaeger.thriftThrift-binary 协议              |
-| 链路追踪 | jaeger        | 5778     | -           | 服务配置（采样等）                               |
-| 链路追踪 | jaeger        | 16686    | -           | 服务前端 (ui)                                    |
-| 链路追踪 | jaeger        | 14268    | -           | 直接从客户端接受jaeger.thrift协议                |
-| 链路追踪 | jaeger        | 9411     | -           | 兼容 Zipkin 服务（可选）                         |
-| 服务监控 | prometheus    | 9090     | -           | 服务监控系统                                     |
-| 服务监控 | grafana       | 3000     | -           | prometheus服务监控系统 (ui)                      |
-| 数据收集 | elasticsearch | 9200     | -           | http协议连接es使用的端口                         |
-| 数据收集 | elasticsearch | 9300     | -           | tcp客户端连接使用的端口                          |
-| 数据收集 | kibana        | 5601     | -           | 查看elasticsearch数据 (ui)                       |
-| 日志收集 | filebeat      | -        | -           | 收集日志并上报到kafka                            |
-| 日志处理 | go-stash      | -        | -           | 处理kafka中的日志并发送到es                      |
-| 消息队列 | zookeeper     | 2181     | -           | kafka的依赖服务                                  |
-| 消息队列 | kafka         | 9092     | -           | kafka消息队列                                    |
-| 消息队列 | CMAK          | 9000     | -           | 用于管理Apache Kafka集群的工具 (ui)              |
-| 消息队列 | asynqmon      | 8080     | -           | go基于redis实现的消息队列及面板 (ui)             |
-| 核心服务 | app           | -        | -           | modd热编译环境                                   |
-| 核心业务 | admin-api     | 7011     | -           | 管理员API服务                                    |
-| 核心业务 | admin-rpc     | 7012     | -           | 管理员RPC服务                                    |
-| 核心业务 | captcha-api   | 7021     | -           | 验证码API服务                                    |
-| 核心业务 | captcha-rpc   | 7022     | -           | 验证码RPC服务                                    |
-| 核心业务 | luckydraw-api | 7031     | -           | 抽奖API服务                                      |
-| 核心业务 | luckydraw-rpc | 7032     | -           | 抽奖RPC服务                                      |
-| 核心业务 | luckydraw-mq  | 7033     | -           | 抽奖mq服务(kafka或asynq)                         |
-| 核心业务 | chat-api      | 7041     | -           | 客服系统API服务                                  |
-| 核心业务 | chat-mq       | 7043     | -           | 客服系统mq服务(asynq)                            |
+| 类别     | 服务名称           | 暴露端口 | 映射端口    | 说明                                             |
+| -------- | ------------------ | -------- | ----------- | ------------------------------------------------ |
+| 数据库   | mysql              | 3306     | -           | mysql数据库                                      |
+| 数据库   | mysqlmanage        | 80       | -           | mysql管理面板 (ui)                               |
+| 缓存库   | redis              | 6379     | -           | redis缓存库                                      |
+| 缓存库   | redismanage        | 80       | -           | redis管理面板(ui)                                |
+| 公网网关 | nginx              | 80,443   | -           | nginx正向代理服务                                |
+| 内网网关 | nginx              | 80,443   | 11080,11443 | nginx反向代理服务                                |
+| 数据中心 | datacenter         | -        | -           | 数据卷容器，存储各个服务生产的数据(目前暂时弃用) |
+| 文件管理 | filebrowser        | 80       | -           | 文件管理服务，用于浏览数据中心文件(ui)           |
+| 链路追踪 | jaeger             | 6831/udp | -           | 接受jaeger.thriftThrift-compact 协议             |
+| 链路追踪 | jaeger             | 6832/udp | -           | 接受jaeger.thriftThrift-binary 协议              |
+| 链路追踪 | jaeger             | 5778     | -           | 服务配置（采样等）                               |
+| 链路追踪 | jaeger             | 16686    | -           | 服务前端 (ui)                                    |
+| 链路追踪 | jaeger             | 14268    | -           | 直接从客户端接受jaeger.thrift协议                |
+| 链路追踪 | jaeger             | 9411     | -           | 兼容 Zipkin 服务（可选）                         |
+| 服务监控 | prometheus         | 9090     | -           | 服务监控系统                                     |
+| 服务监控 | grafana            | 3000     | -           | prometheus服务监控系统 (ui)                      |
+| 数据收集 | elasticsearch      | 9200     | -           | http协议连接es使用的端口                         |
+| 数据收集 | elasticsearch      | 9300     | -           | tcp客户端连接使用的端口                          |
+| 数据收集 | kibana             | 5601     | -           | 查看elasticsearch数据 (ui)                       |
+| 日志收集 | filebeat           | -        | -           | 收集日志并上报到kafka                            |
+| 日志处理 | go-stash           | -        | -           | 处理kafka中的日志并发送到es                      |
+| 消息队列 | zookeeper          | 2181     | -           | kafka的依赖服务                                  |
+| 消息队列 | kafka              | 9092     | -           | kafka消息队列                                    |
+| 消息队列 | CMAK               | 9000     | -           | 用于管理Apache Kafka集群的工具 (ui)              |
+| 消息队列 | asynqmon           | 8080     | -           | go基于redis实现的消息队列及面板 (ui)             |
+| 核心服务 | app                | -        | -           | modd热编译环境                                   |
+| 核心业务 | admin-api          | 7011     | -           | 管理员API服务                                    |
+| 核心业务 | admin-rpc          | 7012     | -           | 管理员RPC服务                                    |
+| 核心业务 | authentication-api | 7021     | -           | 鉴权API服务                                      |
+| 核心业务 | authentication-rpc | 7022     | -           | 鉴权RPC服务                                      |
+| 核心业务 | authentication-mq  | 7023     | -           | 鉴权MQ服务(asynq) DB=2                           |
+| 核心业务 | luckydraw-api      | 7031     | -           | 抽奖API服务                                      |
+| 核心业务 | luckydraw-rpc      | 7032     | -           | 抽奖RPC服务                                      |
+| 核心业务 | luckydraw-mq       | 7033     | -           | 抽奖mq服务(kafka或asynq)                         |
+| 核心业务 | chat-api           | 7041     | -           | 客服系统API服务(redisDB=4)                       |
+| 核心业务 | chat-mq            | 7043     | -           | 客服系统mq服务(asynq redisDB=3)                  |
 
 ## 说明
 
@@ -241,7 +242,7 @@ genzero -h
 
 1. 定义消息格式：确定客户与客服之间传递的消息格式，包括消息内容、发送者、接收者、时间戳等信息。
 
-2. 选择消息队列技术：根据需求选择合适的消息队列技术。常见的消息队列技术有 RabbitMQ、Apache Kafka、ActiveMQ 等。
+2. 选择消息队列技术：根据需求选择合适的消息队列技术。常见的消息队列技术有 RabbitMQ、Apache Kafka、ActiveMQ 等（使用redis内容分发服务）。
 
 3. 创建消息队列：在选定的消息队列技术上创建一个消息队列或主题，用于存储客户和客服之间的消息。
 

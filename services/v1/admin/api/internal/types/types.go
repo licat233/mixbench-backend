@@ -143,6 +143,7 @@ type Adminer struct {
 	Email        string `json:"email"`        //邮箱
 	Status       int64  `json:"status"`       //账号状态，是否可用
 	IsSuperAdmin int64  `json:"isSuperAdmin"` //是否为超级管理员
+	ProjectId    int64  `json:"projectId"`    //项目id
 	LoginCount   int64  `json:"loginCount"`   //登录次数
 	LastLogin    int64  `json:"lastLogin"`    //最后一次登录时间
 }
@@ -156,6 +157,7 @@ type AddAdminerReq struct {
 	Email        string `json:"email"`        //邮箱
 	Status       int64  `json:"status"`       //账号状态，是否可用
 	IsSuperAdmin int64  `json:"isSuperAdmin"` //是否为超级管理员
+	ProjectId    int64  `json:"projectId"`    //项目id
 	LoginCount   int64  `json:"loginCount"`   //登录次数
 	LastLogin    int64  `json:"lastLogin"`    //最后一次登录时间
 }
@@ -171,6 +173,7 @@ type PutAdminerReq struct {
 	Email        string `json:"email"`        //邮箱
 	Status       int64  `json:"status"`       //账号状态，是否可用
 	IsSuperAdmin int64  `json:"isSuperAdmin"` //是否为超级管理员
+	ProjectId    int64  `json:"projectId"`    //项目id
 	LoginCount   int64  `json:"loginCount"`   //登录次数
 	LastLogin    int64  `json:"lastLogin"`    //最后一次登录时间
 }
@@ -198,6 +201,7 @@ type GetAdminerListReq struct {
 	Email        string `form:"email,optional"`                   //邮箱
 	Status       int64  `form:"status,optional,default=-1"`       //账号状态，是否可用
 	IsSuperAdmin int64  `form:"isSuperAdmin,optional,default=-1"` //是否为超级管理员
+	ProjectId    int64  `form:"projectId,optional,default=-1"`    //项目id
 	LoginCount   int64  `form:"loginCount,optional,default=-1"`   //登录次数
 	LastLogin    int64  `form:"lastLogin,optional,default=-1"`    //最后一次登录时间
 }
@@ -228,6 +232,72 @@ type ForgotPasswordReq struct {
 	Email     string `json:"email"`     // 邮箱
 	CaptchaId string `json:"captchaId"` //验证码ID
 	Solution  string `json:"solution"`  //验证码答案
+}
+
+type Campaign struct {
+	Id        int64  `json:"id"`        //表主键
+	Uuid      string `json:"uuid"`      //UUID
+	Name      string `json:"name"`      //活动名称
+	ProjectId int64  `json:"projectId"` //项目id
+	Status    int64  `json:"status"`    //活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64  `json:"pattern"`   //方案: 0会员制，1公开制，2会员需授权
+	MaxCount  int64  `json:"maxCount"`  //最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"maxPrizes"` //最大抽奖次数：-1表示无限制，0表示不可中奖
+	StartTime int64  `json:"startTime"` //活动开始时间
+	EndTime   int64  `json:"endTime"`   //活动结束时间
+}
+
+type AddCampaignReq struct {
+	Name      string `json:"name"`      //活动名称
+	ProjectId int64  `json:"projectId"` //项目id
+	Status    int64  `json:"status"`    //活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64  `json:"pattern"`   //方案: 0会员制，1公开制，2会员需授权
+	MaxCount  int64  `json:"maxCount"`  //最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"maxPrizes"` //最大抽奖次数：-1表示无限制，0表示不可中奖
+	StartTime int64  `json:"startTime"` //活动开始时间
+	EndTime   int64  `json:"endTime"`   //活动结束时间
+}
+
+type PutCampaignReq struct {
+	Id        int64  `json:"id"`        //表主键
+	Uuid      string `json:"uuid"`      //UUID
+	Name      string `json:"name"`      //活动名称
+	ProjectId int64  `json:"projectId"` //项目id
+	Status    int64  `json:"status"`    //活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64  `json:"pattern"`   //方案: 0会员制，1公开制，2会员需授权
+	MaxCount  int64  `json:"maxCount"`  //最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `json:"maxPrizes"` //最大抽奖次数：-1表示无限制，0表示不可中奖
+	StartTime int64  `json:"startTime"` //活动开始时间
+	EndTime   int64  `json:"endTime"`   //活动结束时间
+}
+
+type DelCampaignReq struct {
+	Id int64 `json:"id"` //活动 ID
+}
+
+type GetCampaignReq struct {
+	Id int64 `json:"id"` //活动 ID
+}
+
+type GetCampaignListReq struct {
+	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
+	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
+	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
+	Keyword   string `form:"keyword,optional"`              //关键词，可选
+	Id        int64  `form:"id,optional,default=-1"`        //表主键
+	Uuid      string `form:"uuid,optional"`                 //UUID
+	Name      string `form:"name,optional"`                 //活动名称
+	ProjectId int64  `form:"projectId,optional,default=-1"` //项目id
+	Status    int64  `form:"status,optional,default=-1"`    //活动状态，是否在举办，默认关闭，需手动开启
+	Pattern   int64  `form:"pattern,optional,default=-1"`   //方案: 0会员制，1公开制，2会员需授权
+	MaxCount  int64  `form:"maxCount,optional,default=-1"`  //最大抽奖次数：-1表示无限制，0表示不可抽奖
+	MaxPrizes int64  `form:"maxPrizes,optional,default=-1"` //最大抽奖次数：-1表示无限制，0表示不可中奖
+	StartTime int64  `form:"startTime,optional,default=-1"` //活动开始时间
+	EndTime   int64  `form:"endTime,optional,default=-1"`   //活动结束时间
+}
+
+type GetCampaignEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }
 
 type Project struct {
@@ -269,5 +339,59 @@ type GetProjectListReq struct {
 }
 
 type GetProjectEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
+type Web struct {
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	ProjectId   int64  `json:"projectId"`   //项目id
+	Url         string `json:"url"`         //连接
+	Host        string `json:"host"`        //域名
+	Description string `json:"description"` //备注
+	Code        string `json:"code"`        //代码
+}
+
+type AddWebReq struct {
+	ProjectId   int64  `json:"projectId"`   //项目id
+	Url         string `json:"url"`         //连接
+	Host        string `json:"host"`        //域名
+	Description string `json:"description"` //备注
+	Code        string `json:"code"`        //代码
+}
+
+type PutWebReq struct {
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	ProjectId   int64  `json:"projectId"`   //项目id
+	Url         string `json:"url"`         //连接
+	Host        string `json:"host"`        //域名
+	Description string `json:"description"` //备注
+	Code        string `json:"code"`        //代码
+}
+
+type DelWebReq struct {
+	Id int64 `json:"id"` //网站 ID
+}
+
+type GetWebReq struct {
+	Id int64 `json:"id"` //网站 ID
+}
+
+type GetWebListReq struct {
+	PageSize    int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
+	Page        int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
+	Current     int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
+	Keyword     string `form:"keyword,optional"`              //关键词，可选
+	Id          int64  `form:"id,optional,default=-1"`        //表主键
+	Uuid        string `form:"uuid,optional"`                 //UUID
+	ProjectId   int64  `form:"projectId,optional,default=-1"` //项目id
+	Url         string `form:"url,optional"`                  //连接
+	Host        string `form:"host,optional"`                 //域名
+	Description string `form:"description,optional"`          //备注
+	Code        string `form:"code,optional"`                 //代码
+}
+
+type GetWebEnumsReq struct {
 	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }

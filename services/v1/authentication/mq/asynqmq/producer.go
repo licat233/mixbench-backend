@@ -39,5 +39,5 @@ func NewSendEmailCaptchaTask(payload []byte) (*asynq.Task, error) {
 	// if err != nil {
 	// 	return nil, err
 	// }
-	return asynq.NewTask(types.SendEmailCaptchaKey, payload), nil
+	return asynq.NewTask(types.TaskTypeSendEmailCaptcha, payload), nil
 }

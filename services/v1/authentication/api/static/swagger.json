@@ -1,0 +1,1022 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/api/authentication/auth": {
+      "get": {
+        "summary": "jwt鉴权接口",
+        "operationId": "auth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "authentication"
+        ]
+      }
+    },
+    "/v1/api/authentication/captcha/email": {
+      "post": {
+        "summary": "向邮箱发送验证码",
+        "operationId": "SendEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "获取邮箱验证码请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailCaptchaReq"
+            }
+          }
+        ],
+        "tags": [
+          "captcha"
+        ]
+      }
+    },
+    "/v1/api/authentication/captcha/email/process": {
+      "post": {
+        "summary": "邮箱验证码校验",
+        "operationId": "VerifyEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/EmailCaptchaResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "邮箱验证码校验请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailCaptchaVerifyReq"
+            }
+          }
+        ],
+        "tags": [
+          "captcha"
+        ]
+      }
+    },
+    "/v1/api/authentication/captcha/math": {
+      "post": {
+        "summary": "获取数学验证码",
+        "operationId": "GetMathCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "图片验证码请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CaptchaReq"
+            }
+          }
+        ],
+        "tags": [
+          "captcha"
+        ]
+      }
+    },
+    "/v1/api/authentication/captcha/process": {
+      "post": {
+        "summary": "验证码校验",
+        "operationId": "VerifyCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "校验验证码请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProcessCaptchaReq"
+            }
+          }
+        ],
+        "tags": [
+          "captcha"
+        ]
+      }
+    },
+    "/v1/api/authentication/captcha/show": {
+      "get": {
+        "summary": "验证码图片",
+        "operationId": "ShowCaptchaImage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "tags": [
+          "captcha"
+        ]
+      }
+    },
+    "/v1/api/authentication/ipblack/": {
+      "get": {
+        "summary": "获取IP黑名单 基础API",
+        "operationId": "GetIpblack",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "IP黑名单 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ipblack"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "删除IP黑名单 基础API",
+        "operationId": "DelIpblack",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除IP黑名单请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelIpblackReq"
+            }
+          }
+        ],
+        "tags": [
+          "ipblack"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "添加IP黑名单 基础API",
+        "operationId": "AddIpblack",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加IP黑名单请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddIpblackReq"
+            }
+          }
+        ],
+        "tags": [
+          "ipblack"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "更新IP黑名单 基础API",
+        "operationId": "PutIpblack",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新IP黑名单请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutIpblackReq"
+            }
+          }
+        ],
+        "tags": [
+          "ipblack"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/authentication/ipblack/enums": {
+      "get": {
+        "summary": "获取IP黑名单枚举列表 基础API",
+        "operationId": "GetIpblackEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "ipblack"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/authentication/ipblack/list": {
+      "get": {
+        "summary": "获取IP黑名单列表 基础API",
+        "operationId": "GetIpblackList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "ip",
+            "description": "IP",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ipblack"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/authentication/test": {
+      "get": {
+        "summary": "预留的调试端口",
+        "operationId": "test",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "数据",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "authentication"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AddIpblackReq": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "description": "IP"
+        }
+      },
+      "title": "AddIpblackReq",
+      "required": [
+        "ip"
+      ]
+    },
+    "AuthReq": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "title": "AuthReq"
+    },
+    "BaseResp": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "响应状态"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "响应状态，用于对接umijs"
+        },
+        "message": {
+          "type": "string",
+          "description": "给予的提示信息"
+        },
+        "data": {
+          "type": "object",
+          "description": "【选填】响应的业务数据"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】数据总个数"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】单页数量"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】当前页码，用于对接umijs"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】当前页码"
+        },
+        "totalPage": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】自增项，总共有多少页，根据前端的pageSize来计算"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】错误类型代码：400错误请求，401未授权，500服务器内部错误，200成功"
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "【选填】向用户显示消息"
+        },
+        "traceMessage": {
+          "type": "string",
+          "description": "【选填】调试错误信息，请勿在生产环境下使用，可有可无"
+        },
+        "showType": {
+          "type": "integer",
+          "format": "int64",
+          "description": "【选填】错误显示类型：0.不提示错误;1.警告信息提示；2.错误信息提示；4.通知提示；9.页面跳转"
+        },
+        "traceId": {
+          "type": "string",
+          "description": "【选填】方便后端故障排除：唯一的请求ID"
+        },
+        "host": {
+          "type": "string",
+          "description": "【选填】方便后端故障排除：当前访问服务器的主机"
+        }
+      },
+      "title": "BaseResp",
+      "required": [
+        "status",
+        "success"
+      ]
+    },
+    "ByIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "主键"
+        }
+      },
+      "title": "ByIdReq",
+      "required": [
+        "id"
+      ]
+    },
+    "CaptchaBgColor": {
+      "type": "object",
+      "properties": {
+        "R": {
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
+        },
+        "G": {
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
+        },
+        "B": {
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
+        },
+        "A": {
+          "type": "integer",
+          "format": "uint8",
+          "default": "254",
+          "maximum": 254
+        }
+      },
+      "title": "CaptchaBgColor"
+    },
+    "CaptchaInfo": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "验证码Key"
+        },
+        "base64Image": {
+          "type": "string",
+          "description": "base46图片数据"
+        }
+      },
+      "title": "CaptchaInfo",
+      "required": [
+        "captchaId",
+        "base64Image"
+      ]
+    },
+    "CaptchaReq": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "default": "60"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "default": "200"
+        },
+        "BgColor": {
+          "$ref": "#/definitions/CaptchaBgColor"
+        }
+      },
+      "title": "CaptchaReq",
+      "required": [
+        "BgColor"
+      ]
+    },
+    "CaptchaResp": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string",
+          "description": "captcha id"
+        },
+        "expiresAt": {
+          "type": "integer",
+          "format": "int64",
+          "description": "expires time"
+        }
+      },
+      "title": "CaptchaResp",
+      "required": [
+        "captchaId",
+        "expiresAt"
+      ]
+    },
+    "DelIpblackReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "IP黑名单 ID"
+        }
+      },
+      "title": "DelIpblackReq",
+      "required": [
+        "id"
+      ]
+    },
+    "EmailCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "接收验证码的邮箱地址"
+        }
+      },
+      "title": "EmailCaptchaReq",
+      "required": [
+        "captchaId",
+        "solution",
+        "email"
+      ]
+    },
+    "EmailCaptchaResp": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "EmailCaptchaResp",
+      "required": [
+        "captchaId",
+        "expiresAt"
+      ]
+    },
+    "EmailCaptchaVerifyReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "captchaId": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        }
+      },
+      "title": "EmailCaptchaVerifyReq",
+      "required": [
+        "email",
+        "captchaId",
+        "solution"
+      ]
+    },
+    "Enum": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "object",
+          "description": "名"
+        },
+        "value": {
+          "type": "object",
+          "description": "值"
+        }
+      },
+      "title": "Enum",
+      "required": [
+        "label",
+        "value"
+      ]
+    },
+    "Enums": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Enum"
+          },
+          "description": "枚举列表数据"
+        }
+      },
+      "title": "Enums",
+      "required": [
+        "list"
+      ]
+    },
+    "GetIpblackEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetIpblackEnumsReq"
+    },
+    "GetIpblackListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP"
+        }
+      },
+      "title": "GetIpblackListReq"
+    },
+    "GetIpblackReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "IP黑名单 ID"
+        }
+      },
+      "title": "GetIpblackReq",
+      "required": [
+        "id"
+      ]
+    },
+    "Ipblack": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP"
+        }
+      },
+      "title": "Ipblack",
+      "required": [
+        "id",
+        "ip"
+      ]
+    },
+    "JwtToken": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "token"
+        },
+        "accessExpire": {
+          "type": "integer",
+          "format": "int64",
+          "description": "expire"
+        },
+        "refreshAfter": {
+          "type": "integer",
+          "format": "int64",
+          "description": "refresh at"
+        }
+      },
+      "title": "JwtToken",
+      "required": [
+        "accessToken",
+        "accessExpire",
+        "refreshAfter"
+      ]
+    },
+    "ListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        }
+      },
+      "title": "ListReq"
+    },
+    "NilReq": {
+      "type": "object",
+      "title": "NilReq"
+    },
+    "NilResp": {
+      "type": "object",
+      "title": "NilResp"
+    },
+    "Option": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "名"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "值"
+        }
+      },
+      "title": "Option",
+      "required": [
+        "title",
+        "value"
+      ]
+    },
+    "Options": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Option"
+          },
+          "description": "选项列表数据"
+        }
+      },
+      "title": "Options",
+      "required": [
+        "list"
+      ]
+    },
+    "ProcessCaptchaReq": {
+      "type": "object",
+      "properties": {
+        "captchaId": {
+          "type": "string"
+        },
+        "solution": {
+          "type": "string"
+        }
+      },
+      "title": "ProcessCaptchaReq",
+      "required": [
+        "captchaId",
+        "solution"
+      ]
+    },
+    "PutIpblackReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP"
+        }
+      },
+      "title": "PutIpblackReq",
+      "required": [
+        "id",
+        "ip"
+      ]
+    },
+    "Resp": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "object",
+          "description": "响应数据"
+        }
+      },
+      "title": "Resp",
+      "required": [
+        "body"
+      ]
+    },
+    "TreeOption": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "名"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "description": "值"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TreeOption"
+          },
+          "description": "子集"
+        }
+      },
+      "title": "TreeOption",
+      "required": [
+        "title",
+        "value"
+      ]
+    },
+    "TreeOptions": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TreeOption"
+          },
+          "description": "树形选项列表数据"
+        }
+      },
+      "title": "TreeOptions",
+      "required": [
+        "list"
+      ]
+    },
+    "testReq": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "数据"
+        }
+      },
+      "title": "testReq"
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 package asynqmq
 
 const (
-	RedisDB = 1
+	RedisDB = 3
 )

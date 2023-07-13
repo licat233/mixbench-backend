@@ -68,3 +68,15 @@ func KeyValueValidator(ctx context.Context, redisClient *redis.Redis, key string
 
 	return false, nil
 }
+
+// NewRedis returns a Redis with given options.
+func NewRedis(conf redis.RedisConf, opts ...redis.Option) (*redis.Redis, error) {
+	r, err := redis.NewRedis(conf, opts...)
+	if err != nil {
+		panic(fmt.Errorf("NewRedis失败: %s", err))
+	}
+	if !r.Ping() {
+		panic(errors.New("连接redis数据库失败"))
+	}
+	return r, err
+}

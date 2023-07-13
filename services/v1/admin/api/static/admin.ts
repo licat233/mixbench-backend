@@ -197,6 +197,54 @@ export function forgotPassword(req: components.ForgotPasswordReq) {
 }
 
 /**
+ * @description "添加活动 基础API"
+ * @param req
+ */
+export function addCampaign(req: components.AddCampaignReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/campaign`, req)
+}
+
+/**
+ * @description "更新活动 基础API"
+ * @param req
+ */
+export function putCampaign(req: components.PutCampaignReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/campaign`, req)
+}
+
+/**
+ * @description "获取活动 基础API"
+ * @param req
+ */
+export function getCampaign(req: components.GetCampaignReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/campaign`, req)
+}
+
+/**
+ * @description "删除活动 基础API"
+ * @param req
+ */
+export function delCampaign(req: components.DelCampaignReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/campaign`, req)
+}
+
+/**
+ * @description "获取活动列表 基础API"
+ * @param params
+ */
+export function getCampaignList(params: components.GetCampaignListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/campaign/list`, params)
+}
+
+/**
+ * @description "获取活动枚举列表 基础API"
+ * @param req
+ */
+export function getCampaignEnums(req: components.GetCampaignEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/campaign/enums`, req)
+}
+
+/**
  * @description "添加项目 基础API"
  * @param req
  */
@@ -242,6 +290,54 @@ export function getProjectList(params: components.GetProjectListReqParams) {
  */
 export function getProjectEnums(req: components.GetProjectEnumsReq) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/project/enums`, req)
+}
+
+/**
+ * @description "添加网站 基础API"
+ * @param req
+ */
+export function addWeb(req: components.AddWebReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/web`, req)
+}
+
+/**
+ * @description "更新网站 基础API"
+ * @param req
+ */
+export function putWeb(req: components.PutWebReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/web`, req)
+}
+
+/**
+ * @description "获取网站 基础API"
+ * @param req
+ */
+export function getWeb(req: components.GetWebReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/web`, req)
+}
+
+/**
+ * @description "删除网站 基础API"
+ * @param req
+ */
+export function delWeb(req: components.DelWebReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/web`, req)
+}
+
+/**
+ * @description "获取网站列表 基础API"
+ * @param params
+ */
+export function getWebList(params: components.GetWebListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/web/list`, params)
+}
+
+/**
+ * @description "获取网站枚举列表 基础API"
+ * @param req
+ */
+export function getWebEnums(req: components.GetWebEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/web/enums`, req)
 }
 
 /**

@@ -25,7 +25,9 @@ type (
 		FindsToVisitorByVisitorIds(ctx context.Context, visitorIds []int64) ([]*Message, error)
 		FindsToKefuByKefuIds(ctx context.Context, kefuIds []int64) ([]*Message, error)
 		FindsToKefuByKefuId(ctx context.Context, kefuId int64) ([]*Message, error)
+		FindsToKefuByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
 		FindsToVisitorByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
+		FindsToVisitorByKefuId(ctx context.Context, kefuId int64) ([]*Message, error)
 	}
 
 	customMessageModel struct {
@@ -79,7 +81,7 @@ func (m *customMessageModel) FindsToVisitorByVisitorIds(ctx context.Context, vis
 	return resp, err
 }
 
-// 查找游客发给客服的消息
+// 查找游客发给某个客服的消息
 func (m *customMessageModel) FindsToKefuByKefuId(ctx context.Context, kefuId int64) ([]*Message, error) {
 	var resp = make([]*Message, 0)
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `msg_type` = '0' and `is_deleted` = '0' ", messageRows, m.table)
@@ -87,10 +89,26 @@ func (m *customMessageModel) FindsToKefuByKefuId(ctx context.Context, kefuId int
 	return resp, err
 }
 
-// 查找客服发给游客的信息
+// 查找某个游客发给客服的消息
+func (m *customMessageModel) FindsToKefuByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `msg_type` = '0' and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, visitorId)
+	return resp, err
+}
+
+// 查找客服发给某个游客的信息
 func (m *customMessageModel) FindsToVisitorByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error) {
 	var resp = make([]*Message, 0)
 	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `msg_type` = '1' and `is_deleted` = '0' ", messageRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, visitorId)
+	return resp, err
+}
+
+// 查找某个客服发给游客的信息
+func (m *customMessageModel) FindsToVisitorByKefuId(ctx context.Context, kefuId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `msg_type` = '1' and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
 	return resp, err
 }

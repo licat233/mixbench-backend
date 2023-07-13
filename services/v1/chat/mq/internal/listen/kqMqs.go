@@ -13,6 +13,6 @@ import (
 // pub sub use kq (kafka)
 func KqMqs(c config.Config, ctx context.Context, svcCtx *svc.ServiceContext) []service.Service {
 	return []service.Service{
-		kq.MustNewQueue(c.KqConf, mqKq.NewGoodluckStatusMq(ctx, svcCtx)),
+		kq.MustNewQueue(c.KqConf, mqKq.NewSendMessageMq(ctx, svcCtx)),
 	}
 }
