@@ -9,6 +9,7 @@ package svc
 
 import (
 	"fmt"
+	"log"
 	"mixbench/common/utils"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/internal/config"
@@ -29,7 +30,7 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
 	if err != nil {
-		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
 	return &ServiceContext{
 		Config: c,

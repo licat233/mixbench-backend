@@ -28,6 +28,9 @@ type user interface {
 	GetProjectId() int64
 	IsKefu() bool
 	IsVisitor() bool
+	// NewMessage(content string, receiverId int64) *model.Message
+	// GetReceiverId() int64
+	// SetReceiverId(receiverId int64)
 }
 
 type client struct {
@@ -38,8 +41,7 @@ type client struct {
 
 	conn *websocket.Conn
 
-	stop   chan bool //关闭信号
-	status bool      //状态
+	stop chan bool //关闭信号
 
 	w http.ResponseWriter
 	r *http.Request
@@ -92,7 +94,6 @@ func newClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.ResponseW
 }
 
 func (c *client) Close() {
-	c.status = false
 	c.pubsub.Close()
 	c.conn.Close()
 	close(c.stop)
@@ -241,4 +242,88 @@ func (c *client) publishMessage(channel string, message *model.Message) error {
 		return err
 	}
 	return nil
+}
+
+// ws读取
+func (c *client) readPump(payloadHandler payloadHandler) {
+	defer func() {
+		close(c.stop)
+	}()
+
+	for {
+		select {
+		case <-c.stop:
+			return
+		default:
+			_, payload, err := c.conn.ReadMessage()
+			if err != nil {
+				//ws已经关闭
+				return
+			}
+
+			message, err := payloadHandler(payload)
+			if err != nil {
+				//有错误，关闭
+				return
+			}
+			if message == nil {
+				//丢弃
+				continue
+			}
+
+			//改用redis发布方案：
+			if err = c.sendMessage(message); err != nil {
+				c.Logger.Error(err)
+				return
+			}
+		}
+	}
+}
+
+// ws写入
+func (c *client) writePump() {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
+		close(c.stop)
+	}()
+
+	for {
+		select {
+		case <-c.stop:
+			return
+		case msg, ok := <-c.pubsub.Channel():
+			//如果通道已经关闭
+			if !ok {
+				// 关闭ws.conn
+				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
+					if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+						//正常关闭
+						return
+					} else {
+						//异常关闭
+						c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
+						return
+					}
+				}
+				// 已关闭，正常退出
+				return
+			}
+			var message model.Message
+			if err := json.Unmarshal([]byte(msg.Payload), &message); err != nil {
+				//不合规的消息体。丢弃
+				continue
+			}
+			if err := c.writeMessage(&message); err != nil {
+				c.Logger.Error(err)
+				return
+			}
+		case <-ticker.C:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				c.Logger.Error(err)
+				return
+			}
+		}
+	}
 }

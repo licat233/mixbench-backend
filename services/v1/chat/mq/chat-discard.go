@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"mixbench/services/v1/chat/mq/internal/config"
 	"mixbench/services/v1/chat/mq/internal/listen"
 
@@ -13,9 +14,6 @@ import (
 var configFile = flag.String("f", "etc/chat.yaml", "the config file")
 
 func main() {
-	//discard
-	return
-
 	flag.Parse()
 
 	var c config.Config
@@ -23,7 +21,7 @@ func main() {
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 
 	if err := c.SetUp(); err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	serviceGroup := service.NewServiceGroup()

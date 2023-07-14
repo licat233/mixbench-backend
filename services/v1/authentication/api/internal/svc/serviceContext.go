@@ -2,6 +2,7 @@ package svc
 
 import (
 	"fmt"
+	"log"
 	"mixbench/common/rbacx"
 	"mixbench/common/utils"
 	adminClient "mixbench/services/v1/admin/rpc/client"
@@ -34,12 +35,11 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
 	if err != nil {
-		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
-	redisConn := redis.New(c.Redis.Addr, func(r *redis.Redis) {
+	redisConn := redis.New(c.Redis.Host, func(r *redis.Redis) {
 		r.Type = c.Redis.Type
 		r.Pass = c.Redis.Pass
-		r.Addr = c.Redis.Addr
 	})
 	// 因为 utils.NewMysql 方法内部已经执行过 sqlConn.RawDB() 方法且无错误了，这里再执行选择忽略错误
 	db, _ := sqlConn.RawDB()

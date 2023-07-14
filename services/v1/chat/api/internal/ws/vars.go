@@ -2,6 +2,7 @@ package ws
 
 import (
 	"errors"
+	"mixbench/services/v1/chat/model"
 	"net/http"
 	"time"
 
@@ -62,3 +63,6 @@ var upgrader = websocket.Upgrader{
 }
 
 var ErrSystem = errors.New("server internal error! 伺服器故障! ")
+
+// 将payload转化为message
+type payloadHandler func(payload []byte) (*model.Message, error)

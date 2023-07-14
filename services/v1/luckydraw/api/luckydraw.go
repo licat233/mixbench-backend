@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"mixbench/services/v1/luckydraw/api/internal/config"
 	"mixbench/services/v1/luckydraw/api/internal/handler"
 	"mixbench/services/v1/luckydraw/api/internal/svc"
@@ -34,7 +35,7 @@ func main() {
 
 	staticPath := path.Join(c.RootDir, "static")
 	if err := filex.CreateDir(staticPath); err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	urlPrefix := utils.GenStaticServiceUrl("luckydraw")
 	server.AddRoute(rest.Route{

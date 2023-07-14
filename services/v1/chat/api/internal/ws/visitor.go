@@ -2,15 +2,12 @@ package ws
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"mixbench/common/uniqueid"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/model"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/websocket"
 )
 
 type VisitorInfo struct {
@@ -42,8 +39,29 @@ func NewVisitorClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.Re
 		client:  client,
 		Visitor: visitor,
 	}
-	c.client.status = c.Init() == nil
 	return c, nil
+}
+
+func (c *VisitorClient) Run() {
+	if c.Init() != nil {
+		return
+	}
+	c.wg.Add(2)
+	go func() {
+		defer c.wg.Done()
+		c.writePump()
+	}()
+	go func() {
+		defer c.wg.Done()
+		c.readPump(c.payloadHandler)
+	}()
+	c.wg.Wait()
+	c.done()
+}
+
+func (c *VisitorClient) done() error {
+	c.client.Close() //关闭client
+	return nil
 }
 
 func (c *VisitorClient) Init() error {
@@ -89,128 +107,37 @@ func (c *VisitorClient) Init() error {
 	return nil
 }
 
-func (c *VisitorClient) Run() {
-	if !c.client.status {
-		return
+func (c *VisitorClient) payloadHandler(payload []byte) (*model.Message, error) {
+	//这里的payload仅为message.content
+	if !validatePayload(payload) {
+		//丢弃
+		return nil, nil
 	}
-	c.wg.Add(2)
-	go func() {
-		defer c.wg.Done()
-		c.writePump()
-	}()
-	go func() {
-		defer c.wg.Done()
-		c.readPump()
-	}()
-	c.wg.Wait()
-	c.done()
-}
-
-func (c *VisitorClient) done() error {
-	c.client.Close() //关闭client
-	return nil
-}
-
-// 读取游客通过websocket.Conn发送过来的信息，发布至redis中
-func (c *VisitorClient) readPump() {
-	defer func() {
-		close(c.stop)
-	}()
-
-	for {
-		select {
-		case <-c.client.stop:
-			return
-		default:
-			// 防止某些游客搞骚操作，更改数据，这里的messageContent仅仅是 content ，不是message的json数据
-			_, messageContent, err := c.conn.ReadMessage()
-			if err != nil {
-				//ws已经关闭
-				return
-			}
-
-			// 如果该游客没有客服接待
-			if c.Visitor.KefuId < 1 {
-				//尝试分配客服
-				kefuId := c.assignKefu()
-				//如果有客服
-				if kefuId > 0 {
-					//如果有客服，将其分配给该游客
-					c.Visitor.KefuId = kefuId
-					//同时更新数据库
-					if err = c.svcCtx.VisitorModel.Update(c.ctx, c.Visitor.Visitor); err != nil {
-						c.Logger.Error(err)
-						return
-					}
-				}
-				//不管有无客服，都不应该丢弃该条信息
-			}
-
-			message := c.NewVisitorMessage(string(messageContent))
-
-			//改用redis发布方案：
-			if err = c.client.sendMessage(message); err != nil {
+	// 如果该游客没有客服接待
+	if c.Visitor.KefuId < 1 {
+		//尝试分配客服
+		kefuId := c.assignKefu()
+		//如果有客服
+		if kefuId > 0 {
+			//如果有客服，将其分配给该游客
+			c.Visitor.KefuId = kefuId
+			//同时更新数据库
+			if err := c.update(); err != nil {
 				c.Logger.Error(err)
-				return
+				return nil, err
 			}
 		}
+		//不管有无客服，都不应该丢弃该条信息
 	}
-}
-
-// 给客服的ws写入消息
-func (c *VisitorClient) writePump() {
-	ticker := time.NewTicker(pingPeriod)
-	defer func() {
-		ticker.Stop()
-		close(c.stop)
-	}()
-
-	for {
-		select {
-		case msg, ok := <-c.pubsub.Channel():
-			//如果通道已经关闭
-			if !ok {
-				// 关闭ws.conn
-				if err := c.conn.WriteMessage(websocket.CloseMessage, []byte{}); err != nil {
-					if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-						//正常关闭
-						return
-					} else {
-						//异常关闭
-						c.Logger.Error("websocket conn IsUnexpectedCloseError: %v", err)
-						return
-					}
-				}
-				// 已关闭，正常退出
-				return
-			}
-			var message model.Message
-			if err := json.Unmarshal([]byte(msg.Payload), &message); err != nil {
-				//不合规的消息体。丢弃
-				continue
-			}
-			if err := c.writeMessage(&message); err != nil {
-				c.Logger.Error(err)
-				return
-			}
-		case <-c.client.stop:
-			//关闭了
-			return
-		case <-ticker.C:
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-				c.Logger.Error(err)
-				return
-			}
-		}
-	}
+	message := c.newMessage(string(payload))
+	return message, nil
 }
 
 func (c *VisitorClient) update() error {
 	return c.svcCtx.VisitorModel.Update(c.ctx, c.Visitor.Visitor)
 }
 
-func (c *VisitorClient) NewVisitorMessage(content string) *model.Message {
+func (c *VisitorClient) newMessage(content string) *model.Message {
 	return &model.Message{
 		Id:          0,
 		Uuid:        uniqueid.NewUUID(),
@@ -218,7 +145,7 @@ func (c *VisitorClient) NewVisitorMessage(content string) *model.Message {
 		ContentType: TextContentType,
 		VisitorId:   c.Visitor.Id,
 		KefuId:      c.Visitor.KefuId,
-		ProjectId:   c.user.GetProjectId(),
+		ProjectId:   c.Visitor.ProjectId,
 		MsgType:     VisitorMsgType,
 		Status:      0,
 		IsRead:      0,

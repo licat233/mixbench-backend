@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -78,27 +77,6 @@ func StructToSlice(f interface{}) []string {
 		ss[i] = fmt.Sprintf("%v", v.Field(i))
 	}
 	return ss
-}
-
-// 驼峰法to蛇形法
-func ToSnakeCase(str string) string {
-	var matchNonAlphaNumeric = regexp.MustCompile(`[^a-zA-Z0-9]+`)
-	var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
-	var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
-	str = matchNonAlphaNumeric.ReplaceAllString(str, "_")     //非常规字符转化为 _
-	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}") //拆分出连续大写
-	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")  //拆分单词
-	return strings.ToLower(snake)                             //全部转小写
-}
-
-// 蛇形法to大驼峰法
-func ToCamelCase(str string) string {
-	wds := strings.Split(str, "_")
-	res := ""
-	for _, wd := range wds {
-		res += StrFirstToUpper(wd)
-	}
-	return res
 }
 
 // 如果是小写字母, 则变换为大写字母

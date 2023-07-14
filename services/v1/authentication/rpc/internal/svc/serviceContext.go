@@ -3,6 +3,7 @@ package svc
 import (
 	"context"
 	"fmt"
+	"log"
 	"mixbench/common/utils"
 	"mixbench/services/v1/authentication/model"
 	"mixbench/services/v1/authentication/mq/asynqmq"
@@ -31,7 +32,7 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
 	if err != nil {
-		panic(fmt.Errorf("连接mysql数据库失败: %s", err))
+		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
 	redisConn := redis.New(c.Redis.Host, func(r *redis.Redis) {
 		r.Type = c.Redis.Type

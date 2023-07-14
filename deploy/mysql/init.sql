@@ -4,6 +4,11 @@
 CREATE DATABASE IF NOT EXISTS mixbench_admin;
 
 -- --------------
+-- 创建 authentication 数据库
+-- --------------
+CREATE DATABASE IF NOT EXISTS mixbench_authentication;
+
+-- --------------
 -- 创建 luckydraw 数据库
 -- --------------
 CREATE DATABASE IF NOT EXISTS mixbench_luckydraw;
@@ -12,6 +17,11 @@ CREATE DATABASE IF NOT EXISTS mixbench_luckydraw;
 -- 创建 mall 数据库
 -- --------------
 CREATE DATABASE IF NOT EXISTS mixbench_mall;
+
+-- --------------
+-- 创建 chat 数据库
+-- --------------
+CREATE DATABASE IF NOT EXISTS mixbench_chat;
 
 ----------------
 -- Mysql创建mixbench用户

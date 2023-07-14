@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"mixbench/services/v1/admin/api/internal/config"
 	"mixbench/services/v1/admin/api/internal/handler"
 	"mixbench/services/v1/admin/api/internal/svc"
@@ -39,7 +40,7 @@ func main() {
 
 	staticPath := path.Join(c.RootDir, "static")
 	if err := filex.CreateDir(staticPath); err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	urlPrefix := utils.GenStaticServiceUrl("admin")
 	server.AddRoute(rest.Route{

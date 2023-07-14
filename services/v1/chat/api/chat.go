@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"path"
 
@@ -35,7 +36,7 @@ func main() {
 	//配置静态资源服务
 	staticPath := path.Join(c.RootDir, "static")
 	if err := filex.CreateDir(staticPath); err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	urlPrefix := utils.GenStaticServiceUrl("chat")
 	server.AddRoute(rest.Route{

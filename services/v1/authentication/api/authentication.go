@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"path"
 
@@ -33,7 +34,7 @@ func main() {
 
 	staticPath := path.Join(c.RootDir, "static")
 	if err := filex.CreateDir(staticPath); err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	urlPrefix := utils.GenStaticServiceUrl("authentication")
 	server.AddRoute(rest.Route{

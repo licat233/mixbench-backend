@@ -2,8 +2,11 @@ package utils
 
 import (
 	"bytes"
+	"regexp"
 	"strings"
 	"unicode"
+
+	"github.com/iancoleman/strcase"
 )
 
 var WhiteSpace = []rune{'\n', '\t', '\f', '\v', ' '}
@@ -153,4 +156,34 @@ func ContainsAny(s string, runes ...rune) bool {
 
 func ContainsWhiteSpace(s string) bool {
 	return ContainsAny(s, WhiteSpace...)
+}
+
+func ToCamel(s string) string {
+	return strcase.ToCamel(s)
+}
+
+func ToLowerCamel(s string) string {
+	return strcase.ToLowerCamel(s)
+}
+
+func ToSnake(s string) string {
+	return strcase.ToSnake(strcase.ToCamel(s))
+}
+
+func IsSnake(s string) bool {
+	// 定义正则表达式
+	r := regexp.MustCompile(`^[a-z]+(_[a-z]+)*$`)
+	return r.MatchString(s)
+}
+
+func IsCamel(s string) bool {
+	// 定义正则表达式
+	r := regexp.MustCompile(`^[A-Z]+([A-Z][a-z]*)*$`)
+	return r.MatchString(s)
+}
+
+func IsLowerCamel(s string) bool {
+	// 定义正则表达式
+	r := regexp.MustCompile(`^[a-z]+([A-Z][a-z]*)*$`)
+	return r.MatchString(s)
 }

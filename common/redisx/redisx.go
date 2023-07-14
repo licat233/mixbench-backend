@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -73,10 +74,10 @@ func KeyValueValidator(ctx context.Context, redisClient *redis.Redis, key string
 func NewRedis(conf redis.RedisConf, opts ...redis.Option) (*redis.Redis, error) {
 	r, err := redis.NewRedis(conf, opts...)
 	if err != nil {
-		panic(fmt.Errorf("NewRedis失败: %s", err))
+		log.Fatalln(fmt.Errorf("NewRedis失败: %s", err))
 	}
 	if !r.Ping() {
-		panic(errors.New("连接redis数据库失败"))
+		log.Fatalln(errors.New("连接redis数据库失败"))
 	}
 	return r, err
 }

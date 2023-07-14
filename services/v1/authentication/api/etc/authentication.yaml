@@ -36,10 +36,9 @@ Telemetry:
   Batcher: jaeger
 
 Redis:
-  Addr: ${REDIS_HOST}:${REDIS_PORT}
+  Host: ${REDIS_HOST}:${REDIS_PORT}
   Pass: ${REDIS_PASSWORD}
   Type: node
-  DB: 1
 
 CacheRedis:
   - Host: ${REDIS_HOST}:${REDIS_PORT}

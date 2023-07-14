@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"bytes"
 	"context"
 	"mixbench/common/errorx"
 	"mixbench/services/v1/admin/rpc/admin_pb"
@@ -11,9 +12,15 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-// 预处理消息内容
+// 预处理消息内容，删除前后空格和换行
 func preprocessMessageContent(content string) string {
-	return strings.TrimSpace(strings.ReplaceAll(content, string(newline), string(space)))
+	return strings.TrimSpace(strings.Trim(content, string(newline)))
+}
+
+// 验证载体是否合法
+func validatePayload(payload []byte) bool {
+	res := bytes.TrimSpace(bytes.ReplaceAll(payload, newline, space))
+	return len(res) != 0
 }
 
 // TransferVisitor 转移某游客给某客服，返回errorx错误

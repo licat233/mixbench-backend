@@ -1,0 +1,24 @@
+
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+AdminRpc:
+  Endpoints:
+    - 127.0.0.1:${ADMIN_RPC_PORT}
+  NonBlock: true
+
+AuthenticationRpc:
+  Endpoints:
+    - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
+  NonBlock: true
+
+Auth:
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: 86400

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"mixbench/services/v1/luckydraw/mq/internal/config"
 	"mixbench/services/v1/luckydraw/mq/internal/listen"
 
@@ -20,7 +21,7 @@ func main() {
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 
 	if err := c.SetUp(); err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	serviceGroup := service.NewServiceGroup()
