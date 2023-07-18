@@ -23,7 +23,6 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	//加载配置文件
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
 
 	ctx := svc.NewServiceContext(c)

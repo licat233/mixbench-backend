@@ -123,33 +123,29 @@ type TestReq struct {
 	Data string `form:"data,optional"` //数据
 }
 
-type AuthReq struct {
-	Token string `form:"token,optional"`
-}
-
-type Ipblack struct {
+type IpBlacklist struct {
 	Id int64  `json:"id"` //
 	Ip string `json:"ip"` //IP
 }
 
-type AddIpblackReq struct {
+type AddIpBlacklistReq struct {
 	Ip string `json:"ip"` //IP
 }
 
-type PutIpblackReq struct {
+type PutIpBlacklistReq struct {
 	Id int64  `json:"id"` //
 	Ip string `json:"ip"` //IP
 }
 
-type DelIpblackReq struct {
+type DelIpBlacklistReq struct {
 	Id int64 `json:"id"` //IP黑名单 ID
 }
 
-type GetIpblackReq struct {
+type GetIpBlacklistReq struct {
 	Id int64 `json:"id"` //IP黑名单 ID
 }
 
-type GetIpblackListReq struct {
+type GetIpBlacklistListReq struct {
 	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
 	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
 	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
@@ -158,6 +154,49 @@ type GetIpblackListReq struct {
 	Ip       string `form:"ip,optional"`                  //IP
 }
 
-type GetIpblackEnumsReq struct {
+type GetIpBlacklistEnumsReq struct {
+	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
+}
+
+type TokenBlacklist struct {
+	Id       int64  `json:"id"`       //表主键
+	Token    string `json:"token"`    //token
+	Platform string `json:"platform"` //绑定平台
+	Ip       string `json:"ip"`       //绑定ip
+}
+
+type AddTokenBlacklistReq struct {
+	Token    string `json:"token"`    //token
+	Platform string `json:"platform"` //绑定平台
+	Ip       string `json:"ip"`       //绑定ip
+}
+
+type PutTokenBlacklistReq struct {
+	Id       int64  `json:"id"`       //表主键
+	Token    string `json:"token"`    //token
+	Platform string `json:"platform"` //绑定平台
+	Ip       string `json:"ip"`       //绑定ip
+}
+
+type DelTokenBlacklistReq struct {
+	Id int64 `json:"id"` //token黑名单 ID
+}
+
+type GetTokenBlacklistReq struct {
+	Id int64 `json:"id"` //token黑名单 ID
+}
+
+type GetTokenBlacklistListReq struct {
+	PageSize int64  `form:"pageSize,optional,default=20"` //页面容量，默认20，可选
+	Page     int64  `form:"page,optional,default=1"`      //当前页码，默认1，可选
+	Current  int64  `form:"current,optional,default=1"`   //当前页码，默认1，用于对接umijs，可选
+	Keyword  string `form:"keyword,optional"`             //关键词，可选
+	Id       int64  `form:"id,optional,default=-1"`       //表主键
+	Token    string `form:"token,optional"`               //token
+	Platform string `form:"platform,optional"`            //绑定平台
+	Ip       string `form:"ip,optional"`                  //绑定ip
+}
+
+type GetTokenBlacklistEnumsReq struct {
 	ParentId int64 `json:"parentId,optional,default=-1"` //父级ID
 }

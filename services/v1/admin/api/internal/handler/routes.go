@@ -6,6 +6,7 @@ import (
 
 	adminer "mixbench/services/v1/admin/api/internal/handler/adminer"
 	campaign "mixbench/services/v1/admin/api/internal/handler/campaign"
+	company "mixbench/services/v1/admin/api/internal/handler/company"
 	project "mixbench/services/v1/admin/api/internal/handler/project"
 	upload "mixbench/services/v1/admin/api/internal/handler/upload"
 	web "mixbench/services/v1/admin/api/internal/handler/web"
@@ -15,32 +16,6 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodGet,
-				Path:    "/auth",
-				Handler: authHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/devPanelLogin",
-				Handler: devPanelLoginHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/devPanelAuth",
-				Handler: devPanelAuthHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/superAdminAuth",
-				Handler: superAdminAuthHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/api/admin"),
-	)
-
 	server.AddRoutes(
 		[]rest.Route{
 			{
@@ -84,246 +59,255 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: pwdCompareHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/v1/api/admin"),
+		rest.WithPrefix("/v1/api/admin/public"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/logout",
-					Handler: logoutHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/currentUser",
-					Handler: currentUserHandler(serverCtx),
-				},
-			}...,
-		),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/logout",
+				Handler: logoutHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/currentUser",
+				Handler: currentUserHandler(serverCtx),
+			},
+		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/v1/api/admin"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: adminer.AddAdminerHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: adminer.PutAdminerHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: adminer.GetAdminerHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: adminer.DelAdminerHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: adminer.GetAdminerListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enums",
-					Handler: adminer.GetAdminerEnumsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: adminer.AddAdminerHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: adminer.PutAdminerHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: adminer.GetAdminerHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: adminer.DelAdminerHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: adminer.GetAdminerListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: adminer.GetAdminerEnumsHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1/api/admin/adminer"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/verifyPassword",
-					Handler: adminer.VerifyPasswordHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/putCurrent",
-					Handler: adminer.PutCurrentHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/currentInfo",
-					Handler: adminer.CurrentInfoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/putPassword",
-					Handler: adminer.PutPasswordHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/forgotPassword",
-					Handler: adminer.ForgotPasswordHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/verifyPassword",
+				Handler: adminer.VerifyPasswordHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/putCurrent",
+				Handler: adminer.PutCurrentHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/currentInfo",
+				Handler: adminer.CurrentInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/putPassword",
+				Handler: adminer.PutPasswordHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/forgotPassword",
+				Handler: adminer.ForgotPasswordHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1/api/admin/adminer"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: campaign.AddCampaignHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: campaign.PutCampaignHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: campaign.GetCampaignHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: campaign.DelCampaignHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: campaign.GetCampaignListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enums",
-					Handler: campaign.GetCampaignEnumsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: campaign.AddCampaignHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: campaign.PutCampaignHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: campaign.GetCampaignHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: campaign.DelCampaignHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: campaign.GetCampaignListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: campaign.GetCampaignEnumsHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1/api/admin/campaign"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: project.AddProjectHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: project.PutProjectHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: project.GetProjectHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: project.DelProjectHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: project.GetProjectListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enums",
-					Handler: project.GetProjectEnumsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: company.AddCompanyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: company.PutCompanyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: company.GetCompanyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: company.DelCompanyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: company.GetCompanyListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: company.GetCompanyEnumsHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/api/admin/company"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: project.AddProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: project.PutProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: project.GetProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: project.DelProjectHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: project.GetProjectListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: project.GetProjectEnumsHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1/api/admin/project"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: web.AddWebHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: web.PutWebHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: web.GetWebHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: web.DelWebHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: web.GetWebListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enums",
-					Handler: web.GetWebEnumsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: web.AddWebHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/",
+				Handler: web.PutWebHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: web.GetWebHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/",
+				Handler: web.DelWebHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: web.GetWebListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/enums",
+				Handler: web.GetWebEnumsHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1/api/admin/web"),
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/avatar",
-					Handler: upload.UploadAvatarHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/logo",
-					Handler: upload.UploadLogoHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/image",
-					Handler: upload.UploadImgHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/avatar",
+				Handler: upload.UploadAvatarHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/logo",
+				Handler: upload.UploadLogoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/image",
+				Handler: upload.UploadImgHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1/api/admin/upload"),
 	)
 }

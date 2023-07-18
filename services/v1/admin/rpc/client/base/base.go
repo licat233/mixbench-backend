@@ -17,6 +17,8 @@ type (
 	AddAdminerResp      = admin_pb.AddAdminerResp
 	AddCampaignReq      = admin_pb.AddCampaignReq
 	AddCampaignResp     = admin_pb.AddCampaignResp
+	AddCompanyReq       = admin_pb.AddCompanyReq
+	AddCompanyResp      = admin_pb.AddCompanyResp
 	AddProjectReq       = admin_pb.AddProjectReq
 	AddProjectResp      = admin_pb.AddProjectResp
 	AddWebReq           = admin_pb.AddWebReq
@@ -24,10 +26,13 @@ type (
 	Adminer             = admin_pb.Adminer
 	ByIdReq             = admin_pb.ByIdReq
 	Campaign            = admin_pb.Campaign
+	Company             = admin_pb.Company
 	DelAdminerReq       = admin_pb.DelAdminerReq
 	DelAdminerResp      = admin_pb.DelAdminerResp
 	DelCampaignReq      = admin_pb.DelCampaignReq
 	DelCampaignResp     = admin_pb.DelCampaignResp
+	DelCompanyReq       = admin_pb.DelCompanyReq
+	DelCompanyResp      = admin_pb.DelCompanyResp
 	DelProjectReq       = admin_pb.DelProjectReq
 	DelProjectResp      = admin_pb.DelProjectResp
 	DelWebReq           = admin_pb.DelWebReq
@@ -38,9 +43,9 @@ type (
 	ExistsEmailResp     = admin_pb.ExistsEmailResp
 	FindByEmailReq      = admin_pb.FindByEmailReq
 	FindByEmailResp     = admin_pb.FindByEmailResp
+	FindByPassportReq   = admin_pb.FindByPassportReq
+	FindByPassportResp  = admin_pb.FindByPassportResp
 	ForgotPasswordReq   = admin_pb.ForgotPasswordReq
-	GenerateTokenReq    = admin_pb.GenerateTokenReq
-	GenerateTokenResp   = admin_pb.GenerateTokenResp
 	GetAdminerEnumsReq  = admin_pb.GetAdminerEnumsReq
 	GetAdminerListReq   = admin_pb.GetAdminerListReq
 	GetAdminerListResp  = admin_pb.GetAdminerListResp
@@ -51,6 +56,11 @@ type (
 	GetCampaignListResp = admin_pb.GetCampaignListResp
 	GetCampaignReq      = admin_pb.GetCampaignReq
 	GetCampaignResp     = admin_pb.GetCampaignResp
+	GetCompanyEnumsReq  = admin_pb.GetCompanyEnumsReq
+	GetCompanyListReq   = admin_pb.GetCompanyListReq
+	GetCompanyListResp  = admin_pb.GetCompanyListResp
+	GetCompanyReq       = admin_pb.GetCompanyReq
+	GetCompanyResp      = admin_pb.GetCompanyResp
 	GetProjectEnumsReq  = admin_pb.GetProjectEnumsReq
 	GetProjectListReq   = admin_pb.GetProjectListReq
 	GetProjectListResp  = admin_pb.GetProjectListResp
@@ -65,12 +75,8 @@ type (
 	GetWebResp          = admin_pb.GetWebResp
 	IsLogoutReq         = admin_pb.IsLogoutReq
 	IsLogoutResp        = admin_pb.IsLogoutResp
-	JwtData             = admin_pb.JwtData
 	JwtToken            = admin_pb.JwtToken
 	ListReq             = admin_pb.ListReq
-	LoginByEmailReq     = admin_pb.LoginByEmailReq
-	LoginReq            = admin_pb.LoginReq
-	LoginResp           = admin_pb.LoginResp
 	LogoutReq           = admin_pb.LogoutReq
 	LogoutResp          = admin_pb.LogoutResp
 	NilReq              = admin_pb.NilReq
@@ -84,6 +90,8 @@ type (
 	PutAdminerResp      = admin_pb.PutAdminerResp
 	PutCampaignReq      = admin_pb.PutCampaignReq
 	PutCampaignResp     = admin_pb.PutCampaignResp
+	PutCompanyReq       = admin_pb.PutCompanyReq
+	PutCompanyResp      = admin_pb.PutCompanyResp
 	PutPasswordReq      = admin_pb.PutPasswordReq
 	PutProjectReq       = admin_pb.PutProjectReq
 	PutProjectResp      = admin_pb.PutProjectResp
@@ -97,6 +105,8 @@ type (
 	TreeOptions         = admin_pb.TreeOptions
 	ValidateTokenReq    = admin_pb.ValidateTokenReq
 	ValidateTokenResp   = admin_pb.ValidateTokenResp
+	VerifyAccountReq    = admin_pb.VerifyAccountReq
+	VerifyAccountResp   = admin_pb.VerifyAccountResp
 	VerifyPasswordReq   = admin_pb.VerifyPasswordReq
 	VerifyPasswordResp  = admin_pb.VerifyPasswordResp
 	Web                 = admin_pb.Web
@@ -126,6 +136,18 @@ type (
 		GetCampaignList(ctx context.Context, in *GetCampaignListReq, opts ...grpc.CallOption) (*GetCampaignListResp, error)
 		// 获取活动枚举列表
 		GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+		// 添加公司
+		AddCompany(ctx context.Context, in *AddCompanyReq, opts ...grpc.CallOption) (*AddCompanyResp, error)
+		// 更新公司
+		PutCompany(ctx context.Context, in *PutCompanyReq, opts ...grpc.CallOption) (*PutCompanyResp, error)
+		// 获取公司
+		GetCompany(ctx context.Context, in *GetCompanyReq, opts ...grpc.CallOption) (*GetCompanyResp, error)
+		// 删除公司
+		DelCompany(ctx context.Context, in *DelCompanyReq, opts ...grpc.CallOption) (*DelCompanyResp, error)
+		// 获取公司列表
+		GetCompanyList(ctx context.Context, in *GetCompanyListReq, opts ...grpc.CallOption) (*GetCompanyListResp, error)
+		// 获取公司枚举列表
+		GetCompanyEnums(ctx context.Context, in *GetCompanyEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 		// 添加项目
 		AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
 		// 更新项目
@@ -233,6 +255,42 @@ func (m *defaultBase) GetCampaignList(ctx context.Context, in *GetCampaignListRe
 func (m *defaultBase) GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
 	client := admin_pb.NewBaseClient(m.cli.Conn())
 	return client.GetCampaignEnums(ctx, in, opts...)
+}
+
+// 添加公司
+func (m *defaultBase) AddCompany(ctx context.Context, in *AddCompanyReq, opts ...grpc.CallOption) (*AddCompanyResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.AddCompany(ctx, in, opts...)
+}
+
+// 更新公司
+func (m *defaultBase) PutCompany(ctx context.Context, in *PutCompanyReq, opts ...grpc.CallOption) (*PutCompanyResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.PutCompany(ctx, in, opts...)
+}
+
+// 获取公司
+func (m *defaultBase) GetCompany(ctx context.Context, in *GetCompanyReq, opts ...grpc.CallOption) (*GetCompanyResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetCompany(ctx, in, opts...)
+}
+
+// 删除公司
+func (m *defaultBase) DelCompany(ctx context.Context, in *DelCompanyReq, opts ...grpc.CallOption) (*DelCompanyResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.DelCompany(ctx, in, opts...)
+}
+
+// 获取公司列表
+func (m *defaultBase) GetCompanyList(ctx context.Context, in *GetCompanyListReq, opts ...grpc.CallOption) (*GetCompanyListResp, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetCompanyList(ctx, in, opts...)
+}
+
+// 获取公司枚举列表
+func (m *defaultBase) GetCompanyEnums(ctx context.Context, in *GetCompanyEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	client := admin_pb.NewBaseClient(m.cli.Conn())
+	return client.GetCompanyEnums(ctx, in, opts...)
 }
 
 // 添加项目

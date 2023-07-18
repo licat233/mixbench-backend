@@ -323,7 +323,7 @@
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           },
           {
             "name": "endTime",
@@ -332,7 +332,7 @@
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           }
         ],
         "tags": [
@@ -3476,13 +3476,13 @@
         "startTime": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "活动开始时间"
         },
         "endTime": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "活动结束时间"
         }
       },

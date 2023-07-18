@@ -33,9 +33,6 @@ func (l *GetActivityLogic) GetActivity(in *luckydraw_pb.GetActivityReq) (*luckyd
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetActivityResp{
 		Activity: dataconv.MdActivityToPbActivity(res),

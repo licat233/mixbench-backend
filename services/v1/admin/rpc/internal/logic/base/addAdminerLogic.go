@@ -39,9 +39,10 @@ func (l *AddAdminerLogic) AddAdminer(in *admin_pb.AddAdminerReq) (*admin_pb.AddA
 		Email:        in.Email,
 		Status:       in.Status,
 		IsSuperAdmin: in.IsSuperAdmin,
+		CompanyId:    in.CompanyId,
 		ProjectId:    in.ProjectId,
 		LoginCount:   in.LoginCount,
-		LastLogin:    time.Unix(in.LastLogin, 0).Local(),
+		LastLoginAt:  time.Unix(in.LastLoginAt, 0).Local(),
 	}
 	if _, err := l.svcCtx.AdminerModel.Insert(l.ctx, data); err != nil {
 		l.Logger.Error(err)

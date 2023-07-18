@@ -27,19 +27,20 @@ func NewPutActivityLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAc
 
 func (l *PutActivityLogic) PutActivity(req *types.PutActivityReq) (any, error) {
 	in := &luckydraw_pb.PutActivityReq{
-		Id:        req.Id,
-		Uuid:      req.Uuid,
-		Name:      req.Name,
-		ProjectId: req.ProjectId,
-		Status:    req.Status,
-		Pattern:   req.Pattern,
-		MaxCount:  req.MaxCount,
-		MaxPrizes: req.MaxPrizes,
-		StartTime: req.StartTime,
-		EndTime:   req.EndTime,
+		Activity: &luckydraw_pb.Activity{
+			Id:        req.Id,
+			Uuid:      req.Uuid,
+			Name:      req.Name,
+			ProjectId: req.ProjectId,
+			Status:    req.Status,
+			Pattern:   req.Pattern,
+			MaxCount:  req.MaxCount,
+			MaxPrizes: req.MaxPrizes,
+			StartTime: req.StartTime,
+			EndTime:   req.EndTime,
+		},
 	}
-	_, err := l.svcCtx.LuckydrawRpc.PutActivity(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.LuckydrawRpc.PutActivity(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

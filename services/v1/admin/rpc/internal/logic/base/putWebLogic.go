@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
-	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
+	"mixbench/services/v1/admin/rpc/internal/logic/dataconv"
 	"mixbench/services/v1/admin/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -27,16 +27,7 @@ func NewPutWebLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutWebLogi
 
 // 更新网站
 func (l *PutWebLogic) PutWeb(in *admin_pb.PutWebReq) (*admin_pb.PutWebResp, error) {
-	data := &model.Web{
-		Id:          in.Id,
-		Uuid:        in.Uuid,
-		ProjectId:   in.ProjectId,
-		Url:         in.Url,
-		Host:        in.Host,
-		Description: in.Description,
-		Code:        in.Code,
-	}
-
+	data := dataconv.PbWebToMdWeb(in.Web)
 	if err := l.svcCtx.WebModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

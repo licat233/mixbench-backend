@@ -12,10 +12,9 @@ export function test(params: components.TestReqParams) {
 
 /**
  * @description "jwt鉴权接口"
- * @param params
  */
-export function auth(params: components.AuthReqParams) {
-	return webapi.get<null>(`/v1/api/authentication/auth`, params)
+export function auth() {
+	return webapi.get<null>(`/v1/api/authentication/auth`)
 }
 
 /**
@@ -61,46 +60,94 @@ export function verifyEmailCaptcha(req: components.EmailCaptchaVerifyReq) {
  * @description "添加IP黑名单 基础API"
  * @param req
  */
-export function addIpblack(req: components.AddIpblackReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/authentication/ipblack`, req)
+export function addIpBlacklist(req: components.AddIpBlacklistReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/authentication/ipBlacklist`, req)
 }
 
 /**
  * @description "更新IP黑名单 基础API"
  * @param req
  */
-export function putIpblack(req: components.PutIpblackReq) {
-	return webapi.put<components.BaseResp>(`/v1/api/authentication/ipblack`, req)
+export function putIpBlacklist(req: components.PutIpBlacklistReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/authentication/ipBlacklist`, req)
 }
 
 /**
  * @description "获取IP黑名单 基础API"
  * @param req
  */
-export function getIpblack(req: components.GetIpblackReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/authentication/ipblack`, req)
+export function getIpBlacklist(req: components.GetIpBlacklistReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/authentication/ipBlacklist`, req)
 }
 
 /**
  * @description "删除IP黑名单 基础API"
  * @param req
  */
-export function delIpblack(req: components.DelIpblackReq) {
-	return webapi.delete<components.BaseResp>(`/v1/api/authentication/ipblack`, req)
+export function delIpBlacklist(req: components.DelIpBlacklistReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/authentication/ipBlacklist`, req)
 }
 
 /**
  * @description "获取IP黑名单列表 基础API"
  * @param params
  */
-export function getIpblackList(params: components.GetIpblackListReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/authentication/ipblack/list`, params)
+export function getIpBlacklistList(params: components.GetIpBlacklistListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/authentication/ipBlacklist/list`, params)
 }
 
 /**
  * @description "获取IP黑名单枚举列表 基础API"
  * @param req
  */
-export function getIpblackEnums(req: components.GetIpblackEnumsReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/authentication/ipblack/enums`, req)
+export function getIpBlacklistEnums(req: components.GetIpBlacklistEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/authentication/ipBlacklist/enums`, req)
+}
+
+/**
+ * @description "添加token黑名单 基础API"
+ * @param req
+ */
+export function addTokenBlacklist(req: components.AddTokenBlacklistReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/authentication/tokenBlacklist`, req)
+}
+
+/**
+ * @description "更新token黑名单 基础API"
+ * @param req
+ */
+export function putTokenBlacklist(req: components.PutTokenBlacklistReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/authentication/tokenBlacklist`, req)
+}
+
+/**
+ * @description "获取token黑名单 基础API"
+ * @param req
+ */
+export function getTokenBlacklist(req: components.GetTokenBlacklistReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/authentication/tokenBlacklist`, req)
+}
+
+/**
+ * @description "删除token黑名单 基础API"
+ * @param req
+ */
+export function delTokenBlacklist(req: components.DelTokenBlacklistReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/authentication/tokenBlacklist`, req)
+}
+
+/**
+ * @description "获取token黑名单列表 基础API"
+ * @param params
+ */
+export function getTokenBlacklistList(params: components.GetTokenBlacklistListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/authentication/tokenBlacklist/list`, params)
+}
+
+/**
+ * @description "获取token黑名单枚举列表 基础API"
+ * @param req
+ */
+export function getTokenBlacklistEnums(req: components.GetTokenBlacklistEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/authentication/tokenBlacklist/enums`, req)
 }

@@ -34,8 +34,7 @@ func (l *GetProjectLogic) GetProject(req *types.GetProjectReq) (any, error) {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}
-	pbProject := rpcResp.Project
-	data := dataconv.PbProjectToApiProject(pbProject)
+	data := dataconv.PbProjectToApiProject(rpcResp.Project)
 
 	return respx.DefaultSingleResp(data, nil)
 }

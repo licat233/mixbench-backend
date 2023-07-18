@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"mixbench/common/utils"
+	"mixbench/common/mysqlx"
 	adminClient "mixbench/services/v1/admin/rpc/client"
 	authenticationClient "mixbench/services/v1/authentication/rpc/client"
 	"mixbench/services/v1/chat/api/internal/config"
@@ -45,7 +45,7 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	ctx := context.Background()
-	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	sqlConn, err := mysqlx.NewMysql(c.Mysql.DataSource)
 	if err != nil {
 		log.Fatal(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}

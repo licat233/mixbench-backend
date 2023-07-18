@@ -27,21 +27,24 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 
 func (l *PutAdminerLogic) PutAdminer(req *types.PutAdminerReq) (any, error) {
 	in := &admin_pb.PutAdminerReq{
-		Id:           req.Id,
-		Uuid:         req.Uuid,
-		Name:         req.Name,
-		Avatar:       req.Avatar,
-		Access:       req.Access,
-		Passport:     req.Passport,
-		Password:     req.Password,
-		Email:        req.Email,
-		Status:       req.Status,
-		IsSuperAdmin: req.IsSuperAdmin,
-		LoginCount:   req.LoginCount,
-		LastLogin:    req.LastLogin,
+		Adminer: &admin_pb.Adminer{
+			Id:           req.Id,
+			Uuid:         req.Uuid,
+			Name:         req.Name,
+			Avatar:       req.Avatar,
+			Access:       req.Access,
+			Passport:     req.Passport,
+			Password:     req.Password,
+			Email:        req.Email,
+			Status:       req.Status,
+			IsSuperAdmin: req.IsSuperAdmin,
+			CompanyId:    req.CompanyId,
+			ProjectId:    req.ProjectId,
+			LoginCount:   req.LoginCount,
+			LastLoginAt:  req.LastLoginAt,
+		},
 	}
-	_, err := l.svcCtx.AdminRpc.PutAdminer(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.AdminRpc.PutAdminer(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

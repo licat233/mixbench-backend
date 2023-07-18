@@ -10,7 +10,7 @@ package svc
 import (
 	"fmt"
 	"log"
-	"mixbench/common/utils"
+	"mixbench/common/mysqlx"
 	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/internal/config"
 
@@ -25,10 +25,11 @@ type ServiceContext struct {
 	ProjectModel      model.ProjectModel
 	CampaignModel     model.CampaignModel
 	WebModel          model.WebModel
+	CompanyModel      model.CompanyModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	sqlConn, err := mysqlx.NewMysql(c.Mysql.DataSource)
 	if err != nil {
 		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
@@ -43,5 +44,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ProjectModel:      model.NewProjectModel(sqlConn, c.CacheRedis),
 		CampaignModel:     model.NewCampaignModel(sqlConn, c.CacheRedis),
 		WebModel:          model.NewWebModel(sqlConn, c.CacheRedis),
+		CompanyModel:      model.NewCompanyModel(sqlConn, c.CacheRedis),
 	}
 }

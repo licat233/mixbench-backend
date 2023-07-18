@@ -25,14 +25,6 @@
             "schema": {}
           }
         },
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "tags": [
           "authentication"
         ]
@@ -165,10 +157,10 @@
         ]
       }
     },
-    "/v1/api/authentication/ipblack/": {
+    "/v1/api/authentication/ipBlacklist/": {
       "get": {
         "summary": "获取IP黑名单 基础API",
-        "operationId": "GetIpblack",
+        "operationId": "GetIpBlacklist",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -188,7 +180,7 @@
           }
         ],
         "tags": [
-          "ipblack"
+          "ipBlacklist"
         ],
         "security": [
           {
@@ -198,7 +190,7 @@
       },
       "delete": {
         "summary": "删除IP黑名单 基础API",
-        "operationId": "DelIpblack",
+        "operationId": "DelIpBlacklist",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -214,12 +206,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/DelIpblackReq"
+              "$ref": "#/definitions/DelIpBlacklistReq"
             }
           }
         ],
         "tags": [
-          "ipblack"
+          "ipBlacklist"
         ],
         "security": [
           {
@@ -229,7 +221,7 @@
       },
       "post": {
         "summary": "添加IP黑名单 基础API",
-        "operationId": "AddIpblack",
+        "operationId": "AddIpBlacklist",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -245,12 +237,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AddIpblackReq"
+              "$ref": "#/definitions/AddIpBlacklistReq"
             }
           }
         ],
         "tags": [
-          "ipblack"
+          "ipBlacklist"
         ],
         "security": [
           {
@@ -260,7 +252,7 @@
       },
       "put": {
         "summary": "更新IP黑名单 基础API",
-        "operationId": "PutIpblack",
+        "operationId": "PutIpBlacklist",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -276,12 +268,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/PutIpblackReq"
+              "$ref": "#/definitions/PutIpBlacklistReq"
             }
           }
         ],
         "tags": [
-          "ipblack"
+          "ipBlacklist"
         ],
         "security": [
           {
@@ -290,10 +282,10 @@
         ]
       }
     },
-    "/v1/api/authentication/ipblack/enums": {
+    "/v1/api/authentication/ipBlacklist/enums": {
       "get": {
         "summary": "获取IP黑名单枚举列表 基础API",
-        "operationId": "GetIpblackEnums",
+        "operationId": "GetIpBlacklistEnums",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -314,7 +306,7 @@
           }
         ],
         "tags": [
-          "ipblack"
+          "ipBlacklist"
         ],
         "security": [
           {
@@ -323,10 +315,10 @@
         ]
       }
     },
-    "/v1/api/authentication/ipblack/list": {
+    "/v1/api/authentication/ipBlacklist/list": {
       "get": {
         "summary": "获取IP黑名单列表 基础API",
-        "operationId": "GetIpblackList",
+        "operationId": "GetIpBlacklistList",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -387,7 +379,7 @@
           }
         ],
         "tags": [
-          "ipblack"
+          "ipBlacklist"
         ],
         "security": [
           {
@@ -421,10 +413,256 @@
           "authentication"
         ]
       }
+    },
+    "/v1/api/authentication/tokenBlacklist/": {
+      "get": {
+        "summary": "获取token黑名单 基础API",
+        "operationId": "GetTokenBlacklist",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "token黑名单 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "tokenBlacklist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "删除token黑名单 基础API",
+        "operationId": "DelTokenBlacklist",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除token黑名单请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelTokenBlacklistReq"
+            }
+          }
+        ],
+        "tags": [
+          "tokenBlacklist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "添加token黑名单 基础API",
+        "operationId": "AddTokenBlacklist",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加token黑名单请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddTokenBlacklistReq"
+            }
+          }
+        ],
+        "tags": [
+          "tokenBlacklist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "更新token黑名单 基础API",
+        "operationId": "PutTokenBlacklist",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新token黑名单请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutTokenBlacklistReq"
+            }
+          }
+        ],
+        "tags": [
+          "tokenBlacklist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/authentication/tokenBlacklist/enums": {
+      "get": {
+        "summary": "获取token黑名单枚举列表 基础API",
+        "operationId": "GetTokenBlacklistEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "tokenBlacklist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/api/authentication/tokenBlacklist/list": {
+      "get": {
+        "summary": "获取token黑名单列表 基础API",
+        "operationId": "GetTokenBlacklistList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "token",
+            "description": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "platform",
+            "description": "绑定平台",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "ip",
+            "description": "绑定ip",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "tokenBlacklist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
     }
   },
   "definitions": {
-    "AddIpblackReq": {
+    "AddIpBlacklistReq": {
       "type": "object",
       "properties": {
         "ip": {
@@ -432,19 +670,33 @@
           "description": "IP"
         }
       },
-      "title": "AddIpblackReq",
+      "title": "AddIpBlacklistReq",
       "required": [
         "ip"
       ]
     },
-    "AuthReq": {
+    "AddTokenBlacklistReq": {
       "type": "object",
       "properties": {
         "token": {
-          "type": "string"
+          "type": "string",
+          "description": "token"
+        },
+        "platform": {
+          "type": "string",
+          "description": "绑定平台"
+        },
+        "ip": {
+          "type": "string",
+          "description": "绑定ip"
         }
       },
-      "title": "AuthReq"
+      "title": "AddTokenBlacklistReq",
+      "required": [
+        "token",
+        "platform",
+        "ip"
+      ]
     },
     "BaseResp": {
       "type": "object",
@@ -628,7 +880,7 @@
         "expiresAt"
       ]
     },
-    "DelIpblackReq": {
+    "DelIpBlacklistReq": {
       "type": "object",
       "properties": {
         "id": {
@@ -637,7 +889,21 @@
           "description": "IP黑名单 ID"
         }
       },
-      "title": "DelIpblackReq",
+      "title": "DelIpBlacklistReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DelTokenBlacklistReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "token黑名单 ID"
+        }
+      },
+      "title": "DelTokenBlacklistReq",
       "required": [
         "id"
       ]
@@ -734,7 +1000,7 @@
         "list"
       ]
     },
-    "GetIpblackEnumsReq": {
+    "GetIpBlacklistEnumsReq": {
       "type": "object",
       "properties": {
         "parentId": {
@@ -744,9 +1010,9 @@
           "description": "父级ID"
         }
       },
-      "title": "GetIpblackEnumsReq"
+      "title": "GetIpBlacklistEnumsReq"
     },
-    "GetIpblackListReq": {
+    "GetIpBlacklistListReq": {
       "type": "object",
       "properties": {
         "pageSize": {
@@ -781,9 +1047,9 @@
           "description": "IP"
         }
       },
-      "title": "GetIpblackListReq"
+      "title": "GetIpBlacklistListReq"
     },
-    "GetIpblackReq": {
+    "GetIpBlacklistReq": {
       "type": "object",
       "properties": {
         "id": {
@@ -792,12 +1058,84 @@
           "description": "IP黑名单 ID"
         }
       },
-      "title": "GetIpblackReq",
+      "title": "GetIpBlacklistReq",
       "required": [
         "id"
       ]
     },
-    "Ipblack": {
+    "GetTokenBlacklistEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetTokenBlacklistEnumsReq"
+    },
+    "GetTokenBlacklistListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "表主键"
+        },
+        "token": {
+          "type": "string",
+          "description": "token"
+        },
+        "platform": {
+          "type": "string",
+          "description": "绑定平台"
+        },
+        "ip": {
+          "type": "string",
+          "description": "绑定ip"
+        }
+      },
+      "title": "GetTokenBlacklistListReq"
+    },
+    "GetTokenBlacklistReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "token黑名单 ID"
+        }
+      },
+      "title": "GetTokenBlacklistReq",
+      "required": [
+        "id"
+      ]
+    },
+    "IpBlacklist": {
       "type": "object",
       "properties": {
         "id": {
@@ -809,7 +1147,7 @@
           "description": "IP"
         }
       },
-      "title": "Ipblack",
+      "title": "IpBlacklist",
       "required": [
         "id",
         "ip"
@@ -927,7 +1265,7 @@
         "solution"
       ]
     },
-    "PutIpblackReq": {
+    "PutIpBlacklistReq": {
       "type": "object",
       "properties": {
         "id": {
@@ -939,9 +1277,38 @@
           "description": "IP"
         }
       },
-      "title": "PutIpblackReq",
+      "title": "PutIpBlacklistReq",
       "required": [
         "id",
+        "ip"
+      ]
+    },
+    "PutTokenBlacklistReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "token": {
+          "type": "string",
+          "description": "token"
+        },
+        "platform": {
+          "type": "string",
+          "description": "绑定平台"
+        },
+        "ip": {
+          "type": "string",
+          "description": "绑定ip"
+        }
+      },
+      "title": "PutTokenBlacklistReq",
+      "required": [
+        "id",
+        "token",
+        "platform",
         "ip"
       ]
     },
@@ -956,6 +1323,35 @@
       "title": "Resp",
       "required": [
         "body"
+      ]
+    },
+    "TokenBlacklist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "token": {
+          "type": "string",
+          "description": "token"
+        },
+        "platform": {
+          "type": "string",
+          "description": "绑定平台"
+        },
+        "ip": {
+          "type": "string",
+          "description": "绑定ip"
+        }
+      },
+      "title": "TokenBlacklist",
+      "required": [
+        "id",
+        "token",
+        "platform",
+        "ip"
       ]
     },
     "TreeOption": {

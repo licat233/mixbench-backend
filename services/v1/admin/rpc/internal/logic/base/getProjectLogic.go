@@ -28,13 +28,10 @@ func NewGetProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPro
 
 // 获取项目
 func (l *GetProjectLogic) GetProject(in *admin_pb.GetProjectReq) (*admin_pb.GetProjectResp, error) {
-	res, err := l.svcCtx.ProjectModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.ProjectModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return nil, nil
 	}
 
 	return &admin_pb.GetProjectResp{

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
-	"mixbench/services/v1/luckydraw/model"
+	"mixbench/services/v1/luckydraw/rpc/internal/logic/dataconv"
 	"mixbench/services/v1/luckydraw/rpc/internal/svc"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
 
@@ -27,13 +27,7 @@ func NewPutPrizeGradeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Put
 
 // 更新奖品级别
 func (l *PutPrizeGradeLogic) PutPrizeGrade(in *luckydraw_pb.PutPrizeGradeReq) (*luckydraw_pb.PutPrizeGradeResp, error) {
-	data := &model.PrizeGrade{
-		Id:    in.Id,
-		Uuid:  in.Uuid,
-		Name:  in.Name,
-		IsWin: in.IsWin,
-	}
-
+	data := dataconv.PbPrizeGradeToMdPrizeGrade(in.PrizeGrade)
 	if err := l.svcCtx.PrizeGradeModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

@@ -11,6 +11,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"time"
 
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
@@ -66,25 +67,49 @@ func (l *LoginByEmailLogic) LoginByEmail(req *types.LoginByEmailReq) (any, error
 	if !res.Success {
 		return nil, errorx.ExternalError(nil, errors.New("captcha auth failed"))
 	}
-	//验证码校验成功，调用admin.rpc服务登录
-	jwtData := &admin_pb.JwtData{
-		UserId:   0,
+	//验证码校验成功，调用admin.rpc服务查询是否存在该email绑定的账户
+	resp, err := l.svcCtx.AdminRpc.FindByEmail(l.ctx, &admin_pb.FindByEmailReq{
+		Email: req.Email,
+	})
+	if err != nil {
+		return nil, err
+	}
+	if resp.Adminer == nil {
+		return nil, errorx.ExternalError(nil, "account does not exist")
+	}
+
+	//如果用户存在，则生成token
+	jwtData := &authentication_pb.JwtData{
+		UserId:   resp.Adminer.Id,
 		Ip:       reqIp,
 		Platform: reqPlatform,
 	}
-	resp, err := l.svcCtx.AdminRpc.LoginByEmail(l.ctx, &admin_pb.LoginByEmailReq{
-		Email:     req.Email,
-		AutoLogin: req.AutoLogin,
+	resp1, err := l.svcCtx.AuthenticationRpc.GenToken(l.ctx, &authentication_pb.GenTokenReq{
 		JwtData:   jwtData,
+		AutoLogin: req.AutoLogin,
 	})
+	if err != nil {
+		return nil, err
+	}
 
+	if resp1.JwtToken == nil {
+		return nil, errorx.InternalError("JwtToken equal nil")
+	}
+
+	//更新登录数据
+	adminer := resp.Adminer
+	adminer.LastLoginAt = time.Now().Local().Unix()
+	adminer.LoginCount++
+	_, err = l.svcCtx.AdminRpc.PutAdminer(l.ctx, &admin_pb.PutAdminerReq{
+		Adminer: adminer,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	return respx.NewData(&types.JwtToken{
-		AccessToken:  resp.JwtToken.AccessToken,
-		AccessExpire: resp.JwtToken.AccessExpire,
-		RefreshAfter: resp.JwtToken.RefreshAfter,
+		AccessToken:  resp1.JwtToken.AccessToken,
+		AccessExpire: resp1.JwtToken.AccessExpire,
+		RefreshAfter: resp1.JwtToken.RefreshAfter,
 	}), nil
 }

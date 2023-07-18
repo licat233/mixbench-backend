@@ -31,6 +31,4 @@ type Config struct {
 		Domain string
 		Root   string
 	}
-
-	RootDir string
 }

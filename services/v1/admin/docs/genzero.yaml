@@ -2,13 +2,9 @@ api:
     dir: ""
     ignoreColumns: []
     ignoreTables:
-        - jwt_blacklist
-        - casbin_rule
     jsonStyle: genZero
-    jwt: Auth
+    jwt:
     middleware:
-        - AuthMiddleware
-        - RbacMiddleware
     multiple: true
     prefix: /v1/api/admin
     serviceName: admin
@@ -49,8 +45,6 @@ proto:
     goPackage: ""
     ignoreColumns: []
     ignoreTables:
-        - jwt_blacklist
-        - casbin_rule
     multiple: true
     package: ""
     serviceName: admin

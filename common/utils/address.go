@@ -36,8 +36,7 @@ func (a *AddressInfo) ToString() string {
 }
 
 func QueryAddress(ipAddress string) *AddressInfo {
-	root := CurrentProjectRootPath()
-	dbfile := path.Join(root, "deploy/ip-db/GeoLite2-City.mmdb")
+	dbfile := path.Join(ProjectRoot, "deploy/ip-db/GeoLite2-City.mmdb")
 	db, err := geoip2.Open(dbfile)
 	if err != nil {
 		log.Fatal(err)

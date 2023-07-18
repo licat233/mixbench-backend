@@ -9,9 +9,8 @@ package gotest
 
 import (
 	"fmt"
-	"net/url"
-	"strings"
 	"testing"
+	"time"
 )
 
 type Animal interface {
@@ -47,18 +46,23 @@ func (r *Room) Do() error {
 	panic("发生了恐慌")
 }
 
+func echo(v any) {
+	fmt.Printf("結果:%s\n", v)
+}
+
 func Test_go(t *testing.T) {
-	rawURL := "https://example.com/path/to/resource"
-	parsedURL, err := url.Parse(rawURL)
-	if err != nil {
-		fmt.Println("URL 解析失败:", err)
-		return
-	}
+	var err error
+	res := fmt.Sprintf("%s", err)
+	echo(res == "")
+}
 
-	hostParts := strings.Split(parsedURL.Hostname(), ".")
-	numParts := len(hostParts)
+func Test_Time(t *testing.T) {
+	a := time.Unix(-1, 0).Local()
+	// a := time.Time{}
+	fmt.Println(a)
+	fmt.Println(isZeroTime(a))
+}
 
-	// 提取主域名
-	mainDomain := hostParts[numParts-2] + "." + hostParts[numParts-1]
-	fmt.Println("主域名:", mainDomain)
+func isZeroTime(t time.Time) bool {
+	return t.Before(time.Unix(0, 0))
 }

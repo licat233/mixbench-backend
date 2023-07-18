@@ -2,8 +2,6 @@ package adminlogic
 
 import (
 	"context"
-	"net/url"
-	"path"
 
 	"mixbench/common/errorx"
 	"mixbench/common/utils"
@@ -30,29 +28,13 @@ func NewGetWebByUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetWe
 }
 
 func (l *GetWebByUrlLogic) GetWebByUrl(in *admin_pb.GetWebByUrlReq) (*admin_pb.GetWebByUrlResp, error) {
-	if in.Url == "" {
+	weburls := utils.SplitURL(in.Url)
+	if len(weburls) == 0 {
 		return &admin_pb.GetWebByUrlResp{}, nil
 	}
-	parsedURL, err := url.Parse(in.Url)
-	if err != nil || parsedURL.Host == "" {
-		return nil, errorx.ExtRpcErr(err)
-	}
 
-	url, _ := url.JoinPath(parsedURL.Host, parsedURL.Path)
-	web, err := l.svcCtx.WebModel.FindByUrl(l.ctx, url)
-	if err != nil && err != model.ErrNotFound {
-		l.Logger.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == nil {
-		return &admin_pb.GetWebByUrlResp{
-			Web: dataconv.MdWebToPbWeb(web),
-		}, nil
-	}
-	//尝试缩短路径查找
-
-	for parentPath := path.Dir(url); parentPath != url; parentPath = path.Dir(url) {
-		web, err = l.svcCtx.WebModel.FindByUrl(l.ctx, parentPath)
+	for _, weburl := range weburls {
+		web, err := l.svcCtx.WebModel.FindByUrl(l.ctx, weburl)
 		if err != nil && err != model.ErrNotFound {
 			l.Logger.Error(err)
 			return nil, errorx.IntRpcErr(err)
@@ -62,30 +44,6 @@ func (l *GetWebByUrlLogic) GetWebByUrl(in *admin_pb.GetWebByUrlReq) (*admin_pb.G
 				Web: dataconv.MdWebToPbWeb(web),
 			}, nil
 		}
-	}
-
-	//不存在，尝试找host
-	web, err = l.svcCtx.WebModel.FindByHost(l.ctx, parsedURL.Host)
-	if err != nil && err != model.ErrNotFound {
-		l.Logger.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == nil {
-		return &admin_pb.GetWebByUrlResp{
-			Web: dataconv.MdWebToPbWeb(web),
-		}, nil
-	}
-
-	//不存在，尝试查找domain
-	web, err = l.svcCtx.WebModel.FindByHost(l.ctx, utils.GetDomain(parsedURL.Host))
-	if err != nil && err != model.ErrNotFound {
-		l.Logger.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-	if err == nil {
-		return &admin_pb.GetWebByUrlResp{
-			Web: dataconv.MdWebToPbWeb(web),
-		}, nil
 	}
 
 	return &admin_pb.GetWebByUrlResp{}, nil

@@ -35,11 +35,12 @@ func (l *AddAdminerLogic) AddAdminer(req *types.AddAdminerReq) (any, error) {
 		Email:        req.Email,
 		Status:       req.Status,
 		IsSuperAdmin: req.IsSuperAdmin,
+		CompanyId:    req.CompanyId,
+		ProjectId:    req.ProjectId,
 		LoginCount:   req.LoginCount,
-		LastLogin:    req.LastLogin,
+		LastLoginAt:  req.LastLoginAt,
 	}
-	_, err := l.svcCtx.AdminRpc.AddAdminer(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.AdminRpc.AddAdminer(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

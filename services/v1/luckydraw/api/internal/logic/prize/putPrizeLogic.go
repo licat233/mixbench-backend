@@ -27,15 +27,16 @@ func NewPutPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPrize
 
 func (l *PutPrizeLogic) PutPrize(req *types.PutPrizeReq) (any, error) {
 	in := &luckydraw_pb.PutPrizeReq{
-		Id:     req.Id,
-		Uuid:   req.Uuid,
-		Name:   req.Name,
-		Image:  req.Image,
-		Price:  req.Price,
-		Status: req.Status,
+		Prize: &luckydraw_pb.Prize{
+			Id:     req.Id,
+			Uuid:   req.Uuid,
+			Name:   req.Name,
+			Image:  req.Image,
+			Price:  req.Price,
+			Status: req.Status,
+		},
 	}
-	_, err := l.svcCtx.LuckydrawRpc.PutPrize(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.LuckydrawRpc.PutPrize(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

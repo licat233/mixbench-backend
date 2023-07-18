@@ -45,24 +45,25 @@ func NewKefuClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.Respo
 }
 
 func (c *KefuClient) Run() {
+	defer c.Close()
 	if c.Init() != nil {
 		return
 	}
 	c.wg.Add(2)
 	go func() {
 		defer c.wg.Done()
-		c.writePump()
+		c.writePump(c.recevierMessageHandler)
 	}()
 	go func() {
 		defer c.wg.Done()
-		c.readPump(c.payloadHandler)
+		c.readPump(c.wsPayloadHandler)
 	}()
 	c.wg.Wait()
 	c.done()
 }
 
 func (c *KefuClient) done() error {
-	c.client.Close() //关闭client
+	//客服离线后的操作
 	//此时，如果其对接的游客还在线，应该将他的游客转接给其它客服，而不是放任不管
 	//逻辑：转移当前客服的在线游客，分配给其它客服
 	//如果没有其它在线客服可分配，则无法分配，无需分配
@@ -72,19 +73,52 @@ func (c *KefuClient) done() error {
 func (c *KefuClient) Init() error {
 	// 此时，可能存在需要接待的游客
 
+	//查找该客服的在线游客
+	ids := OnlineVisitor.FindsByVal(c.Kefu.Id)
+	count := len(ids)
+
 	//注册online
-	OnlineKefu.Set(c.user.GetId(), 0)
+	OnlineKefu.Set(c.Kefu.Id, int64(count))
+
 	//发送公告信息
 	if err := c.sendPresetMessage(PublicMessageKey, c.Kefu.Id, -1); err != nil {
-		c.Logger.Error(err)
 		return err
 	}
+	//给该客服分配等待接待的游客
+	if err := c.assignVisitor(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
-// payloadHandler 用于处理ws消息
+func (c *KefuClient) assignVisitor() error {
+	//需要分配客服的在线的游客
+	ids := OnlineVisitor.FindsByVal(0)
+	visitors, err := c.svcCtx.VisitorModel.FindsByIds(c.ctx, ids)
+	if err != nil {
+		c.Logger.Error(err)
+		return err
+	}
+	for _, visitor := range visitors {
+		//先更新数据库，确保无误后再更新其它
+		if err := c.svcCtx.VisitorModel.Update(c.ctx, visitor); err != nil {
+			return err
+		}
+		//给他们指定客服为当前客服
+		OnlineVisitor.Set(visitor.Id, c.Kefu.Id)
+		visitor.KefuId = c.Kefu.Id
+		//还需要更新visitorClient中的visitor信息，在visitorClient中实现
+	}
+	//更新其游客数量
+	count := OnlineKefu.Get(c.Kefu.Id)
+	OnlineKefu.Set(c.Kefu.Id, count+int64(len(ids)))
+	return nil
+}
+
+// wsPayloadHandler 用于处理ws消息
 // 当返回nil,nil时，表示丢弃
-func (c *KefuClient) payloadHandler(payload []byte) (*model.Message, error) {
+func (c *KefuClient) wsPayloadHandler(payload []byte) (*model.Message, error) {
 	//这里的payload为完整的json序列
 	if !validatePayload(payload) {
 		//丢弃
@@ -107,6 +141,34 @@ func (c *KefuClient) payloadHandler(payload []byte) (*model.Message, error) {
 	return message, nil
 }
 
+func (c *KefuClient) recevierMessageHandler(message *model.Message) error {
+	//客服接受到了游客发送过来的消息
+	if message.KefuId < 1 && message.MsgType == VisitorMsgType && message.VisitorId > 0 {
+		//会有多个客服接收到该信息，谁先拿到算谁的，所以要确认是否已被其他客服拿到了
+		kefuId := OnlineVisitor.Get(message.VisitorId)
+		if kefuId < 1 {
+			OnlineVisitor.Set(message.VisitorId, c.Kefu.Id)
+			//检查更新数据库中的数据
+			visitor, err := c.svcCtx.VisitorModel.FindById(c.ctx, message.Id)
+			if err == model.ErrNotFound {
+				return err
+			} else if err != nil {
+				c.Logger.Error(err)
+				return err
+			}
+			if visitor.KefuId != c.Kefu.Id {
+				//更新为当前客服的id
+				message.KefuId = c.Kefu.Id
+				err = c.svcCtx.VisitorModel.Update(c.ctx, visitor)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+
 func (c *KefuClient) newMessage(content string, visitorId int64) *model.Message {
 	return &model.Message{
 		Id:          0,
@@ -123,6 +185,17 @@ func (c *KefuClient) newMessage(content string, visitorId int64) *model.Message 
 		SendTime:    time.Now().Local(),
 		ExpireTime:  time.Now().Local().Add(time.Hour * 24 * 30), //30天
 	}
+}
+
+// sendHistoryMessages 发送历史聊天记录给当前用户
+// 不经过 redis 订阅，直接写入ws
+func (c *KefuClient) SendHistoryMessages(visitorId int64) error {
+	messages, err := c.svcCtx.MessageModel.FindsByVisitorIdAndKefuId(c.ctx, visitorId, c.Kefu.Id)
+	if err != nil {
+		c.Logger.Error(err)
+		return err
+	}
+	return c.writeToWebsocket(messages...)
 }
 
 // func (c *KefuClient) update() error {

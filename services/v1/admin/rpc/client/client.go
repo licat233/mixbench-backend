@@ -12,8 +12,9 @@ type AdminRpc struct {
 }
 
 func NewAdminRpc(cli zrpc.Client) *AdminRpc {
+	conn := cli.Conn()
 	return &AdminRpc{
-		BaseClient:  admin_pb.NewBaseClient(cli.Conn()),
-		AdminClient: admin_pb.NewAdminClient(cli.Conn()),
+		BaseClient:  admin_pb.NewBaseClient(conn),
+		AdminClient: admin_pb.NewAdminClient(conn),
 	}
 }

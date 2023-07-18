@@ -13,56 +13,82 @@ import (
 )
 
 type (
-	AddIpblackReq          = authentication_pb.AddIpblackReq
-	AddIpblackResp         = authentication_pb.AddIpblackResp
-	AuthReq                = authentication_pb.AuthReq
-	AuthResp               = authentication_pb.AuthResp
-	ByIdReq                = authentication_pb.ByIdReq
-	CaptchaBgColor         = authentication_pb.CaptchaBgColor
-	DelIpblackReq          = authentication_pb.DelIpblackReq
-	DelIpblackResp         = authentication_pb.DelIpblackResp
-	Enum                   = authentication_pb.Enum
-	Enums                  = authentication_pb.Enums
-	GenTokenReq            = authentication_pb.GenTokenReq
-	GenTokenResp           = authentication_pb.GenTokenResp
-	GetCaptchaReq          = authentication_pb.GetCaptchaReq
-	GetCaptchaResp         = authentication_pb.GetCaptchaResp
-	GetIpblackEnumsReq     = authentication_pb.GetIpblackEnumsReq
-	GetIpblackListReq      = authentication_pb.GetIpblackListReq
-	GetIpblackListResp     = authentication_pb.GetIpblackListResp
-	GetIpblackReq          = authentication_pb.GetIpblackReq
-	GetIpblackResp         = authentication_pb.GetIpblackResp
-	Ipblack                = authentication_pb.Ipblack
-	ListReq                = authentication_pb.ListReq
-	NilReq                 = authentication_pb.NilReq
-	NilResp                = authentication_pb.NilResp
-	Option                 = authentication_pb.Option
-	Options                = authentication_pb.Options
-	PutIpblackReq          = authentication_pb.PutIpblackReq
-	PutIpblackResp         = authentication_pb.PutIpblackResp
-	SendEmailCaptchaReq    = authentication_pb.SendEmailCaptchaReq
-	SendEmailCaptchaResp   = authentication_pb.SendEmailCaptchaResp
-	StatusResp             = authentication_pb.StatusResp
-	TreeOption             = authentication_pb.TreeOption
-	TreeOptions            = authentication_pb.TreeOptions
-	VerifyCaptchaReq       = authentication_pb.VerifyCaptchaReq
-	VerifyCaptchaResp      = authentication_pb.VerifyCaptchaResp
-	VerifyEmailCaptchaReq  = authentication_pb.VerifyEmailCaptchaReq
-	VerifyEmailCaptchaResp = authentication_pb.VerifyEmailCaptchaResp
+	AddIpBlacklistReq         = authentication_pb.AddIpBlacklistReq
+	AddIpBlacklistResp        = authentication_pb.AddIpBlacklistResp
+	AddTokenBlacklistReq      = authentication_pb.AddTokenBlacklistReq
+	AddTokenBlacklistResp     = authentication_pb.AddTokenBlacklistResp
+	AuthReq                   = authentication_pb.AuthReq
+	AuthResp                  = authentication_pb.AuthResp
+	ByIdReq                   = authentication_pb.ByIdReq
+	CaptchaBgColor            = authentication_pb.CaptchaBgColor
+	DelIpBlacklistReq         = authentication_pb.DelIpBlacklistReq
+	DelIpBlacklistResp        = authentication_pb.DelIpBlacklistResp
+	DelTokenBlacklistReq      = authentication_pb.DelTokenBlacklistReq
+	DelTokenBlacklistResp     = authentication_pb.DelTokenBlacklistResp
+	Enum                      = authentication_pb.Enum
+	Enums                     = authentication_pb.Enums
+	GenTokenReq               = authentication_pb.GenTokenReq
+	GenTokenResp              = authentication_pb.GenTokenResp
+	GetCaptchaReq             = authentication_pb.GetCaptchaReq
+	GetCaptchaResp            = authentication_pb.GetCaptchaResp
+	GetIpBlacklistEnumsReq    = authentication_pb.GetIpBlacklistEnumsReq
+	GetIpBlacklistListReq     = authentication_pb.GetIpBlacklistListReq
+	GetIpBlacklistListResp    = authentication_pb.GetIpBlacklistListResp
+	GetIpBlacklistReq         = authentication_pb.GetIpBlacklistReq
+	GetIpBlacklistResp        = authentication_pb.GetIpBlacklistResp
+	GetTokenBlacklistEnumsReq = authentication_pb.GetTokenBlacklistEnumsReq
+	GetTokenBlacklistListReq  = authentication_pb.GetTokenBlacklistListReq
+	GetTokenBlacklistListResp = authentication_pb.GetTokenBlacklistListResp
+	GetTokenBlacklistReq      = authentication_pb.GetTokenBlacklistReq
+	GetTokenBlacklistResp     = authentication_pb.GetTokenBlacklistResp
+	IpBlacklist               = authentication_pb.IpBlacklist
+	JwtData                   = authentication_pb.JwtData
+	JwtToken                  = authentication_pb.JwtToken
+	ListReq                   = authentication_pb.ListReq
+	NilReq                    = authentication_pb.NilReq
+	NilResp                   = authentication_pb.NilResp
+	Option                    = authentication_pb.Option
+	Options                   = authentication_pb.Options
+	PutIpBlacklistReq         = authentication_pb.PutIpBlacklistReq
+	PutIpBlacklistResp        = authentication_pb.PutIpBlacklistResp
+	PutTokenBlacklistReq      = authentication_pb.PutTokenBlacklistReq
+	PutTokenBlacklistResp     = authentication_pb.PutTokenBlacklistResp
+	SendEmailCaptchaReq       = authentication_pb.SendEmailCaptchaReq
+	SendEmailCaptchaResp      = authentication_pb.SendEmailCaptchaResp
+	StatusResp                = authentication_pb.StatusResp
+	TokenBlacklist            = authentication_pb.TokenBlacklist
+	TreeOption                = authentication_pb.TreeOption
+	TreeOptions               = authentication_pb.TreeOptions
+	VerifyCaptchaReq          = authentication_pb.VerifyCaptchaReq
+	VerifyCaptchaResp         = authentication_pb.VerifyCaptchaResp
+	VerifyEmailCaptchaReq     = authentication_pb.VerifyEmailCaptchaReq
+	VerifyEmailCaptchaResp    = authentication_pb.VerifyEmailCaptchaResp
 
 	Base interface {
 		// 添加IP黑名单
-		AddIpblack(ctx context.Context, in *AddIpblackReq, opts ...grpc.CallOption) (*AddIpblackResp, error)
+		AddIpBlacklist(ctx context.Context, in *AddIpBlacklistReq, opts ...grpc.CallOption) (*AddIpBlacklistResp, error)
 		// 更新IP黑名单
-		PutIpblack(ctx context.Context, in *PutIpblackReq, opts ...grpc.CallOption) (*PutIpblackResp, error)
+		PutIpBlacklist(ctx context.Context, in *PutIpBlacklistReq, opts ...grpc.CallOption) (*PutIpBlacklistResp, error)
 		// 获取IP黑名单
-		GetIpblack(ctx context.Context, in *GetIpblackReq, opts ...grpc.CallOption) (*GetIpblackResp, error)
+		GetIpBlacklist(ctx context.Context, in *GetIpBlacklistReq, opts ...grpc.CallOption) (*GetIpBlacklistResp, error)
 		// 删除IP黑名单
-		DelIpblack(ctx context.Context, in *DelIpblackReq, opts ...grpc.CallOption) (*DelIpblackResp, error)
+		DelIpBlacklist(ctx context.Context, in *DelIpBlacklistReq, opts ...grpc.CallOption) (*DelIpBlacklistResp, error)
 		// 获取IP黑名单列表
-		GetIpblackList(ctx context.Context, in *GetIpblackListReq, opts ...grpc.CallOption) (*GetIpblackListResp, error)
+		GetIpBlacklistList(ctx context.Context, in *GetIpBlacklistListReq, opts ...grpc.CallOption) (*GetIpBlacklistListResp, error)
 		// 获取IP黑名单枚举列表
-		GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+		GetIpBlacklistEnums(ctx context.Context, in *GetIpBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+		// 添加token黑名单
+		AddTokenBlacklist(ctx context.Context, in *AddTokenBlacklistReq, opts ...grpc.CallOption) (*AddTokenBlacklistResp, error)
+		// 更新token黑名单
+		PutTokenBlacklist(ctx context.Context, in *PutTokenBlacklistReq, opts ...grpc.CallOption) (*PutTokenBlacklistResp, error)
+		// 获取token黑名单
+		GetTokenBlacklist(ctx context.Context, in *GetTokenBlacklistReq, opts ...grpc.CallOption) (*GetTokenBlacklistResp, error)
+		// 删除token黑名单
+		DelTokenBlacklist(ctx context.Context, in *DelTokenBlacklistReq, opts ...grpc.CallOption) (*DelTokenBlacklistResp, error)
+		// 获取token黑名单列表
+		GetTokenBlacklistList(ctx context.Context, in *GetTokenBlacklistListReq, opts ...grpc.CallOption) (*GetTokenBlacklistListResp, error)
+		// 获取token黑名单枚举列表
+		GetTokenBlacklistEnums(ctx context.Context, in *GetTokenBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 	}
 
 	defaultBase struct {
@@ -77,37 +103,73 @@ func NewBase(cli zrpc.Client) Base {
 }
 
 // 添加IP黑名单
-func (m *defaultBase) AddIpblack(ctx context.Context, in *AddIpblackReq, opts ...grpc.CallOption) (*AddIpblackResp, error) {
+func (m *defaultBase) AddIpBlacklist(ctx context.Context, in *AddIpBlacklistReq, opts ...grpc.CallOption) (*AddIpBlacklistResp, error) {
 	client := authentication_pb.NewBaseClient(m.cli.Conn())
-	return client.AddIpblack(ctx, in, opts...)
+	return client.AddIpBlacklist(ctx, in, opts...)
 }
 
 // 更新IP黑名单
-func (m *defaultBase) PutIpblack(ctx context.Context, in *PutIpblackReq, opts ...grpc.CallOption) (*PutIpblackResp, error) {
+func (m *defaultBase) PutIpBlacklist(ctx context.Context, in *PutIpBlacklistReq, opts ...grpc.CallOption) (*PutIpBlacklistResp, error) {
 	client := authentication_pb.NewBaseClient(m.cli.Conn())
-	return client.PutIpblack(ctx, in, opts...)
+	return client.PutIpBlacklist(ctx, in, opts...)
 }
 
 // 获取IP黑名单
-func (m *defaultBase) GetIpblack(ctx context.Context, in *GetIpblackReq, opts ...grpc.CallOption) (*GetIpblackResp, error) {
+func (m *defaultBase) GetIpBlacklist(ctx context.Context, in *GetIpBlacklistReq, opts ...grpc.CallOption) (*GetIpBlacklistResp, error) {
 	client := authentication_pb.NewBaseClient(m.cli.Conn())
-	return client.GetIpblack(ctx, in, opts...)
+	return client.GetIpBlacklist(ctx, in, opts...)
 }
 
 // 删除IP黑名单
-func (m *defaultBase) DelIpblack(ctx context.Context, in *DelIpblackReq, opts ...grpc.CallOption) (*DelIpblackResp, error) {
+func (m *defaultBase) DelIpBlacklist(ctx context.Context, in *DelIpBlacklistReq, opts ...grpc.CallOption) (*DelIpBlacklistResp, error) {
 	client := authentication_pb.NewBaseClient(m.cli.Conn())
-	return client.DelIpblack(ctx, in, opts...)
+	return client.DelIpBlacklist(ctx, in, opts...)
 }
 
 // 获取IP黑名单列表
-func (m *defaultBase) GetIpblackList(ctx context.Context, in *GetIpblackListReq, opts ...grpc.CallOption) (*GetIpblackListResp, error) {
+func (m *defaultBase) GetIpBlacklistList(ctx context.Context, in *GetIpBlacklistListReq, opts ...grpc.CallOption) (*GetIpBlacklistListResp, error) {
 	client := authentication_pb.NewBaseClient(m.cli.Conn())
-	return client.GetIpblackList(ctx, in, opts...)
+	return client.GetIpBlacklistList(ctx, in, opts...)
 }
 
 // 获取IP黑名单枚举列表
-func (m *defaultBase) GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+func (m *defaultBase) GetIpBlacklistEnums(ctx context.Context, in *GetIpBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
 	client := authentication_pb.NewBaseClient(m.cli.Conn())
-	return client.GetIpblackEnums(ctx, in, opts...)
+	return client.GetIpBlacklistEnums(ctx, in, opts...)
+}
+
+// 添加token黑名单
+func (m *defaultBase) AddTokenBlacklist(ctx context.Context, in *AddTokenBlacklistReq, opts ...grpc.CallOption) (*AddTokenBlacklistResp, error) {
+	client := authentication_pb.NewBaseClient(m.cli.Conn())
+	return client.AddTokenBlacklist(ctx, in, opts...)
+}
+
+// 更新token黑名单
+func (m *defaultBase) PutTokenBlacklist(ctx context.Context, in *PutTokenBlacklistReq, opts ...grpc.CallOption) (*PutTokenBlacklistResp, error) {
+	client := authentication_pb.NewBaseClient(m.cli.Conn())
+	return client.PutTokenBlacklist(ctx, in, opts...)
+}
+
+// 获取token黑名单
+func (m *defaultBase) GetTokenBlacklist(ctx context.Context, in *GetTokenBlacklistReq, opts ...grpc.CallOption) (*GetTokenBlacklistResp, error) {
+	client := authentication_pb.NewBaseClient(m.cli.Conn())
+	return client.GetTokenBlacklist(ctx, in, opts...)
+}
+
+// 删除token黑名单
+func (m *defaultBase) DelTokenBlacklist(ctx context.Context, in *DelTokenBlacklistReq, opts ...grpc.CallOption) (*DelTokenBlacklistResp, error) {
+	client := authentication_pb.NewBaseClient(m.cli.Conn())
+	return client.DelTokenBlacklist(ctx, in, opts...)
+}
+
+// 获取token黑名单列表
+func (m *defaultBase) GetTokenBlacklistList(ctx context.Context, in *GetTokenBlacklistListReq, opts ...grpc.CallOption) (*GetTokenBlacklistListResp, error) {
+	client := authentication_pb.NewBaseClient(m.cli.Conn())
+	return client.GetTokenBlacklistList(ctx, in, opts...)
+}
+
+// 获取token黑名单枚举列表
+func (m *defaultBase) GetTokenBlacklistEnums(ctx context.Context, in *GetTokenBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	client := authentication_pb.NewBaseClient(m.cli.Conn())
+	return client.GetTokenBlacklistEnums(ctx, in, opts...)
 }

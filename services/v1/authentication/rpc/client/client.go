@@ -12,8 +12,9 @@ type AuthenticationRpc struct {
 }
 
 func NewAuthenticationRpc(cli zrpc.Client) *AuthenticationRpc {
+	conn := cli.Conn()
 	return &AuthenticationRpc{
-		BaseClient:           authentication_pb.NewBaseClient(cli.Conn()),
-		AuthenticationClient: authentication_pb.NewAuthenticationClient(cli.Conn()),
+		BaseClient:           authentication_pb.NewBaseClient(conn),
+		AuthenticationClient: authentication_pb.NewAuthenticationClient(conn),
 	}
 }

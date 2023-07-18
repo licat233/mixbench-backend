@@ -3,40 +3,11 @@ import type * as components from "./adminComponents"
 export * from "./adminComponents"
 
 /**
- * @description "jwt鉴权接口"
- */
-export function auth() {
-	return webapi.get<null>(`/v1/api/admin/auth`)
-}
-
-/**
- * @description "开发面板的登录"
- * @param req
- */
-export function devPanelLogin(req: components.DevPanelLoginReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/devPanelLogin`, req)
-}
-
-/**
- * @description "开发面板的鉴权"
- */
-export function devPanelAuth() {
-	return webapi.get<null>(`/v1/api/admin/devPanelAuth`)
-}
-
-/**
- * @description "superAdmin鉴权接口"
- */
-export function superAdminAuth() {
-	return webapi.get<null>(`/v1/api/admin/superAdminAuth`)
-}
-
-/**
  * @description "登录"
  * @param req
  */
 export function login(req: components.LoginReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/login`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/admin/public/login`, req)
 }
 
 /**
@@ -44,7 +15,7 @@ export function login(req: components.LoginReq) {
  * @param req
  */
 export function loginByEmail(req: components.LoginByEmailReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/loginByEmail`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/admin/public/loginByEmail`, req)
 }
 
 /**
@@ -52,7 +23,7 @@ export function loginByEmail(req: components.LoginByEmailReq) {
  * @param req
  */
 export function loginEmailCaptcha(req: components.LoginEmailCaptchaReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/loginEmailCaptcha`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/admin/public/loginEmailCaptcha`, req)
 }
 
 /**
@@ -60,7 +31,7 @@ export function loginEmailCaptcha(req: components.LoginEmailCaptchaReq) {
  * @param req
  */
 export function registerEmailCaptcha(req: components.RegisterEmailCaptchaReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/registerEmailCaptcha`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/admin/public/registerEmailCaptcha`, req)
 }
 
 /**
@@ -68,7 +39,7 @@ export function registerEmailCaptcha(req: components.RegisterEmailCaptchaReq) {
  * @param req
  */
 export function bindEmailCaptcha(req: components.BindEmailCaptchaReq) {
-	return webapi.post<components.BaseResp>(`/v1/api/admin/bindEmailCaptcha`, req)
+	return webapi.post<components.BaseResp>(`/v1/api/admin/public/bindEmailCaptcha`, req)
 }
 
 /**
@@ -76,7 +47,7 @@ export function bindEmailCaptcha(req: components.BindEmailCaptchaReq) {
  * @param params
  */
 export function test(params: components.TestReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/test`, params)
+	return webapi.get<components.BaseResp>(`/v1/api/admin/public/test`, params)
 }
 
 /**
@@ -84,7 +55,7 @@ export function test(params: components.TestReqParams) {
  * @param params
  */
 export function pwdEncryption(params: components.PwdEncryptionReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/pwdEncryption`, params)
+	return webapi.get<components.BaseResp>(`/v1/api/admin/public/pwdEncryption`, params)
 }
 
 /**
@@ -92,7 +63,7 @@ export function pwdEncryption(params: components.PwdEncryptionReqParams) {
  * @param params
  */
 export function pwdCompare(params: components.PwdCompareReqParams) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/pwdCompare`, params)
+	return webapi.get<components.BaseResp>(`/v1/api/admin/public/pwdCompare`, params)
 }
 
 /**
@@ -242,6 +213,54 @@ export function getCampaignList(params: components.GetCampaignListReqParams) {
  */
 export function getCampaignEnums(req: components.GetCampaignEnumsReq) {
 	return webapi.get<components.BaseResp>(`/v1/api/admin/campaign/enums`, req)
+}
+
+/**
+ * @description "添加公司 基础API"
+ * @param req
+ */
+export function addCompany(req: components.AddCompanyReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/admin/company`, req)
+}
+
+/**
+ * @description "更新公司 基础API"
+ * @param req
+ */
+export function putCompany(req: components.PutCompanyReq) {
+	return webapi.put<components.BaseResp>(`/v1/api/admin/company`, req)
+}
+
+/**
+ * @description "获取公司 基础API"
+ * @param req
+ */
+export function getCompany(req: components.GetCompanyReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/company`, req)
+}
+
+/**
+ * @description "删除公司 基础API"
+ * @param req
+ */
+export function delCompany(req: components.DelCompanyReq) {
+	return webapi.delete<components.BaseResp>(`/v1/api/admin/company`, req)
+}
+
+/**
+ * @description "获取公司列表 基础API"
+ * @param params
+ */
+export function getCompanyList(params: components.GetCompanyListReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/company/list`, params)
+}
+
+/**
+ * @description "获取公司枚举列表 基础API"
+ * @param req
+ */
+export function getCompanyEnums(req: components.GetCompanyEnumsReq) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/company/enums`, req)
 }
 
 /**

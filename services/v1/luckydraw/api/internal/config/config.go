@@ -14,8 +14,8 @@ import (
 
 type Config struct {
 	rest.RestConf
-	RootDir string
-	Auth    struct {
+	// RootDir string
+	Auth struct {
 		AccessSecret string
 	}
 	AuthenticationRpc zrpc.RpcClientConf

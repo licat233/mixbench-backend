@@ -2,6 +2,7 @@ package ws
 
 import (
 	"errors"
+	"mixbench/services/v1/chat/api/internal/ws/store"
 	"mixbench/services/v1/chat/model"
 	"net/http"
 	"time"
@@ -46,6 +47,9 @@ const (
 	EmojiContentType = 2
 	VideoContentType = 3
 	ErrorContentType = 4
+
+	//无客服接待的游客的redis channel值
+	WaiteKefuChannelValue = "waite-kefu-redis-channel-value"
 )
 
 var (
@@ -66,3 +70,12 @@ var ErrSystem = errors.New("server internal error! 伺服器故障! ")
 
 // 将payload转化为message
 type payloadHandler func(payload []byte) (*model.Message, error)
+
+type recevierMessageHandler func(message *model.Message) error
+
+// 对于kefu来说：map[kefuId]count 客服ID-游客数
+var OnlineKefu = store.NewOnlineKefu()
+
+// 对于visitor来说：map[visitorId]kefuId 游客ID-客服ID
+// 约定，如果kefuId == 0，表示无客服
+var OnlineVisitor = store.NewOnlineVisitor()

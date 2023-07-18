@@ -5,7 +5,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -23,14 +22,12 @@ type web_model interface {
 	FindByUuid(ctx context.Context, uuid string) (*Web, error)
 	FindByProjectId(ctx context.Context, projectId int64) (*Web, error)
 	FindByUrl(ctx context.Context, url string) (*Web, error)
-	FindByHost(ctx context.Context, host string) (*Web, error)
 	FindByDescription(ctx context.Context, description string) (*Web, error)
 	FindByCode(ctx context.Context, code string) (*Web, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Web, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Web, error)
 	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Web, error)
 	FindsByUrls(ctx context.Context, urls []string) ([]*Web, error)
-	FindsByHosts(ctx context.Context, hosts []string) ([]*Web, error)
 	FindsByDescriptions(ctx context.Context, descriptions []string) ([]*Web, error)
 	FindsByCodes(ctx context.Context, codes []string) ([]*Web, error)
 
@@ -38,7 +35,6 @@ type web_model interface {
 	FindsByUuid(ctx context.Context, uuid string) ([]*Web, error)
 	FindsByProjectId(ctx context.Context, projectId int64) ([]*Web, error)
 	FindsByUrl(ctx context.Context, url string) ([]*Web, error)
-	FindsByHost(ctx context.Context, host string) ([]*Web, error)
 	FindsByDescription(ctx context.Context, description string) ([]*Web, error)
 	FindsByCode(ctx context.Context, code string) ([]*Web, error)
 
@@ -82,9 +78,6 @@ func (m *defaultWebModel) FindList(ctx context.Context, pageSize, page int64, ke
 		if web.Url != "" {
 			sq = sq.Where("`url` = ?", web.Url)
 		}
-		if web.Host != "" {
-			sq = sq.Where("`host` = ?", web.Host)
-		}
 		if web.Description != "" {
 			sq = sq.Where("`description` = ?", web.Description)
 		}
@@ -93,14 +86,13 @@ func (m *defaultWebModel) FindList(ctx context.Context, pageSize, page int64, ke
 		}
 	}
 	if pageSize > 0 && page > 0 {
-		sqCount := sq.RemoveLimit().RemoveOffset()
 		sq = sq.Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-		queryCount, agrsCount, e := sqCount.ToSql()
+		sqCount := sq.RemoveLimit().RemoveOffset()
+		queryCount, agrsCount, e := sqCount.RemoveColumns().Column("COUNT(*)").ToSql()
 		if e != nil {
 			err = e
 			return
 		}
-		queryCount = strings.ReplaceAll(queryCount, webRows, "COUNT(*)")
 		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
 			return
 		}
@@ -179,20 +171,6 @@ func (m *defaultWebModel) FindByUrl(ctx context.Context, url string) (*Web, erro
 	}
 }
 
-func (m *defaultWebModel) FindByHost(ctx context.Context, host string) (*Web, error) {
-	var resp Web
-	query := fmt.Sprintf("select %s from %s where `host` = ? and `is_deleted` = '0' limit 1", webRows, m.table)
-	err := m.QueryRowNoCacheCtx(ctx, &resp, query, host)
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
 func (m *defaultWebModel) FindByDescription(ctx context.Context, description string) (*Web, error) {
 	var resp Web
 	query := fmt.Sprintf("select %s from %s where `description` = ? and `is_deleted` = '0' limit 1", webRows, m.table)
@@ -261,16 +239,6 @@ func (m *defaultWebModel) FindsByUrls(ctx context.Context, urls []string) ([]*We
 	return resp, err
 }
 
-func (m *defaultWebModel) FindsByHosts(ctx context.Context, hosts []string) ([]*Web, error) {
-	var resp = make([]*Web, 0)
-	if len(hosts) == 0 {
-		return resp, nil
-	}
-	query := fmt.Sprintf("select %s from %s where `host` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, hosts)
-	return resp, err
-}
-
 func (m *defaultWebModel) FindsByDescriptions(ctx context.Context, descriptions []string) ([]*Web, error) {
 	var resp = make([]*Web, 0)
 	if len(descriptions) == 0 {
@@ -316,13 +284,6 @@ func (m *defaultWebModel) FindsByUrl(ctx context.Context, url string) ([]*Web, e
 	var resp = make([]*Web, 0)
 	query := fmt.Sprintf("select %s from %s where `url` = ? and `is_deleted` = '0' ", webRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, url)
-	return resp, err
-}
-
-func (m *defaultWebModel) FindsByHost(ctx context.Context, host string) ([]*Web, error) {
-	var resp = make([]*Web, 0)
-	query := fmt.Sprintf("select %s from %s where `host` = ? and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, host)
 	return resp, err
 }
 

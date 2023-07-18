@@ -5,7 +5,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -22,15 +21,18 @@ type project_model interface {
 	FindById(ctx context.Context, id int64) (*Project, error)
 	FindByUuid(ctx context.Context, uuid string) (*Project, error)
 	FindByName(ctx context.Context, name string) (*Project, error)
+	FindByCompanyId(ctx context.Context, companyId int64) (*Project, error)
 	FindByStatus(ctx context.Context, status int64) (*Project, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Project, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Project, error)
 	FindsByNames(ctx context.Context, names []string) ([]*Project, error)
+	FindsByCompanyIds(ctx context.Context, companyIds []int64) ([]*Project, error)
 	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Project, error)
 
 	FindsById(ctx context.Context, id int64) ([]*Project, error)
 	FindsByUuid(ctx context.Context, uuid string) ([]*Project, error)
 	FindsByName(ctx context.Context, name string) ([]*Project, error)
+	FindsByCompanyId(ctx context.Context, companyId int64) ([]*Project, error)
 	FindsByStatus(ctx context.Context, status int64) ([]*Project, error)
 
 	formatUuidKey(uuid string) string
@@ -72,6 +74,9 @@ func (m *defaultProjectModel) FindList(ctx context.Context, pageSize, page int64
 			sq = sq.Where("`name` = ?", project.Name)
 			hasName = true
 		}
+		if project.CompanyId > 0 {
+			sq = sq.Where("`company_id` = ?", project.CompanyId)
+		}
 		if project.Status >= 0 {
 			sq = sq.Where("`status` = ?", project.Status)
 		}
@@ -80,14 +85,13 @@ func (m *defaultProjectModel) FindList(ctx context.Context, pageSize, page int64
 		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
-		sqCount := sq.RemoveLimit().RemoveOffset()
 		sq = sq.Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-		queryCount, agrsCount, e := sqCount.ToSql()
+		sqCount := sq.RemoveLimit().RemoveOffset()
+		queryCount, agrsCount, e := sqCount.RemoveColumns().Column("COUNT(*)").ToSql()
 		if e != nil {
 			err = e
 			return
 		}
-		queryCount = strings.ReplaceAll(queryCount, projectRows, "COUNT(*)")
 		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
 			return
 		}
@@ -152,6 +156,20 @@ func (m *defaultProjectModel) FindByName(ctx context.Context, name string) (*Pro
 	}
 }
 
+func (m *defaultProjectModel) FindByCompanyId(ctx context.Context, companyId int64) (*Project, error) {
+	var resp Project
+	query := fmt.Sprintf("select %s from %s where `company_id` = ? and `is_deleted` = '0' limit 1", projectRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, companyId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultProjectModel) FindByStatus(ctx context.Context, status int64) (*Project, error) {
 	var resp Project
 	query := fmt.Sprintf("select %s from %s where `status` = ? and `is_deleted` = '0' limit 1", projectRows, m.table)
@@ -196,6 +214,16 @@ func (m *defaultProjectModel) FindsByNames(ctx context.Context, names []string) 
 	return resp, err
 }
 
+func (m *defaultProjectModel) FindsByCompanyIds(ctx context.Context, companyIds []int64) ([]*Project, error) {
+	var resp = make([]*Project, 0)
+	if len(companyIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `company_id` in (?) and `is_deleted` = '0' ", projectRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, companyIds)
+	return resp, err
+}
+
 func (m *defaultProjectModel) FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Project, error) {
 	var resp = make([]*Project, 0)
 	if len(statuslist) == 0 {
@@ -224,6 +252,13 @@ func (m *defaultProjectModel) FindsByName(ctx context.Context, name string) ([]*
 	var resp = make([]*Project, 0)
 	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", projectRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultProjectModel) FindsByCompanyId(ctx context.Context, companyId int64) ([]*Project, error) {
+	var resp = make([]*Project, 0)
+	query := fmt.Sprintf("select %s from %s where `company_id` = ? and `is_deleted` = '0' ", projectRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, companyId)
 	return resp, err
 }
 

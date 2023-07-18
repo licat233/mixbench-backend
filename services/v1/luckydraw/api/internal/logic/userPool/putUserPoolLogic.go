@@ -27,15 +27,16 @@ func NewPutUserPoolLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutUs
 
 func (l *PutUserPoolLogic) PutUserPool(req *types.PutUserPoolReq) (any, error) {
 	in := &luckydraw_pb.PutUserPoolReq{
-		Id:         req.Id,
-		Uuid:       req.Uuid,
-		ActivityId: req.ActivityId,
-		UserId:     req.UserId,
-		Status:     req.Status,
-		Score:      req.Score,
+		UserPool: &luckydraw_pb.UserPool{
+			Id:         req.Id,
+			Uuid:       req.Uuid,
+			ActivityId: req.ActivityId,
+			UserId:     req.UserId,
+			Status:     req.Status,
+			Score:      req.Score,
+		},
 	}
-	_, err := l.svcCtx.LuckydrawRpc.PutUserPool(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.LuckydrawRpc.PutUserPool(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

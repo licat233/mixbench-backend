@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
-	"mixbench/services/v1/luckydraw/model"
+	"mixbench/services/v1/luckydraw/rpc/internal/logic/dataconv"
 	"mixbench/services/v1/luckydraw/rpc/internal/svc"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
 
@@ -27,18 +27,7 @@ func NewPutUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutUserLo
 
 // 更新用户名单
 func (l *PutUserLogic) PutUser(in *luckydraw_pb.PutUserReq) (*luckydraw_pb.PutUserResp, error) {
-	data := &model.User{
-		Id:       in.Id,
-		Uuid:     in.Uuid,
-		Passport: in.Passport,
-		Email:    in.Email,
-		Phone:    in.Phone,
-		Name:     in.Name,
-		Address:  in.Address,
-		Score:    in.Score,
-		Status:   in.Status,
-	}
-
+	data := dataconv.PbUserToMdUser(in.User)
 	if err := l.svcCtx.UserModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

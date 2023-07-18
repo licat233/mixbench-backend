@@ -23,17 +23,29 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BaseClient interface {
 	// 添加IP黑名单
-	AddIpblack(ctx context.Context, in *AddIpblackReq, opts ...grpc.CallOption) (*AddIpblackResp, error)
+	AddIpBlacklist(ctx context.Context, in *AddIpBlacklistReq, opts ...grpc.CallOption) (*AddIpBlacklistResp, error)
 	// 更新IP黑名单
-	PutIpblack(ctx context.Context, in *PutIpblackReq, opts ...grpc.CallOption) (*PutIpblackResp, error)
+	PutIpBlacklist(ctx context.Context, in *PutIpBlacklistReq, opts ...grpc.CallOption) (*PutIpBlacklistResp, error)
 	// 获取IP黑名单
-	GetIpblack(ctx context.Context, in *GetIpblackReq, opts ...grpc.CallOption) (*GetIpblackResp, error)
+	GetIpBlacklist(ctx context.Context, in *GetIpBlacklistReq, opts ...grpc.CallOption) (*GetIpBlacklistResp, error)
 	// 删除IP黑名单
-	DelIpblack(ctx context.Context, in *DelIpblackReq, opts ...grpc.CallOption) (*DelIpblackResp, error)
+	DelIpBlacklist(ctx context.Context, in *DelIpBlacklistReq, opts ...grpc.CallOption) (*DelIpBlacklistResp, error)
 	// 获取IP黑名单列表
-	GetIpblackList(ctx context.Context, in *GetIpblackListReq, opts ...grpc.CallOption) (*GetIpblackListResp, error)
+	GetIpBlacklistList(ctx context.Context, in *GetIpBlacklistListReq, opts ...grpc.CallOption) (*GetIpBlacklistListResp, error)
 	// 获取IP黑名单枚举列表
-	GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	GetIpBlacklistEnums(ctx context.Context, in *GetIpBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加token黑名单
+	AddTokenBlacklist(ctx context.Context, in *AddTokenBlacklistReq, opts ...grpc.CallOption) (*AddTokenBlacklistResp, error)
+	// 更新token黑名单
+	PutTokenBlacklist(ctx context.Context, in *PutTokenBlacklistReq, opts ...grpc.CallOption) (*PutTokenBlacklistResp, error)
+	// 获取token黑名单
+	GetTokenBlacklist(ctx context.Context, in *GetTokenBlacklistReq, opts ...grpc.CallOption) (*GetTokenBlacklistResp, error)
+	// 删除token黑名单
+	DelTokenBlacklist(ctx context.Context, in *DelTokenBlacklistReq, opts ...grpc.CallOption) (*DelTokenBlacklistResp, error)
+	// 获取token黑名单列表
+	GetTokenBlacklistList(ctx context.Context, in *GetTokenBlacklistListReq, opts ...grpc.CallOption) (*GetTokenBlacklistListResp, error)
+	// 获取token黑名单枚举列表
+	GetTokenBlacklistEnums(ctx context.Context, in *GetTokenBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 }
 
 type baseClient struct {
@@ -44,54 +56,108 @@ func NewBaseClient(cc grpc.ClientConnInterface) BaseClient {
 	return &baseClient{cc}
 }
 
-func (c *baseClient) AddIpblack(ctx context.Context, in *AddIpblackReq, opts ...grpc.CallOption) (*AddIpblackResp, error) {
-	out := new(AddIpblackResp)
-	err := c.cc.Invoke(ctx, "/authentication_proto.Base/AddIpblack", in, out, opts...)
+func (c *baseClient) AddIpBlacklist(ctx context.Context, in *AddIpBlacklistReq, opts ...grpc.CallOption) (*AddIpBlacklistResp, error) {
+	out := new(AddIpBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/AddIpBlacklist", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *baseClient) PutIpblack(ctx context.Context, in *PutIpblackReq, opts ...grpc.CallOption) (*PutIpblackResp, error) {
-	out := new(PutIpblackResp)
-	err := c.cc.Invoke(ctx, "/authentication_proto.Base/PutIpblack", in, out, opts...)
+func (c *baseClient) PutIpBlacklist(ctx context.Context, in *PutIpBlacklistReq, opts ...grpc.CallOption) (*PutIpBlacklistResp, error) {
+	out := new(PutIpBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/PutIpBlacklist", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *baseClient) GetIpblack(ctx context.Context, in *GetIpblackReq, opts ...grpc.CallOption) (*GetIpblackResp, error) {
-	out := new(GetIpblackResp)
-	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpblack", in, out, opts...)
+func (c *baseClient) GetIpBlacklist(ctx context.Context, in *GetIpBlacklistReq, opts ...grpc.CallOption) (*GetIpBlacklistResp, error) {
+	out := new(GetIpBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpBlacklist", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *baseClient) DelIpblack(ctx context.Context, in *DelIpblackReq, opts ...grpc.CallOption) (*DelIpblackResp, error) {
-	out := new(DelIpblackResp)
-	err := c.cc.Invoke(ctx, "/authentication_proto.Base/DelIpblack", in, out, opts...)
+func (c *baseClient) DelIpBlacklist(ctx context.Context, in *DelIpBlacklistReq, opts ...grpc.CallOption) (*DelIpBlacklistResp, error) {
+	out := new(DelIpBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/DelIpBlacklist", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *baseClient) GetIpblackList(ctx context.Context, in *GetIpblackListReq, opts ...grpc.CallOption) (*GetIpblackListResp, error) {
-	out := new(GetIpblackListResp)
-	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpblackList", in, out, opts...)
+func (c *baseClient) GetIpBlacklistList(ctx context.Context, in *GetIpBlacklistListReq, opts ...grpc.CallOption) (*GetIpBlacklistListResp, error) {
+	out := new(GetIpBlacklistListResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpBlacklistList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *baseClient) GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+func (c *baseClient) GetIpBlacklistEnums(ctx context.Context, in *GetIpBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
 	out := new(Enums)
-	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpblackEnums", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetIpBlacklistEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) AddTokenBlacklist(ctx context.Context, in *AddTokenBlacklistReq, opts ...grpc.CallOption) (*AddTokenBlacklistResp, error) {
+	out := new(AddTokenBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/AddTokenBlacklist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutTokenBlacklist(ctx context.Context, in *PutTokenBlacklistReq, opts ...grpc.CallOption) (*PutTokenBlacklistResp, error) {
+	out := new(PutTokenBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/PutTokenBlacklist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetTokenBlacklist(ctx context.Context, in *GetTokenBlacklistReq, opts ...grpc.CallOption) (*GetTokenBlacklistResp, error) {
+	out := new(GetTokenBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetTokenBlacklist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelTokenBlacklist(ctx context.Context, in *DelTokenBlacklistReq, opts ...grpc.CallOption) (*DelTokenBlacklistResp, error) {
+	out := new(DelTokenBlacklistResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/DelTokenBlacklist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetTokenBlacklistList(ctx context.Context, in *GetTokenBlacklistListReq, opts ...grpc.CallOption) (*GetTokenBlacklistListResp, error) {
+	out := new(GetTokenBlacklistListResp)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetTokenBlacklistList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetTokenBlacklistEnums(ctx context.Context, in *GetTokenBlacklistEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/authentication_proto.Base/GetTokenBlacklistEnums", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,17 +169,29 @@ func (c *baseClient) GetIpblackEnums(ctx context.Context, in *GetIpblackEnumsReq
 // for forward compatibility
 type BaseServer interface {
 	// 添加IP黑名单
-	AddIpblack(context.Context, *AddIpblackReq) (*AddIpblackResp, error)
+	AddIpBlacklist(context.Context, *AddIpBlacklistReq) (*AddIpBlacklistResp, error)
 	// 更新IP黑名单
-	PutIpblack(context.Context, *PutIpblackReq) (*PutIpblackResp, error)
+	PutIpBlacklist(context.Context, *PutIpBlacklistReq) (*PutIpBlacklistResp, error)
 	// 获取IP黑名单
-	GetIpblack(context.Context, *GetIpblackReq) (*GetIpblackResp, error)
+	GetIpBlacklist(context.Context, *GetIpBlacklistReq) (*GetIpBlacklistResp, error)
 	// 删除IP黑名单
-	DelIpblack(context.Context, *DelIpblackReq) (*DelIpblackResp, error)
+	DelIpBlacklist(context.Context, *DelIpBlacklistReq) (*DelIpBlacklistResp, error)
 	// 获取IP黑名单列表
-	GetIpblackList(context.Context, *GetIpblackListReq) (*GetIpblackListResp, error)
+	GetIpBlacklistList(context.Context, *GetIpBlacklistListReq) (*GetIpBlacklistListResp, error)
 	// 获取IP黑名单枚举列表
-	GetIpblackEnums(context.Context, *GetIpblackEnumsReq) (*Enums, error)
+	GetIpBlacklistEnums(context.Context, *GetIpBlacklistEnumsReq) (*Enums, error)
+	// 添加token黑名单
+	AddTokenBlacklist(context.Context, *AddTokenBlacklistReq) (*AddTokenBlacklistResp, error)
+	// 更新token黑名单
+	PutTokenBlacklist(context.Context, *PutTokenBlacklistReq) (*PutTokenBlacklistResp, error)
+	// 获取token黑名单
+	GetTokenBlacklist(context.Context, *GetTokenBlacklistReq) (*GetTokenBlacklistResp, error)
+	// 删除token黑名单
+	DelTokenBlacklist(context.Context, *DelTokenBlacklistReq) (*DelTokenBlacklistResp, error)
+	// 获取token黑名单列表
+	GetTokenBlacklistList(context.Context, *GetTokenBlacklistListReq) (*GetTokenBlacklistListResp, error)
+	// 获取token黑名单枚举列表
+	GetTokenBlacklistEnums(context.Context, *GetTokenBlacklistEnumsReq) (*Enums, error)
 	mustEmbedUnimplementedBaseServer()
 }
 
@@ -121,23 +199,41 @@ type BaseServer interface {
 type UnimplementedBaseServer struct {
 }
 
-func (UnimplementedBaseServer) AddIpblack(context.Context, *AddIpblackReq) (*AddIpblackResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddIpblack not implemented")
+func (UnimplementedBaseServer) AddIpBlacklist(context.Context, *AddIpBlacklistReq) (*AddIpBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddIpBlacklist not implemented")
 }
-func (UnimplementedBaseServer) PutIpblack(context.Context, *PutIpblackReq) (*PutIpblackResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PutIpblack not implemented")
+func (UnimplementedBaseServer) PutIpBlacklist(context.Context, *PutIpBlacklistReq) (*PutIpBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutIpBlacklist not implemented")
 }
-func (UnimplementedBaseServer) GetIpblack(context.Context, *GetIpblackReq) (*GetIpblackResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetIpblack not implemented")
+func (UnimplementedBaseServer) GetIpBlacklist(context.Context, *GetIpBlacklistReq) (*GetIpBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIpBlacklist not implemented")
 }
-func (UnimplementedBaseServer) DelIpblack(context.Context, *DelIpblackReq) (*DelIpblackResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelIpblack not implemented")
+func (UnimplementedBaseServer) DelIpBlacklist(context.Context, *DelIpBlacklistReq) (*DelIpBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelIpBlacklist not implemented")
 }
-func (UnimplementedBaseServer) GetIpblackList(context.Context, *GetIpblackListReq) (*GetIpblackListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetIpblackList not implemented")
+func (UnimplementedBaseServer) GetIpBlacklistList(context.Context, *GetIpBlacklistListReq) (*GetIpBlacklistListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIpBlacklistList not implemented")
 }
-func (UnimplementedBaseServer) GetIpblackEnums(context.Context, *GetIpblackEnumsReq) (*Enums, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetIpblackEnums not implemented")
+func (UnimplementedBaseServer) GetIpBlacklistEnums(context.Context, *GetIpBlacklistEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIpBlacklistEnums not implemented")
+}
+func (UnimplementedBaseServer) AddTokenBlacklist(context.Context, *AddTokenBlacklistReq) (*AddTokenBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddTokenBlacklist not implemented")
+}
+func (UnimplementedBaseServer) PutTokenBlacklist(context.Context, *PutTokenBlacklistReq) (*PutTokenBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutTokenBlacklist not implemented")
+}
+func (UnimplementedBaseServer) GetTokenBlacklist(context.Context, *GetTokenBlacklistReq) (*GetTokenBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenBlacklist not implemented")
+}
+func (UnimplementedBaseServer) DelTokenBlacklist(context.Context, *DelTokenBlacklistReq) (*DelTokenBlacklistResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelTokenBlacklist not implemented")
+}
+func (UnimplementedBaseServer) GetTokenBlacklistList(context.Context, *GetTokenBlacklistListReq) (*GetTokenBlacklistListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenBlacklistList not implemented")
+}
+func (UnimplementedBaseServer) GetTokenBlacklistEnums(context.Context, *GetTokenBlacklistEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTokenBlacklistEnums not implemented")
 }
 func (UnimplementedBaseServer) mustEmbedUnimplementedBaseServer() {}
 
@@ -152,110 +248,218 @@ func RegisterBaseServer(s grpc.ServiceRegistrar, srv BaseServer) {
 	s.RegisterService(&Base_ServiceDesc, srv)
 }
 
-func _Base_AddIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddIpblackReq)
+func _Base_AddIpBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddIpBlacklistReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BaseServer).AddIpblack(ctx, in)
+		return srv.(BaseServer).AddIpBlacklist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authentication_proto.Base/AddIpblack",
+		FullMethod: "/authentication_proto.Base/AddIpBlacklist",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseServer).AddIpblack(ctx, req.(*AddIpblackReq))
+		return srv.(BaseServer).AddIpBlacklist(ctx, req.(*AddIpBlacklistReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Base_PutIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PutIpblackReq)
+func _Base_PutIpBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutIpBlacklistReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BaseServer).PutIpblack(ctx, in)
+		return srv.(BaseServer).PutIpBlacklist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authentication_proto.Base/PutIpblack",
+		FullMethod: "/authentication_proto.Base/PutIpBlacklist",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseServer).PutIpblack(ctx, req.(*PutIpblackReq))
+		return srv.(BaseServer).PutIpBlacklist(ctx, req.(*PutIpBlacklistReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Base_GetIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIpblackReq)
+func _Base_GetIpBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIpBlacklistReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BaseServer).GetIpblack(ctx, in)
+		return srv.(BaseServer).GetIpBlacklist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authentication_proto.Base/GetIpblack",
+		FullMethod: "/authentication_proto.Base/GetIpBlacklist",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseServer).GetIpblack(ctx, req.(*GetIpblackReq))
+		return srv.(BaseServer).GetIpBlacklist(ctx, req.(*GetIpBlacklistReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Base_DelIpblack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelIpblackReq)
+func _Base_DelIpBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelIpBlacklistReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BaseServer).DelIpblack(ctx, in)
+		return srv.(BaseServer).DelIpBlacklist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authentication_proto.Base/DelIpblack",
+		FullMethod: "/authentication_proto.Base/DelIpBlacklist",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseServer).DelIpblack(ctx, req.(*DelIpblackReq))
+		return srv.(BaseServer).DelIpBlacklist(ctx, req.(*DelIpBlacklistReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Base_GetIpblackList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIpblackListReq)
+func _Base_GetIpBlacklistList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIpBlacklistListReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BaseServer).GetIpblackList(ctx, in)
+		return srv.(BaseServer).GetIpBlacklistList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authentication_proto.Base/GetIpblackList",
+		FullMethod: "/authentication_proto.Base/GetIpBlacklistList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseServer).GetIpblackList(ctx, req.(*GetIpblackListReq))
+		return srv.(BaseServer).GetIpBlacklistList(ctx, req.(*GetIpBlacklistListReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Base_GetIpblackEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIpblackEnumsReq)
+func _Base_GetIpBlacklistEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIpBlacklistEnumsReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BaseServer).GetIpblackEnums(ctx, in)
+		return srv.(BaseServer).GetIpBlacklistEnums(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/authentication_proto.Base/GetIpblackEnums",
+		FullMethod: "/authentication_proto.Base/GetIpBlacklistEnums",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BaseServer).GetIpblackEnums(ctx, req.(*GetIpblackEnumsReq))
+		return srv.(BaseServer).GetIpBlacklistEnums(ctx, req.(*GetIpBlacklistEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddTokenBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTokenBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddTokenBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/AddTokenBlacklist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddTokenBlacklist(ctx, req.(*AddTokenBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutTokenBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutTokenBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutTokenBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/PutTokenBlacklist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutTokenBlacklist(ctx, req.(*PutTokenBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetTokenBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTokenBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetTokenBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/GetTokenBlacklist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetTokenBlacklist(ctx, req.(*GetTokenBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelTokenBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelTokenBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelTokenBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/DelTokenBlacklist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelTokenBlacklist(ctx, req.(*DelTokenBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetTokenBlacklistList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTokenBlacklistListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetTokenBlacklistList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/GetTokenBlacklistList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetTokenBlacklistList(ctx, req.(*GetTokenBlacklistListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetTokenBlacklistEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTokenBlacklistEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetTokenBlacklistEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/authentication_proto.Base/GetTokenBlacklistEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetTokenBlacklistEnums(ctx, req.(*GetTokenBlacklistEnumsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -268,28 +472,52 @@ var Base_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BaseServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddIpblack",
-			Handler:    _Base_AddIpblack_Handler,
+			MethodName: "AddIpBlacklist",
+			Handler:    _Base_AddIpBlacklist_Handler,
 		},
 		{
-			MethodName: "PutIpblack",
-			Handler:    _Base_PutIpblack_Handler,
+			MethodName: "PutIpBlacklist",
+			Handler:    _Base_PutIpBlacklist_Handler,
 		},
 		{
-			MethodName: "GetIpblack",
-			Handler:    _Base_GetIpblack_Handler,
+			MethodName: "GetIpBlacklist",
+			Handler:    _Base_GetIpBlacklist_Handler,
 		},
 		{
-			MethodName: "DelIpblack",
-			Handler:    _Base_DelIpblack_Handler,
+			MethodName: "DelIpBlacklist",
+			Handler:    _Base_DelIpBlacklist_Handler,
 		},
 		{
-			MethodName: "GetIpblackList",
-			Handler:    _Base_GetIpblackList_Handler,
+			MethodName: "GetIpBlacklistList",
+			Handler:    _Base_GetIpBlacklistList_Handler,
 		},
 		{
-			MethodName: "GetIpblackEnums",
-			Handler:    _Base_GetIpblackEnums_Handler,
+			MethodName: "GetIpBlacklistEnums",
+			Handler:    _Base_GetIpBlacklistEnums_Handler,
+		},
+		{
+			MethodName: "AddTokenBlacklist",
+			Handler:    _Base_AddTokenBlacklist_Handler,
+		},
+		{
+			MethodName: "PutTokenBlacklist",
+			Handler:    _Base_PutTokenBlacklist_Handler,
+		},
+		{
+			MethodName: "GetTokenBlacklist",
+			Handler:    _Base_GetTokenBlacklist_Handler,
+		},
+		{
+			MethodName: "DelTokenBlacklist",
+			Handler:    _Base_DelTokenBlacklist_Handler,
+		},
+		{
+			MethodName: "GetTokenBlacklistList",
+			Handler:    _Base_GetTokenBlacklistList_Handler,
+		},
+		{
+			MethodName: "GetTokenBlacklistEnums",
+			Handler:    _Base_GetTokenBlacklistEnums_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -152,9 +152,10 @@ export interface Adminer {
 	email: string // 邮箱
 	status: number // 账号状态，是否可用
 	isSuperAdmin: number // 是否为超级管理员
+	companyId: number // 公司id
 	projectId: number // 项目id
 	loginCount: number // 登录次数
-	lastLogin: number // 最后一次登录时间
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface AddAdminerReq {
@@ -166,9 +167,10 @@ export interface AddAdminerReq {
 	email: string // 邮箱
 	status: number // 账号状态，是否可用
 	isSuperAdmin: number // 是否为超级管理员
+	companyId: number // 公司id
 	projectId: number // 项目id
 	loginCount: number // 登录次数
-	lastLogin: number // 最后一次登录时间
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface PutAdminerReq {
@@ -182,9 +184,10 @@ export interface PutAdminerReq {
 	email: string // 邮箱
 	status: number // 账号状态，是否可用
 	isSuperAdmin: number // 是否为超级管理员
+	companyId: number // 公司id
 	projectId: number // 项目id
 	loginCount: number // 登录次数
-	lastLogin: number // 最后一次登录时间
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface DelAdminerReq {
@@ -212,9 +215,10 @@ export interface GetAdminerListReqParams {
 	email: string // 邮箱
 	status: number // 账号状态，是否可用
 	isSuperAdmin: number // 是否为超级管理员
+	companyId: number // 公司id
 	projectId: number // 项目id
 	loginCount: number // 登录次数
-	lastLogin: number // 最后一次登录时间
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface GetAdminerEnumsReq {
@@ -315,15 +319,61 @@ export interface GetCampaignEnumsReq {
 	parentId?: number // 父级ID
 }
 
+export interface Company {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 公司名称
+	status: number // 项目状态: 0关闭，1开启
+}
+
+export interface AddCompanyReq {
+	name: string // 公司名称
+	status: number // 项目状态: 0关闭，1开启
+}
+
+export interface PutCompanyReq {
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 公司名称
+	status: number // 项目状态: 0关闭，1开启
+}
+
+export interface DelCompanyReq {
+	id: number // 公司 ID
+}
+
+export interface GetCompanyReq {
+	id: number // 公司 ID
+}
+
+export interface GetCompanyListReq {
+}
+export interface GetCompanyListReqParams {
+	pageSize: number // 页面容量，默认20，可选
+	page: number // 当前页码，默认1，可选
+	current: number // 当前页码，默认1，用于对接umijs，可选
+	keyword: string // 关键词，可选
+	id: number // 表主键
+	uuid: string // UUID
+	name: string // 公司名称
+	status: number // 项目状态: 0关闭，1开启
+}
+
+export interface GetCompanyEnumsReq {
+	parentId?: number // 父级ID
+}
+
 export interface Project {
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 项目名称
+	companyId: number // 公司id
 	status: number // 项目状态: 0已下线，1已上线
 }
 
 export interface AddProjectReq {
 	name: string // 项目名称
+	companyId: number // 公司id
 	status: number // 项目状态: 0已下线，1已上线
 }
 
@@ -331,6 +381,7 @@ export interface PutProjectReq {
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 项目名称
+	companyId: number // 公司id
 	status: number // 项目状态: 0已下线，1已上线
 }
 
@@ -352,6 +403,7 @@ export interface GetProjectListReqParams {
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 项目名称
+	companyId: number // 公司id
 	status: number // 项目状态: 0已下线，1已上线
 }
 
@@ -364,7 +416,6 @@ export interface Web {
 	uuid: string // UUID
 	projectId: number // 项目id
 	url: string // 连接
-	host: string // 域名
 	description: string // 备注
 	code: string // 代码
 }
@@ -372,7 +423,6 @@ export interface Web {
 export interface AddWebReq {
 	projectId: number // 项目id
 	url: string // 连接
-	host: string // 域名
 	description: string // 备注
 	code: string // 代码
 }
@@ -382,7 +432,6 @@ export interface PutWebReq {
 	uuid: string // UUID
 	projectId: number // 项目id
 	url: string // 连接
-	host: string // 域名
 	description: string // 备注
 	code: string // 代码
 }
@@ -406,7 +455,6 @@ export interface GetWebListReqParams {
 	uuid: string // UUID
 	projectId: number // 项目id
 	url: string // 连接
-	host: string // 域名
 	description: string // 备注
 	code: string // 代码
 }

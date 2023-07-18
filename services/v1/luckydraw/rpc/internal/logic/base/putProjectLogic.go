@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
-	"mixbench/services/v1/luckydraw/model"
+	"mixbench/services/v1/luckydraw/rpc/internal/logic/dataconv"
 	"mixbench/services/v1/luckydraw/rpc/internal/svc"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
 
@@ -27,13 +27,7 @@ func NewPutProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPro
 
 // 更新项目
 func (l *PutProjectLogic) PutProject(in *luckydraw_pb.PutProjectReq) (*luckydraw_pb.PutProjectResp, error) {
-	data := &model.Project{
-		Id:     in.Id,
-		Uuid:   in.Uuid,
-		Name:   in.Name,
-		Status: in.Status,
-	}
-
+	data := dataconv.PbProjectToMdProject(in.Project)
 	if err := l.svcCtx.ProjectModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

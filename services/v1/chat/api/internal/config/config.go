@@ -27,8 +27,6 @@ type Config struct {
 	AuthenticationRpc zrpc.RpcClientConf
 	AdminRpc          zrpc.RpcClientConf
 
-	RootDir string
-
 	RedisDB int //该redis库用于消息分发
 	Redis   *redis.RedisKeyConf
 }

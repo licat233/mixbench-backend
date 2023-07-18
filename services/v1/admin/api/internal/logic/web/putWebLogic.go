@@ -27,13 +27,14 @@ func NewPutWebLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutWebLogi
 
 func (l *PutWebLogic) PutWeb(req *types.PutWebReq) (any, error) {
 	in := &admin_pb.PutWebReq{
-		Id:          req.Id,
-		Uuid:        req.Uuid,
-		ProjectId:   req.ProjectId,
-		Url:         req.Url,
-		Host:        req.Host,
-		Description: req.Description,
-		Code:        req.Code,
+		Web: &admin_pb.Web{
+			Id:          req.Id,
+			Uuid:        req.Uuid,
+			ProjectId:   req.ProjectId,
+			Url:         req.Url,
+			Description: req.Description,
+			Code:        req.Code,
+		},
 	}
 	if _, err := l.svcCtx.AdminRpc.PutWeb(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可

@@ -12,8 +12,9 @@ type LuckydrawRpc struct {
 }
 
 func NewLuckydrawRpc(cli zrpc.Client) *LuckydrawRpc {
+	conn := cli.Conn()
 	return &LuckydrawRpc{
-		BaseClient:      luckydraw_pb.NewBaseClient(cli.Conn()),
-		LuckydrawClient: luckydraw_pb.NewLuckydrawClient(cli.Conn()),
+		BaseClient:      luckydraw_pb.NewBaseClient(conn),
+		LuckydrawClient: luckydraw_pb.NewLuckydrawClient(conn),
 	}
 }

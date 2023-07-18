@@ -3,11 +3,10 @@ package lucky
 import (
 	"net/http"
 
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"mixbench/services/v1/luckydraw/api/internal/logic/lucky"
 	"mixbench/services/v1/luckydraw/api/internal/svc"
 	"mixbench/services/v1/luckydraw/api/internal/types"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func PutLuckyHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

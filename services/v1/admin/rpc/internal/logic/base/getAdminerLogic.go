@@ -28,13 +28,10 @@ func NewGetAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAdm
 
 // 获取管理员
 func (l *GetAdminerLogic) GetAdminer(in *admin_pb.GetAdminerReq) (*admin_pb.GetAdminerResp, error) {
-	res, err := l.svcCtx.AdminerModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.AdminerModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return nil, nil
 	}
 
 	return &admin_pb.GetAdminerResp{

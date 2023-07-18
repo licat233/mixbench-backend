@@ -76,9 +76,10 @@ func MdAdminerToApiAdminer(md *model.Adminer) *types.Adminer {
 		Email:        md.Email,
 		Status:       md.Status,
 		IsSuperAdmin: md.IsSuperAdmin,
+		CompanyId:    md.CompanyId,
 		ProjectId:    md.ProjectId,
 		LoginCount:   md.LoginCount,
-		LastLogin:    md.LastLogin.Unix(),
+		LastLoginAt:  md.LastLoginAt.Unix(),
 	}
 }
 
@@ -108,9 +109,10 @@ func PbAdminerToApiAdminer(pb *admin_pb.Adminer) *types.Adminer {
 		Email:        pb.Email,
 		Status:       pb.Status,
 		IsSuperAdmin: pb.IsSuperAdmin,
+		CompanyId:    pb.CompanyId,
 		ProjectId:    pb.ProjectId,
 		LoginCount:   pb.LoginCount,
-		LastLogin:    pb.LastLogin,
+		LastLoginAt:  pb.LastLoginAt,
 	}
 }
 
@@ -183,15 +185,62 @@ func PbCampaigns2ApiCampaigns(pbList []*admin_pb.Campaign) []*types.Campaign {
 	return data
 }
 
+func MdCompanyToApiCompany(md *model.Company) *types.Company {
+	if md == nil {
+		return nil
+	}
+	return &types.Company{
+		Id:     md.Id,
+		Uuid:   md.Uuid,
+		Name:   md.Name,
+		Status: md.Status,
+	}
+}
+
+func MdCompanies2ApiCompanies(mdList []*model.Company) []*types.Company {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*types.Company, 0)
+	for _, v := range mdList {
+		data = append(data, MdCompanyToApiCompany(v))
+	}
+	return data
+}
+
+func PbCompanyToApiCompany(pb *admin_pb.Company) *types.Company {
+	if pb == nil {
+		return nil
+	}
+	return &types.Company{
+		Id:     pb.Id,
+		Uuid:   pb.Uuid,
+		Name:   pb.Name,
+		Status: pb.Status,
+	}
+}
+
+func PbCompanies2ApiCompanies(pbList []*admin_pb.Company) []*types.Company {
+	if pbList == nil {
+		return nil
+	}
+	data := make([]*types.Company, 0)
+	for _, v := range pbList {
+		data = append(data, PbCompanyToApiCompany(v))
+	}
+	return data
+}
+
 func MdProjectToApiProject(md *model.Project) *types.Project {
 	if md == nil {
 		return nil
 	}
 	return &types.Project{
-		Id:     md.Id,
-		Uuid:   md.Uuid,
-		Name:   md.Name,
-		Status: md.Status,
+		Id:        md.Id,
+		Uuid:      md.Uuid,
+		Name:      md.Name,
+		CompanyId: md.CompanyId,
+		Status:    md.Status,
 	}
 }
 
@@ -211,10 +260,11 @@ func PbProjectToApiProject(pb *admin_pb.Project) *types.Project {
 		return nil
 	}
 	return &types.Project{
-		Id:     pb.Id,
-		Uuid:   pb.Uuid,
-		Name:   pb.Name,
-		Status: pb.Status,
+		Id:        pb.Id,
+		Uuid:      pb.Uuid,
+		Name:      pb.Name,
+		CompanyId: pb.CompanyId,
+		Status:    pb.Status,
 	}
 }
 
@@ -238,7 +288,6 @@ func MdWebToApiWeb(md *model.Web) *types.Web {
 		Uuid:        md.Uuid,
 		ProjectId:   md.ProjectId,
 		Url:         md.Url,
-		Host:        md.Host,
 		Description: md.Description,
 		Code:        md.Code,
 	}
@@ -264,7 +313,6 @@ func PbWebToApiWeb(pb *admin_pb.Web) *types.Web {
 		Uuid:        pb.Uuid,
 		ProjectId:   pb.ProjectId,
 		Url:         pb.Url,
-		Host:        pb.Host,
 		Description: pb.Description,
 		Code:        pb.Code,
 	}

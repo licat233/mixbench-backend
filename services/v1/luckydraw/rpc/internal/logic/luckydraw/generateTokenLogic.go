@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"time"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
 	"mixbench/services/v1/luckydraw/rpc/internal/svc"
@@ -60,8 +59,8 @@ func (l *GenerateTokenLogic) getJwtToken(secret string, now, expire int64, data 
 	claims := make(jwt.MapClaims)
 	claims["exp"] = now + expire
 	claims["iat"] = now
-	claims[ctxdata.CtxKeyJwtUserId] = data.UserId
-	claims[ctxdata.CtxKeyJwtIp] = data.Ip
-	claims[ctxdata.CtxKeyJwtPlatform] = data.Platform
+	claims[jwtx.JwtUidKey] = data.UserId
+	claims[jwtx.JwtIpKey] = data.Ip
+	claims[jwtx.JwtPlatformKey] = data.Platform
 	return jwtx.CreateToken(claims, secret)
 }

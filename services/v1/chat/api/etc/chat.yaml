@@ -16,8 +16,20 @@ Log:
   ServiceName: chat-api
   Level: error
 
+CacheRedis:
+  - Host: ${REDIS_HOST}:${REDIS_PORT}
+    Pass: ${REDIS_PASSWORD}
+    Type: node
+
+RedisDB: 4
+Redis:
+  Host: ${REDIS_HOST}:${REDIS_PORT}
+  Pass: ${REDIS_PASSWORD}
+  Type: node
+  Key: chat
+
 # 单服务根目录
-RootDir: ./
+# RootDir: ./
 
 #监控
 Prometheus:
@@ -32,11 +44,6 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 
-CacheRedis:
-  - Host: ${REDIS_HOST}:${REDIS_PORT}
-    Pass: ${REDIS_PASSWORD}
-    Type: node
-
 #静态资源服务配置
 StaticConfig:
   Domain: ${STATIC_HOST}
@@ -47,12 +54,6 @@ AuthenticationRpc:
     - 127.0.0.1:${AUTHENTICATION_RPC_PORT}
   NonBlock: true
 
-RedisDB: 4
-Redis:
-  Host: ${REDIS_HOST}:${REDIS_PORT}
-  Pass: ${REDIS_PASSWORD}
-  Type: node
-  Key: chat
 
 AdminRpc:
   Endpoints:

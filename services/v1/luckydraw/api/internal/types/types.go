@@ -170,8 +170,8 @@ type GetActivityListReq struct {
 	Pattern   int64  `form:"pattern,optional,default=-1"`   //方案: 0会员制，1公开制，2会员需授权
 	MaxCount  int64  `form:"maxCount,optional,default=-1"`  //最大抽奖次数：-1表示无限制，0表示不可抽奖
 	MaxPrizes int64  `form:"maxPrizes,optional,default=-1"` //最大抽奖次数：-1表示无限制，0表示不可中奖
-	StartTime int64  `form:"startTime,optional,default=-1"` //活动开始时间
-	EndTime   int64  `form:"endTime,optional,default=-1"`   //活动结束时间
+	StartTime int64  `form:"startTime,optional,default=0"`  //活动开始时间
+	EndTime   int64  `form:"endTime,optional,default=0"`    //活动结束时间
 }
 
 type GetActivityEnumsReq struct {

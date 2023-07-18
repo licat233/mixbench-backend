@@ -33,9 +33,6 @@ func (l *GetProjectLogic) GetProject(in *luckydraw_pb.GetProjectReq) (*luckydraw
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetProjectResp{
 		Project: dataconv.MdProjectToPbProject(res),

@@ -47,18 +47,7 @@ func (l *PutCurrentLogic) PutCurrent(req *types.PutCurrentReq) (any, error) {
 	adminer.Passport = req.Passport
 	adminer.Email = req.Email
 	_, err = l.svcCtx.AdminRpc.PutAdminer(l.ctx, &admin_pb.PutAdminerReq{
-		Id:           adminer.Id,
-		Uuid:         adminer.Uuid,
-		Name:         adminer.Name,
-		Avatar:       adminer.Avatar,
-		Access:       adminer.Access,
-		Passport:     adminer.Passport,
-		Password:     adminer.Password,
-		Email:        adminer.Email,
-		Status:       adminer.Status,
-		IsSuperAdmin: adminer.IsSuperAdmin,
-		LoginCount:   adminer.LoginCount,
-		LastLogin:    adminer.LastLogin,
+		Adminer: adminer,
 	})
 	if err != nil {
 		return nil, err

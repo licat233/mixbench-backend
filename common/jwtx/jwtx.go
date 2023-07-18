@@ -14,6 +14,12 @@ import (
 	// uuid "github.com/satori/go.uuid"
 )
 
+var (
+	JwtUidKey      = "uid" //不要使用id，因为无法在ctx中获取id值
+	JwtIpKey       = "ip"
+	JwtPlatformKey = "platform"
+)
+
 var ReqHeaderTokenKey = "Authorization"
 var DefaultDuration int64 = 86400 //一天时间
 
@@ -129,7 +135,7 @@ func ValidateToken(token string, secret string) (jwt.MapClaims, bool) {
 	if err != nil {
 		return nil, false
 	}
-	return claims, IsExpired(claims)
+	return claims, !IsExpired(claims)
 }
 
 func IsExpired(claims jwt.MapClaims) bool {
@@ -142,23 +148,39 @@ func IsExpired(claims jwt.MapClaims) bool {
 
 		if currentTime.After(expirationTime) {
 			//Token 已过期
-			return false
+			return true
 		} else {
 			//Token 未过期
-			return true
+			return false
 		}
 	} else {
 		//Token 没有设置过期时间，不会过期
-		return true
+		return false
 	}
 }
 
 func GetId(claims jwt.MapClaims) (int64, bool) {
 	// 获取 id 值
-	id, ok := claims["id"].(float64)
+	id, ok := claims[JwtUidKey].(float64)
 	if !ok {
 		// id 不存在或类型不正确
 		return 0, false
 	}
 	return int64(id), true
+}
+
+func GetInt64(claims jwt.MapClaims, key string) (res int64, exist bool) {
+	v, ok := claims[key].(float64)
+	exist = ok
+	if !ok {
+		//不存在或类型不正确
+		return 0, false
+	}
+	res = int64(v)
+	return res, exist
+}
+
+func GetString(claims jwt.MapClaims, key string) (res string, exist bool) {
+	res, exist = claims[key].(string)
+	return res, exist
 }

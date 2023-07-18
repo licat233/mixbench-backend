@@ -33,9 +33,6 @@ func (l *GetLuckyLogic) GetLucky(in *luckydraw_pb.GetLuckyReq) (*luckydraw_pb.Ge
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetLuckyResp{
 		Lucky: dataconv.MdLuckyToPbLucky(res),

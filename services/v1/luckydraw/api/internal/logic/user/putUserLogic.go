@@ -27,18 +27,19 @@ func NewPutUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutUserLo
 
 func (l *PutUserLogic) PutUser(req *types.PutUserReq) (any, error) {
 	in := &luckydraw_pb.PutUserReq{
-		Id:       req.Id,
-		Uuid:     req.Uuid,
-		Passport: req.Passport,
-		Email:    req.Email,
-		Phone:    req.Phone,
-		Name:     req.Name,
-		Address:  req.Address,
-		Score:    req.Score,
-		Status:   req.Status,
+		User: &luckydraw_pb.User{
+			Id:       req.Id,
+			Uuid:     req.Uuid,
+			Passport: req.Passport,
+			Email:    req.Email,
+			Phone:    req.Phone,
+			Name:     req.Name,
+			Address:  req.Address,
+			Score:    req.Score,
+			Status:   req.Status,
+		},
 	}
-	_, err := l.svcCtx.LuckydrawRpc.PutUser(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.LuckydrawRpc.PutUser(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

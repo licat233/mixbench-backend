@@ -189,8 +189,8 @@ type GetMessageListReq struct {
 	Status      int64  `form:"status,optional,default=-1"`      //状态:0合法，1违规
 	IsRead      int64  `form:"isRead,optional,default=-1"`      //是否已读:0未读，1已读
 	IsSend      int64  `form:"isSend,optional,default=-1"`      //是否已发送:0未发送，1已发送
-	SendTime    int64  `form:"sendTime,optional,default=-1"`    //发送时间
-	ExpireTime  int64  `form:"expireTime,optional,default=-1"`  //缓存过期时间, 默认为30天
+	SendTime    int64  `form:"sendTime,optional,default=0"`     //发送时间
+	ExpireTime  int64  `form:"expireTime,optional,default=0"`   //缓存过期时间, 默认为30天
 }
 
 type GetMessageEnumsReq struct {

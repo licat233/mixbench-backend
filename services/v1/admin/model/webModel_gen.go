@@ -22,16 +22,14 @@ var (
 	webRowsExpectAutoSet   = strings.Join(stringx.Remove(webFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	webRowsWithPlaceHolder = strings.Join(stringx.Remove(webFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheWebIdPrefix   = "cache:web:id:"
-	cacheWebHostPrefix = "cache:web:host:"
-	cacheWebUrlPrefix  = "cache:web:url:"
+	cacheWebIdPrefix  = "cache:web:id:"
+	cacheWebUrlPrefix = "cache:web:url:"
 )
 
 type (
 	webModel interface {
 		Insert(ctx context.Context, data *Web) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Web, error)
-		FindOneByHost(ctx context.Context, host string) (*Web, error)
 		FindOneByUrl(ctx context.Context, url string) (*Web, error)
 		Update(ctx context.Context, data *Web) error
 		Delete(ctx context.Context, id int64) error
@@ -47,7 +45,6 @@ type (
 		Uuid        string    `db:"uuid"`        // UUID
 		ProjectId   int64     `db:"project_id"`  // 项目id
 		Url         string    `db:"url"`         // 连接
-		Host        string    `db:"host"`        // 域名
 		Description string    `db:"description"` // 备注
 		Code        string    `db:"code"`        // 代码
 		CreateAt    time.Time `db:"create_at"`   // 创建日期
@@ -76,13 +73,12 @@ func (m *defaultWebModel) Delete(ctx context.Context, id int64) error {
 		return err
 	}
 
-	webHostKey := fmt.Sprintf("%s%v", cacheWebHostPrefix, data.Host)
 	webIdKey := fmt.Sprintf("%s%v", cacheWebIdPrefix, id)
 	webUrlKey := fmt.Sprintf("%s%v", cacheWebUrlPrefix, data.Url)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, id)
-	}, webHostKey, webIdKey, webUrlKey)
+	}, webIdKey, webUrlKey)
 	return err
 }
 
@@ -93,26 +89,6 @@ func (m *defaultWebModel) FindOne(ctx context.Context, id int64) (*Web, error) {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", webRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
-	switch err {
-	case nil:
-		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
-func (m *defaultWebModel) FindOneByHost(ctx context.Context, host string) (*Web, error) {
-	webHostKey := fmt.Sprintf("%s%v", cacheWebHostPrefix, host)
-	var resp Web
-	err := m.QueryRowIndexCtx(ctx, &resp, webHostKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v any) (i any, e error) {
-		query := fmt.Sprintf("select %s from %s where `host` = ? limit 1", webRows, m.table)
-		if err := conn.QueryRowCtx(ctx, &resp, query, host); err != nil {
-			return nil, err
-		}
-		return resp.Id, nil
-	}, m.queryPrimary)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -144,13 +120,12 @@ func (m *defaultWebModel) FindOneByUrl(ctx context.Context, url string) (*Web, e
 }
 
 func (m *defaultWebModel) Insert(ctx context.Context, data *Web) (sql.Result, error) {
-	webHostKey := fmt.Sprintf("%s%v", cacheWebHostPrefix, data.Host)
 	webIdKey := fmt.Sprintf("%s%v", cacheWebIdPrefix, data.Id)
 	webUrlKey := fmt.Sprintf("%s%v", cacheWebUrlPrefix, data.Url)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, webRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ProjectId, data.Url, data.Host, data.Description, data.Code, data.IsDeleted)
-	}, webHostKey, webIdKey, webUrlKey)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, webRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ProjectId, data.Url, data.Description, data.Code, data.IsDeleted)
+	}, webIdKey, webUrlKey)
 	return ret, err
 }
 
@@ -160,13 +135,12 @@ func (m *defaultWebModel) Update(ctx context.Context, newData *Web) error {
 		return err
 	}
 
-	webHostKey := fmt.Sprintf("%s%v", cacheWebHostPrefix, data.Host)
 	webIdKey := fmt.Sprintf("%s%v", cacheWebIdPrefix, data.Id)
 	webUrlKey := fmt.Sprintf("%s%v", cacheWebUrlPrefix, data.Url)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, webRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.Uuid, newData.ProjectId, newData.Url, newData.Host, newData.Description, newData.Code, newData.IsDeleted, newData.Id)
-	}, webHostKey, webIdKey, webUrlKey)
+		return conn.ExecCtx(ctx, query, newData.Uuid, newData.ProjectId, newData.Url, newData.Description, newData.Code, newData.IsDeleted, newData.Id)
+	}, webIdKey, webUrlKey)
 	return err
 }
 

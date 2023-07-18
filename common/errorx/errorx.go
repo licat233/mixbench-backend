@@ -96,12 +96,12 @@ func (e *Errorx) Data() *ResponseError {
  */
 func InternalError(errs ...any) error {
 	var traceErr error
+	alertErr := errors.New(ServerErrorMsg)
 	n := len(errs)
-	if n > 0 {
+	if n > 0 && errs[0] != nil {
 		traceErr = fmt.Errorf("%s", errs[0])
 	}
-	alertErr := errors.New(ServerErrorMsg)
-	if n > 1 {
+	if n > 1 && errs[1] != nil {
 		alertErr = fmt.Errorf("%s", errs[1])
 	}
 	return internalError(alertErr.Error(), traceErr)
@@ -115,10 +115,10 @@ func ExternalError(errs ...any) error {
 	var traceErr error
 	alertErr := errors.New(RequestErrorMsg)
 	n := len(errs)
-	if n > 0 {
+	if n > 0 && errs[0] != nil {
 		traceErr = fmt.Errorf("%s", errs[0])
 	}
-	if n > 1 {
+	if n > 1 && errs[1] != nil {
 		alertErr = fmt.Errorf("%s", errs[1])
 	}
 	return externalError(alertErr.Error(), traceErr)
@@ -128,15 +128,15 @@ func ExternalError(errs ...any) error {
  * traceErr error 调试信息
  * alertErr error 提示信息
  */
-func AccessError(errs ...error) error {
+func AccessError(errs ...any) error {
 	var traceErr error
-	alertErr := errors.New(RequestErrorMsg)
+	alertErr := errors.New(AuthErrorMsg)
 	n := len(errs)
-	if n > 0 {
-		traceErr = errs[0]
+	if n > 0 && errs[0] != nil {
+		traceErr = fmt.Errorf("%s", errs[0])
 	}
-	if n > 1 {
-		alertErr = errs[1]
+	if n > 1 && errs[1] != nil {
+		alertErr = fmt.Errorf("%s", errs[1])
 	}
 	return accessError(alertErr.Error(), traceErr)
 }
@@ -144,20 +144,24 @@ func AccessError(errs ...error) error {
 /** AuthError 身份校验失败 401
  * traceMsg string 调试信息
  */
-func AuthError(traceErr error) error {
+func AuthError(traceErr any) error {
 	return authError(AuthErrorMsg, traceErr)
 }
 
 // Alert 错误提示, 400
-func Alert(msg string) error {
-	if strings.TrimSpace(msg) == "" {
+func Alert(msg any) error {
+	var alertMsg string
+	if msg != nil {
+		alertMsg = strings.TrimSpace(fmt.Sprint(msg))
+	}
+	if alertMsg == "" {
 		msg = RequestFailedMsg
 	}
 	return &Errorx{
 		Status:       false,
 		Success:      false,
 		ErrorCode:    ERROR_CODE_EXTERNAL,
-		ErrorMessage: msg,
+		ErrorMessage: alertMsg,
 		TraceMessage: "",
 		ShowType:     SHOW_TYPE,
 		TraceId:      uniqueid.NewUUID(),
@@ -166,8 +170,8 @@ func Alert(msg string) error {
 }
 
 // ----------实现--------
-func internalError(alertMsg string, traceErr error) *Errorx {
-	errorx := newErrorx(alertMsg, traceErr)
+func internalError(alert any, trace any) *Errorx {
+	errorx := newErrorx(alert, trace)
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = ServerErrorMsg
 	}
@@ -180,8 +184,8 @@ func internalError(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
-func externalError(alertMsg string, traceErr error) *Errorx {
-	errorx := newErrorx(alertMsg, traceErr)
+func externalError(alert any, trace any) *Errorx {
+	errorx := newErrorx(alert, trace)
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = RequestErrorMsg
 	}
@@ -189,8 +193,8 @@ func externalError(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
-func authError(alertMsg string, traceErr error) *Errorx {
-	errorx := newErrorx(alertMsg, traceErr)
+func authError(alert any, trace any) *Errorx {
+	errorx := newErrorx(alert, trace)
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = AuthErrorMsg
 	}
@@ -198,8 +202,8 @@ func authError(alertMsg string, traceErr error) *Errorx {
 	return errorx
 }
 
-func accessError(alertMsg string, traceErr error) *Errorx {
-	errorx := newErrorx(alertMsg, traceErr)
+func accessError(alert any, trace any) *Errorx {
+	errorx := newErrorx(alert, trace)
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = AuthErrorMsg
 	}
@@ -208,17 +212,17 @@ func accessError(alertMsg string, traceErr error) *Errorx {
 }
 
 // newErrorx 新建Errorx实例，默认为外部请求错误
-func newErrorx(alertMsg string, traceErr error) *Errorx {
-	traceMsg := ""
+func newErrorx(alert any, trace any) *Errorx {
+	var alertMsg, traceMsg string
+	if alert != nil {
+		alertMsg = strings.TrimSpace(fmt.Sprint(alert))
+	}
+	if alertMsg == "" {
+		alertMsg = RequestErrorMsg
+	}
 	//调试模式下，展现错误调试信息
-	if Debug && traceErr != nil {
-		traceMsg = traceErr.Error()
-		// v, ok := traceErr.(*Errorx)
-		// if ok {
-		// 	traceMsg = v.TraceMessage
-		// } else {
-		// 	traceMsg = traceErr.Error()
-		// }
+	if Debug && trace != nil {
+		traceMsg = strings.TrimSpace(fmt.Sprint(trace))
 	}
 	errorx := &Errorx{
 		Status:       false,
@@ -267,15 +271,19 @@ func Convert(err error) (errorx *Errorx) {
  * alertErr string 提示信息
  * traceErr string 调试信息
  */
-func New(errs ...string) error {
+func New(errs ...any) error {
 	alertErr := RequestErrorMsg
 	n := len(errs)
 	if n > 0 {
-		alertErr = errs[0]
+		if errs[0] != nil {
+			alertErr = strings.TrimSpace(fmt.Sprint(errs[0]))
+		}
 	}
 	var traceErr string
 	if n > 1 {
-		traceErr = errs[1]
+		if errs[1] != nil {
+			traceErr = strings.TrimSpace(fmt.Sprint(errs[1]))
+		}
 	}
 	return externalError(alertErr, errors.New(traceErr))
 }

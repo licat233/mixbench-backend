@@ -29,36 +29,12 @@ func (s *AdminServer) Test(ctx context.Context, in *admin_pb.TestReq) (*admin_pb
 }
 
 // 生产token
-func (s *AdminServer) GenerateToken(ctx context.Context, in *admin_pb.GenerateTokenReq) (*admin_pb.GenerateTokenResp, error) {
-	l := adminlogic.NewGenerateTokenLogic(ctx, s.svcCtx)
-	return l.GenerateToken(in)
+func (s *AdminServer) VerifyAccount(ctx context.Context, in *admin_pb.VerifyAccountReq) (*admin_pb.VerifyAccountResp, error) {
+	l := adminlogic.NewVerifyAccountLogic(ctx, s.svcCtx)
+	return l.VerifyAccount(in)
 }
 
-// 验证token是否有效
-func (s *AdminServer) ValidateToken(ctx context.Context, in *admin_pb.ValidateTokenReq) (*admin_pb.ValidateTokenResp, error) {
-	l := adminlogic.NewValidateTokenLogic(ctx, s.svcCtx)
-	return l.ValidateToken(in)
-}
-
-// 账号登录
-func (s *AdminServer) Login(ctx context.Context, in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
-	l := adminlogic.NewLoginLogic(ctx, s.svcCtx)
-	return l.Login(in)
-}
-
-// 超级管理员/开发员登录
-func (s *AdminServer) SuperAdminLogin(ctx context.Context, in *admin_pb.LoginReq) (*admin_pb.LoginResp, error) {
-	l := adminlogic.NewSuperAdminLoginLogic(ctx, s.svcCtx)
-	return l.SuperAdminLogin(in)
-}
-
-// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
-func (s *AdminServer) LoginByEmail(ctx context.Context, in *admin_pb.LoginByEmailReq) (*admin_pb.LoginResp, error) {
-	l := adminlogic.NewLoginByEmailLogic(ctx, s.svcCtx)
-	return l.LoginByEmail(in)
-}
-
-// 邮箱是否存在
+// 登录
 func (s *AdminServer) ExistsEmail(ctx context.Context, in *admin_pb.ExistsEmailReq) (*admin_pb.ExistsEmailResp, error) {
 	l := adminlogic.NewExistsEmailLogic(ctx, s.svcCtx)
 	return l.ExistsEmail(in)
@@ -68,6 +44,12 @@ func (s *AdminServer) ExistsEmail(ctx context.Context, in *admin_pb.ExistsEmailR
 func (s *AdminServer) FindByEmail(ctx context.Context, in *admin_pb.FindByEmailReq) (*admin_pb.FindByEmailResp, error) {
 	l := adminlogic.NewFindByEmailLogic(ctx, s.svcCtx)
 	return l.FindByEmail(in)
+}
+
+// 通过账号查找管理员
+func (s *AdminServer) FindByPassport(ctx context.Context, in *admin_pb.FindByPassportReq) (*admin_pb.FindByPassportResp, error) {
+	l := adminlogic.NewFindByPassportLogic(ctx, s.svcCtx)
+	return l.FindByPassport(in)
 }
 
 // 注销登录
@@ -83,12 +65,6 @@ func (s *AdminServer) IsLogout(ctx context.Context, in *admin_pb.IsLogoutReq) (*
 }
 
 // 解析 jwtToken, 返回原生error
-func (s *AdminServer) ParseJwtToken(ctx context.Context, in *admin_pb.ParseJwtTokenReq) (*admin_pb.ParseJwtTokenResp, error) {
-	l := adminlogic.NewParseJwtTokenLogic(ctx, s.svcCtx)
-	return l.ParseJwtToken(in)
-}
-
-// 验证管理员密码
 func (s *AdminServer) VerifyPassword(ctx context.Context, in *admin_pb.VerifyPasswordReq) (*admin_pb.VerifyPasswordResp, error) {
 	l := adminlogic.NewVerifyPasswordLogic(ctx, s.svcCtx)
 	return l.VerifyPassword(in)

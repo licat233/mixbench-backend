@@ -23,37 +23,73 @@ func NewBaseServer(svcCtx *svc.ServiceContext) *BaseServer {
 }
 
 // 添加IP黑名单
-func (s *BaseServer) AddIpblack(ctx context.Context, in *authentication_pb.AddIpblackReq) (*authentication_pb.AddIpblackResp, error) {
-	l := baselogic.NewAddIpblackLogic(ctx, s.svcCtx)
-	return l.AddIpblack(in)
+func (s *BaseServer) AddIpBlacklist(ctx context.Context, in *authentication_pb.AddIpBlacklistReq) (*authentication_pb.AddIpBlacklistResp, error) {
+	l := baselogic.NewAddIpBlacklistLogic(ctx, s.svcCtx)
+	return l.AddIpBlacklist(in)
 }
 
 // 更新IP黑名单
-func (s *BaseServer) PutIpblack(ctx context.Context, in *authentication_pb.PutIpblackReq) (*authentication_pb.PutIpblackResp, error) {
-	l := baselogic.NewPutIpblackLogic(ctx, s.svcCtx)
-	return l.PutIpblack(in)
+func (s *BaseServer) PutIpBlacklist(ctx context.Context, in *authentication_pb.PutIpBlacklistReq) (*authentication_pb.PutIpBlacklistResp, error) {
+	l := baselogic.NewPutIpBlacklistLogic(ctx, s.svcCtx)
+	return l.PutIpBlacklist(in)
 }
 
 // 获取IP黑名单
-func (s *BaseServer) GetIpblack(ctx context.Context, in *authentication_pb.GetIpblackReq) (*authentication_pb.GetIpblackResp, error) {
-	l := baselogic.NewGetIpblackLogic(ctx, s.svcCtx)
-	return l.GetIpblack(in)
+func (s *BaseServer) GetIpBlacklist(ctx context.Context, in *authentication_pb.GetIpBlacklistReq) (*authentication_pb.GetIpBlacklistResp, error) {
+	l := baselogic.NewGetIpBlacklistLogic(ctx, s.svcCtx)
+	return l.GetIpBlacklist(in)
 }
 
 // 删除IP黑名单
-func (s *BaseServer) DelIpblack(ctx context.Context, in *authentication_pb.DelIpblackReq) (*authentication_pb.DelIpblackResp, error) {
-	l := baselogic.NewDelIpblackLogic(ctx, s.svcCtx)
-	return l.DelIpblack(in)
+func (s *BaseServer) DelIpBlacklist(ctx context.Context, in *authentication_pb.DelIpBlacklistReq) (*authentication_pb.DelIpBlacklistResp, error) {
+	l := baselogic.NewDelIpBlacklistLogic(ctx, s.svcCtx)
+	return l.DelIpBlacklist(in)
 }
 
 // 获取IP黑名单列表
-func (s *BaseServer) GetIpblackList(ctx context.Context, in *authentication_pb.GetIpblackListReq) (*authentication_pb.GetIpblackListResp, error) {
-	l := baselogic.NewGetIpblackListLogic(ctx, s.svcCtx)
-	return l.GetIpblackList(in)
+func (s *BaseServer) GetIpBlacklistList(ctx context.Context, in *authentication_pb.GetIpBlacklistListReq) (*authentication_pb.GetIpBlacklistListResp, error) {
+	l := baselogic.NewGetIpBlacklistListLogic(ctx, s.svcCtx)
+	return l.GetIpBlacklistList(in)
 }
 
 // 获取IP黑名单枚举列表
-func (s *BaseServer) GetIpblackEnums(ctx context.Context, in *authentication_pb.GetIpblackEnumsReq) (*authentication_pb.Enums, error) {
-	l := baselogic.NewGetIpblackEnumsLogic(ctx, s.svcCtx)
-	return l.GetIpblackEnums(in)
+func (s *BaseServer) GetIpBlacklistEnums(ctx context.Context, in *authentication_pb.GetIpBlacklistEnumsReq) (*authentication_pb.Enums, error) {
+	l := baselogic.NewGetIpBlacklistEnumsLogic(ctx, s.svcCtx)
+	return l.GetIpBlacklistEnums(in)
+}
+
+// 添加token黑名单
+func (s *BaseServer) AddTokenBlacklist(ctx context.Context, in *authentication_pb.AddTokenBlacklistReq) (*authentication_pb.AddTokenBlacklistResp, error) {
+	l := baselogic.NewAddTokenBlacklistLogic(ctx, s.svcCtx)
+	return l.AddTokenBlacklist(in)
+}
+
+// 更新token黑名单
+func (s *BaseServer) PutTokenBlacklist(ctx context.Context, in *authentication_pb.PutTokenBlacklistReq) (*authentication_pb.PutTokenBlacklistResp, error) {
+	l := baselogic.NewPutTokenBlacklistLogic(ctx, s.svcCtx)
+	return l.PutTokenBlacklist(in)
+}
+
+// 获取token黑名单
+func (s *BaseServer) GetTokenBlacklist(ctx context.Context, in *authentication_pb.GetTokenBlacklistReq) (*authentication_pb.GetTokenBlacklistResp, error) {
+	l := baselogic.NewGetTokenBlacklistLogic(ctx, s.svcCtx)
+	return l.GetTokenBlacklist(in)
+}
+
+// 删除token黑名单
+func (s *BaseServer) DelTokenBlacklist(ctx context.Context, in *authentication_pb.DelTokenBlacklistReq) (*authentication_pb.DelTokenBlacklistResp, error) {
+	l := baselogic.NewDelTokenBlacklistLogic(ctx, s.svcCtx)
+	return l.DelTokenBlacklist(in)
+}
+
+// 获取token黑名单列表
+func (s *BaseServer) GetTokenBlacklistList(ctx context.Context, in *authentication_pb.GetTokenBlacklistListReq) (*authentication_pb.GetTokenBlacklistListResp, error) {
+	l := baselogic.NewGetTokenBlacklistListLogic(ctx, s.svcCtx)
+	return l.GetTokenBlacklistList(in)
+}
+
+// 获取token黑名单枚举列表
+func (s *BaseServer) GetTokenBlacklistEnums(ctx context.Context, in *authentication_pb.GetTokenBlacklistEnumsReq) (*authentication_pb.Enums, error) {
+	l := baselogic.NewGetTokenBlacklistEnumsLogic(ctx, s.svcCtx)
+	return l.GetTokenBlacklistEnums(in)
 }

@@ -38,7 +38,6 @@ func (l *GetWebListLogic) GetWebList(req *types.GetWebListReq) (any, error) {
 			Uuid:        req.Uuid,
 			ProjectId:   req.ProjectId,
 			Url:         req.Url,
-			Host:        req.Host,
 			Description: req.Description,
 			Code:        req.Code,
 		},

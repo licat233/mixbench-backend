@@ -32,7 +32,6 @@ func (l *AddWebLogic) AddWeb(in *admin_pb.AddWebReq) (*admin_pb.AddWebResp, erro
 		Uuid:        uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
 		ProjectId:   in.ProjectId,
 		Url:         in.Url,
-		Host:        in.Host,
 		Description: in.Description,
 		Code:        in.Code,
 	}

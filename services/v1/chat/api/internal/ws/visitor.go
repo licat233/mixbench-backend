@@ -43,24 +43,25 @@ func NewVisitorClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.Re
 }
 
 func (c *VisitorClient) Run() {
+	defer c.Close()
 	if c.Init() != nil {
 		return
 	}
 	c.wg.Add(2)
 	go func() {
 		defer c.wg.Done()
-		c.writePump()
+		c.writePump(c.recevierMessageHandler)
 	}()
 	go func() {
 		defer c.wg.Done()
-		c.readPump(c.payloadHandler)
+		c.readPump(c.wsPayloadHandler)
 	}()
 	c.wg.Wait()
 	c.done()
 }
 
 func (c *VisitorClient) done() error {
-	c.client.Close() //关闭client
+	//游客离线后的操作
 	return nil
 }
 
@@ -79,27 +80,37 @@ func (c *VisitorClient) Init() error {
 				//更新数据库
 				if err := c.update(); err != nil {
 					c.Logger.Error(err)
-					c.client.Close()
 					return err
 				}
 			}
 		}
 		//如果在线，则不用管
 	}
+
+	kefuId := c.Visitor.KefuId
+	if c.Visitor.KefuId < 0 {
+		kefuId = 0
+	}
+
 	// 注册online
-	OnlineKefu.Set(c.user.GetId(), 0)
-	// 如果该游客有客服接待
-	if c.Visitor.KefuId > 0 {
+	OnlineVisitor.Set(c.Visitor.Id, kefuId)
+
+	// 发送历史聊天记录
+	err := c.SendHistoryMessages()
+	if err != nil {
+		return err
+	}
+
+	// 如果该游客分配到客服是否在线
+	if c.Visitor.KefuId > 0 && OnlineKefu.Exist(c.Visitor.KefuId) {
 		// 发送欢迎信息
 		if err := c.sendPresetMessage(WelcomeMessageKey, -1, c.Visitor.Id); err != nil {
-			c.Logger.Error(err)
 			return err
 		}
 	} else {
 		// 没有分配接待的客服，该怎样处理？说明没有客服在线，无法分配，此时应该发送留言信息
 		// 发送留言信息
 		if err := c.sendPresetMessage(LeaveMessageKey, -1, c.Visitor.Id); err != nil {
-			c.Logger.Error(err)
 			return err
 		}
 	}
@@ -107,7 +118,9 @@ func (c *VisitorClient) Init() error {
 	return nil
 }
 
-func (c *VisitorClient) payloadHandler(payload []byte) (*model.Message, error) {
+// 用于处理ws中的信息
+// 当返回nil,nil时，表示丢弃
+func (c *VisitorClient) wsPayloadHandler(payload []byte) (*model.Message, error) {
 	//这里的payload仅为message.content
 	if !validatePayload(payload) {
 		//丢弃
@@ -133,7 +146,21 @@ func (c *VisitorClient) payloadHandler(payload []byte) (*model.Message, error) {
 	return message, nil
 }
 
+func (c *VisitorClient) recevierMessageHandler(message *model.Message) error {
+	//如果当前游客没有指定客服
+	//接收到了新客服的消息，应当及时更新信息，表示自己有客服了
+	//也要检查新的客服id是否合理
+	if c.Visitor.KefuId < 1 && message.KefuId > 0 && message.MsgType == KefuMsgType {
+		c.Visitor.KefuId = message.KefuId
+		if err := c.update(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (c *VisitorClient) update() error {
+	OnlineVisitor.Set(c.Visitor.Id, c.Visitor.KefuId)
 	return c.svcCtx.VisitorModel.Update(c.ctx, c.Visitor.Visitor)
 }
 
@@ -154,3 +181,33 @@ func (c *VisitorClient) newMessage(content string) *model.Message {
 		ExpireTime:  time.Now().Local().Add(time.Hour * 24 * 30), //30天
 	}
 }
+
+func (c *VisitorClient) getChatRecod() ([]*model.Message, error) {
+	res, err := c.svcCtx.MessageModel.FindsByVisitorId(c.ctx, c.Visitor.Id)
+	if err != nil {
+		c.Logger.Error(err)
+		return nil, err
+	}
+	return res, nil
+}
+
+// sendHistoryMessages 发送历史聊天记录给当前用户
+// 不经过 redis 订阅，直接写入ws
+func (c *VisitorClient) SendHistoryMessages() error {
+	messages, err := c.getChatRecod()
+	if err != nil {
+		return err
+	}
+	return c.writeToWebsocket(messages...)
+}
+
+// func (c *VisitorClient) GetKefuId() (int64, error) {
+// 	visitor, err := c.svcCtx.VisitorModel.FindById(c.ctx, c.Visitor.Id)
+// 	if err != nil && err != model.ErrNotFound {
+// 		return 0, err
+// 	} else if err == model.ErrNotFound {
+// 		return 0, model.ErrNotFound
+// 	}
+// 	c.Visitor.Visitor = visitor
+// 	return visitor.KefuId, err
+// }

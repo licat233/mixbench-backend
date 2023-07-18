@@ -8,7 +8,6 @@
 package middleware
 
 import (
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
 	"mixbench/common/utils"
@@ -52,14 +51,14 @@ func (m *AdminAuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		jwtPlatform := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtPlatform, claims)
+		jwtPlatform := jwtx.GetClaimsValue(jwtx.JwtPlatformKey, claims)
 		//设备 校验
 		if reqPlatform != jwtPlatform {
 			httpx.Error(w, errorx.ErrPlatform)
 			return
 		}
 
-		jwtIp := jwtx.GetClaimsValue(ctxdata.CtxKeyJwtIp, claims)
+		jwtIp := jwtx.GetClaimsValue(jwtx.JwtIpKey, claims)
 		//获取请求ip
 		reqIp := utils.RemoteIp(r)
 		//ip 校验

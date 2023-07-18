@@ -26,7 +26,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: TestHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/v1/api/chat"),
+		rest.WithPrefix("/v1/api/chat/public"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.VisitorAuth},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/messages",
+					Handler: VisitorMessagesHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/v1/api/chat/public/visitor"),
 	)
 
 	server.AddRoutes(
@@ -40,7 +54,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				},
 			}...,
 		),
-		rest.WithPrefix("/v1/api/chat/ws"),
+		rest.WithPrefix("/v1/api/chat/public/ws"),
 	)
 
 	server.AddRoutes(

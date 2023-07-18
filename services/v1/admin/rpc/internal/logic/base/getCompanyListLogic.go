@@ -1,0 +1,41 @@
+package baselogic
+
+import (
+	"context"
+
+	"mixbench/common/errorx"
+	"mixbench/services/v1/admin/rpc/admin_pb"
+	"mixbench/services/v1/admin/rpc/internal/logic/dataconv"
+	"mixbench/services/v1/admin/rpc/internal/svc"
+
+	"github.com/zeromicro/go-zero/core/logx"
+)
+
+type GetCompanyListLogic struct {
+	ctx    context.Context
+	svcCtx *svc.ServiceContext
+	logx.Logger
+}
+
+func NewGetCompanyListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCompanyListLogic {
+	return &GetCompanyListLogic{
+		ctx:    ctx,
+		svcCtx: svcCtx,
+		Logger: logx.WithContext(ctx),
+	}
+}
+
+// 获取公司列表
+func (l *GetCompanyListLogic) GetCompanyList(in *admin_pb.GetCompanyListReq) (*admin_pb.GetCompanyListResp, error) {
+	pageSize, page, keyword := dataconv.ListReqParams(in.ListReq)
+	list, total, err := l.svcCtx.CompanyModel.FindList(l.ctx, pageSize, page, keyword, dataconv.PbCompanyToMdCompany(in.Company))
+	if err != nil {
+		l.Logger.Error(err)
+		return nil, errorx.IntRpcErr(err)
+	}
+
+	return &admin_pb.GetCompanyListResp{
+		Companies: dataconv.MdCompanies2PbCompanies(list),
+		Total:     total,
+	}, nil
+}

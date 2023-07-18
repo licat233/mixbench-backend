@@ -68,6 +68,7 @@
 外部访问所有的服务均通过nginx反向代理: SEVER_NAME.mixbench.net
 所有数据存储在datacenter数据卷容器中
 默认使用 Nginx的 auth 模块做鉴权：auth_request /v1/api/admin/auth;
+配置CORS时，只能在正向nginx代理或者反向nginx代理其中一个配置cors;
 
 ## 注意事项
 

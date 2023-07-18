@@ -297,7 +297,7 @@
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           },
           {
             "name": "expireTime",
@@ -306,7 +306,7 @@
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           }
         ],
         "tags": [
@@ -539,6 +539,99 @@
         ]
       }
     },
+    "/v1/api/chat/public/test": {
+      "get": {
+        "summary": "测试",
+        "operationId": "Test",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/v1/api/chat/public/visitor/messages": {
+      "get": {
+        "summary": "visitor游客获取自己的聊天记录",
+        "operationId": "VisitorMessages",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/v1/api/chat/public/visitorLogin": {
+      "post": {
+        "summary": "游客登录",
+        "operationId": "VisitorLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start], 游客登录请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VisitorLoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/v1/api/chat/public/ws/visitor": {
+      "get": {
+        "summary": "visitor建立ws连接",
+        "operationId": "VisitorServer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "chat"
+        ]
+      }
+    },
     "/v1/api/chat/saveMsgConf": {
       "post": {
         "summary": "保存消息配置",
@@ -559,31 +652,6 @@
             "schema": {
               "$ref": "#/definitions/SaveMsgConfReq"
             }
-          }
-        ],
-        "tags": [
-          "chat"
-        ]
-      }
-    },
-    "/v1/api/chat/test": {
-      "get": {
-        "summary": "测试",
-        "operationId": "Test",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "data",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -937,61 +1005,10 @@
         ]
       }
     },
-    "/v1/api/chat/visitorLogin": {
-      "post": {
-        "summary": "游客登录",
-        "operationId": "VisitorLogin",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start], 游客登录请求",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/VisitorLoginReq"
-            }
-          }
-        ],
-        "tags": [
-          "chat"
-        ]
-      }
-    },
     "/v1/api/chat/ws/kefu": {
       "get": {
         "summary": "kefu建立ws连接",
         "operationId": "KefuServer",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {}
-          }
-        },
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "chat"
-        ]
-      }
-    },
-    "/v1/api/chat/ws/visitor": {
-      "get": {
-        "summary": "visitor建立ws连接",
-        "operationId": "VisitorServer",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1563,13 +1580,13 @@
         "sendTime": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "发送时间"
         },
         "expireTime": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "缓存过期时间, 默认为30天"
         }
       },

@@ -33,9 +33,6 @@ func (l *GetPrizePoolLogic) GetPrizePool(in *luckydraw_pb.GetPrizePoolReq) (*luc
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetPrizePoolResp{
 		PrizePool: dataconv.MdPrizePoolToPbPrizePool(res),

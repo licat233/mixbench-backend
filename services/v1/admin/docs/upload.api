@@ -2,8 +2,6 @@ syntax = "v1"
 
 
 @server(
-	jwt: Auth
-	middleware: AuthMiddleware
 	prefix: /v1/api/admin/upload
     group: upload
 )

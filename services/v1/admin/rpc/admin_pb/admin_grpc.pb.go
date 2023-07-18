@@ -46,6 +46,18 @@ type BaseClient interface {
 	GetCampaignList(ctx context.Context, in *GetCampaignListReq, opts ...grpc.CallOption) (*GetCampaignListResp, error)
 	// 获取活动枚举列表
 	GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsReq, opts ...grpc.CallOption) (*Enums, error)
+	// 添加公司
+	AddCompany(ctx context.Context, in *AddCompanyReq, opts ...grpc.CallOption) (*AddCompanyResp, error)
+	// 更新公司
+	PutCompany(ctx context.Context, in *PutCompanyReq, opts ...grpc.CallOption) (*PutCompanyResp, error)
+	// 获取公司
+	GetCompany(ctx context.Context, in *GetCompanyReq, opts ...grpc.CallOption) (*GetCompanyResp, error)
+	// 删除公司
+	DelCompany(ctx context.Context, in *DelCompanyReq, opts ...grpc.CallOption) (*DelCompanyResp, error)
+	// 获取公司列表
+	GetCompanyList(ctx context.Context, in *GetCompanyListReq, opts ...grpc.CallOption) (*GetCompanyListResp, error)
+	// 获取公司枚举列表
+	GetCompanyEnums(ctx context.Context, in *GetCompanyEnumsReq, opts ...grpc.CallOption) (*Enums, error)
 	// 添加项目
 	AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error)
 	// 更新项目
@@ -188,6 +200,60 @@ func (c *baseClient) GetCampaignEnums(ctx context.Context, in *GetCampaignEnumsR
 	return out, nil
 }
 
+func (c *baseClient) AddCompany(ctx context.Context, in *AddCompanyReq, opts ...grpc.CallOption) (*AddCompanyResp, error) {
+	out := new(AddCompanyResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/AddCompany", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) PutCompany(ctx context.Context, in *PutCompanyReq, opts ...grpc.CallOption) (*PutCompanyResp, error) {
+	out := new(PutCompanyResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/PutCompany", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetCompany(ctx context.Context, in *GetCompanyReq, opts ...grpc.CallOption) (*GetCompanyResp, error) {
+	out := new(GetCompanyResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetCompany", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) DelCompany(ctx context.Context, in *DelCompanyReq, opts ...grpc.CallOption) (*DelCompanyResp, error) {
+	out := new(DelCompanyResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/DelCompany", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetCompanyList(ctx context.Context, in *GetCompanyListReq, opts ...grpc.CallOption) (*GetCompanyListResp, error) {
+	out := new(GetCompanyListResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetCompanyList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *baseClient) GetCompanyEnums(ctx context.Context, in *GetCompanyEnumsReq, opts ...grpc.CallOption) (*Enums, error) {
+	out := new(Enums)
+	err := c.cc.Invoke(ctx, "/admin_proto.Base/GetCompanyEnums", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *baseClient) AddProject(ctx context.Context, in *AddProjectReq, opts ...grpc.CallOption) (*AddProjectResp, error) {
 	out := new(AddProjectResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Base/AddProject", in, out, opts...)
@@ -324,6 +390,18 @@ type BaseServer interface {
 	GetCampaignList(context.Context, *GetCampaignListReq) (*GetCampaignListResp, error)
 	// 获取活动枚举列表
 	GetCampaignEnums(context.Context, *GetCampaignEnumsReq) (*Enums, error)
+	// 添加公司
+	AddCompany(context.Context, *AddCompanyReq) (*AddCompanyResp, error)
+	// 更新公司
+	PutCompany(context.Context, *PutCompanyReq) (*PutCompanyResp, error)
+	// 获取公司
+	GetCompany(context.Context, *GetCompanyReq) (*GetCompanyResp, error)
+	// 删除公司
+	DelCompany(context.Context, *DelCompanyReq) (*DelCompanyResp, error)
+	// 获取公司列表
+	GetCompanyList(context.Context, *GetCompanyListReq) (*GetCompanyListResp, error)
+	// 获取公司枚举列表
+	GetCompanyEnums(context.Context, *GetCompanyEnumsReq) (*Enums, error)
 	// 添加项目
 	AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error)
 	// 更新项目
@@ -390,6 +468,24 @@ func (UnimplementedBaseServer) GetCampaignList(context.Context, *GetCampaignList
 }
 func (UnimplementedBaseServer) GetCampaignEnums(context.Context, *GetCampaignEnumsReq) (*Enums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCampaignEnums not implemented")
+}
+func (UnimplementedBaseServer) AddCompany(context.Context, *AddCompanyReq) (*AddCompanyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddCompany not implemented")
+}
+func (UnimplementedBaseServer) PutCompany(context.Context, *PutCompanyReq) (*PutCompanyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutCompany not implemented")
+}
+func (UnimplementedBaseServer) GetCompany(context.Context, *GetCompanyReq) (*GetCompanyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCompany not implemented")
+}
+func (UnimplementedBaseServer) DelCompany(context.Context, *DelCompanyReq) (*DelCompanyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelCompany not implemented")
+}
+func (UnimplementedBaseServer) GetCompanyList(context.Context, *GetCompanyListReq) (*GetCompanyListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCompanyList not implemented")
+}
+func (UnimplementedBaseServer) GetCompanyEnums(context.Context, *GetCompanyEnumsReq) (*Enums, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCompanyEnums not implemented")
 }
 func (UnimplementedBaseServer) AddProject(context.Context, *AddProjectReq) (*AddProjectResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddProject not implemented")
@@ -652,6 +748,114 @@ func _Base_GetCampaignEnums_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BaseServer).GetCampaignEnums(ctx, req.(*GetCampaignEnumsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_AddCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCompanyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).AddCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/AddCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).AddCompany(ctx, req.(*AddCompanyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_PutCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutCompanyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).PutCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/PutCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).PutCompany(ctx, req.(*PutCompanyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCompanyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetCompany(ctx, req.(*GetCompanyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_DelCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelCompanyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).DelCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/DelCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).DelCompany(ctx, req.(*DelCompanyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetCompanyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCompanyListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetCompanyList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetCompanyList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetCompanyList(ctx, req.(*GetCompanyListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Base_GetCompanyEnums_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCompanyEnumsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BaseServer).GetCompanyEnums(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Base/GetCompanyEnums",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BaseServer).GetCompanyEnums(ctx, req.(*GetCompanyEnumsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -928,6 +1132,30 @@ var Base_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Base_GetCampaignEnums_Handler,
 		},
 		{
+			MethodName: "AddCompany",
+			Handler:    _Base_AddCompany_Handler,
+		},
+		{
+			MethodName: "PutCompany",
+			Handler:    _Base_PutCompany_Handler,
+		},
+		{
+			MethodName: "GetCompany",
+			Handler:    _Base_GetCompany_Handler,
+		},
+		{
+			MethodName: "DelCompany",
+			Handler:    _Base_DelCompany_Handler,
+		},
+		{
+			MethodName: "GetCompanyList",
+			Handler:    _Base_GetCompanyList_Handler,
+		},
+		{
+			MethodName: "GetCompanyEnums",
+			Handler:    _Base_GetCompanyEnums_Handler,
+		},
+		{
 			MethodName: "AddProject",
 			Handler:    _Base_AddProject_Handler,
 		},
@@ -987,25 +1215,29 @@ type AdminClient interface {
 	// 预留的调试端口
 	Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error)
 	// 生产token
-	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	// rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
 	// 验证token是否有效
-	ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error)
-	// 账号登录
-	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// rpc ValidateToken (ValidateTokenReq) returns (ValidateTokenResp);
+	// 账号验证
+	VerifyAccount(ctx context.Context, in *VerifyAccountReq, opts ...grpc.CallOption) (*VerifyAccountResp, error)
+	// 登录
+	// rpc Login (LoginReq) returns (LoginResp);
 	// 超级管理员/开发员登录
-	SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// rpc SuperAdminLogin (LoginReq) returns (LoginResp);
 	// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
-	LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
+	// rpc LoginByEmail (LoginByEmailReq) returns (VerifyAccountResp);
 	// 邮箱是否存在
 	ExistsEmail(ctx context.Context, in *ExistsEmailReq, opts ...grpc.CallOption) (*ExistsEmailResp, error)
 	// 通过邮箱查找管理员
 	FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error)
+	// 通过账号查找管理员
+	FindByPassport(ctx context.Context, in *FindByPassportReq, opts ...grpc.CallOption) (*FindByPassportResp, error)
 	// 注销登录
 	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
 	// 是否已经注销
 	IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error)
 	// 解析 jwtToken, 返回原生error
-	ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
+	// rpc ParseJwtToken (ParseJwtTokenReq) returns (ParseJwtTokenResp);
 	// 验证管理员密码
 	VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error)
 	// 修改密码
@@ -1032,45 +1264,9 @@ func (c *adminClient) Test(ctx context.Context, in *TestReq, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *adminClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
-	out := new(GenerateTokenResp)
-	err := c.cc.Invoke(ctx, "/admin_proto.Admin/GenerateToken", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *adminClient) ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error) {
-	out := new(ValidateTokenResp)
-	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ValidateToken", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *adminClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	out := new(LoginResp)
-	err := c.cc.Invoke(ctx, "/admin_proto.Admin/Login", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *adminClient) SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	out := new(LoginResp)
-	err := c.cc.Invoke(ctx, "/admin_proto.Admin/SuperAdminLogin", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *adminClient) LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	out := new(LoginResp)
-	err := c.cc.Invoke(ctx, "/admin_proto.Admin/LoginByEmail", in, out, opts...)
+func (c *adminClient) VerifyAccount(ctx context.Context, in *VerifyAccountReq, opts ...grpc.CallOption) (*VerifyAccountResp, error) {
+	out := new(VerifyAccountResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/VerifyAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1095,6 +1291,15 @@ func (c *adminClient) FindByEmail(ctx context.Context, in *FindByEmailReq, opts 
 	return out, nil
 }
 
+func (c *adminClient) FindByPassport(ctx context.Context, in *FindByPassportReq, opts ...grpc.CallOption) (*FindByPassportResp, error) {
+	out := new(FindByPassportResp)
+	err := c.cc.Invoke(ctx, "/admin_proto.Admin/FindByPassport", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminClient) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error) {
 	out := new(LogoutResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/Logout", in, out, opts...)
@@ -1107,15 +1312,6 @@ func (c *adminClient) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.Ca
 func (c *adminClient) IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error) {
 	out := new(IsLogoutResp)
 	err := c.cc.Invoke(ctx, "/admin_proto.Admin/IsLogout", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *adminClient) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error) {
-	out := new(ParseJwtTokenResp)
-	err := c.cc.Invoke(ctx, "/admin_proto.Admin/ParseJwtToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1165,25 +1361,29 @@ type AdminServer interface {
 	// 预留的调试端口
 	Test(context.Context, *TestReq) (*TestResp, error)
 	// 生产token
-	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	// rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
 	// 验证token是否有效
-	ValidateToken(context.Context, *ValidateTokenReq) (*ValidateTokenResp, error)
-	// 账号登录
-	Login(context.Context, *LoginReq) (*LoginResp, error)
+	// rpc ValidateToken (ValidateTokenReq) returns (ValidateTokenResp);
+	// 账号验证
+	VerifyAccount(context.Context, *VerifyAccountReq) (*VerifyAccountResp, error)
+	// 登录
+	// rpc Login (LoginReq) returns (LoginResp);
 	// 超级管理员/开发员登录
-	SuperAdminLogin(context.Context, *LoginReq) (*LoginResp, error)
+	// rpc SuperAdminLogin (LoginReq) returns (LoginResp);
 	// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
-	LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error)
+	// rpc LoginByEmail (LoginByEmailReq) returns (VerifyAccountResp);
 	// 邮箱是否存在
 	ExistsEmail(context.Context, *ExistsEmailReq) (*ExistsEmailResp, error)
 	// 通过邮箱查找管理员
 	FindByEmail(context.Context, *FindByEmailReq) (*FindByEmailResp, error)
+	// 通过账号查找管理员
+	FindByPassport(context.Context, *FindByPassportReq) (*FindByPassportResp, error)
 	// 注销登录
 	Logout(context.Context, *LogoutReq) (*LogoutResp, error)
 	// 是否已经注销
 	IsLogout(context.Context, *IsLogoutReq) (*IsLogoutResp, error)
 	// 解析 jwtToken, 返回原生error
-	ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error)
+	// rpc ParseJwtToken (ParseJwtTokenReq) returns (ParseJwtTokenResp);
 	// 验证管理员密码
 	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordResp, error)
 	// 修改密码
@@ -1201,20 +1401,8 @@ type UnimplementedAdminServer struct {
 func (UnimplementedAdminServer) Test(context.Context, *TestReq) (*TestResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Test not implemented")
 }
-func (UnimplementedAdminServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
-}
-func (UnimplementedAdminServer) ValidateToken(context.Context, *ValidateTokenReq) (*ValidateTokenResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ValidateToken not implemented")
-}
-func (UnimplementedAdminServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
-}
-func (UnimplementedAdminServer) SuperAdminLogin(context.Context, *LoginReq) (*LoginResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SuperAdminLogin not implemented")
-}
-func (UnimplementedAdminServer) LoginByEmail(context.Context, *LoginByEmailReq) (*LoginResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LoginByEmail not implemented")
+func (UnimplementedAdminServer) VerifyAccount(context.Context, *VerifyAccountReq) (*VerifyAccountResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyAccount not implemented")
 }
 func (UnimplementedAdminServer) ExistsEmail(context.Context, *ExistsEmailReq) (*ExistsEmailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExistsEmail not implemented")
@@ -1222,14 +1410,14 @@ func (UnimplementedAdminServer) ExistsEmail(context.Context, *ExistsEmailReq) (*
 func (UnimplementedAdminServer) FindByEmail(context.Context, *FindByEmailReq) (*FindByEmailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByEmail not implemented")
 }
+func (UnimplementedAdminServer) FindByPassport(context.Context, *FindByPassportReq) (*FindByPassportResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByPassport not implemented")
+}
 func (UnimplementedAdminServer) Logout(context.Context, *LogoutReq) (*LogoutResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
 func (UnimplementedAdminServer) IsLogout(context.Context, *IsLogoutReq) (*IsLogoutResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsLogout not implemented")
-}
-func (UnimplementedAdminServer) ParseJwtToken(context.Context, *ParseJwtTokenReq) (*ParseJwtTokenResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ParseJwtToken not implemented")
 }
 func (UnimplementedAdminServer) VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyPassword not implemented")
@@ -1274,92 +1462,20 @@ func _Admin_Test_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Admin_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GenerateTokenReq)
+func _Admin_VerifyAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyAccountReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServer).GenerateToken(ctx, in)
+		return srv.(AdminServer).VerifyAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/admin_proto.Admin/GenerateToken",
+		FullMethod: "/admin_proto.Admin/VerifyAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).GenerateToken(ctx, req.(*GenerateTokenReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Admin_ValidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ValidateTokenReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServer).ValidateToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/admin_proto.Admin/ValidateToken",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).ValidateToken(ctx, req.(*ValidateTokenReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Admin_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServer).Login(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/admin_proto.Admin/Login",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).Login(ctx, req.(*LoginReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Admin_SuperAdminLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServer).SuperAdminLogin(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/admin_proto.Admin/SuperAdminLogin",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).SuperAdminLogin(ctx, req.(*LoginReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Admin_LoginByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginByEmailReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServer).LoginByEmail(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/admin_proto.Admin/LoginByEmail",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).LoginByEmail(ctx, req.(*LoginByEmailReq))
+		return srv.(AdminServer).VerifyAccount(ctx, req.(*VerifyAccountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1400,6 +1516,24 @@ func _Admin_FindByEmail_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Admin_FindByPassport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByPassportReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServer).FindByPassport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/admin_proto.Admin/FindByPassport",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServer).FindByPassport(ctx, req.(*FindByPassportReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Admin_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LogoutReq)
 	if err := dec(in); err != nil {
@@ -1432,24 +1566,6 @@ func _Admin_IsLogout_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminServer).IsLogout(ctx, req.(*IsLogoutReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Admin_ParseJwtToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ParseJwtTokenReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServer).ParseJwtToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/admin_proto.Admin/ParseJwtToken",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServer).ParseJwtToken(ctx, req.(*ParseJwtTokenReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1538,24 +1654,8 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Admin_Test_Handler,
 		},
 		{
-			MethodName: "GenerateToken",
-			Handler:    _Admin_GenerateToken_Handler,
-		},
-		{
-			MethodName: "ValidateToken",
-			Handler:    _Admin_ValidateToken_Handler,
-		},
-		{
-			MethodName: "Login",
-			Handler:    _Admin_Login_Handler,
-		},
-		{
-			MethodName: "SuperAdminLogin",
-			Handler:    _Admin_SuperAdminLogin_Handler,
-		},
-		{
-			MethodName: "LoginByEmail",
-			Handler:    _Admin_LoginByEmail_Handler,
+			MethodName: "VerifyAccount",
+			Handler:    _Admin_VerifyAccount_Handler,
 		},
 		{
 			MethodName: "ExistsEmail",
@@ -1566,16 +1666,16 @@ var Admin_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Admin_FindByEmail_Handler,
 		},
 		{
+			MethodName: "FindByPassport",
+			Handler:    _Admin_FindByPassport_Handler,
+		},
+		{
 			MethodName: "Logout",
 			Handler:    _Admin_Logout_Handler,
 		},
 		{
 			MethodName: "IsLogout",
 			Handler:    _Admin_IsLogout_Handler,
-		},
-		{
-			MethodName: "ParseJwtToken",
-			Handler:    _Admin_ParseJwtToken_Handler,
 		},
 		{
 			MethodName: "VerifyPassword",

@@ -27,13 +27,14 @@ func NewPutPrizeGradeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Put
 
 func (l *PutPrizeGradeLogic) PutPrizeGrade(req *types.PutPrizeGradeReq) (any, error) {
 	in := &luckydraw_pb.PutPrizeGradeReq{
-		Id:    req.Id,
-		Uuid:  req.Uuid,
-		Name:  req.Name,
-		IsWin: req.IsWin,
+		PrizeGrade: &luckydraw_pb.PrizeGrade{
+			Id:    req.Id,
+			Uuid:  req.Uuid,
+			Name:  req.Name,
+			IsWin: req.IsWin,
+		},
 	}
-	_, err := l.svcCtx.LuckydrawRpc.PutPrizeGrade(l.ctx, in)
-	if err != nil {
+	if _, err := l.svcCtx.LuckydrawRpc.PutPrizeGrade(l.ctx, in); err != nil {
 		//若rpc的错误已经包装过了，无需再处理，直接返回即可
 		return nil, err
 	}

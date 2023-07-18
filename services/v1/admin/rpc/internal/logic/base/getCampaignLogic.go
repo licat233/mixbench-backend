@@ -28,13 +28,10 @@ func NewGetCampaignLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCa
 
 // 获取活动
 func (l *GetCampaignLogic) GetCampaign(in *admin_pb.GetCampaignReq) (*admin_pb.GetCampaignResp, error) {
-	res, err := l.svcCtx.CampaignModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.CampaignModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return nil, nil
 	}
 
 	return &admin_pb.GetCampaignResp{

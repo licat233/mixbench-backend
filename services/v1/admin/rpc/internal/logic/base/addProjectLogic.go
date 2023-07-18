@@ -29,9 +29,10 @@ func NewAddProjectLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPro
 // 添加项目
 func (l *AddProjectLogic) AddProject(in *admin_pb.AddProjectReq) (*admin_pb.AddProjectResp, error) {
 	data := &model.Project{
-		Uuid:   uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
-		Name:   in.Name,
-		Status: in.Status,
+		Uuid:      uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
+		Name:      in.Name,
+		CompanyId: in.CompanyId,
+		Status:    in.Status,
 	}
 	if _, err := l.svcCtx.ProjectModel.Insert(l.ctx, data); err != nil {
 		l.Logger.Error(err)

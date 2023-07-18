@@ -5,7 +5,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -87,14 +86,13 @@ func (m *defaultUserPoolModel) FindList(ctx context.Context, pageSize, page int6
 		}
 	}
 	if pageSize > 0 && page > 0 {
-		sqCount := sq.RemoveLimit().RemoveOffset()
 		sq = sq.Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-		queryCount, agrsCount, e := sqCount.ToSql()
+		sqCount := sq.RemoveLimit().RemoveOffset()
+		queryCount, agrsCount, e := sqCount.RemoveColumns().Column("COUNT(*)").ToSql()
 		if e != nil {
 			err = e
 			return
 		}
-		queryCount = strings.ReplaceAll(queryCount, userPoolRows, "COUNT(*)")
 		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
 			return
 		}

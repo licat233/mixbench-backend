@@ -33,9 +33,6 @@ func (l *GetPrizeGradeLogic) GetPrizeGrade(in *luckydraw_pb.GetPrizeGradeReq) (*
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetPrizeGradeResp{
 		PrizeGrade: dataconv.MdPrizeGradeToPbPrizeGrade(res),

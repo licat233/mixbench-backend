@@ -17,6 +17,8 @@ type (
 	AddAdminerResp      = admin_pb.AddAdminerResp
 	AddCampaignReq      = admin_pb.AddCampaignReq
 	AddCampaignResp     = admin_pb.AddCampaignResp
+	AddCompanyReq       = admin_pb.AddCompanyReq
+	AddCompanyResp      = admin_pb.AddCompanyResp
 	AddProjectReq       = admin_pb.AddProjectReq
 	AddProjectResp      = admin_pb.AddProjectResp
 	AddWebReq           = admin_pb.AddWebReq
@@ -24,10 +26,13 @@ type (
 	Adminer             = admin_pb.Adminer
 	ByIdReq             = admin_pb.ByIdReq
 	Campaign            = admin_pb.Campaign
+	Company             = admin_pb.Company
 	DelAdminerReq       = admin_pb.DelAdminerReq
 	DelAdminerResp      = admin_pb.DelAdminerResp
 	DelCampaignReq      = admin_pb.DelCampaignReq
 	DelCampaignResp     = admin_pb.DelCampaignResp
+	DelCompanyReq       = admin_pb.DelCompanyReq
+	DelCompanyResp      = admin_pb.DelCompanyResp
 	DelProjectReq       = admin_pb.DelProjectReq
 	DelProjectResp      = admin_pb.DelProjectResp
 	DelWebReq           = admin_pb.DelWebReq
@@ -38,9 +43,9 @@ type (
 	ExistsEmailResp     = admin_pb.ExistsEmailResp
 	FindByEmailReq      = admin_pb.FindByEmailReq
 	FindByEmailResp     = admin_pb.FindByEmailResp
+	FindByPassportReq   = admin_pb.FindByPassportReq
+	FindByPassportResp  = admin_pb.FindByPassportResp
 	ForgotPasswordReq   = admin_pb.ForgotPasswordReq
-	GenerateTokenReq    = admin_pb.GenerateTokenReq
-	GenerateTokenResp   = admin_pb.GenerateTokenResp
 	GetAdminerEnumsReq  = admin_pb.GetAdminerEnumsReq
 	GetAdminerListReq   = admin_pb.GetAdminerListReq
 	GetAdminerListResp  = admin_pb.GetAdminerListResp
@@ -51,6 +56,11 @@ type (
 	GetCampaignListResp = admin_pb.GetCampaignListResp
 	GetCampaignReq      = admin_pb.GetCampaignReq
 	GetCampaignResp     = admin_pb.GetCampaignResp
+	GetCompanyEnumsReq  = admin_pb.GetCompanyEnumsReq
+	GetCompanyListReq   = admin_pb.GetCompanyListReq
+	GetCompanyListResp  = admin_pb.GetCompanyListResp
+	GetCompanyReq       = admin_pb.GetCompanyReq
+	GetCompanyResp      = admin_pb.GetCompanyResp
 	GetProjectEnumsReq  = admin_pb.GetProjectEnumsReq
 	GetProjectListReq   = admin_pb.GetProjectListReq
 	GetProjectListResp  = admin_pb.GetProjectListResp
@@ -65,12 +75,8 @@ type (
 	GetWebResp          = admin_pb.GetWebResp
 	IsLogoutReq         = admin_pb.IsLogoutReq
 	IsLogoutResp        = admin_pb.IsLogoutResp
-	JwtData             = admin_pb.JwtData
 	JwtToken            = admin_pb.JwtToken
 	ListReq             = admin_pb.ListReq
-	LoginByEmailReq     = admin_pb.LoginByEmailReq
-	LoginReq            = admin_pb.LoginReq
-	LoginResp           = admin_pb.LoginResp
 	LogoutReq           = admin_pb.LogoutReq
 	LogoutResp          = admin_pb.LogoutResp
 	NilReq              = admin_pb.NilReq
@@ -84,6 +90,8 @@ type (
 	PutAdminerResp      = admin_pb.PutAdminerResp
 	PutCampaignReq      = admin_pb.PutCampaignReq
 	PutCampaignResp     = admin_pb.PutCampaignResp
+	PutCompanyReq       = admin_pb.PutCompanyReq
+	PutCompanyResp      = admin_pb.PutCompanyResp
 	PutPasswordReq      = admin_pb.PutPasswordReq
 	PutProjectReq       = admin_pb.PutProjectReq
 	PutProjectResp      = admin_pb.PutProjectResp
@@ -97,6 +105,8 @@ type (
 	TreeOptions         = admin_pb.TreeOptions
 	ValidateTokenReq    = admin_pb.ValidateTokenReq
 	ValidateTokenResp   = admin_pb.ValidateTokenResp
+	VerifyAccountReq    = admin_pb.VerifyAccountReq
+	VerifyAccountResp   = admin_pb.VerifyAccountResp
 	VerifyPasswordReq   = admin_pb.VerifyPasswordReq
 	VerifyPasswordResp  = admin_pb.VerifyPasswordResp
 	Web                 = admin_pb.Web
@@ -105,26 +115,18 @@ type (
 		// 预留的调试端口
 		Test(ctx context.Context, in *TestReq, opts ...grpc.CallOption) (*TestResp, error)
 		// 生产token
-		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
-		// 验证token是否有效
-		ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error)
-		// 账号登录
-		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
-		// 超级管理员/开发员登录
-		SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
-		// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
-		LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error)
-		// 邮箱是否存在
+		VerifyAccount(ctx context.Context, in *VerifyAccountReq, opts ...grpc.CallOption) (*VerifyAccountResp, error)
+		// 登录
 		ExistsEmail(ctx context.Context, in *ExistsEmailReq, opts ...grpc.CallOption) (*ExistsEmailResp, error)
 		// 通过邮箱查找管理员
 		FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error)
+		// 通过账号查找管理员
+		FindByPassport(ctx context.Context, in *FindByPassportReq, opts ...grpc.CallOption) (*FindByPassportResp, error)
 		// 注销登录
 		Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
 		// 是否已经注销
 		IsLogout(ctx context.Context, in *IsLogoutReq, opts ...grpc.CallOption) (*IsLogoutResp, error)
 		// 解析 jwtToken, 返回原生error
-		ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error)
-		// 验证管理员密码
 		VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error)
 		// 修改密码
 		PutPassword(ctx context.Context, in *PutPasswordReq, opts ...grpc.CallOption) (*StatusResp, error)
@@ -151,36 +153,12 @@ func (m *defaultAdmin) Test(ctx context.Context, in *TestReq, opts ...grpc.CallO
 }
 
 // 生产token
-func (m *defaultAdmin) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
+func (m *defaultAdmin) VerifyAccount(ctx context.Context, in *VerifyAccountReq, opts ...grpc.CallOption) (*VerifyAccountResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.GenerateToken(ctx, in, opts...)
+	return client.VerifyAccount(ctx, in, opts...)
 }
 
-// 验证token是否有效
-func (m *defaultAdmin) ValidateToken(ctx context.Context, in *ValidateTokenReq, opts ...grpc.CallOption) (*ValidateTokenResp, error) {
-	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.ValidateToken(ctx, in, opts...)
-}
-
-// 账号登录
-func (m *defaultAdmin) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.Login(ctx, in, opts...)
-}
-
-// 超级管理员/开发员登录
-func (m *defaultAdmin) SuperAdminLogin(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.SuperAdminLogin(ctx, in, opts...)
-}
-
-// 邮箱登录，注意避免同个邮箱，多点同时登陆带来的耦合性问题
-func (m *defaultAdmin) LoginByEmail(ctx context.Context, in *LoginByEmailReq, opts ...grpc.CallOption) (*LoginResp, error) {
-	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.LoginByEmail(ctx, in, opts...)
-}
-
-// 邮箱是否存在
+// 登录
 func (m *defaultAdmin) ExistsEmail(ctx context.Context, in *ExistsEmailReq, opts ...grpc.CallOption) (*ExistsEmailResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.ExistsEmail(ctx, in, opts...)
@@ -190,6 +168,12 @@ func (m *defaultAdmin) ExistsEmail(ctx context.Context, in *ExistsEmailReq, opts
 func (m *defaultAdmin) FindByEmail(ctx context.Context, in *FindByEmailReq, opts ...grpc.CallOption) (*FindByEmailResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.FindByEmail(ctx, in, opts...)
+}
+
+// 通过账号查找管理员
+func (m *defaultAdmin) FindByPassport(ctx context.Context, in *FindByPassportReq, opts ...grpc.CallOption) (*FindByPassportResp, error) {
+	client := admin_pb.NewAdminClient(m.cli.Conn())
+	return client.FindByPassport(ctx, in, opts...)
 }
 
 // 注销登录
@@ -205,12 +189,6 @@ func (m *defaultAdmin) IsLogout(ctx context.Context, in *IsLogoutReq, opts ...gr
 }
 
 // 解析 jwtToken, 返回原生error
-func (m *defaultAdmin) ParseJwtToken(ctx context.Context, in *ParseJwtTokenReq, opts ...grpc.CallOption) (*ParseJwtTokenResp, error) {
-	client := admin_pb.NewAdminClient(m.cli.Conn())
-	return client.ParseJwtToken(ctx, in, opts...)
-}
-
-// 验证管理员密码
 func (m *defaultAdmin) VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordResp, error) {
 	client := admin_pb.NewAdminClient(m.cli.Conn())
 	return client.VerifyPassword(ctx, in, opts...)

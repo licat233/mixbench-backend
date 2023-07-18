@@ -29,7 +29,6 @@ func (l *AddWebLogic) AddWeb(req *types.AddWebReq) (any, error) {
 	in := &admin_pb.AddWebReq{
 		ProjectId:   req.ProjectId,
 		Url:         req.Url,
-		Host:        req.Host,
 		Description: req.Description,
 		Code:        req.Code,
 	}

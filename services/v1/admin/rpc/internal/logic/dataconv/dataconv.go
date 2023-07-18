@@ -21,9 +21,10 @@ func PbAdminerToMdAdminer(pb *admin_pb.Adminer) *model.Adminer {
 		Email:        pb.Email,
 		Status:       pb.Status,
 		IsSuperAdmin: pb.IsSuperAdmin,
+		CompanyId:    pb.CompanyId,
 		ProjectId:    pb.ProjectId,
 		LoginCount:   pb.LoginCount,
-		LastLogin:    time.Unix(pb.LastLogin, 0).Local(),
+		LastLoginAt:  time.Unix(pb.LastLoginAt, 0).Local(),
 	}
 }
 
@@ -42,9 +43,10 @@ func MdAdminerToPbAdminer(md *model.Adminer) *admin_pb.Adminer {
 		Email:        md.Email,
 		Status:       md.Status,
 		IsSuperAdmin: md.IsSuperAdmin,
+		CompanyId:    md.CompanyId,
 		ProjectId:    md.ProjectId,
 		LoginCount:   md.LoginCount,
-		LastLogin:    md.LastLogin.Unix(),
+		LastLoginAt:  md.LastLoginAt.Unix(),
 	}
 }
 
@@ -128,15 +130,62 @@ func MdCampaigns2PbCampaigns(mdList []*model.Campaign) []*admin_pb.Campaign {
 	return data
 }
 
+func PbCompanyToMdCompany(pb *admin_pb.Company) *model.Company {
+	if pb == nil {
+		return nil
+	}
+	return &model.Company{
+		Id:     pb.Id,
+		Uuid:   pb.Uuid,
+		Name:   pb.Name,
+		Status: pb.Status,
+	}
+}
+
+func MdCompanyToPbCompany(md *model.Company) *admin_pb.Company {
+	if md == nil {
+		return nil
+	}
+	return &admin_pb.Company{
+		Id:     md.Id,
+		Uuid:   md.Uuid,
+		Name:   md.Name,
+		Status: md.Status,
+	}
+}
+
+func PbCompanies2MdCompanies(pbList []*admin_pb.Company) []*model.Company {
+	if pbList == nil {
+		return nil
+	}
+	data := make([]*model.Company, 0)
+	for _, v := range pbList {
+		data = append(data, PbCompanyToMdCompany(v))
+	}
+	return data
+}
+
+func MdCompanies2PbCompanies(mdList []*model.Company) []*admin_pb.Company {
+	if mdList == nil {
+		return nil
+	}
+	data := make([]*admin_pb.Company, 0)
+	for _, v := range mdList {
+		data = append(data, MdCompanyToPbCompany(v))
+	}
+	return data
+}
+
 func PbProjectToMdProject(pb *admin_pb.Project) *model.Project {
 	if pb == nil {
 		return nil
 	}
 	return &model.Project{
-		Id:     pb.Id,
-		Uuid:   pb.Uuid,
-		Name:   pb.Name,
-		Status: pb.Status,
+		Id:        pb.Id,
+		Uuid:      pb.Uuid,
+		Name:      pb.Name,
+		CompanyId: pb.CompanyId,
+		Status:    pb.Status,
 	}
 }
 
@@ -145,10 +194,11 @@ func MdProjectToPbProject(md *model.Project) *admin_pb.Project {
 		return nil
 	}
 	return &admin_pb.Project{
-		Id:     md.Id,
-		Uuid:   md.Uuid,
-		Name:   md.Name,
-		Status: md.Status,
+		Id:        md.Id,
+		Uuid:      md.Uuid,
+		Name:      md.Name,
+		CompanyId: md.CompanyId,
+		Status:    md.Status,
 	}
 }
 
@@ -183,7 +233,6 @@ func PbWebToMdWeb(pb *admin_pb.Web) *model.Web {
 		Uuid:        pb.Uuid,
 		ProjectId:   pb.ProjectId,
 		Url:         pb.Url,
-		Host:        pb.Host,
 		Description: pb.Description,
 		Code:        pb.Code,
 	}
@@ -198,7 +247,6 @@ func MdWebToPbWeb(md *model.Web) *admin_pb.Web {
 		Uuid:        md.Uuid,
 		ProjectId:   md.ProjectId,
 		Url:         md.Url,
-		Host:        md.Host,
 		Description: md.Description,
 		Code:        md.Code,
 	}

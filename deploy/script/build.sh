@@ -53,8 +53,11 @@ build_go() {
         exit 1
     fi
     dirpath="${project_root}build/${filename}"
-    mkdir -p $dirpath/etc/
-    cp -rf ./etc/ $dirpath/etc/
+    if [ -d ./etc/ ]; then
+        #如果目录存在，则复制
+        mkdir -p $dirpath/etc/
+        cp -rf ./etc/ $dirpath/etc/
+    fi
     if [ -d ./static/ ]; then
         #如果目录存在，则复制
         mkdir -p $dirpath/static/

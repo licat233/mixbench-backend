@@ -34,10 +34,11 @@ func (l *GetProjectListLogic) GetProjectList(req *types.GetProjectListReq) (any,
 			Keyword:  req.Keyword,
 		},
 		Project: &admin_pb.Project{
-			Id:     req.Id,
-			Uuid:   req.Uuid,
-			Name:   req.Name,
-			Status: req.Status,
+			Id:        req.Id,
+			Uuid:      req.Uuid,
+			Name:      req.Name,
+			CompanyId: req.CompanyId,
+			Status:    req.Status,
 		},
 	}
 	rpcResp, err := l.svcCtx.AdminRpc.GetProjectList(l.ctx, in)

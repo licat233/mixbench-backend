@@ -11,7 +11,9 @@ import (
 	"context"
 
 	"mixbench/common/ctxdata"
+	"mixbench/common/errorx"
 	"mixbench/common/respx"
+	"mixbench/services/v1/admin/api/internal/logic/dataconv"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 
@@ -34,12 +36,23 @@ func NewCurrentUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Curre
 
 func (l *CurrentUserLogic) CurrentUser() (any, error) {
 	uid := ctxdata.GetUidFromCtx(l.ctx)
-	resp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{
+	if uid < 1 {
+		return nil, errorx.New("user does not exist")
+	}
+	rpcResp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{
 		Id: uid,
 	})
 	if err != nil {
 		return nil, err
 	}
-	resp.Adminer.Password = ""
-	return respx.NewData(resp.Adminer), nil
+	if rpcResp.Adminer == nil {
+		return nil, errorx.New("user does not exist")
+	}
+	pbAdminer := rpcResp.Adminer
+	data := dataconv.PbAdminerToApiAdminer(pbAdminer)
+	if data != nil {
+		data.Password = ""
+	}
+
+	return respx.DefaultSingleResp(data, nil)
 }

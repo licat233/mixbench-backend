@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"mixbench/common/utils"
+	"mixbench/common/mysqlx"
 	"mixbench/services/v1/authentication/model"
 	"mixbench/services/v1/authentication/mq/asynqmq"
 	"mixbench/services/v1/authentication/rpc/internal/config"
@@ -25,12 +25,12 @@ type ServiceContext struct {
 	KqPusherClient *kq.Pusher
 	AsynqClient    *asynqmq.AsynqProducer
 
-	JwtBlacklistModel model.JwtBlacklistModel
-	IpblackModel      model.IpblackModel
+	TokenBlacklistModel model.TokenBlacklistModel
+	IpBlacklistModel    model.IpBlacklistModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	sqlConn, err := mysqlx.NewMysql(c.Mysql.DataSource)
 	if err != nil {
 		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}
@@ -42,17 +42,13 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	//验证码有效期
 	captchaExpire := time.Duration(c.Captcha.Expire*1000) * time.Millisecond
 	return &ServiceContext{
-		Config:        c,
-		RedisClient:   redisConn,
-		CaptchaStore:  base64Captcha.NewMemoryStore(10240, captchaExpire),
-		CaptchaExpire: captchaExpire,
-		// KqPusherClient: kq.NewPusher(c.KqConf.Brokers, c.KqConf.Topic), //这里放弃使用kakfa，用asynq来代替
-		AsynqClient: asynqmq.NewAsynqProducer(context.Background(), &asynq.RedisClientOpt{
-			Addr:     c.Redis.Host,
-			Password: c.Redis.Pass,
-			DB:       asynqmq.RedisDB,
-		}),
-		JwtBlacklistModel: model.NewJwtBlacklistModel(sqlConn, c.CacheRedis),
-		IpblackModel:      model.NewIpblackModel(sqlConn, c.CacheRedis),
+		Config:              c,
+		RedisClient:         redisConn,
+		CaptchaStore:        base64Captcha.NewMemoryStore(10240, captchaExpire),
+		CaptchaExpire:       captchaExpire,
+		KqPusherClient:      &kq.Pusher{},
+		AsynqClient:         asynqmq.NewAsynqProducer(context.Background(), &asynq.RedisClientOpt{Addr: c.Redis.Host, Password: c.Redis.Pass, DB: asynqmq.RedisDB}),
+		TokenBlacklistModel: model.NewTokenBlacklistModel(sqlConn, c.CacheRedis),
+		IpBlacklistModel:    model.NewIpBlacklistModel(sqlConn, c.CacheRedis),
 	}
 }

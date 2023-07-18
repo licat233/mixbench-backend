@@ -11,7 +11,7 @@ current_path=$(
 # project_root="${current_path%%mixbench-backend*}mixbench-backend"
 project_root="${current_path%%deploy*}"
 
-nohup=$($project_root/genModd.sh);
+nohup=$($project_root/genModd.sh)
 
 # 创建build目录
 if [ ! -d "${project_root}/build" ]; then
@@ -76,10 +76,13 @@ gen_api() {
         exit 1
     fi
     echo "已生成${name}-${micro}服务typescript接口文件"
-    # cd ../
-    # rm -f Dockerfile
-    # goctl docker -go "${name}.go"
-    # echo "生成${name} API服务的Dockerfile"
+    # 全部移动到 build 目录中
+    cd "${project_root}/services/v1/${name}/api"
+    dirpath="${project_root}build/${name}-${micro}"
+    mkdir -p $dirpath/etc/
+    cp -rf ./etc/ $dirpath/etc/
+    mkdir -p $dirpath/static/
+    cp -rf ./static/ $dirpath/static/
 }
 
 gen_rpc() {
@@ -101,7 +104,7 @@ gen_rpc() {
     fi
     if [ ! -f $filename ]; then
         #如果文件不存在，则退出
-        echo -e "\n提示: 文件${filename} 不存在, 无需生成${name}-rpc服务"
+        # echo -e "\n提示: 文件${filename} 不存在, 无需生成${name}-rpc服务"
         return
     fi
     # 判断该rpc服务是否为 multiple
@@ -134,10 +137,41 @@ gen_rpc() {
     fi
 
     echo -e "\n已生成${name}-${micro}服务相关文件!"
+    # 全部移动到 build 目录中
+    cd "${project_root}/services/v1/${name}/rpc"
+    dirpath="${project_root}build/${name}-${micro}"
+    mkdir -p $dirpath/etc/
+    cp -rf ./etc/ $dirpath/etc/
     # cd ../
     # rm -f Dockerfile
     # goctl docker -go "${name}.go"
     # echo "生成${name} RPC服务的Dockerfile"
+}
+
+gen_mq() {
+    name=$1
+    micro=$2
+    if [ "$micro" != "mq" ]; then
+        return
+    fi
+    micro_path="${project_root}/services/v1/${name}/mq"
+    if [ ! -d $micro_path ]; then
+        #如果目录不存在，则退出
+        return
+    fi
+    if [ ! -d "$micro_path/etc" ]; then
+        #如果目录不存在，则退出
+        return
+    fi
+    cd "${micro_path}"
+    if [ ! -f "$micro_path/${name}.go" ]; then
+        #如果文件不存在，则退出
+        return
+    fi
+    # 全部移动到 build 目录中
+    dirpath="${project_root}build/${name}-${micro}"
+    mkdir -p $dirpath/etc/
+    cp -rf ./etc/ $dirpath/etc/
 }
 
 gen_model() {
@@ -193,7 +227,7 @@ gen() {
     if [ ! -d $docs_path ]; then
         #如果目录不存在，则退出
         echo "目录: ${docs_path} 不存在"
-        return
+        return 1
     fi
 
     # 判断是否存在 sql 文件， 如果存在才能使用 genzero 工具
@@ -202,8 +236,6 @@ gen() {
     exist_sql_file=$? # 0 表示存在，1 表示不存在
 
     echo -e "\n开始生成${name}服务文件"
-
-
 
     cd "$docs_path" || exit
     # 使用 genzero
@@ -215,13 +247,13 @@ gen() {
         if [ ! -f "./genzero.yaml" ]; then
             if ! genzero init config; then
                 echo "${docs_path}目录下缺少 genzero.yaml 文件，已经生成，请先配置!"
-                exit 1
+                exist 1
             fi
         fi
 
         # ②根据yaml配置文件来生成微服务的配置文件
         if ! genzero start; then
-            exit 1
+            return 1
         fi
     fi
 
@@ -229,6 +261,7 @@ gen() {
     for micro in ${all_micros[*]}; do
         gen_rpc $name $micro
         gen_api $name $micro
+        gen_mq $name $micro
     done
 
     go mod tidy
@@ -238,16 +271,18 @@ gen() {
         # ④使用 genzero 修改微服务文件
         cd "$docs_path" || exit
         if ! genzero start; then
-            exit 1
+            return 1
         fi
     fi
 
     echo -e "已生成${name}服务相关文件!"
+    return 0
 }
 
-#开始遍历编译
+# 开始遍历编译
 for name in ${all_services[*]}; do
     gen $name
+    # gen $name # 2次运行
 done
 
 echo "----------- generator successful -----------"

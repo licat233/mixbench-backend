@@ -2,11 +2,10 @@ package baselogic
 
 import (
 	"context"
-	"time"
 
 	"mixbench/common/errorx"
-	"mixbench/services/v1/admin/model"
 	"mixbench/services/v1/admin/rpc/admin_pb"
+	"mixbench/services/v1/admin/rpc/internal/logic/dataconv"
 	"mixbench/services/v1/admin/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -28,22 +27,7 @@ func NewPutAdminerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutAdm
 
 // 更新管理员
 func (l *PutAdminerLogic) PutAdminer(in *admin_pb.PutAdminerReq) (*admin_pb.PutAdminerResp, error) {
-	data := &model.Adminer{
-		Id:           in.Id,
-		Uuid:         in.Uuid,
-		Name:         in.Name,
-		Avatar:       in.Avatar,
-		Access:       in.Access,
-		Passport:     in.Passport,
-		Password:     in.Password,
-		Email:        in.Email,
-		Status:       in.Status,
-		IsSuperAdmin: in.IsSuperAdmin,
-		ProjectId:    in.ProjectId,
-		LoginCount:   in.LoginCount,
-		LastLogin:    time.Unix(in.LastLogin, 0).Local(),
-	}
-
+	data := dataconv.PbAdminerToMdAdminer(in.Adminer)
 	if err := l.svcCtx.AdminerModel.Update(l.ctx, data); err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)

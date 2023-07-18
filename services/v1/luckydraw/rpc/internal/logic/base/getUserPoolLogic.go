@@ -33,9 +33,6 @@ func (l *GetUserPoolLogic) GetUserPool(in *luckydraw_pb.GetUserPoolReq) (*luckyd
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetUserPoolResp{
 		UserPool: dataconv.MdUserPoolToPbUserPool(res),

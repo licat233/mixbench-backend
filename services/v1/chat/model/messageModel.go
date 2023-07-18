@@ -22,6 +22,7 @@ type (
 
 		Insert(ctx context.Context, data *Message) (sql.Result, error)
 		DeleteExpiredRecords(ctx context.Context) error
+		FindsByVisitorIdAndKefuId(ctx context.Context, visitorId int64, kefuId int64) ([]*Message, error)
 		FindsToVisitorByVisitorIds(ctx context.Context, visitorIds []int64) ([]*Message, error)
 		FindsToKefuByKefuIds(ctx context.Context, kefuIds []int64) ([]*Message, error)
 		FindsToKefuByKefuId(ctx context.Context, kefuId int64) ([]*Message, error)
@@ -110,5 +111,13 @@ func (m *customMessageModel) FindsToVisitorByKefuId(ctx context.Context, kefuId 
 	var resp = make([]*Message, 0)
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `msg_type` = '1' and `is_deleted` = '0' ", messageRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId)
+	return resp, err
+}
+
+// 查找某个客服与某个游客的信息
+func (m *customMessageModel) FindsByVisitorIdAndKefuId(ctx context.Context, visitorId int64, kefuId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `visitor_id` = ? and `is_deleted` = '0' ", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId, visitorId)
 	return resp, err
 }

@@ -15,7 +15,7 @@ Log:
   Level: error
 
 # 单服务根目录
-RootDir: ./
+# RootDir: ./
 
 #监控
 Prometheus:

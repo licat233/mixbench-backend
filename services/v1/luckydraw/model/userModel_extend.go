@@ -5,7 +5,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -110,14 +109,13 @@ func (m *defaultUserModel) FindList(ctx context.Context, pageSize, page int64, k
 		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
-		sqCount := sq.RemoveLimit().RemoveOffset()
 		sq = sq.Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-		queryCount, agrsCount, e := sqCount.ToSql()
+		sqCount := sq.RemoveLimit().RemoveOffset()
+		queryCount, agrsCount, e := sqCount.RemoveColumns().Column("COUNT(*)").ToSql()
 		if e != nil {
 			err = e
 			return
 		}
-		queryCount = strings.ReplaceAll(queryCount, userRows, "COUNT(*)")
 		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
 			return
 		}

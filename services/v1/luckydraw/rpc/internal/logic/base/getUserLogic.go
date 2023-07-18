@@ -33,9 +33,6 @@ func (l *GetUserLogic) GetUser(in *luckydraw_pb.GetUserReq) (*luckydraw_pb.GetUs
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-	if err == model.ErrNotFound {
-		return nil, nil
-	}
 
 	return &luckydraw_pb.GetUserResp{
 		User: dataconv.MdUserToPbUser(res),

@@ -3,11 +3,10 @@ package prizePool
 import (
 	"net/http"
 
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"mixbench/services/v1/luckydraw/api/internal/logic/prizePool"
 	"mixbench/services/v1/luckydraw/api/internal/svc"
 	"mixbench/services/v1/luckydraw/api/internal/types"
-
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func PutPrizePoolHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

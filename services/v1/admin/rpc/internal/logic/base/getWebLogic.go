@@ -28,13 +28,10 @@ func NewGetWebLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetWebLogi
 
 // 获取网站
 func (l *GetWebLogic) GetWeb(in *admin_pb.GetWebReq) (*admin_pb.GetWebResp, error) {
-	res, err := l.svcCtx.WebModel.FindOne(l.ctx, in.Id)
+	res, err := l.svcCtx.WebModel.FindById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
-	}
-	if err == model.ErrNotFound {
-		return nil, nil
 	}
 
 	return &admin_pb.GetWebResp{

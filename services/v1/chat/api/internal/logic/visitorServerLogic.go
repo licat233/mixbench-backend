@@ -80,10 +80,6 @@ func (l *VisitorServerLogic) VisitorServer(req *types.ConnWebsocketReq) (_ error
 		return
 	}
 
-	defer func() {
-		ws.OnlineVisitor.Del(id)
-	}()
-
 	cli, err := ws.NewVisitorClient(l.ctx, l.svcCtx, l.w, l.r, &ws.VisitorInfo{Visitor: visitor})
 	if err != nil {
 		l.Logger.Error(err)

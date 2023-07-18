@@ -86,10 +86,6 @@ func (l *KefuServerLogic) KefuServer(req *types.ConnWebsocketReq) (_ error) {
 		return
 	}
 
-	defer func() {
-		ws.OnlineKefu.Del(id)
-	}()
-
 	cli, err := ws.NewKefuClient(l.ctx, l.svcCtx, l.w, l.r, &ws.KefuInfo{Adminer: kefu})
 	if err != nil {
 		l.Logger.Error(err)

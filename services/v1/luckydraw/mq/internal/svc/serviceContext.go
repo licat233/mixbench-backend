@@ -10,7 +10,7 @@ package svc
 import (
 	"fmt"
 	"log"
-	"mixbench/common/utils"
+	"mixbench/common/mysqlx"
 	"mixbench/services/v1/luckydraw/model"
 	"mixbench/services/v1/luckydraw/mq/asynqmq"
 	"mixbench/services/v1/luckydraw/mq/internal/config"
@@ -28,7 +28,7 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn, err := utils.NewMysql(c.Mysql.DataSource)
+	sqlConn, err := mysqlx.NewMysql(c.Mysql.DataSource)
 	if err != nil {
 		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
 	}

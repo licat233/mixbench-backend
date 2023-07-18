@@ -6,7 +6,7 @@ export * from "./chatComponents"
  * @description "游客登录"
  */
 export function visitorLogin() {
-	return webapi.post<components.BaseResp>(`/v1/api/chat/visitorLogin`)
+	return webapi.post<components.BaseResp>(`/v1/api/chat/public/visitorLogin`)
 }
 
 /**
@@ -14,7 +14,14 @@ export function visitorLogin() {
  * @param req
  */
 export function test(req: components.TestReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/test`, req)
+	return webapi.get<components.BaseResp>(`/v1/api/chat/public/test`, req)
+}
+
+/**
+ * @description "visitor游客获取自己的聊天记录"
+ */
+export function visitorMessages() {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/public/visitor/messages`)
 }
 
 /**
@@ -22,7 +29,7 @@ export function test(req: components.TestReq) {
  * @param params
  */
 export function visitorServer(params: components.ConnWebsocketReqParams) {
-	return webapi.get<null>(`/v1/api/chat/ws/visitor`, params)
+	return webapi.get<null>(`/v1/api/chat/public/ws/visitor`, params)
 }
 
 /**

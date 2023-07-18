@@ -2,11 +2,15 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"net/http"
+	"net/url"
+	"path"
 	"regexp"
 	"strings"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
@@ -139,10 +143,57 @@ func IsWebsocketRequest(r *http.Request) bool {
 }
 
 func GetDomain(host string) string {
+	host = strings.TrimSpace(host)
 	hostParts := strings.Split(host, ".")
 	numParts := len(hostParts)
+	if numParts < 3 {
+		return host
+	}
 
-	// 提取主域名
-	mainDomain := hostParts[numParts-2] + "." + hostParts[numParts-1]
-	return mainDomain
+	return strings.Join(hostParts[numParts-2:], ".")
+}
+
+func SplitURL(rawURL string) (res []string) {
+	if rawURL == "" {
+		return
+	}
+	rawURL = strings.TrimSpace(rawURL)
+	if !strings.HasPrefix(rawURL, "http://") && !strings.HasPrefix(rawURL, "https://") {
+		rawURL = strings.TrimLeft(rawURL, "/")
+		rawURL = fmt.Sprintf("http://%s", rawURL)
+	}
+	if !govalidator.IsURL(rawURL) {
+		return
+	}
+	parsedURL, err := url.Parse(rawURL)
+	if err != nil || parsedURL.Host == "" {
+		return
+	}
+	weburl := path.Join(parsedURL.Host, parsedURL.Path)
+	res = append(res, weburl)
+	parts := strings.Split(weburl, "/")
+	n := len(parts) - 1
+	for index := n; index >= 0; index-- {
+		item := strings.Join(parts[:index], "/")
+		if item = strings.TrimSpace(item); item != "" {
+			res = append(res, item)
+		}
+	}
+	domain := GetDomain(parsedURL.Host)
+	m := len(res)
+	if m > 0 && domain != res[m-1] {
+		res = append(res, domain)
+	}
+	return res
+}
+
+// 是否为请求的公开路径
+func IsPublicRequestPath(r *http.Request) bool {
+	// 获取请求路径
+	path := r.URL.Path
+
+	// 使用正则表达式匹配 "/v{版本号}/api/{名称}/public" 后面可能有路径的格式
+	re := regexp.MustCompile(`/v\d+/api/([^/]+)/public(/.*)?`)
+	ok := re.MatchString(path)
+	return ok
 }

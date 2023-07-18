@@ -21,6 +21,7 @@ import (
 	// "mixbench/services/v1/chat/api/internal/wshub"
 	"mixbench/services/v1/chat/model"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/mssola/useragent"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,7 +31,7 @@ type VisitorLoginLogic struct {
 	logx.Logger
 	ctx       context.Context
 	svcCtx    *svc.ServiceContext
-	req       *http.Request
+	r         *http.Request
 	id        int64
 	ip        string
 	address   *utils.AddressInfo
@@ -41,12 +42,12 @@ type VisitorLoginLogic struct {
 	ProjectId int64
 }
 
-func NewVisitorLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, req *http.Request) *VisitorLoginLogic {
+func NewVisitorLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *VisitorLoginLogic {
 	return &VisitorLoginLogic{
 		Logger:    logx.WithContext(ctx),
 		ctx:       ctx,
 		svcCtx:    svcCtx,
-		req:       req,
+		r:         r,
 		id:        0,
 		ip:        "",
 		address:   nil,
@@ -64,16 +65,16 @@ const KefuJwtKey2 = "kefuId"
 // 该接口主要用于生成 jwt-token
 func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error) {
 	// 获取设备信息
-	l.ua = useragent.New(utils.RemoteUserAgent(l.req))
+	l.ua = useragent.New(utils.RemoteUserAgent(l.r))
 	//如果是机器人
 	if l.ua.Bot() {
 		return nil, errorx.ExternalError(errors.New("the current request is a bot"))
 	}
 	// 获取语言
-	l.language = strings.Join(utils.RemoteLanguage(l.req), ",")
+	l.language = strings.Join(utils.RemoteLanguage(l.r), ",")
 
 	// 获取 ip
-	l.ip = utils.RemoteIp(l.req)
+	l.ip = utils.RemoteIp(l.r)
 	// 解析 ip
 	l.address = utils.QueryAddress(l.ip)
 
@@ -83,40 +84,53 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 	// 	platform = fmt.Sprintf("%s[%s]", err.Error(), platform)
 	// }
 	// 获取来源
-	l.referer = utils.RemoteReferer(l.req)
-	parsedURL, err := url.Parse(l.referer)
+	weburl := l.r.Header.Get("Web-Url")
+	if weburl != "" {
+		l.referer = weburl
+	}
+	if l.referer == "" {
+		l.referer = utils.RemoteReferer(l.r)
+	}
+	if l.referer == "" {
+		l.referer = utils.RemoteOrigin(l.r)
+	}
+	if l.referer == "" {
+		l.referer = "未知"
+	}
+
+	if weburl == "" || !govalidator.IsURL(weburl) {
+		//未知referer
+		return nil, errorx.AuthError("referer is " + weburl)
+	}
+
+	parsedURL, err := url.Parse(weburl)
 	if err != nil {
 		return nil, errorx.InternalError(fmt.Errorf("failed to parse URL: %s", err.Error()))
 	}
+	isDev := strings.HasPrefix(parsedURL.Host, "localhost")
+	if !isDev {
+		//获取当前weburl的归属项目
+		webResp, err := l.svcCtx.AdminRpc.GetWebByUrl(l.ctx, &admin_pb.GetWebByUrlReq{
+			Url: weburl,
+		})
+		if err != nil {
+			return nil, err
+		}
 
-	host := parsedURL.Host
-
-	if len(host) == 0 {
-		//未知host
-		return nil, errorx.ErrAuth
+		if webResp.Web == nil {
+			//如果无此url对应的web，则返回
+			return nil, errorx.ExternalError("unknown referer")
+		}
+		l.ProjectId = webResp.Web.ProjectId
+	} else {
+		l.ProjectId = 1
 	}
-
-	//获取当前referer的归属项目
-	// TODO: 根据referer查找项目的逻辑
-	webResp, err := l.svcCtx.AdminRpc.GetWebByUrl(l.ctx, &admin_pb.GetWebByUrlReq{
-		Url: l.referer,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if webResp.Web == nil {
-		//如果无此url对应的web，则返回
-		return nil, errorx.ExternalError("unknown referer")
-	}
-
-	l.ProjectId = webResp.Web.ProjectId
 
 	// 获取游客可能存在的id
 	var visitorId int64
 
 	// 判断其是不是新客户，依据在于，是否携带jwt-token
-	jwtToken := l.req.Header.Get(VisitorTokenKey)
+	jwtToken := l.r.Header.Get(VisitorTokenKey)
 	jwtToken = strings.TrimSpace(jwtToken)
 	if jwtToken != "" {
 		// 存在, 验证
@@ -168,6 +182,11 @@ func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error
 	// ④最近使用算法：选择最近使用过的客服分配给游客。【合适】
 
 	// 最终方案：查看游客是否有历史客服id，如果存在，且该客服在线的话，则优先分配给该客服，否则，采用最小负载算法，如果最小负荷都一样，则采用随机算法。
+
+	// 检查projectId
+	if l.ProjectId < 1 {
+		return nil, errorx.AuthError("project not found")
+	}
 
 	// 如果存在 visitorId，则表示老客户
 	if visitorId > 0 {
@@ -285,7 +304,7 @@ func (l *VisitorLoginLogic) isNewVisitor() (any, error) {
 
 func GenVisitorToken(secret string, visitor *model.Visitor) (string, error) {
 	claims := make(jwt.MapClaims)
-	claims["id"] = visitor.Id
-	claims["platform"] = visitor.Platform
+	claims[jwtx.JwtUidKey] = visitor.Id
+	claims[jwtx.JwtPlatformKey] = visitor.Platform
 	return jwtx.CreateToken(claims, secret)
 }

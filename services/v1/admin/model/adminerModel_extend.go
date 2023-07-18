@@ -5,7 +5,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -30,9 +29,10 @@ type adminer_model interface {
 	FindByEmail(ctx context.Context, email string) (*Adminer, error)
 	FindByStatus(ctx context.Context, status int64) (*Adminer, error)
 	FindByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) (*Adminer, error)
+	FindByCompanyId(ctx context.Context, companyId int64) (*Adminer, error)
 	FindByProjectId(ctx context.Context, projectId int64) (*Adminer, error)
 	FindByLoginCount(ctx context.Context, loginCount int64) (*Adminer, error)
-	FindByLastLogin(ctx context.Context, lastLogin time.Time) (*Adminer, error)
+	FindByLastLoginAt(ctx context.Context, lastLoginAt time.Time) (*Adminer, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Adminer, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Adminer, error)
 	FindsByNames(ctx context.Context, names []string) ([]*Adminer, error)
@@ -43,9 +43,10 @@ type adminer_model interface {
 	FindsByEmails(ctx context.Context, emails []string) ([]*Adminer, error)
 	FindsByStatuslist(ctx context.Context, statuslist []int64) ([]*Adminer, error)
 	FindsByIsSuperAdmins(ctx context.Context, isSuperAdmins []int64) ([]*Adminer, error)
+	FindsByCompanyIds(ctx context.Context, companyIds []int64) ([]*Adminer, error)
 	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Adminer, error)
 	FindsByLoginCounts(ctx context.Context, loginCounts []int64) ([]*Adminer, error)
-	FindsByLastLogins(ctx context.Context, lastLogins []time.Time) ([]*Adminer, error)
+	FindsByLastLoginAts(ctx context.Context, lastLoginAts []time.Time) ([]*Adminer, error)
 
 	FindsById(ctx context.Context, id int64) ([]*Adminer, error)
 	FindsByUuid(ctx context.Context, uuid string) ([]*Adminer, error)
@@ -57,9 +58,10 @@ type adminer_model interface {
 	FindsByEmail(ctx context.Context, email string) ([]*Adminer, error)
 	FindsByStatus(ctx context.Context, status int64) ([]*Adminer, error)
 	FindsByIsSuperAdmin(ctx context.Context, isSuperAdmin int64) ([]*Adminer, error)
+	FindsByCompanyId(ctx context.Context, companyId int64) ([]*Adminer, error)
 	FindsByProjectId(ctx context.Context, projectId int64) ([]*Adminer, error)
 	FindsByLoginCount(ctx context.Context, loginCount int64) ([]*Adminer, error)
-	FindsByLastLogin(ctx context.Context, lastLogin time.Time) ([]*Adminer, error)
+	FindsByLastLoginAt(ctx context.Context, lastLoginAt time.Time) ([]*Adminer, error)
 
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
@@ -121,28 +123,30 @@ func (m *defaultAdminerModel) FindList(ctx context.Context, pageSize, page int64
 		if adminer.IsSuperAdmin >= 0 {
 			sq = sq.Where("`is_super_admin` = ?", adminer.IsSuperAdmin)
 		}
+		if adminer.CompanyId > 0 {
+			sq = sq.Where("`company_id` = ?", adminer.CompanyId)
+		}
 		if adminer.ProjectId > 0 {
 			sq = sq.Where("`project_id` = ?", adminer.ProjectId)
 		}
 		if adminer.LoginCount >= 0 {
 			sq = sq.Where("`login_count` = ?", adminer.LoginCount)
 		}
-		if !adminer.LastLogin.IsZero() {
-			sq = sq.Where("`last_login` = ?", adminer.LastLogin.Format("2006-01-02 15:04:05"))
+		if adminer.LastLoginAt.After(time.Unix(0, 0)) {
+			sq = sq.Where("`last_login_at` = ?", adminer.LastLoginAt.Format("2006-01-02 15:04:05"))
 		}
 	}
 	if keyword != "" && hasName {
 		sq = sq.Where("`name` LIKE ?", fmt.Sprintf("%%%s%%", keyword))
 	}
 	if pageSize > 0 && page > 0 {
-		sqCount := sq.RemoveLimit().RemoveOffset()
 		sq = sq.Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-		queryCount, agrsCount, e := sqCount.ToSql()
+		sqCount := sq.RemoveLimit().RemoveOffset()
+		queryCount, agrsCount, e := sqCount.RemoveColumns().Column("COUNT(*)").ToSql()
 		if e != nil {
 			err = e
 			return
 		}
-		queryCount = strings.ReplaceAll(queryCount, adminerRows, "COUNT(*)")
 		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
 			return
 		}
@@ -305,6 +309,20 @@ func (m *defaultAdminerModel) FindByIsSuperAdmin(ctx context.Context, isSuperAdm
 	}
 }
 
+func (m *defaultAdminerModel) FindByCompanyId(ctx context.Context, companyId int64) (*Adminer, error) {
+	var resp Adminer
+	query := fmt.Sprintf("select %s from %s where `company_id` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, companyId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultAdminerModel) FindByProjectId(ctx context.Context, projectId int64) (*Adminer, error) {
 	var resp Adminer
 	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
@@ -333,10 +351,10 @@ func (m *defaultAdminerModel) FindByLoginCount(ctx context.Context, loginCount i
 	}
 }
 
-func (m *defaultAdminerModel) FindByLastLogin(ctx context.Context, lastLogin time.Time) (*Adminer, error) {
+func (m *defaultAdminerModel) FindByLastLoginAt(ctx context.Context, lastLoginAt time.Time) (*Adminer, error) {
 	var resp Adminer
-	query := fmt.Sprintf("select %s from %s where `last_login` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
-	err := m.QueryRowNoCacheCtx(ctx, &resp, query, lastLogin.Format("2006-01-02 15:04:05"))
+	query := fmt.Sprintf("select %s from %s where `last_login_at` = ? and `is_deleted` = '0' limit 1", adminerRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, lastLoginAt.Format("2006-01-02 15:04:05"))
 	switch err {
 	case nil:
 		return &resp, nil
@@ -447,6 +465,16 @@ func (m *defaultAdminerModel) FindsByIsSuperAdmins(ctx context.Context, isSuperA
 	return resp, err
 }
 
+func (m *defaultAdminerModel) FindsByCompanyIds(ctx context.Context, companyIds []int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	if len(companyIds) == 0 {
+		return resp, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `company_id` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, companyIds)
+	return resp, err
+}
+
 func (m *defaultAdminerModel) FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
 	if len(projectIds) == 0 {
@@ -467,13 +495,13 @@ func (m *defaultAdminerModel) FindsByLoginCounts(ctx context.Context, loginCount
 	return resp, err
 }
 
-func (m *defaultAdminerModel) FindsByLastLogins(ctx context.Context, lastLogins []time.Time) ([]*Adminer, error) {
+func (m *defaultAdminerModel) FindsByLastLoginAts(ctx context.Context, lastLoginAts []time.Time) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
-	if len(lastLogins) == 0 {
+	if len(lastLoginAts) == 0 {
 		return resp, nil
 	}
-	query := fmt.Sprintf("select %s from %s where `last_login` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLogins)
+	query := fmt.Sprintf("select %s from %s where `last_login_at` in (?) and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLoginAts)
 	return resp, err
 }
 
@@ -547,6 +575,13 @@ func (m *defaultAdminerModel) FindsByIsSuperAdmin(ctx context.Context, isSuperAd
 	return resp, err
 }
 
+func (m *defaultAdminerModel) FindsByCompanyId(ctx context.Context, companyId int64) ([]*Adminer, error) {
+	var resp = make([]*Adminer, 0)
+	query := fmt.Sprintf("select %s from %s where `company_id` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, companyId)
+	return resp, err
+}
+
 func (m *defaultAdminerModel) FindsByProjectId(ctx context.Context, projectId int64) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
 	query := fmt.Sprintf("select %s from %s where `project_id` = ? and `is_deleted` = '0' ", adminerRows, m.table)
@@ -561,10 +596,10 @@ func (m *defaultAdminerModel) FindsByLoginCount(ctx context.Context, loginCount 
 	return resp, err
 }
 
-func (m *defaultAdminerModel) FindsByLastLogin(ctx context.Context, lastLogin time.Time) ([]*Adminer, error) {
+func (m *defaultAdminerModel) FindsByLastLoginAt(ctx context.Context, lastLoginAt time.Time) ([]*Adminer, error) {
 	var resp = make([]*Adminer, 0)
-	query := fmt.Sprintf("select %s from %s where `last_login` = ? and `is_deleted` = '0' ", adminerRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLogin)
+	query := fmt.Sprintf("select %s from %s where `last_login_at` = ? and `is_deleted` = '0' ", adminerRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLoginAt)
 	return resp, err
 }
 

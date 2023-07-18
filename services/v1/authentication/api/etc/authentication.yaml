@@ -15,7 +15,7 @@ Log:
   ServiceName: authentication-api
   Level: error
 
-RootDir: ./
+# RootDir: ./
 
 #静态资源服务配置
 StaticConfig:

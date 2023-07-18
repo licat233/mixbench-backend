@@ -54,14 +54,16 @@ for service in ${service_list[*]}; do
         build_file="${service}-${micro}"
         build_path="${build_dir}/${build_file}/${build_file}"
         go_path="${micro_path}/${service}.go"
-        yaml_name="${service}"
-        yaml_path="${micro_path}/etc/${yaml_name}.yaml"
-        monitor_file="${micro_path}/**/*.go ${service_path}/model/**/*.go common/**/*.go"
+        # yaml_file="${build_dir}/${build_file}/etc/${service}.yaml"
+        yaml_file="${micro_path}/etc/${service}.yaml"
+        # monitor_file="${micro_path}/**/*.go ${service_path}/model/**/*.go common/**/*.go"
+        monitor_file="${micro_path}/**/*.go ${service_path}/model/**/*.go"
         prep="    prep: go build -o ${build_path} -v ${go_path}"
-        daemon="    daemon +sigkill: ${build_path} -f ${yaml_path}"
-        if [[ "$micro" = "api" ]]; then
-            daemon="${daemon} -d ${micro_path}"
-        fi
+        # daemon="    daemon +sigkill: ${build_path} -f ${yaml_file}"
+        daemon="    daemon +sigkill: ${build_path} -f ${yaml_file}"
+        # if [[ "$micro" = "api" ]]; then
+        #     daemon="${daemon} -d ${micro_path}"
+        # fi
         echo "# ${micro}
 ${monitor_file} {
 $prep

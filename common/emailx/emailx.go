@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"mixbench/common/global"
+	"mixbench/common/utils"
 	"os"
 	"path"
 	"strconv"
@@ -65,7 +65,7 @@ func sendEmail(ctx context.Context, subject string, body string, receiver []stri
 }
 
 func genBody(ctx context.Context, htmlname string, data map[string]string) (string, error) {
-	filename := path.Join(global.ProjectRoot, "deploy/email/template/", htmlname)
+	filename := path.Join(utils.ProjectRoot, "deploy/email/template/", htmlname)
 	body, err := os.ReadFile(filename)
 	if err != nil {
 		logx.WithContext(ctx).Error("File reading error", err)

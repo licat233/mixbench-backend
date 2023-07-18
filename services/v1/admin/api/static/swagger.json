@@ -39,11 +39,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "delete": {
@@ -70,11 +65,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "post": {
@@ -101,11 +91,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "put": {
@@ -132,11 +117,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -154,11 +134,6 @@
         },
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -187,11 +162,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -219,11 +189,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -351,6 +316,15 @@
             "default": "-1"
           },
           {
+            "name": "companyId",
+            "description": "公司id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
             "name": "projectId",
             "description": "项目id",
             "in": "query",
@@ -369,22 +343,17 @@
             "default": "-1"
           },
           {
-            "name": "lastLogin",
+            "name": "lastLoginAt",
             "description": "最后一次登录时间",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           }
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -413,11 +382,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -445,11 +409,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -477,53 +436,6 @@
         ],
         "tags": [
           "adminer"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
-        ]
-      }
-    },
-    "/v1/api/admin/auth": {
-      "get": {
-        "summary": "jwt鉴权接口",
-        "operationId": "auth",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {}
-          }
-        },
-        "tags": [
-          "admin"
-        ]
-      }
-    },
-    "/v1/api/admin/bindEmailCaptcha": {
-      "post": {
-        "summary": "给绑定邮箱发送验证码",
-        "operationId": "bindEmailCaptcha",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/bindEmailCaptchaReq"
-            }
-          }
-        ],
-        "tags": [
-          "admin"
         ]
       }
     },
@@ -551,11 +463,6 @@
         ],
         "tags": [
           "campaign"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "delete": {
@@ -582,11 +489,6 @@
         ],
         "tags": [
           "campaign"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "post": {
@@ -613,11 +515,6 @@
         ],
         "tags": [
           "campaign"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "put": {
@@ -644,11 +541,6 @@
         ],
         "tags": [
           "campaign"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -677,11 +569,6 @@
         ],
         "tags": [
           "campaign"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -807,7 +694,7 @@
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           },
           {
             "name": "endTime",
@@ -816,16 +703,229 @@
             "required": false,
             "type": "integer",
             "format": "int64",
-            "default": "-1"
+            "default": "0"
           }
         ],
         "tags": [
           "campaign"
-        ],
-        "security": [
-          {
-            "apiKey": []
+        ]
+      }
+    },
+    "/v1/api/admin/company/": {
+      "get": {
+        "summary": "获取公司 基础API",
+        "operationId": "GetCompany",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
           }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "公司 ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "company"
+        ]
+      },
+      "delete": {
+        "summary": "删除公司 基础API",
+        "operationId": "DelCompany",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "删除公司请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DelCompanyReq"
+            }
+          }
+        ],
+        "tags": [
+          "company"
+        ]
+      },
+      "post": {
+        "summary": "添加公司 基础API",
+        "operationId": "AddCompany",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "添加公司请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCompanyReq"
+            }
+          }
+        ],
+        "tags": [
+          "company"
+        ]
+      },
+      "put": {
+        "summary": "更新公司 基础API",
+        "operationId": "PutCompany",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "更新公司请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutCompanyReq"
+            }
+          }
+        ],
+        "tags": [
+          "company"
+        ]
+      }
+    },
+    "/v1/api/admin/company/enums": {
+      "get": {
+        "summary": "获取公司枚举列表 基础API",
+        "operationId": "GetCompanyEnums",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parentId",
+            "description": "父级ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "company"
+        ]
+      }
+    },
+    "/v1/api/admin/company/list": {
+      "get": {
+        "summary": "获取公司列表 基础API",
+        "operationId": "GetCompanyList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "页面容量，默认20，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "20"
+          },
+          {
+            "name": "page",
+            "description": "当前页码，默认1，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "current",
+            "description": "当前页码，默认1，用于对接umijs，可选",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "1"
+          },
+          {
+            "name": "keyword",
+            "description": "关键词，可选",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "description": "表主键",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
+            "name": "uuid",
+            "description": "UUID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "公司名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "项目状态: 0关闭，1开启",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          }
+        ],
+        "tags": [
+          "company"
         ]
       }
     },
@@ -848,148 +948,6 @@
           {
             "apiKey": []
           }
-        ]
-      }
-    },
-    "/v1/api/admin/devPanelAuth": {
-      "get": {
-        "summary": "开发面板的鉴权",
-        "operationId": "devPanelAuth",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {}
-          }
-        },
-        "tags": [
-          "admin"
-        ]
-      }
-    },
-    "/v1/api/admin/devPanelLogin": {
-      "get": {
-        "summary": "开发面板的登录",
-        "operationId": "devPanelLogin",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "captchaId",
-            "description": "验证码ID",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "solution",
-            "description": "验证码答案",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "admin"
-        ]
-      }
-    },
-    "/v1/api/admin/login": {
-      "post": {
-        "summary": "登录",
-        "operationId": "login",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start],管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/loginReq"
-            }
-          }
-        ],
-        "tags": [
-          "admin"
-        ]
-      }
-    },
-    "/v1/api/admin/loginByEmail": {
-      "post": {
-        "summary": "邮箱登录",
-        "operationId": "loginByEmail",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/loginByEmailReq"
-            }
-          }
-        ],
-        "tags": [
-          "admin"
-        ]
-      }
-    },
-    "/v1/api/admin/loginEmailCaptcha": {
-      "post": {
-        "summary": "给登录邮箱发送验证码",
-        "operationId": "loginEmailCaptcha",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/BaseResp"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/loginEmailCaptchaReq"
-            }
-          }
-        ],
-        "tags": [
-          "admin"
         ]
       }
     },
@@ -1039,11 +997,6 @@
         ],
         "tags": [
           "project"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "delete": {
@@ -1070,11 +1023,6 @@
         ],
         "tags": [
           "project"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "post": {
@@ -1101,11 +1049,6 @@
         ],
         "tags": [
           "project"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "put": {
@@ -1132,11 +1075,6 @@
         ],
         "tags": [
           "project"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1165,11 +1103,6 @@
         ],
         "tags": [
           "project"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1244,6 +1177,15 @@
             "type": "string"
           },
           {
+            "name": "companyId",
+            "description": "公司id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "-1"
+          },
+          {
             "name": "status",
             "description": "项目状态: 0已下线，1已上线",
             "in": "query",
@@ -1255,15 +1197,119 @@
         ],
         "tags": [
           "project"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
-    "/v1/api/admin/pwdCompare": {
+    "/v1/api/admin/public/bindEmailCaptcha": {
+      "post": {
+        "summary": "给绑定邮箱发送验证码",
+        "operationId": "bindEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bindEmailCaptchaReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/public/login": {
+      "post": {
+        "summary": "登录",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "--------- base struct end---------, The content in this block will not be updated, 此区块内的内容不会被更新,[custom struct start],管理员登陆，可用账号、手机号、邮箱登录，(暂未实现验证码登录功能)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/public/loginByEmail": {
+      "post": {
+        "summary": "邮箱登录",
+        "operationId": "loginByEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginByEmailReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/public/loginEmailCaptcha": {
+      "post": {
+        "summary": "给登录邮箱发送验证码",
+        "operationId": "loginEmailCaptcha",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginEmailCaptchaReq"
+            }
+          }
+        ],
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/api/admin/public/pwdCompare": {
       "get": {
         "summary": "密码比较端口",
         "operationId": "pwdCompare",
@@ -1296,7 +1342,7 @@
         ]
       }
     },
-    "/v1/api/admin/pwdEncryption": {
+    "/v1/api/admin/public/pwdEncryption": {
       "get": {
         "summary": "密码加密端口",
         "operationId": "pwdEncryption",
@@ -1322,7 +1368,7 @@
         ]
       }
     },
-    "/v1/api/admin/registerEmailCaptcha": {
+    "/v1/api/admin/public/registerEmailCaptcha": {
       "post": {
         "summary": "给注册邮箱发送验证码",
         "operationId": "registerEmailCaptcha",
@@ -1349,22 +1395,7 @@
         ]
       }
     },
-    "/v1/api/admin/superAdminAuth": {
-      "get": {
-        "summary": "superAdmin鉴权接口",
-        "operationId": "superAdminAuth",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {}
-          }
-        },
-        "tags": [
-          "admin"
-        ]
-      }
-    },
-    "/v1/api/admin/test": {
+    "/v1/api/admin/public/test": {
       "get": {
         "summary": "'预留的调试端口'",
         "operationId": "test",
@@ -1404,11 +1435,6 @@
         },
         "tags": [
           "upload"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1426,11 +1452,6 @@
         },
         "tags": [
           "upload"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1448,11 +1469,6 @@
         },
         "tags": [
           "upload"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1480,11 +1496,6 @@
         ],
         "tags": [
           "web"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "delete": {
@@ -1511,11 +1522,6 @@
         ],
         "tags": [
           "web"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "post": {
@@ -1542,11 +1548,6 @@
         ],
         "tags": [
           "web"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       },
       "put": {
@@ -1573,11 +1574,6 @@
         ],
         "tags": [
           "web"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1606,11 +1602,6 @@
         ],
         "tags": [
           "web"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     },
@@ -1694,13 +1685,6 @@
             "type": "string"
           },
           {
-            "name": "host",
-            "description": "域名",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "description",
             "description": "备注",
             "in": "query",
@@ -1717,11 +1701,6 @@
         ],
         "tags": [
           "web"
-        ],
-        "security": [
-          {
-            "apiKey": []
-          }
         ]
       }
     }
@@ -1764,6 +1743,11 @@
           "format": "int64",
           "description": "是否为超级管理员"
         },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司id"
+        },
         "projectId": {
           "type": "integer",
           "format": "int64",
@@ -1774,7 +1758,7 @@
           "format": "int64",
           "description": "登录次数"
         },
-        "lastLogin": {
+        "lastLoginAt": {
           "type": "integer",
           "format": "int64",
           "description": "最后一次登录时间"
@@ -1790,9 +1774,10 @@
         "email",
         "status",
         "isSuperAdmin",
+        "companyId",
         "projectId",
         "loginCount",
-        "lastLogin"
+        "lastLoginAt"
       ]
     },
     "AddCampaignReq": {
@@ -1850,12 +1835,36 @@
         "endTime"
       ]
     },
+    "AddCompanyReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "公司名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态: 0关闭，1开启"
+        }
+      },
+      "title": "AddCompanyReq",
+      "required": [
+        "name",
+        "status"
+      ]
+    },
     "AddProjectReq": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
           "description": "项目名称"
+        },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司id"
         },
         "status": {
           "type": "integer",
@@ -1866,6 +1875,7 @@
       "title": "AddProjectReq",
       "required": [
         "name",
+        "companyId",
         "status"
       ]
     },
@@ -1881,10 +1891,6 @@
           "type": "string",
           "description": "连接"
         },
-        "host": {
-          "type": "string",
-          "description": "域名"
-        },
         "description": {
           "type": "string",
           "description": "备注"
@@ -1898,7 +1904,6 @@
       "required": [
         "projectId",
         "url",
-        "host",
         "description",
         "code"
       ]
@@ -1949,6 +1954,11 @@
           "format": "int64",
           "description": "是否为超级管理员"
         },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司id"
+        },
         "projectId": {
           "type": "integer",
           "format": "int64",
@@ -1959,7 +1969,7 @@
           "format": "int64",
           "description": "登录次数"
         },
-        "lastLogin": {
+        "lastLoginAt": {
           "type": "integer",
           "format": "int64",
           "description": "最后一次登录时间"
@@ -1977,9 +1987,10 @@
         "email",
         "status",
         "isSuperAdmin",
+        "companyId",
         "projectId",
         "loginCount",
-        "lastLogin"
+        "lastLoginAt"
       ]
     },
     "BaseResp": {
@@ -2160,6 +2171,36 @@
         "expiresAt"
       ]
     },
+    "Company": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "公司名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态: 0关闭，1开启"
+        }
+      },
+      "title": "Company",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status"
+      ]
+    },
     "DelAdminerReq": {
       "type": "object",
       "properties": {
@@ -2184,6 +2225,20 @@
         }
       },
       "title": "DelCampaignReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DelCompanyReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司 ID"
+        }
+      },
+      "title": "DelCompanyReq",
       "required": [
         "id"
       ]
@@ -2356,6 +2411,12 @@
           "default": "-1",
           "description": "是否为超级管理员"
         },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "公司id"
+        },
         "projectId": {
           "type": "integer",
           "format": "int64",
@@ -2368,10 +2429,10 @@
           "default": "-1",
           "description": "登录次数"
         },
-        "lastLogin": {
+        "lastLoginAt": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "最后一次登录时间"
         }
       },
@@ -2475,13 +2536,13 @@
         "startTime": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "活动开始时间"
         },
         "endTime": {
           "type": "integer",
           "format": "int64",
-          "default": "-1",
+          "default": "0",
           "description": "活动结束时间"
         }
       },
@@ -2497,6 +2558,80 @@
         }
       },
       "title": "GetCampaignReq",
+      "required": [
+        "id"
+      ]
+    },
+    "GetCompanyEnumsReq": {
+      "type": "object",
+      "properties": {
+        "parentId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "父级ID"
+        }
+      },
+      "title": "GetCompanyEnumsReq"
+    },
+    "GetCompanyListReq": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "format": "int64",
+          "default": "20",
+          "description": "页面容量，默认20，可选"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，可选"
+        },
+        "current": {
+          "type": "integer",
+          "format": "int64",
+          "default": "1",
+          "description": "当前页码，默认1，用于对接umijs，可选"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "关键词，可选"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "公司名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "项目状态: 0关闭，1开启"
+        }
+      },
+      "title": "GetCompanyListReq"
+    },
+    "GetCompanyReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司 ID"
+        }
+      },
+      "title": "GetCompanyReq",
       "required": [
         "id"
       ]
@@ -2551,6 +2686,12 @@
         "name": {
           "type": "string",
           "description": "项目名称"
+        },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "default": "-1",
+          "description": "公司id"
         },
         "status": {
           "type": "integer",
@@ -2631,10 +2772,6 @@
         "url": {
           "type": "string",
           "description": "连接"
-        },
-        "host": {
-          "type": "string",
-          "description": "域名"
         },
         "description": {
           "type": "string",
@@ -2773,6 +2910,11 @@
           "type": "string",
           "description": "项目名称"
         },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司id"
+        },
         "status": {
           "type": "integer",
           "format": "int64",
@@ -2784,6 +2926,7 @@
         "id",
         "uuid",
         "name",
+        "companyId",
         "status"
       ]
     },
@@ -2833,6 +2976,11 @@
           "format": "int64",
           "description": "是否为超级管理员"
         },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司id"
+        },
         "projectId": {
           "type": "integer",
           "format": "int64",
@@ -2843,7 +2991,7 @@
           "format": "int64",
           "description": "登录次数"
         },
-        "lastLogin": {
+        "lastLoginAt": {
           "type": "integer",
           "format": "int64",
           "description": "最后一次登录时间"
@@ -2861,9 +3009,10 @@
         "email",
         "status",
         "isSuperAdmin",
+        "companyId",
         "projectId",
         "loginCount",
-        "lastLogin"
+        "lastLoginAt"
       ]
     },
     "PutCampaignReq": {
@@ -2930,6 +3079,36 @@
         "maxPrizes",
         "startTime",
         "endTime"
+      ]
+    },
+    "PutCompanyReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "表主键"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "UUID"
+        },
+        "name": {
+          "type": "string",
+          "description": "公司名称"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "项目状态: 0关闭，1开启"
+        }
+      },
+      "title": "PutCompanyReq",
+      "required": [
+        "id",
+        "uuid",
+        "name",
+        "status"
       ]
     },
     "PutCurrentReq": {
@@ -3004,6 +3183,11 @@
           "type": "string",
           "description": "项目名称"
         },
+        "companyId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "公司id"
+        },
         "status": {
           "type": "integer",
           "format": "int64",
@@ -3015,6 +3199,7 @@
         "id",
         "uuid",
         "name",
+        "companyId",
         "status"
       ]
     },
@@ -3039,10 +3224,6 @@
           "type": "string",
           "description": "连接"
         },
-        "host": {
-          "type": "string",
-          "description": "域名"
-        },
         "description": {
           "type": "string",
           "description": "备注"
@@ -3058,7 +3239,6 @@
         "uuid",
         "projectId",
         "url",
-        "host",
         "description",
         "code"
       ]
@@ -3152,10 +3332,6 @@
           "type": "string",
           "description": "连接"
         },
-        "host": {
-          "type": "string",
-          "description": "域名"
-        },
         "description": {
           "type": "string",
           "description": "备注"
@@ -3171,7 +3347,6 @@
         "uuid",
         "projectId",
         "url",
-        "host",
         "description",
         "code"
       ]

@@ -5,7 +5,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -122,22 +121,21 @@ func (m *defaultMessageModel) FindList(ctx context.Context, pageSize, page int64
 		if message.IsSend >= 0 {
 			sq = sq.Where("`is_send` = ?", message.IsSend)
 		}
-		if !message.SendTime.IsZero() {
+		if message.SendTime.After(time.Unix(0, 0)) {
 			sq = sq.Where("`send_time` = ?", message.SendTime.Format("2006-01-02 15:04:05"))
 		}
-		if !message.ExpireTime.IsZero() {
+		if message.ExpireTime.After(time.Unix(0, 0)) {
 			sq = sq.Where("`expire_time` = ?", message.ExpireTime.Format("2006-01-02 15:04:05"))
 		}
 	}
 	if pageSize > 0 && page > 0 {
-		sqCount := sq.RemoveLimit().RemoveOffset()
 		sq = sq.Limit(uint64(pageSize)).Offset(uint64((page - 1) * pageSize))
-		queryCount, agrsCount, e := sqCount.ToSql()
+		sqCount := sq.RemoveLimit().RemoveOffset()
+		queryCount, agrsCount, e := sqCount.RemoveColumns().Column("COUNT(*)").ToSql()
 		if e != nil {
 			err = e
 			return
 		}
-		queryCount = strings.ReplaceAll(queryCount, messageRows, "COUNT(*)")
 		if err = m.QueryRowNoCacheCtx(ctx, &total, queryCount, agrsCount...); err != nil {
 			return
 		}

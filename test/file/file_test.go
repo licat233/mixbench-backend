@@ -9,7 +9,7 @@ import (
 )
 
 func TestCurrentPath(t *testing.T) {
-	root := utils.CurrentProjectRootPath()
+	root := utils.ProjectRoot
 	filename := path.Join(root, "deploy/email/template/captcha.html")
 	println("路径:", filename)
 }

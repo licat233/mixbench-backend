@@ -94,6 +94,42 @@ func (s *BaseServer) GetCampaignEnums(ctx context.Context, in *admin_pb.GetCampa
 	return l.GetCampaignEnums(in)
 }
 
+// 添加公司
+func (s *BaseServer) AddCompany(ctx context.Context, in *admin_pb.AddCompanyReq) (*admin_pb.AddCompanyResp, error) {
+	l := baselogic.NewAddCompanyLogic(ctx, s.svcCtx)
+	return l.AddCompany(in)
+}
+
+// 更新公司
+func (s *BaseServer) PutCompany(ctx context.Context, in *admin_pb.PutCompanyReq) (*admin_pb.PutCompanyResp, error) {
+	l := baselogic.NewPutCompanyLogic(ctx, s.svcCtx)
+	return l.PutCompany(in)
+}
+
+// 获取公司
+func (s *BaseServer) GetCompany(ctx context.Context, in *admin_pb.GetCompanyReq) (*admin_pb.GetCompanyResp, error) {
+	l := baselogic.NewGetCompanyLogic(ctx, s.svcCtx)
+	return l.GetCompany(in)
+}
+
+// 删除公司
+func (s *BaseServer) DelCompany(ctx context.Context, in *admin_pb.DelCompanyReq) (*admin_pb.DelCompanyResp, error) {
+	l := baselogic.NewDelCompanyLogic(ctx, s.svcCtx)
+	return l.DelCompany(in)
+}
+
+// 获取公司列表
+func (s *BaseServer) GetCompanyList(ctx context.Context, in *admin_pb.GetCompanyListReq) (*admin_pb.GetCompanyListResp, error) {
+	l := baselogic.NewGetCompanyListLogic(ctx, s.svcCtx)
+	return l.GetCompanyList(in)
+}
+
+// 获取公司枚举列表
+func (s *BaseServer) GetCompanyEnums(ctx context.Context, in *admin_pb.GetCompanyEnumsReq) (*admin_pb.Enums, error) {
+	l := baselogic.NewGetCompanyEnumsLogic(ctx, s.svcCtx)
+	return l.GetCompanyEnums(in)
+}
+
 // 添加项目
 func (s *BaseServer) AddProject(ctx context.Context, in *admin_pb.AddProjectReq) (*admin_pb.AddProjectResp, error) {
 	l := baselogic.NewAddProjectLogic(ctx, s.svcCtx)

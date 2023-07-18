@@ -15,7 +15,7 @@ type Config struct {
 	Redis      redis.RedisConf
 	CacheRedis cache.CacheConf
 
-	RootDir      string
+	// RootDir      string
 	StaticConfig struct {
 		Domain string
 		Root   string

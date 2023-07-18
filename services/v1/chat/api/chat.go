@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"path"
 
 	"mixbench/common/errorx"
-	"mixbench/common/filex"
 	"mixbench/common/utils"
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/handler"
@@ -20,7 +18,6 @@ import (
 )
 
 var configFile = flag.String("f", "etc/chat.yaml", "the config file")
-var rootDir = flag.String("d", "./", "the project root path")
 
 func main() {
 	flag.Parse()
@@ -28,21 +25,20 @@ func main() {
 	var c config.Config
 	//加载配置文件
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
-	c.RootDir = *rootDir
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
 	//配置静态资源服务
-	staticPath := path.Join(c.RootDir, "static")
-	if err := filex.CreateDir(staticPath); err != nil {
+	staticDir := utils.GenStaticServiceDir("chat")
+	if err := utils.CreateDir(staticDir); err != nil {
 		log.Fatalln(err)
 	}
 	urlPrefix := utils.GenStaticServiceUrl("chat")
 	server.AddRoute(rest.Route{
 		Method:  http.MethodGet,
 		Path:    urlPrefix + ":file",
-		Handler: http.StripPrefix(urlPrefix, http.FileServer(http.Dir(staticPath))).ServeHTTP,
+		Handler: http.StripPrefix(urlPrefix, http.FileServer(http.Dir(staticDir))).ServeHTTP,
 	})
 
 	ctx := svc.NewServiceContext(c)
