@@ -19,8 +19,8 @@ import (
 var (
 	projectFieldNames          = builder.RawFieldNames(&Project{})
 	projectRows                = strings.Join(projectFieldNames, ",")
-	projectRowsExpectAutoSet   = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	projectRowsWithPlaceHolder = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	projectRowsExpectAutoSet   = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	projectRowsWithPlaceHolder = strings.Join(stringx.Remove(projectFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheProjectIdPrefix = "cache:project:id:"
 )
@@ -93,8 +93,8 @@ func (m *defaultProjectModel) FindOne(ctx context.Context, id int64) (*Project, 
 func (m *defaultProjectModel) Insert(ctx context.Context, data *Project) (sql.Result, error) {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, projectRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.CompanyId, data.Status, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, projectRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.CompanyId, data.Status, data.CreateAt, data.IsDeleted)
 	}, projectIdKey)
 	return ret, err
 }
@@ -103,7 +103,7 @@ func (m *defaultProjectModel) Update(ctx context.Context, data *Project) error {
 	projectIdKey := fmt.Sprintf("%s%v", cacheProjectIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, projectRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.CompanyId, data.Status, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.CompanyId, data.Status, data.CreateAt, data.IsDeleted, data.Id)
 	}, projectIdKey)
 	return err
 }

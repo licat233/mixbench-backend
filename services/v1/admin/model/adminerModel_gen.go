@@ -19,8 +19,8 @@ import (
 var (
 	adminerFieldNames          = builder.RawFieldNames(&Adminer{})
 	adminerRows                = strings.Join(adminerFieldNames, ",")
-	adminerRowsExpectAutoSet   = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	adminerRowsWithPlaceHolder = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	adminerRowsExpectAutoSet   = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	adminerRowsWithPlaceHolder = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheAdminerIdPrefix = "cache:adminer:id:"
 )
@@ -102,8 +102,8 @@ func (m *defaultAdminerModel) FindOne(ctx context.Context, id int64) (*Adminer, 
 func (m *defaultAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Result, error) {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.CreateAt, data.IsDeleted)
 	}, adminerIdKey)
 	return ret, err
 }
@@ -112,7 +112,7 @@ func (m *defaultAdminerModel) Update(ctx context.Context, data *Adminer) error {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, adminerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.CreateAt, data.IsDeleted, data.Id)
 	}, adminerIdKey)
 	return err
 }

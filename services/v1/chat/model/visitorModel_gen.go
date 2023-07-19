@@ -19,8 +19,8 @@ import (
 var (
 	visitorFieldNames          = builder.RawFieldNames(&Visitor{})
 	visitorRows                = strings.Join(visitorFieldNames, ",")
-	visitorRowsExpectAutoSet   = strings.Join(stringx.Remove(visitorFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	visitorRowsWithPlaceHolder = strings.Join(stringx.Remove(visitorFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	visitorRowsExpectAutoSet   = strings.Join(stringx.Remove(visitorFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	visitorRowsWithPlaceHolder = strings.Join(stringx.Remove(visitorFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheVisitorIdPrefix = "cache:visitor:id:"
 )
@@ -102,8 +102,8 @@ func (m *defaultVisitorModel) FindOne(ctx context.Context, id int64) (*Visitor, 
 func (m *defaultVisitorModel) Insert(ctx context.Context, data *Visitor) (sql.Result, error) {
 	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, visitorRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.ProjectId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, visitorRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.ProjectId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.CreateAt, data.IsDeleted)
 	}, visitorIdKey)
 	return ret, err
 }
@@ -112,7 +112,7 @@ func (m *defaultVisitorModel) Update(ctx context.Context, data *Visitor) error {
 	visitorIdKey := fmt.Sprintf("%s%v", cacheVisitorIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, visitorRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.ProjectId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Ip, data.KefuId, data.ProjectId, data.Status, data.Referer, data.Region, data.City, data.Platform, data.Os, data.Browser, data.Language, data.CreateAt, data.IsDeleted, data.Id)
 	}, visitorIdKey)
 	return err
 }

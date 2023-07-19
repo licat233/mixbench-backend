@@ -10,7 +10,7 @@ package svc
 import (
 	"mixbench/services/v1/authentication/mq/asynqmq"
 	"mixbench/services/v1/authentication/mq/internal/config"
-	authenticationClient "mixbench/services/v1/authentication/rpc/client"
+	"mixbench/services/v1/authentication/rpc/authentication"
 
 	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-zero/core/stores/redis"
@@ -19,7 +19,7 @@ import (
 
 type ServiceContext struct {
 	Config            config.Config
-	AuthenticationRpc *authenticationClient.AuthenticationRpc
+	AuthenticationRpc authentication.Authentication
 	RedisClientOpt    *asynq.RedisClientOpt
 	RedisClient       *redis.Redis
 }
@@ -36,7 +36,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	})
 	return &ServiceContext{
 		Config:            c,
-		AuthenticationRpc: authenticationClient.NewAuthenticationRpc(zrpc.MustNewClient(c.AuthenticationRpc)),
+		AuthenticationRpc: authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
 		RedisClientOpt:    redisClientOpt,
 		RedisClient:       redisCli,
 	}

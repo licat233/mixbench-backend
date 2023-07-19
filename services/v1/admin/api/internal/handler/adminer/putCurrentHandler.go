@@ -18,7 +18,7 @@ func PutCurrentHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := adminer.NewPutCurrentLogic(r.Context(), svcCtx)
+		l := adminer.NewPutCurrentLogic(r.Context(), svcCtx, r)
 		resp, err := l.PutCurrent(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

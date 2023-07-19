@@ -1896,14 +1896,10 @@ var Base_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LuckydrawClient interface {
-	// 抽奖凭证校验，验证用户身份，颁发jwt
-	UserIdentify(ctx context.Context, in *UserIdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error)
 	// 抽奖接口
 	Luckydraw(ctx context.Context, in *LuckydrawReq, opts ...grpc.CallOption) (*LuckydrawResp, error)
 	// 用户确认认领奖品名单，记得把剩余的改为弃领状态
 	SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error)
-	// 生产jwtToken
-	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
 	// 活动规则枚举
 	GetActivityPatternEnums(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*Enums, error)
 	// 获取每个项目及其包含的活动
@@ -1956,15 +1952,6 @@ func NewLuckydrawClient(cc grpc.ClientConnInterface) LuckydrawClient {
 	return &luckydrawClient{cc}
 }
 
-func (c *luckydrawClient) UserIdentify(ctx context.Context, in *UserIdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error) {
-	out := new(IdentifyResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/UserIdentify", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *luckydrawClient) Luckydraw(ctx context.Context, in *LuckydrawReq, opts ...grpc.CallOption) (*LuckydrawResp, error) {
 	out := new(LuckydrawResp)
 	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/Luckydraw", in, out, opts...)
@@ -1977,15 +1964,6 @@ func (c *luckydrawClient) Luckydraw(ctx context.Context, in *LuckydrawReq, opts 
 func (c *luckydrawClient) SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error) {
 	out := new(SelectPrizesResp)
 	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/SelectPrizes", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *luckydrawClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
-	out := new(GenerateTokenResp)
-	err := c.cc.Invoke(ctx, "/luckydraw_proto.Luckydraw/GenerateToken", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2185,14 +2163,10 @@ func (c *luckydrawClient) ResetLuckValue(ctx context.Context, in *ResetLuckValue
 // All implementations must embed UnimplementedLuckydrawServer
 // for forward compatibility
 type LuckydrawServer interface {
-	// 抽奖凭证校验，验证用户身份，颁发jwt
-	UserIdentify(context.Context, *UserIdentifyReq) (*IdentifyResp, error)
 	// 抽奖接口
 	Luckydraw(context.Context, *LuckydrawReq) (*LuckydrawResp, error)
 	// 用户确认认领奖品名单，记得把剩余的改为弃领状态
 	SelectPrizes(context.Context, *SelectPrizesReq) (*SelectPrizesResp, error)
-	// 生产jwtToken
-	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
 	// 活动规则枚举
 	GetActivityPatternEnums(context.Context, *NilReq) (*Enums, error)
 	// 获取每个项目及其包含的活动
@@ -2242,17 +2216,11 @@ type LuckydrawServer interface {
 type UnimplementedLuckydrawServer struct {
 }
 
-func (UnimplementedLuckydrawServer) UserIdentify(context.Context, *UserIdentifyReq) (*IdentifyResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserIdentify not implemented")
-}
 func (UnimplementedLuckydrawServer) Luckydraw(context.Context, *LuckydrawReq) (*LuckydrawResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Luckydraw not implemented")
 }
 func (UnimplementedLuckydrawServer) SelectPrizes(context.Context, *SelectPrizesReq) (*SelectPrizesResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SelectPrizes not implemented")
-}
-func (UnimplementedLuckydrawServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
 }
 func (UnimplementedLuckydrawServer) GetActivityPatternEnums(context.Context, *NilReq) (*Enums, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActivityPatternEnums not implemented")
@@ -2330,24 +2298,6 @@ func RegisterLuckydrawServer(s grpc.ServiceRegistrar, srv LuckydrawServer) {
 	s.RegisterService(&Luckydraw_ServiceDesc, srv)
 }
 
-func _Luckydraw_UserIdentify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserIdentifyReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).UserIdentify(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.Luckydraw/UserIdentify",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).UserIdentify(ctx, req.(*UserIdentifyReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Luckydraw_Luckydraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LuckydrawReq)
 	if err := dec(in); err != nil {
@@ -2380,24 +2330,6 @@ func _Luckydraw_SelectPrizes_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LuckydrawServer).SelectPrizes(ctx, req.(*SelectPrizesReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Luckydraw_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GenerateTokenReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(LuckydrawServer).GenerateToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/luckydraw_proto.Luckydraw/GenerateToken",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LuckydrawServer).GenerateToken(ctx, req.(*GenerateTokenReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2788,20 +2720,12 @@ var Luckydraw_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*LuckydrawServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserIdentify",
-			Handler:    _Luckydraw_UserIdentify_Handler,
-		},
-		{
 			MethodName: "Luckydraw",
 			Handler:    _Luckydraw_Luckydraw_Handler,
 		},
 		{
 			MethodName: "SelectPrizes",
 			Handler:    _Luckydraw_SelectPrizes_Handler,
-		},
-		{
-			MethodName: "GenerateToken",
-			Handler:    _Luckydraw_GenerateToken_Handler,
 		},
 		{
 			MethodName: "GetActivityPatternEnums",

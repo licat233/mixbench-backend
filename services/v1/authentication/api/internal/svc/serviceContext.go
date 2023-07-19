@@ -8,8 +8,7 @@ import (
 	adminClient "mixbench/services/v1/admin/rpc/client"
 	"mixbench/services/v1/authentication/api/internal/config"
 	"mixbench/services/v1/authentication/api/internal/middleware"
-	"mixbench/services/v1/authentication/model"
-	authenticationClient "mixbench/services/v1/authentication/rpc/client"
+	"mixbench/services/v1/authentication/rpc/authentication"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/zeromicro/go-zero/core/stores/redis"
@@ -24,12 +23,9 @@ type ServiceContext struct {
 
 	AuthMiddlewareLogic *middleware.AuthMiddleware
 
-	AuthenticationRpc *authenticationClient.AuthenticationRpc
+	AuthenticationRpc authentication.Authentication
 	AdminRpc          *adminClient.AdminRpc
 	RedisClient       *redis.Redis
-
-	TokenBlacklistModel model.TokenBlacklistModel
-	IpBlacklistModel    model.IpBlacklistModel
 
 	CasbinEnforcer *casbin.SyncedEnforcer
 }
@@ -45,23 +41,19 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	})
 	// 因为 mysqlx.NewMysql 方法内部已经执行过 sqlConn.RawDB() 方法且无错误了，这里再执行选择忽略错误
 	db, _ := sqlConn.RawDB()
-	jwtBlacklistModel := model.NewTokenBlacklistModel(sqlConn, c.CacheRedis)
-	ipBlackModel := model.NewIpBlacklistModel(sqlConn, c.CacheRedis)
 
 	enforcer := rbacx.NewCasbinEnforcer(db)
 	adminRpc := adminClient.NewAdminRpc(zrpc.MustNewClient(c.AdminRpc))
 
-	authMiddlewareLogic := middleware.NewAuthMiddleware(c, adminRpc, jwtBlacklistModel, ipBlackModel)
+	authMiddlewareLogic := middleware.NewAuthMiddleware(c, redisConn, adminRpc)
 	return &ServiceContext{
 		Config:              c,
 		AuthMiddleware:      authMiddlewareLogic.Handle,
 		RbacMiddleware:      middleware.NewRbacMiddleware(enforcer, &adminRpc.BaseClient).Handle,
 		AuthMiddlewareLogic: authMiddlewareLogic,
-		AuthenticationRpc:   authenticationClient.NewAuthenticationRpc(zrpc.MustNewClient(c.AuthenticationRpc)),
+		AuthenticationRpc:   authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
 		AdminRpc:            adminRpc,
 		RedisClient:         redisConn,
-		TokenBlacklistModel: jwtBlacklistModel,
-		IpBlacklistModel:    ipBlackModel,
 		CasbinEnforcer:      enforcer,
 	}
 }

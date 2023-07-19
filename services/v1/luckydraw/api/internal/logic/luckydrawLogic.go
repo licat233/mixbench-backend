@@ -11,8 +11,8 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"strconv"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
 	"mixbench/common/utils"
@@ -41,8 +41,13 @@ func NewLuckydrawLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.
 }
 
 func (l *LuckydrawLogic) Luckydraw(req *types.LuckydrawReq) (any, error) {
-	//获取用户id
-	userId := ctxdata.GetUidFromCtx(l.ctx)
+	//获取游客id
+	userIdV := l.r.Header.Get("uid")
+	userId, err := strconv.ParseInt(userIdV, 10, 64)
+	if err != nil {
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
 	//活动uuid检验
 	if !govalidator.IsUUID(req.ActivityUUID) {
 		return nil, errorx.ErrInvalidUuid

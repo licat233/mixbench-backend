@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
+	"mixbench/common/jwtx"
 	"mixbench/common/utils"
 	"net/http"
 	"os"
@@ -50,7 +50,11 @@ func SaveHttpImg(ctx context.Context, r *http.Request, saveDir, prefix string) (
 	}
 
 	date_at := time.Now().Local().Format("20060102")
-	uid := ctxdata.GetUidFromCtx(ctx)
+	uid, err := jwtx.GetIdByRequest(r, "")
+	if err != nil {
+		logx.Error(fmt.Errorf("获取用户id失败: %s", err))
+		return "", err
+	}
 	uuid := uuid.New()
 	filename := fmt.Sprintf("%s_%s_%d_%d.%s", prefix, date_at, uid, uuid.ID(), filetype)
 	filepath := path.Join(saveDir, filename)

@@ -1093,7 +1093,7 @@ service Luckydraw {
   //[custom service start]
 
   // 抽奖凭证校验，验证用户身份，颁发jwt
-  rpc UserIdentify (UserIdentifyReq) returns (IdentifyResp);
+  // rpc UserIdentify (UserIdentifyReq) returns (IdentifyResp);
 
   // 抽奖接口
   rpc Luckydraw (LuckydrawReq) returns (LuckydrawResp);
@@ -1102,7 +1102,7 @@ service Luckydraw {
   rpc SelectPrizes (SelectPrizesReq) returns (SelectPrizesResp);
 
   // 生产jwtToken
-  rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
+  // rpc GenerateToken (GenerateTokenReq) returns (GenerateTokenResp);
 
   // 活动规则枚举
   rpc GetActivityPatternEnums (NilReq) returns (Enums);

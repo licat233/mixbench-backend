@@ -253,7 +253,6 @@ service admin {
 }
 
 @server(
-  jwt: Auth
   prefix: /v1/api/admin
 )
 service admin {

@@ -1,4 +1,4 @@
-package authenticationlogic
+package logic
 
 import (
 	"fmt"

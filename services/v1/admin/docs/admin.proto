@@ -519,16 +519,14 @@ message FindByPassportResp {
 }
 
 message LogoutReq {
-  string jwt_token = 1;
-  string platform = 2;
-  string ip = 3;
+  string token = 1;
 }
 
 message LogoutResp {
 }
 
 message IsLogoutReq {
-  string jwt_token = 1;
+  string token = 1;
 }
 
 message IsLogoutResp {

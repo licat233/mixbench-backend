@@ -18,7 +18,7 @@ func selectPrizesHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewSelectPrizesLogic(r.Context(), svcCtx)
+		l := logic.NewSelectPrizesLogic(r.Context(), svcCtx, r)
 		resp, err := l.SelectPrizes(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

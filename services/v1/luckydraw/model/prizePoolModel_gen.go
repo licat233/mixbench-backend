@@ -19,8 +19,8 @@ import (
 var (
 	prizePoolFieldNames          = builder.RawFieldNames(&PrizePool{})
 	prizePoolRows                = strings.Join(prizePoolFieldNames, ",")
-	prizePoolRowsExpectAutoSet   = strings.Join(stringx.Remove(prizePoolFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	prizePoolRowsWithPlaceHolder = strings.Join(stringx.Remove(prizePoolFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	prizePoolRowsExpectAutoSet   = strings.Join(stringx.Remove(prizePoolFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	prizePoolRowsWithPlaceHolder = strings.Join(stringx.Remove(prizePoolFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cachePrizePoolIdPrefix = "cache:prizePool:id:"
 )
@@ -97,8 +97,8 @@ func (m *defaultPrizePoolModel) FindOne(ctx context.Context, id int64) (*PrizePo
 func (m *defaultPrizePoolModel) Insert(ctx context.Context, data *PrizePool) (sql.Result, error) {
 	prizePoolIdKey := fmt.Sprintf("%s%v", cachePrizePoolIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizePoolRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Total, data.Remainder, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, prizePoolRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Total, data.Remainder, data.CreateAt, data.IsDeleted)
 	}, prizePoolIdKey)
 	return ret, err
 }
@@ -107,7 +107,7 @@ func (m *defaultPrizePoolModel) Update(ctx context.Context, data *PrizePool) err
 	prizePoolIdKey := fmt.Sprintf("%s%v", cachePrizePoolIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizePoolRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Total, data.Remainder, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ActivityId, data.PrizeId, data.GradeId, data.LuckValue, data.Status, data.Total, data.Remainder, data.CreateAt, data.IsDeleted, data.Id)
 	}, prizePoolIdKey)
 	return err
 }

@@ -1,4 +1,4 @@
-package ctxdata
+package _ctxdata
 
 import (
 	"context"
@@ -52,6 +52,5 @@ func GetExpFromCtx(ctx context.Context) int64 {
 	if exp, ok := ctx.Value("exp").(int64); ok {
 		return exp
 	}
-	logx.WithContext(ctx).Error("GetExpFromCtx err")
 	return 0
 }

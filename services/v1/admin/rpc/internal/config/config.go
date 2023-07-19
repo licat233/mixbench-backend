@@ -17,9 +17,5 @@ type Config struct {
 	Mysql struct {
 		DataSource string
 	}
-	JwtAuth struct {
-		AccessSecret string
-		AccessExpire int64
-	}
 	CacheRedis cache.CacheConf
 }

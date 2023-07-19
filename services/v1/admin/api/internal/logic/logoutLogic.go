@@ -11,9 +11,9 @@ import (
 	"context"
 	"net/http"
 
+	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
 	"mixbench/common/respx"
-	"mixbench/common/utils"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 
@@ -38,13 +38,12 @@ func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Req
 
 func (l *LogoutLogic) Logout() (any, error) {
 	token := l.Request.Header.Get(jwtx.ReqHeaderTokenKey)
-	reqIp := utils.RemoteIp(l.Request)
-	platform, _ := utils.RemotePlatform(l.Request)
+	if token == "" {
+		return nil, errorx.ExternalError("token not exists")
+	}
 
 	_, err := l.svcCtx.AdminRpc.Logout(l.ctx, &admin_pb.LogoutReq{
-		JwtToken: token,
-		Platform: platform,
-		Ip:       reqIp,
+		Token: token,
 	})
 	return respx.DefaultStatusResp(err)
 }

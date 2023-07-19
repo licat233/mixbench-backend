@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"mixbench/services/v1/authentication/rpc/authentication_pb"
-	"mixbench/services/v1/authentication/rpc/internal/logic/authentication"
+	"mixbench/services/v1/authentication/rpc/internal/logic"
 	"mixbench/services/v1/authentication/rpc/internal/svc"
 )
 
@@ -24,36 +24,36 @@ func NewAuthenticationServer(svcCtx *svc.ServiceContext) *AuthenticationServer {
 
 // 获取数学验证码
 func (s *AuthenticationServer) GetMathCaptcha(ctx context.Context, in *authentication_pb.GetCaptchaReq) (*authentication_pb.GetCaptchaResp, error) {
-	l := authenticationlogic.NewGetMathCaptchaLogic(ctx, s.svcCtx)
+	l := logic.NewGetMathCaptchaLogic(ctx, s.svcCtx)
 	return l.GetMathCaptcha(in)
 }
 
 // 校验验证码
 func (s *AuthenticationServer) VerifyCaptcha(ctx context.Context, in *authentication_pb.VerifyCaptchaReq) (*authentication_pb.VerifyCaptchaResp, error) {
-	l := authenticationlogic.NewVerifyCaptchaLogic(ctx, s.svcCtx)
+	l := logic.NewVerifyCaptchaLogic(ctx, s.svcCtx)
 	return l.VerifyCaptcha(in)
 }
 
 // 发送邮箱验证码
 func (s *AuthenticationServer) SendEmailCaptcha(ctx context.Context, in *authentication_pb.SendEmailCaptchaReq) (*authentication_pb.SendEmailCaptchaResp, error) {
-	l := authenticationlogic.NewSendEmailCaptchaLogic(ctx, s.svcCtx)
+	l := logic.NewSendEmailCaptchaLogic(ctx, s.svcCtx)
 	return l.SendEmailCaptcha(in)
 }
 
 // 校验邮箱验证码
 func (s *AuthenticationServer) VerifyEmailCaptcha(ctx context.Context, in *authentication_pb.VerifyEmailCaptchaReq) (*authentication_pb.VerifyEmailCaptchaResp, error) {
-	l := authenticationlogic.NewVerifyEmailCaptchaLogic(ctx, s.svcCtx)
+	l := logic.NewVerifyEmailCaptchaLogic(ctx, s.svcCtx)
 	return l.VerifyEmailCaptcha(in)
 }
 
 // 生成jwt-token
 func (s *AuthenticationServer) GenToken(ctx context.Context, in *authentication_pb.GenTokenReq) (*authentication_pb.GenTokenResp, error) {
-	l := authenticationlogic.NewGenTokenLogic(ctx, s.svcCtx)
+	l := logic.NewGenTokenLogic(ctx, s.svcCtx)
 	return l.GenToken(in)
 }
 
 // jwt鉴权
 func (s *AuthenticationServer) Auth(ctx context.Context, in *authentication_pb.AuthReq) (*authentication_pb.AuthResp, error) {
-	l := authenticationlogic.NewAuthLogic(ctx, s.svcCtx)
+	l := logic.NewAuthLogic(ctx, s.svcCtx)
 	return l.Auth(in)
 }

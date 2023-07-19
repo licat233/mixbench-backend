@@ -22,12 +22,6 @@ func NewLuckydrawServer(svcCtx *svc.ServiceContext) *LuckydrawServer {
 	}
 }
 
-// 抽奖凭证校验，验证用户身份，颁发jwt
-func (s *LuckydrawServer) UserIdentify(ctx context.Context, in *luckydraw_pb.UserIdentifyReq) (*luckydraw_pb.IdentifyResp, error) {
-	l := luckydrawlogic.NewUserIdentifyLogic(ctx, s.svcCtx)
-	return l.UserIdentify(in)
-}
-
 // 抽奖接口
 func (s *LuckydrawServer) Luckydraw(ctx context.Context, in *luckydraw_pb.LuckydrawReq) (*luckydraw_pb.LuckydrawResp, error) {
 	l := luckydrawlogic.NewLuckydrawLogic(ctx, s.svcCtx)
@@ -38,12 +32,6 @@ func (s *LuckydrawServer) Luckydraw(ctx context.Context, in *luckydraw_pb.Luckyd
 func (s *LuckydrawServer) SelectPrizes(ctx context.Context, in *luckydraw_pb.SelectPrizesReq) (*luckydraw_pb.SelectPrizesResp, error) {
 	l := luckydrawlogic.NewSelectPrizesLogic(ctx, s.svcCtx)
 	return l.SelectPrizes(in)
-}
-
-// 生产jwtToken
-func (s *LuckydrawServer) GenerateToken(ctx context.Context, in *luckydraw_pb.GenerateTokenReq) (*luckydraw_pb.GenerateTokenResp, error) {
-	l := luckydrawlogic.NewGenerateTokenLogic(ctx, s.svcCtx)
-	return l.GenerateToken(in)
 }
 
 // 活动规则枚举

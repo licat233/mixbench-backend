@@ -11,7 +11,7 @@ import (
 
 func CurrentInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		l := adminer.NewCurrentInfoLogic(r.Context(), svcCtx)
+		l := adminer.NewCurrentInfoLogic(r.Context(), svcCtx, r)
 		resp, err := l.CurrentInfo()
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

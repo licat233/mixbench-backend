@@ -3,10 +3,11 @@ package jwtx
 import (
 	"errors"
 	"fmt"
-	"mixbench/common/errorx"
 	"mixbench/common/utils"
 	"net/http"
+	"os"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -31,6 +32,10 @@ var (
 	ErrNotExist         = errors.New("not exist")
 )
 
+func NewClaims() jwt.MapClaims {
+	return make(jwt.MapClaims)
+}
+
 func CreateToken(claims jwt.MapClaims, secret string) (string, error) {
 	// 创建一个新的令牌对象，指定签名方法和声明
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -41,6 +46,9 @@ func CreateToken(claims jwt.MapClaims, secret string) (string, error) {
 
 // 解析token, 返回原生error
 func ParseToken(tokenString string, secret string) (jwt.MapClaims, error) {
+	if secret == "" {
+		return nil, errors.New("jwt secret equal nil")
+	}
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, e error) {
 		// 返回用于验证签名的密钥
 		return []byte(secret), nil // 替换为实际的密钥
@@ -77,13 +85,13 @@ func GetToken(r *http.Request) string {
 func GetClaims(r *http.Request, secret string) (jwt.MapClaims, error) {
 	token := GetToken(r)
 	if token == "" {
-		return nil, nil
+		return nil, errors.New("token not exist")
 	}
 	claims, err := ParseToken(token, secret)
 	if err != nil {
 		err = fmt.Errorf("从request中获取从jwt解析信息失败, 请检查请求头是否存在%s且claims是否为规定结构,error:%s", ReqHeaderTokenKey, err.Error())
-		logx.WithContext(r.Context()).Error(err)
-		return nil, errorx.InternalError(err)
+		logx.Error(err)
+		return nil, err
 	}
 	return claims, nil
 }
@@ -183,4 +191,44 @@ func GetInt64(claims jwt.MapClaims, key string) (res int64, exist bool) {
 func GetString(claims jwt.MapClaims, key string) (res string, exist bool) {
 	res, exist = claims[key].(string)
 	return res, exist
+}
+
+func GetIdByRequest(r *http.Request, secret string) (int64, error) {
+	if secret = strings.TrimSpace(secret); secret == "" {
+		secret := os.Getenv("JWT_SECRET")
+		if secret = strings.TrimSpace(secret); secret != "" {
+			return 0, errors.New("the environment variable JWT_SECRET equal nil")
+		}
+	}
+	claims, err := GetClaims(r, secret)
+	if err != nil {
+		return 0, err
+	}
+	id, ok := GetId(claims)
+	if !ok {
+		return 0, errors.New("ID does not exist in token")
+	}
+	return id, nil
+}
+
+func GetIdByToken(token string, secret string) (int64, error) {
+	if token == "" {
+		return 0, errors.New("token not exist")
+	}
+	if secret = strings.TrimSpace(secret); secret == "" {
+		secret := os.Getenv("JWT_SECRET")
+		if secret = strings.TrimSpace(secret); secret != "" {
+			return 0, errors.New("the environment variable JWT_SECRET equal nil")
+		}
+	}
+	claims, err := ParseToken(token, secret)
+	if err != nil {
+		logx.Error(err)
+		return 0, err
+	}
+	id, ok := GetId(claims)
+	if !ok {
+		return 0, errors.New("ID does not exist in token")
+	}
+	return id, nil
 }

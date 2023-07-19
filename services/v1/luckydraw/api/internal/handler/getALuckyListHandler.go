@@ -18,7 +18,7 @@ func GetALuckyListHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewGetALuckyListLogic(r.Context(), svcCtx)
+		l := logic.NewGetALuckyListLogic(r.Context(), svcCtx, r)
 		resp, err := l.GetALuckyList(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

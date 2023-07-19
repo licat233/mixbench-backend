@@ -2,10 +2,6 @@ package svc
 
 import (
 	"context"
-	"fmt"
-	"log"
-	"mixbench/common/mysqlx"
-	"mixbench/services/v1/authentication/model"
 	"mixbench/services/v1/authentication/mq/asynqmq"
 	"mixbench/services/v1/authentication/rpc/internal/config"
 	"time"
@@ -24,16 +20,9 @@ type ServiceContext struct {
 
 	KqPusherClient *kq.Pusher
 	AsynqClient    *asynqmq.AsynqProducer
-
-	TokenBlacklistModel model.TokenBlacklistModel
-	IpBlacklistModel    model.IpBlacklistModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	sqlConn, err := mysqlx.NewMysql(c.Mysql.DataSource)
-	if err != nil {
-		log.Fatalln(fmt.Errorf("连接mysql数据库失败: %s", err))
-	}
 	redisConn := redis.New(c.Redis.Host, func(r *redis.Redis) {
 		r.Type = c.Redis.Type
 		r.Pass = c.Redis.Pass
@@ -42,13 +31,11 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	//验证码有效期
 	captchaExpire := time.Duration(c.Captcha.Expire*1000) * time.Millisecond
 	return &ServiceContext{
-		Config:              c,
-		RedisClient:         redisConn,
-		CaptchaStore:        base64Captcha.NewMemoryStore(10240, captchaExpire),
-		CaptchaExpire:       captchaExpire,
-		KqPusherClient:      &kq.Pusher{},
-		AsynqClient:         asynqmq.NewAsynqProducer(context.Background(), &asynq.RedisClientOpt{Addr: c.Redis.Host, Password: c.Redis.Pass, DB: asynqmq.RedisDB}),
-		TokenBlacklistModel: model.NewTokenBlacklistModel(sqlConn, c.CacheRedis),
-		IpBlacklistModel:    model.NewIpBlacklistModel(sqlConn, c.CacheRedis),
+		Config:         c,
+		RedisClient:    redisConn,
+		CaptchaStore:   base64Captcha.NewMemoryStore(10240, captchaExpire),
+		CaptchaExpire:  captchaExpire,
+		KqPusherClient: &kq.Pusher{},
+		AsynqClient:    asynqmq.NewAsynqProducer(context.Background(), &asynq.RedisClientOpt{Addr: c.Redis.Host, Password: c.Redis.Pass, DB: asynqmq.RedisDB}),
 	}
 }

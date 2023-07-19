@@ -6,8 +6,7 @@ import (
 
 	"mixbench/services/v1/authentication/rpc/authentication_pb"
 	"mixbench/services/v1/authentication/rpc/internal/config"
-	authenticationServer "mixbench/services/v1/authentication/rpc/internal/server/authentication"
-	baseServer "mixbench/services/v1/authentication/rpc/internal/server/base"
+	"mixbench/services/v1/authentication/rpc/internal/server"
 	"mixbench/services/v1/authentication/rpc/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -27,8 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		authentication_pb.RegisterBaseServer(grpcServer, baseServer.NewBaseServer(ctx))
-		authentication_pb.RegisterAuthenticationServer(grpcServer, authenticationServer.NewAuthenticationServer(ctx))
+		authentication_pb.RegisterAuthenticationServer(grpcServer, server.NewAuthenticationServer(ctx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)

@@ -18,7 +18,7 @@ func VerifyPasswordHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := adminer.NewVerifyPasswordLogic(r.Context(), svcCtx)
+		l := adminer.NewVerifyPasswordLogic(r.Context(), svcCtx, r)
 		resp, err := l.VerifyPassword(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

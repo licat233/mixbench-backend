@@ -31,6 +31,8 @@ Auth:
   AccessSecret: ${JWT_SECRET}
   AccessExpire: 86400
 
+VisitorAuthSecret: adzxcjqhe891eoid181
+
 AuthenticationRpc:
   Endpoints:
     - 127.0.0.1:${AUTHENTICATION_RPC_PORT}

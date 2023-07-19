@@ -173,14 +173,10 @@ type (
 	UserPool                  = luckydraw_pb.UserPool
 
 	Luckydraw interface {
-		// 抽奖凭证校验，验证用户身份，颁发jwt
-		UserIdentify(ctx context.Context, in *UserIdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error)
 		// 抽奖接口
 		Luckydraw(ctx context.Context, in *LuckydrawReq, opts ...grpc.CallOption) (*LuckydrawResp, error)
 		// 用户确认认领奖品名单，记得把剩余的改为弃领状态
 		SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error)
-		// 生产jwtToken
-		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
 		// 活动规则枚举
 		GetActivityPatternEnums(ctx context.Context, in *NilReq, opts ...grpc.CallOption) (*Enums, error)
 		// 获取每个项目及其包含的活动
@@ -236,12 +232,6 @@ func NewLuckydraw(cli zrpc.Client) Luckydraw {
 	}
 }
 
-// 抽奖凭证校验，验证用户身份，颁发jwt
-func (m *defaultLuckydraw) UserIdentify(ctx context.Context, in *UserIdentifyReq, opts ...grpc.CallOption) (*IdentifyResp, error) {
-	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
-	return client.UserIdentify(ctx, in, opts...)
-}
-
 // 抽奖接口
 func (m *defaultLuckydraw) Luckydraw(ctx context.Context, in *LuckydrawReq, opts ...grpc.CallOption) (*LuckydrawResp, error) {
 	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
@@ -252,12 +242,6 @@ func (m *defaultLuckydraw) Luckydraw(ctx context.Context, in *LuckydrawReq, opts
 func (m *defaultLuckydraw) SelectPrizes(ctx context.Context, in *SelectPrizesReq, opts ...grpc.CallOption) (*SelectPrizesResp, error) {
 	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
 	return client.SelectPrizes(ctx, in, opts...)
-}
-
-// 生产jwtToken
-func (m *defaultLuckydraw) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
-	client := luckydraw_pb.NewLuckydrawClient(m.cli.Conn())
-	return client.GenerateToken(ctx, in, opts...)
 }
 
 // 活动规则枚举

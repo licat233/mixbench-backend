@@ -11,6 +11,7 @@ import (
 	"context"
 
 	"mixbench/common/errorx"
+	"mixbench/common/redisx"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
 
@@ -34,26 +35,13 @@ func NewIsLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IsLogout
 // 是否已经注销
 func (l *IsLogoutLogic) IsLogout(in *admin_pb.IsLogoutReq) (*admin_pb.IsLogoutResp, error) {
 	//优先从redis中查找
-	exist, err := l.svcCtx.RedisCli.ExistsCtx(l.ctx, in.JwtToken)
-	if err != nil {
-		l.Logger.Error(err)
-		return nil, errorx.IntRpcErr(err)
-	}
-
-	if exist {
-		return &admin_pb.IsLogoutResp{
-			Status: exist,
-		}, nil
-	}
-
-	//再从mysql中查找
-	_, err = l.svcCtx.JwtBlacklistModel.FindByToken(l.ctx, in.JwtToken)
+	exist, err := l.svcCtx.RedisCli.ExistsCtx(l.ctx, redisx.FormatTokenblacklistKey(in.Token))
 	if err != nil {
 		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
 
 	return &admin_pb.IsLogoutResp{
-		Status: err == nil,
+		Status: exist,
 	}, nil
 }

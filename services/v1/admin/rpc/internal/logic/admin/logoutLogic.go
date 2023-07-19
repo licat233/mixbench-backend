@@ -10,11 +10,13 @@ package adminlogic
 import (
 	"context"
 	"errors"
+	"fmt"
+	"os"
 	"time"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
-	"mixbench/services/v1/admin/model"
+	"mixbench/common/jwtx"
+	"mixbench/common/redisx"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/admin/rpc/internal/svc"
 
@@ -37,24 +39,26 @@ func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogoutLogi
 
 // 注销登录
 func (l *LogoutLogic) Logout(in *admin_pb.LogoutReq) (*admin_pb.LogoutResp, error) {
-	exp := ctxdata.GetExpFromCtx(l.ctx)
-	if exp == 0 {
-		return nil, errorx.IntRpcErr(errors.New("failed to obtain exp value in ctx"))
+	if in.Token == "" {
+		return nil, errorx.ExtRpcErr(errors.New("token equal nil"))
 	}
-	//注销方案
-	data := &model.JwtBlacklist{
-		Id:       0,
-		Token:    in.JwtToken,
-		Platform: in.Platform,
-		Ip:       in.Ip,
-		ExpireAt: time.Unix(exp, 0),
+	claims, ok := jwtx.ValidateToken(in.Token, os.Getenv("JWT_SECRET"))
+	if !ok {
+		return nil, errorx.ExtRpcErr(errors.New("validate token failed"))
 	}
-
-	_, err := l.svcCtx.JwtBlacklistModel.Insert(l.ctx, data)
+	id, _ := jwtx.GetId(claims)
+	exp := jwtx.ExpiredTime(claims)
+	currentTime := time.Now().Local()
+	expirationTime := time.Unix(int64(exp), 0).Local()
+	var err error
+	if expirationTime.After(currentTime) {
+		seconds := int(expirationTime.Sub(currentTime).Seconds())
+		err = l.svcCtx.RedisCli.SetexCtx(l.ctx, redisx.FormatTokenblacklistKey(in.Token), fmt.Sprint(id), seconds)
+	} else {
+		err = l.svcCtx.RedisCli.SetCtx(l.ctx, redisx.FormatTokenblacklistKey(in.Token), fmt.Sprint(id))
+	}
 	if err != nil {
-		l.Logger.Error(err)
 		return nil, errorx.IntRpcErr(err)
 	}
-
 	return &admin_pb.LogoutResp{}, nil
 }

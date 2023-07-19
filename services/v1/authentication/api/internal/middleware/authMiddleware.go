@@ -5,32 +5,30 @@ import (
 	"errors"
 	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
+	"mixbench/common/redisx"
 	"mixbench/common/utils"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	adminClient "mixbench/services/v1/admin/rpc/client"
 	"mixbench/services/v1/authentication/api/internal/config"
-	"mixbench/services/v1/authentication/model"
 	"net/http"
 
-	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 type AuthMiddleware struct {
-	ctx                 context.Context
-	Config              config.Config
-	AdminRpc            *adminClient.AdminRpc
-	TokenBlacklistModel model.TokenBlacklistModel
-	IpBlacklistModel    model.IpBlacklistModel
+	ctx         context.Context
+	Config      config.Config
+	AdminRpc    *adminClient.AdminRpc
+	RedisClient *redis.Redis
 }
 
-func NewAuthMiddleware(c config.Config, adminRpc *adminClient.AdminRpc, tokenBlacklistModel model.TokenBlacklistModel, ipBlacklistModel model.IpBlacklistModel) *AuthMiddleware {
+func NewAuthMiddleware(c config.Config, RedisClient *redis.Redis, adminRpc *adminClient.AdminRpc) *AuthMiddleware {
 	return &AuthMiddleware{
-		ctx:                 context.Background(),
-		Config:              c,
-		AdminRpc:            adminRpc,
-		TokenBlacklistModel: tokenBlacklistModel,
-		IpBlacklistModel:    ipBlacklistModel,
+		ctx:         context.Background(),
+		Config:      c,
+		AdminRpc:    adminRpc,
+		RedisClient: RedisClient,
 	}
 }
 
@@ -48,6 +46,15 @@ func (m *AuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 func (m *AuthMiddleware) AuthHandler(w http.ResponseWriter, r *http.Request) error {
 	jwtToken := r.Header.Get(jwtx.ReqHeaderTokenKey)
 	if jwtToken == "" {
+		return errorx.ErrAuth
+	}
+
+	//检查token是否已被拉黑
+	exists, err := m.RedisClient.Exists(redisx.FormatTokenblacklistKey(jwtToken))
+	if err != nil {
+		return errorx.InternalError(err)
+	}
+	if exists {
 		return errorx.ErrAuth
 	}
 
@@ -81,6 +88,14 @@ func (m *AuthMiddleware) AuthHandler(w http.ResponseWriter, r *http.Request) err
 	if reqIp != jwtIp {
 		return errorx.ErrIp
 	}
+	//校验ip是否已经加入黑名单
+	exists, err = m.RedisClient.Exists(redisx.FormatIpblacklistKey(reqIp))
+	if err != nil {
+		return errorx.InternalError(err)
+	}
+	if exists {
+		return errorx.ErrAuth
+	}
 
 	//检查用户状态
 	uid, exist := jwtx.GetInt64(claims, jwtx.JwtUidKey)
@@ -100,16 +115,6 @@ func (m *AuthMiddleware) AuthHandler(w http.ResponseWriter, r *http.Request) err
 	adminer := resp.Adminer
 	if adminer.Status == 0 {
 		return errorx.AuthError(errors.New("当前用户不可用"))
-	}
-
-	// 校验token是否已被加入黑名单
-	exists, err := m.TokenBlacklistModel.ExistsByToken(m.ctx, jwtToken)
-	if err != nil {
-		logx.WithContext(m.ctx).Error(err)
-		return errorx.InternalError(err)
-	}
-	if exists {
-		return errorx.ErrAuth
 	}
 	return nil
 }

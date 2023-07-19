@@ -171,6 +171,11 @@ func (m *Mysqlx) ExecServiceSqlFile(databaseName string) error {
 	}
 	defer file.Close()
 
+	//文件存在且可读取，则开始清空数据库
+	if err := m.DropTables(""); err != nil {
+		return err
+	}
+
 	// 创建 bufio.Reader 实例
 	reader := bufio.NewReader(file)
 
@@ -187,5 +192,57 @@ func (m *Mysqlx) ExecServiceSqlFile(databaseName string) error {
 	}
 
 	fmt.Printf("mysql database '%s' create successfully!\n", databaseName)
+	return nil
+}
+
+func (m *Mysqlx) DropTables(databaseName string) error {
+	db := m.DB
+	if databaseName != "" {
+		// 切换到该数据库
+		_, err := m.DB.Exec(fmt.Sprintf("USE %s", databaseName))
+		if err != nil {
+			return fmt.Errorf("failed switch to '%s' database: %v", databaseName, err)
+		}
+	}
+
+	// 获取所有表
+	rows, err := db.Query("SHOW TABLES")
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	// 存储表名的切片
+	var tables []string
+
+	// 遍历查询结果，将表名存储到切片中
+	for rows.Next() {
+		var table string
+		err := rows.Scan(&table)
+		if err != nil {
+			return err
+		}
+		tables = append(tables, table)
+	}
+
+	// 清空表内的数据
+	for _, table := range tables {
+		_, err := db.Exec(fmt.Sprintf("DROP TABLE `%s`", table))
+		if err != nil {
+			return err
+		}
+	}
+
+	// 删除存储过程、触发器、视图等对象
+	objects := []string{"procedure_name", "trigger_name", "view_name"}
+
+	for _, object := range objects {
+		_, err := db.Exec(fmt.Sprintf("DROP PROCEDURE IF EXISTS %s", object))
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println(databaseName + "数据库已清空")
 	return nil
 }

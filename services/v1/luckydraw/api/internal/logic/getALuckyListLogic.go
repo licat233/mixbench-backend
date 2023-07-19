@@ -9,8 +9,9 @@ package logic
 
 import (
 	"context"
+	"net/http"
+	"strconv"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/luckydraw/api/internal/svc"
@@ -25,19 +26,26 @@ type GetALuckyListLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewGetALuckyListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetALuckyListLogic {
+func NewGetALuckyListLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *GetALuckyListLogic {
 	return &GetALuckyListLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
 func (l *GetALuckyListLogic) GetALuckyList(req *types.GetALuckyListReq) (any, error) {
-	//获取用户id
-	userId := ctxdata.GetUidFromCtx(l.ctx)
+	//获取游客id
+	userIdV := l.r.Header.Get("uid")
+	userId, err := strconv.ParseInt(userIdV, 10, 64)
+	if err != nil {
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
 	//活动uuid
 	if !govalidator.IsUUID(req.ActivityUUID) {
 		return nil, errorx.ErrInvalidUuid

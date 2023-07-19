@@ -51,7 +51,7 @@ proto:
     ignoreTables:
         - jwt_blacklist
         - casbin_rule
-    multiple: true
+    multiple: false
     package: ""
     serviceName: authentication
     status: true

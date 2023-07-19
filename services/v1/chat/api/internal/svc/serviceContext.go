@@ -7,7 +7,7 @@ import (
 	"log"
 	"mixbench/common/mysqlx"
 	adminClient "mixbench/services/v1/admin/rpc/client"
-	authenticationClient "mixbench/services/v1/authentication/rpc/client"
+	"mixbench/services/v1/authentication/rpc/authentication"
 	"mixbench/services/v1/chat/api/internal/config"
 	"mixbench/services/v1/chat/api/internal/middleware"
 	"mixbench/services/v1/chat/model"
@@ -25,7 +25,7 @@ type ServiceContext struct {
 
 	VisitorAuth rest.Middleware
 
-	AuthenticationRpc *authenticationClient.AuthenticationRpc
+	AuthenticationRpc authentication.Authentication
 	AdminRpc          *adminClient.AdminRpc
 
 	// ChatRecordModel    model.ChatRecordModel
@@ -71,7 +71,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ctx:                ctx,
 		Config:             c,
 		VisitorAuth:        middleware.NewVisitorAuthMiddleware().Handle,
-		AuthenticationRpc:  authenticationClient.NewAuthenticationRpc(zrpc.MustNewClient(c.AuthenticationRpc)),
+		AuthenticationRpc:  authentication.NewAuthentication(zrpc.MustNewClient(c.AuthenticationRpc)),
 		AdminRpc:           adminClient.NewAdminRpc(zrpc.MustNewClient(c.AdminRpc)),
 		MessageModel:       model.NewMessageModel(sqlConn, c.CacheRedis),
 		MessageConfigModel: model.NewMessageConfigModel(sqlConn, c.CacheRedis),

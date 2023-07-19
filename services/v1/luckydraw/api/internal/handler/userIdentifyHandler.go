@@ -18,7 +18,7 @@ func UserIdentifyHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := logic.NewUserIdentifyLogic(r.Context(), svcCtx)
+		l := logic.NewUserIdentifyLogic(r.Context(), svcCtx, r)
 		resp, err := l.UserIdentify(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

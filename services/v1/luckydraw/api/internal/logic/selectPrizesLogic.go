@@ -12,8 +12,9 @@ import (
 	"mixbench/services/v1/luckydraw/api/internal/svc"
 	"mixbench/services/v1/luckydraw/api/internal/types"
 	"mixbench/services/v1/luckydraw/rpc/luckydraw_pb"
+	"net/http"
+	"strconv"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
 
@@ -25,13 +26,15 @@ type SelectPrizesLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewSelectPrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SelectPrizesLogic {
+func NewSelectPrizesLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *SelectPrizesLogic {
 	return &SelectPrizesLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
@@ -39,7 +42,13 @@ func (l *SelectPrizesLogic) SelectPrizes(req *types.SelectPrizesReq) (resp any, 
 	if !govalidator.IsUUID(req.ActivityUUID) {
 		return nil, errorx.ErrInvalidUuid
 	}
-	userId := ctxdata.GetUidFromCtx(l.ctx)
+	//获取游客id
+	userIdV := l.r.Header.Get("uid")
+	userId, err := strconv.ParseInt(userIdV, 10, 64)
+	if err != nil {
+		l.Logger.Error(err)
+		return nil, errorx.InternalError(err)
+	}
 	in := &luckydraw_pb.SelectPrizesReq{
 		UserId:       userId,
 		ActivityId:   req.ActivityId,

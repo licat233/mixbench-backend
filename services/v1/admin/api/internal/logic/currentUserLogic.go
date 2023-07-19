@@ -9,9 +9,10 @@ package logic
 
 import (
 	"context"
+	"net/http"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
+	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/admin/api/internal/logic/dataconv"
 	"mixbench/services/v1/admin/api/internal/svc"
@@ -24,23 +25,25 @@ type CurrentUserLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewCurrentUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CurrentUserLogic {
+func NewCurrentUserLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *CurrentUserLogic {
 	return &CurrentUserLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
 func (l *CurrentUserLogic) CurrentUser() (any, error) {
-	uid := ctxdata.GetUidFromCtx(l.ctx)
-	if uid < 1 {
-		return nil, errorx.New("user does not exist")
+	id, err := jwtx.GetIdByRequest(l.r, "")
+	if err != nil {
+		return nil, errorx.InternalError(err)
 	}
 	rpcResp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{
-		Id: uid,
+		Id: id,
 	})
 	if err != nil {
 		return nil, err

@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
+	"net/http"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
 	"mixbench/common/jwtx"
 	"mixbench/common/respx"
@@ -17,18 +17,23 @@ type VisitorMessagesLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewVisitorMessagesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VisitorMessagesLogic {
+func NewVisitorMessagesLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *VisitorMessagesLogic {
 	return &VisitorMessagesLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
 func (l *VisitorMessagesLogic) VisitorMessages() (any, error) {
-	id := ctxdata.GetInt64FromCtx(l.ctx, jwtx.JwtUidKey)
+	id, err := jwtx.GetIdByRequest(l.r, l.svcCtx.Config.VisitorAuthSecret)
+	if err != nil {
+		return nil, errorx.AccessError(err)
+	}
 	list, err := l.svcCtx.MessageModel.FindsByVisitorId(l.ctx, id)
 	if err != nil {
 		return nil, errorx.InternalError(err)

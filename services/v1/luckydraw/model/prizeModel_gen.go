@@ -19,8 +19,8 @@ import (
 var (
 	prizeFieldNames          = builder.RawFieldNames(&Prize{})
 	prizeRows                = strings.Join(prizeFieldNames, ",")
-	prizeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	prizeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	prizeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	prizeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cachePrizeIdPrefix = "cache:prize:id:"
 )
@@ -94,8 +94,8 @@ func (m *defaultPrizeModel) FindOne(ctx context.Context, id int64) (*Prize, erro
 func (m *defaultPrizeModel) Insert(ctx context.Context, data *Prize) (sql.Result, error) {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, prizeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.CreateAt, data.IsDeleted)
 	}, prizeIdKey)
 	return ret, err
 }
@@ -104,7 +104,7 @@ func (m *defaultPrizeModel) Update(ctx context.Context, data *Prize) error {
 	prizeIdKey := fmt.Sprintf("%s%v", cachePrizeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Image, data.Price, data.Status, data.CreateAt, data.IsDeleted, data.Id)
 	}, prizeIdKey)
 	return err
 }

@@ -2,9 +2,11 @@ package adminer
 
 import (
 	"context"
+	"net/http"
 	"strings"
 
-	"mixbench/common/ctxdata"
+	"mixbench/common/errorx"
+	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
@@ -17,20 +19,25 @@ type VerifyPasswordLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewVerifyPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VerifyPasswordLogic {
+func NewVerifyPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *VerifyPasswordLogic {
 	return &VerifyPasswordLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
 func (l *VerifyPasswordLogic) VerifyPassword(req *types.VerifyPasswordReq) (any, error) {
-	uid := ctxdata.GetUidFromCtx(l.ctx)
+	id, err := jwtx.GetIdByRequest(l.r, "")
+	if err != nil {
+		return nil, errorx.InternalError(err)
+	}
 	resp, err := l.svcCtx.AdminRpc.VerifyPassword(l.ctx, &admin_pb.VerifyPasswordReq{
-		AdminerId: uid,
+		AdminerId: id,
 		Password:  strings.TrimSpace(req.Password),
 	})
 	if err != nil {

@@ -2,8 +2,10 @@ package adminer
 
 import (
 	"context"
+	"net/http"
 
-	"mixbench/common/ctxdata"
+	"mixbench/common/errorx"
+	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/rpc/admin_pb"
@@ -15,18 +17,23 @@ type CurrentInfoLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewCurrentInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CurrentInfoLogic {
+func NewCurrentInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *CurrentInfoLogic {
 	return &CurrentInfoLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
 func (l *CurrentInfoLogic) CurrentInfo() (any, error) {
-	id := ctxdata.GetUidFromCtx(l.ctx)
+	id, err := jwtx.GetIdByRequest(l.r, "")
+	if err != nil {
+		return nil, errorx.InternalError(err)
+	}
 	resp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{
 		Id: id,
 	})

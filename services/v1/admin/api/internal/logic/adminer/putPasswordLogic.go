@@ -3,9 +3,10 @@ package adminer
 import (
 	"context"
 	"errors"
+	"net/http"
 
-	"mixbench/common/ctxdata"
 	"mixbench/common/errorx"
+	"mixbench/common/jwtx"
 	"mixbench/common/respx"
 	"mixbench/services/v1/admin/api/internal/svc"
 	"mixbench/services/v1/admin/api/internal/types"
@@ -19,13 +20,15 @@ type PutPasswordLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewPutPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutPasswordLogic {
+func NewPutPasswordLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *PutPasswordLogic {
 	return &PutPasswordLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
@@ -41,7 +44,10 @@ func (l *PutPasswordLogic) PutPassword(req *types.PutPasswordReq) (any, error) {
 	if !resp1.Success {
 		return nil, errorx.ExternalError(nil, errors.New("验证码错误"))
 	}
-	id := ctxdata.GetUidFromCtx(l.ctx)
+	id, err := jwtx.GetIdByRequest(l.r, "")
+	if err != nil {
+		return nil, errorx.InternalError(err)
+	}
 	_, err = l.svcCtx.AdminRpc.PutPassword(l.ctx, &admin_pb.PutPasswordReq{
 		AdminerId:   id,
 		OldPassword: req.OldPassword,

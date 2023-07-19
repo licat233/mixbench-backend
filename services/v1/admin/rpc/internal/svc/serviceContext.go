@@ -18,14 +18,13 @@ import (
 )
 
 type ServiceContext struct {
-	Config            config.Config
-	RedisCli          *redis.Redis
-	AdminerModel      model.AdminerModel
-	JwtBlacklistModel model.JwtBlacklistModel
-	ProjectModel      model.ProjectModel
-	CampaignModel     model.CampaignModel
-	WebModel          model.WebModel
-	CompanyModel      model.CompanyModel
+	Config        config.Config
+	RedisCli      *redis.Redis
+	AdminerModel  model.AdminerModel
+	ProjectModel  model.ProjectModel
+	CampaignModel model.CampaignModel
+	WebModel      model.WebModel
+	CompanyModel  model.CompanyModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -39,11 +38,10 @@ func NewServiceContext(c config.Config) *ServiceContext {
 			r.Pass = c.Redis.Pass
 			r.Type = c.Redis.Type
 		}),
-		AdminerModel:      model.NewAdminerModel(sqlConn, c.CacheRedis),
-		JwtBlacklistModel: model.NewJwtBlacklistModel(sqlConn, c.CacheRedis),
-		ProjectModel:      model.NewProjectModel(sqlConn, c.CacheRedis),
-		CampaignModel:     model.NewCampaignModel(sqlConn, c.CacheRedis),
-		WebModel:          model.NewWebModel(sqlConn, c.CacheRedis),
-		CompanyModel:      model.NewCompanyModel(sqlConn, c.CacheRedis),
+		AdminerModel:  model.NewAdminerModel(sqlConn, c.CacheRedis),
+		ProjectModel:  model.NewProjectModel(sqlConn, c.CacheRedis),
+		CampaignModel: model.NewCampaignModel(sqlConn, c.CacheRedis),
+		WebModel:      model.NewWebModel(sqlConn, c.CacheRedis),
+		CompanyModel:  model.NewCompanyModel(sqlConn, c.CacheRedis),
 	}
 }

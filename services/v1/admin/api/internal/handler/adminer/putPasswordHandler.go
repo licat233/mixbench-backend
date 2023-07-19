@@ -18,7 +18,7 @@ func PutPasswordHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := adminer.NewPutPasswordLogic(r.Context(), svcCtx)
+		l := adminer.NewPutPasswordLogic(r.Context(), svcCtx, r)
 		resp, err := l.PutPassword(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)

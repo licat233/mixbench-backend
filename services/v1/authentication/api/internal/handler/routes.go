@@ -5,8 +5,6 @@ import (
 	"net/http"
 
 	captcha "mixbench/services/v1/authentication/api/internal/handler/captcha"
-	ipBlacklist "mixbench/services/v1/authentication/api/internal/handler/ipBlacklist"
-	tokenBlacklist "mixbench/services/v1/authentication/api/internal/handler/tokenBlacklist"
 	"mixbench/services/v1/authentication/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -64,85 +62,5 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/v1/api/authentication/captcha"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: ipBlacklist.AddIpBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: ipBlacklist.PutIpBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: ipBlacklist.GetIpBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: ipBlacklist.DelIpBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: ipBlacklist.GetIpBlacklistListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enums",
-					Handler: ipBlacklist.GetIpBlacklistEnumsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/v1/api/authentication/ipBlacklist"),
-	)
-
-	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.AuthMiddleware, serverCtx.RbacMiddleware},
-			[]rest.Route{
-				{
-					Method:  http.MethodPost,
-					Path:    "/",
-					Handler: tokenBlacklist.AddTokenBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/",
-					Handler: tokenBlacklist.PutTokenBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/",
-					Handler: tokenBlacklist.GetTokenBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodDelete,
-					Path:    "/",
-					Handler: tokenBlacklist.DelTokenBlacklistHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/list",
-					Handler: tokenBlacklist.GetTokenBlacklistListHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/enums",
-					Handler: tokenBlacklist.GetTokenBlacklistEnumsHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
-		rest.WithPrefix("/v1/api/authentication/tokenBlacklist"),
 	)
 }
