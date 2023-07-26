@@ -44,28 +44,19 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		rest.WithMiddlewares(
-			[]rest.Middleware{serverCtx.VisitorAuth},
-			[]rest.Route{
-				{
-					Method:  http.MethodGet,
-					Path:    "/visitor",
-					Handler: VisitorServerHandler(serverCtx),
-				},
-			}...,
-		),
-		rest.WithPrefix("/v1/api/chat/public/ws"),
-	)
-
-	server.AddRoutes(
 		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/visitor",
+				Handler: VisitorServerHandler(serverCtx),
+			},
 			{
 				Method:  http.MethodGet,
 				Path:    "/kefu",
 				Handler: KefuServerHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/v1/api/chat/ws"),
+		rest.WithPrefix("/v1/api/chat/public/ws"),
 	)
 
 	server.AddRoutes(
@@ -84,6 +75,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/transferVisitor",
 				Handler: TransferVisitorHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/visitorLastMessage",
+				Handler: VisitorLastMessageHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/visitorMessages",
+				Handler: GetVisitorMessagesHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/putVisitorComment",
+				Handler: PutVisitorCommentHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/api/chat"),

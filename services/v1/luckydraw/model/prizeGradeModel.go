@@ -30,6 +30,7 @@ func NewPrizeGradeModel(conn sqlx.SqlConn, c cache.CacheConf) PrizeGradeModel {
 	prizeGradeRowsExpectAutoSet = strings.Join(stringx.Remove(prizeGradeFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段
 	prizeGradeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeGradeFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	cachePrizeGradeIdPrefix = "cache:luckydraw:prizeGrade:id:" // modifying cache id prefix by genzero
 	return &customPrizeGradeModel{
 		defaultPrizeGradeModel: newPrizeGradeModel(conn, c),
 	}

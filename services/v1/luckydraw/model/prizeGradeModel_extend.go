@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -169,8 +171,13 @@ func (m *defaultPrizeGradeModel) FindsByIds(ctx context.Context, ids []int64) ([
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -179,8 +186,9 @@ func (m *defaultPrizeGradeModel) FindsByUuids(ctx context.Context, uuids []strin
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -189,8 +197,9 @@ func (m *defaultPrizeGradeModel) FindsByNames(ctx context.Context, names []strin
 	if len(names) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(names, ",")
 	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -199,8 +208,13 @@ func (m *defaultPrizeGradeModel) FindsByIsWins(ctx context.Context, isWins []int
 	if len(isWins) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range isWins {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `is_win` in (?) and `is_deleted` = '0' ", prizeGradeRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isWins)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

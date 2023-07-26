@@ -126,6 +126,28 @@ export interface ConnWebsocketReqParams {
 	token: string
 }
 
+export interface VisitorLastMessageReq {
+	visitorId: number
+}
+
+export interface GetVisitorMessagesReq {
+	visitorId: number
+}
+
+export interface PutVisitorCommentReq {
+	visitorId: number
+	comment: string
+}
+
+export interface VisitorListItem {
+	lastMessage?: Message
+	visitor: Visitor
+}
+
+export interface VisitorList {
+	data: Array<VisitorListItem>
+}
+
 export interface Message {
 	id: number // 表主键
 	uuid: string // UUID
@@ -177,6 +199,8 @@ export interface DelMessageReq {
 }
 
 export interface GetMessageReq {
+}
+export interface GetMessageReqParams {
 	id: number // 消息 ID
 }
 
@@ -234,6 +258,8 @@ export interface DelMessageConfigReq {
 }
 
 export interface GetMessageConfigReq {
+}
+export interface GetMessageConfigReqParams {
 	id: number // 消息配置 ID
 }
 
@@ -259,6 +285,7 @@ export interface Visitor {
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 游客名
+	comment: string // 备注
 	ip: string // IP
 	kefuId: number // 客服id，0表示没有客服接待
 	projectId: number // 项目id
@@ -270,10 +297,12 @@ export interface Visitor {
 	os: string // 系统: andriod,ios,macOS,windows
 	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
 	language: string // 语言
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface AddVisitorReq {
 	name: string // 游客名
+	comment: string // 备注
 	ip: string // IP
 	kefuId: number // 客服id，0表示没有客服接待
 	projectId: number // 项目id
@@ -285,12 +314,14 @@ export interface AddVisitorReq {
 	os: string // 系统: andriod,ios,macOS,windows
 	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
 	language: string // 语言
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface PutVisitorReq {
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 游客名
+	comment: string // 备注
 	ip: string // IP
 	kefuId: number // 客服id，0表示没有客服接待
 	projectId: number // 项目id
@@ -302,6 +333,7 @@ export interface PutVisitorReq {
 	os: string // 系统: andriod,ios,macOS,windows
 	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
 	language: string // 语言
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface DelVisitorReq {
@@ -309,6 +341,8 @@ export interface DelVisitorReq {
 }
 
 export interface GetVisitorReq {
+}
+export interface GetVisitorReqParams {
 	id: number // 游客 ID
 }
 
@@ -322,6 +356,7 @@ export interface GetVisitorListReqParams {
 	id: number // 表主键
 	uuid: string // UUID
 	name: string // 游客名
+	comment: string // 备注
 	ip: string // IP
 	kefuId: number // 客服id，0表示没有客服接待
 	projectId: number // 项目id
@@ -333,6 +368,7 @@ export interface GetVisitorListReqParams {
 	os: string // 系统: andriod,ios,macOS,windows
 	browser: string // 浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
 	language: string // 语言
+	lastLoginAt: number // 最后一次登录时间
 }
 
 export interface GetVisitorEnumsReq {

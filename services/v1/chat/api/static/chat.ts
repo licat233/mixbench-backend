@@ -37,7 +37,7 @@ export function visitorServer(params: components.ConnWebsocketReqParams) {
  * @param params
  */
 export function kefuServer(params: components.ConnWebsocketReqParams) {
-	return webapi.get<null>(`/v1/api/chat/ws/kefu`, params)
+	return webapi.get<null>(`/v1/api/chat/public/ws/kefu`, params)
 }
 
 /**
@@ -65,6 +65,30 @@ export function transferVisitor(req: components.TransferVisitorReq) {
 }
 
 /**
+ * @description "获取某个游客的最后一条消息"
+ * @param req
+ */
+export function visitorLastMessage(req: components.VisitorLastMessageReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/visitorLastMessage`, req)
+}
+
+/**
+ * @description "获取某个游客的全部消息"
+ * @param req
+ */
+export function getVisitorMessages(req: components.GetVisitorMessagesReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/visitorMessages`, req)
+}
+
+/**
+ * @description "更改某个游客的备注"
+ * @param req
+ */
+export function putVisitorComment(req: components.PutVisitorCommentReq) {
+	return webapi.post<components.BaseResp>(`/v1/api/chat/putVisitorComment`, req)
+}
+
+/**
  * @description "添加消息 基础API"
  * @param req
  */
@@ -82,10 +106,10 @@ export function putMessage(req: components.PutMessageReq) {
 
 /**
  * @description "获取消息 基础API"
- * @param req
+ * @param params
  */
-export function getMessage(req: components.GetMessageReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/message`, req)
+export function getMessage(params: components.GetMessageReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/message`, params)
 }
 
 /**
@@ -130,10 +154,10 @@ export function putMessageConfig(req: components.PutMessageConfigReq) {
 
 /**
  * @description "获取消息配置 基础API"
- * @param req
+ * @param params
  */
-export function getMessageConfig(req: components.GetMessageConfigReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/messageConfig`, req)
+export function getMessageConfig(params: components.GetMessageConfigReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/messageConfig`, params)
 }
 
 /**
@@ -178,10 +202,10 @@ export function putVisitor(req: components.PutVisitorReq) {
 
 /**
  * @description "获取游客 基础API"
- * @param req
+ * @param params
  */
-export function getVisitor(req: components.GetVisitorReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor`, req)
+export function getVisitor(params: components.GetVisitorReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/chat/visitor`, params)
 }
 
 /**

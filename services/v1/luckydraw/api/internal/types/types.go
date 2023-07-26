@@ -154,7 +154,7 @@ type DelActivityReq struct {
 }
 
 type GetActivityReq struct {
-	Id int64 `json:"id"` //活动 ID
+	Id int64 `form:"id"` //活动 ID
 }
 
 type GetActivityListReq struct {
@@ -237,7 +237,7 @@ type DelLuckyReq struct {
 }
 
 type GetLuckyReq struct {
-	Id int64 `json:"id"` //中奖名单 ID
+	Id int64 `form:"id"` //中奖名单 ID
 }
 
 type GetLuckyListReq struct {
@@ -327,7 +327,7 @@ type DelPrizeReq struct {
 }
 
 type GetPrizeReq struct {
-	Id int64 `json:"id"` //奖品名单 ID
+	Id int64 `form:"id"` //奖品名单 ID
 }
 
 type GetPrizeListReq struct {
@@ -382,7 +382,7 @@ type DelPrizeGradeReq struct {
 }
 
 type GetPrizeGradeReq struct {
-	Id int64 `json:"id"` //奖品级别 ID
+	Id int64 `form:"id"` //奖品级别 ID
 }
 
 type GetPrizeGradeListReq struct {
@@ -439,7 +439,7 @@ type DelPrizePoolReq struct {
 }
 
 type GetPrizePoolReq struct {
-	Id int64 `json:"id"` //活动奖品池，某活动中的奖品信息 ID
+	Id int64 `form:"id"` //活动奖品池，某活动中的奖品信息 ID
 }
 
 type GetPrizePoolListReq struct {
@@ -491,7 +491,7 @@ type DelProjectReq struct {
 }
 
 type GetProjectReq struct {
-	Id int64 `json:"id"` //项目 ID
+	Id int64 `form:"id"` //项目 ID
 }
 
 type GetProjectListReq struct {
@@ -561,7 +561,7 @@ type DelUserReq struct {
 }
 
 type GetUserReq struct {
-	Id int64 `json:"id"` //用户名单 ID
+	Id int64 `form:"id"` //用户名单 ID
 }
 
 type GetUserListReq struct {
@@ -627,7 +627,7 @@ type DelUserPoolReq struct {
 }
 
 type GetUserPoolReq struct {
-	Id int64 `json:"id"` //活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 ID
+	Id int64 `form:"id"` //活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 ID
 }
 
 type GetUserPoolListReq struct {

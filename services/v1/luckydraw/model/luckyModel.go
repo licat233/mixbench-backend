@@ -52,6 +52,7 @@ func NewLuckyModel(conn sqlx.SqlConn, c cache.CacheConf) LuckyModel {
 	luckyRowsExpectAutoSet = strings.Join(stringx.Remove(luckyFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段，只有创建的时候才能设置ip
 	luckyRowsWithPlaceHolder = strings.Join(stringx.Remove(luckyFieldNames, append(BaseUpdateOmitField, "ip")...), "=?,") + "=?"
+	cacheLuckyIdPrefix = "cache:luckydraw:lucky:id:" // modifying cache id prefix by genzero
 	return &customLuckyModel{
 		defaultLuckyModel: newLuckyModel(conn, c),
 	}

@@ -159,6 +159,8 @@ export interface DelActivityReq {
 }
 
 export interface GetActivityReq {
+}
+export interface GetActivityReqParams {
 	id: number // 活动 ID
 }
 
@@ -250,6 +252,8 @@ export interface DelLuckyReq {
 }
 
 export interface GetLuckyReq {
+}
+export interface GetLuckyReqParams {
 	id: number // 中奖名单 ID
 }
 
@@ -343,6 +347,8 @@ export interface DelPrizeReq {
 }
 
 export interface GetPrizeReq {
+}
+export interface GetPrizeReqParams {
 	id: number // 奖品名单 ID
 }
 
@@ -400,6 +406,8 @@ export interface DelPrizeGradeReq {
 }
 
 export interface GetPrizeGradeReq {
+}
+export interface GetPrizeGradeReqParams {
 	id: number // 奖品级别 ID
 }
 
@@ -459,6 +467,8 @@ export interface DelPrizePoolReq {
 }
 
 export interface GetPrizePoolReq {
+}
+export interface GetPrizePoolReqParams {
 	id: number // 活动奖品池，某活动中的奖品信息 ID
 }
 
@@ -513,6 +523,8 @@ export interface DelProjectReq {
 }
 
 export interface GetProjectReq {
+}
+export interface GetProjectReqParams {
 	id: number // 项目 ID
 }
 
@@ -587,6 +599,8 @@ export interface DelUserReq {
 }
 
 export interface GetUserReq {
+}
+export interface GetUserReqParams {
 	id: number // 用户名单 ID
 }
 
@@ -657,6 +671,8 @@ export interface DelUserPoolReq {
 }
 
 export interface GetUserPoolReq {
+}
+export interface GetUserPoolReqParams {
 	id: number // 活动用户池，可以参与该活动抽奖的用户，及其在该活动中的积分管理 ID
 }
 

@@ -2,6 +2,7 @@ package visitor
 
 import (
 	"context"
+	"time"
 
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
@@ -28,20 +29,22 @@ func NewPutVisitorLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutVis
 
 func (l *PutVisitorLogic) PutVisitor(req *types.PutVisitorReq) (any, error) {
 	in := &model.Visitor{
-		Id:        req.Id,
-		Uuid:      req.Uuid,
-		Name:      req.Name,
-		Ip:        req.Ip,
-		KefuId:    req.KefuId,
-		ProjectId: req.ProjectId,
-		Status:    req.Status,
-		Referer:   req.Referer,
-		Region:    req.Region,
-		City:      req.City,
-		Platform:  req.Platform,
-		Os:        req.Os,
-		Browser:   req.Browser,
-		Language:  req.Language,
+		Id:          req.Id,
+		Uuid:        req.Uuid,
+		Name:        req.Name,
+		Comment:     req.Comment,
+		Ip:          req.Ip,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		Status:      req.Status,
+		Referer:     req.Referer,
+		Region:      req.Region,
+		City:        req.City,
+		Platform:    req.Platform,
+		Os:          req.Os,
+		Browser:     req.Browser,
+		Language:    req.Language,
+		LastLoginAt: time.Unix(req.LastLoginAt, 0).Local(),
 	}
 	if err := l.svcCtx.VisitorModel.Update(l.ctx, in); err != nil {
 		l.Logger.Error("failed to update visitor, error: ", err)

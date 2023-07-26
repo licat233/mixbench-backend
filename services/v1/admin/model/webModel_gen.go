@@ -19,8 +19,8 @@ import (
 var (
 	webFieldNames          = builder.RawFieldNames(&Web{})
 	webRows                = strings.Join(webFieldNames, ",")
-	webRowsExpectAutoSet   = strings.Join(stringx.Remove(webFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	webRowsWithPlaceHolder = strings.Join(stringx.Remove(webFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	webRowsExpectAutoSet   = strings.Join(stringx.Remove(webFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	webRowsWithPlaceHolder = strings.Join(stringx.Remove(webFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheWebIdPrefix  = "cache:web:id:"
 	cacheWebUrlPrefix = "cache:web:url:"
@@ -123,8 +123,8 @@ func (m *defaultWebModel) Insert(ctx context.Context, data *Web) (sql.Result, er
 	webIdKey := fmt.Sprintf("%s%v", cacheWebIdPrefix, data.Id)
 	webUrlKey := fmt.Sprintf("%s%v", cacheWebUrlPrefix, data.Url)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, webRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.ProjectId, data.Url, data.Description, data.Code, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, webRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.ProjectId, data.Url, data.Description, data.Code)
 	}, webIdKey, webUrlKey)
 	return ret, err
 }
@@ -139,7 +139,7 @@ func (m *defaultWebModel) Update(ctx context.Context, newData *Web) error {
 	webUrlKey := fmt.Sprintf("%s%v", cacheWebUrlPrefix, data.Url)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, webRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.Uuid, newData.ProjectId, newData.Url, newData.Description, newData.Code, newData.CreateAt, newData.IsDeleted, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.Uuid, newData.ProjectId, newData.Url, newData.Description, newData.Code, newData.Id)
 	}, webIdKey, webUrlKey)
 	return err
 }

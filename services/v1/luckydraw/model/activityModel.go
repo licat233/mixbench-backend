@@ -32,6 +32,7 @@ func NewActivityModel(conn sqlx.SqlConn, c cache.CacheConf) ActivityModel {
 	activityRowsExpectAutoSet = strings.Join(stringx.Remove(activityFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段
 	activityRowsWithPlaceHolder = strings.Join(stringx.Remove(activityFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	cacheActivityIdPrefix = "cache:luckydraw:activity:id:" // modifying cache id prefix by genzero
 	return &customActivityModel{
 		defaultActivityModel: newActivityModel(conn, c),
 	}

@@ -22,6 +22,7 @@ type (
 
 // NewWebModel returns a model for the database table.
 func NewWebModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) WebModel {
+	cacheWebIdPrefix = "cache:admin:web:id:" // modifying cache id prefix by genzero
 	return &customWebModel{
 		defaultWebModel: newWebModel(conn, c, opts...),
 	}

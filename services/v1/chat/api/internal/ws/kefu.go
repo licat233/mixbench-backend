@@ -44,9 +44,36 @@ func NewKefuClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.Respo
 	return c, nil
 }
 
+func (c *KefuClient) Init() error {
+	var err error
+	// 此时，可能存在需要接待的游客
+
+	//查找该客服的在线游客
+	// ids := OnlineVisitor.FindsByVal(c.Kefu.Id)
+	// count := len(ids)
+
+	//注册online
+	OnlineKefu.Set(c.Kefu.Id, 0)
+
+	// //发送公告信息
+	// if err = c.sendPresetMessage(PublicMessageKey, c.Kefu.Id, -1); err != nil {
+	// 	return err
+	// }
+	//给该客服分配等待接待的游客
+	if err = c.assignVisitor(); err != nil {
+		return err
+	}
+	//通知游客，客服上线了
+	if err = c.onlineNotification(); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *KefuClient) Run() {
 	defer c.Close()
-	if c.Init() != nil {
+	if err := c.Init(); err != nil {
+		c.Logger.Error(err)
 		return
 	}
 	c.wg.Add(2)
@@ -64,62 +91,45 @@ func (c *KefuClient) Run() {
 
 func (c *KefuClient) done() error {
 	//客服离线后的操作
+	//通知游客，自己已下线
+	if err := c.offlineNotification(); err != nil {
+		return err
+	}
 	//此时，如果其对接的游客还在线，应该将他的游客转接给其它客服，而不是放任不管
 	//逻辑：转移当前客服的在线游客，分配给其它客服
 	//如果没有其它在线客服可分配，则无法分配，无需分配
 	return nil
 }
 
-func (c *KefuClient) Init() error {
-	// 此时，可能存在需要接待的游客
-
-	//查找该客服的在线游客
-	ids := OnlineVisitor.FindsByVal(c.Kefu.Id)
-	count := len(ids)
-
-	//注册online
-	OnlineKefu.Set(c.Kefu.Id, int64(count))
-
-	//发送公告信息
-	if err := c.sendPresetMessage(PublicMessageKey, c.Kefu.Id, -1); err != nil {
-		return err
-	}
-	//给该客服分配等待接待的游客
-	if err := c.assignVisitor(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (c *KefuClient) assignVisitor() error {
 	//需要分配客服的在线的游客
 	ids := OnlineVisitor.FindsByVal(0)
+	if len(ids) == 0 {
+		//没有需要分配的游客
+		return nil
+	}
 	visitors, err := c.svcCtx.VisitorModel.FindsByIds(c.ctx, ids)
 	if err != nil {
 		c.Logger.Error(err)
 		return err
 	}
 	for _, visitor := range visitors {
+		//给他们指定客服为当前客服
+		OnlineVisitor.Set(visitor.Id, c.Kefu.Id)
+		visitor.KefuId = c.Kefu.Id
 		//先更新数据库，确保无误后再更新其它
 		if err := c.svcCtx.VisitorModel.Update(c.ctx, visitor); err != nil {
 			return err
 		}
-		//给他们指定客服为当前客服
-		OnlineVisitor.Set(visitor.Id, c.Kefu.Id)
-		visitor.KefuId = c.Kefu.Id
 		//还需要更新visitorClient中的visitor信息，在visitorClient中实现
 	}
-	//更新其游客数量
-	count := OnlineKefu.Get(c.Kefu.Id)
-	OnlineKefu.Set(c.Kefu.Id, count+int64(len(ids)))
 	return nil
 }
 
 // wsPayloadHandler 用于处理ws消息
 // 当返回nil,nil时，表示丢弃
+// 这里的payload为完整的json序列
 func (c *KefuClient) wsPayloadHandler(payload []byte) (*model.Message, error) {
-	//这里的payload为完整的json序列
 	if !validatePayload(payload) {
 		//丢弃
 		return nil, nil
@@ -137,15 +147,33 @@ func (c *KefuClient) wsPayloadHandler(payload []byte) (*model.Message, error) {
 		//丢弃
 		return nil, nil
 	}
+	//检查该游客是否存在
+	_, err := c.svcCtx.VisitorModel.FindById(c.ctx, msg.VisitorId)
+	if err == model.ErrNotFound {
+		//如果不存在，则抛弃该消息
+		return nil, nil
+	} else if err != nil {
+		c.Logger.Error(err)
+		return nil, err
+	}
 	message := c.newMessage(msg.Content, msg.VisitorId)
 	return message, nil
 }
 
 func (c *KefuClient) recevierMessageHandler(message *model.Message) error {
+	//如果是游客的上线通知
+	if message.MsgType == OnlineMsgType {
+		//此时可能已经有一段时间了，判断该游客是否还在线
+		if !OnlineVisitor.Exist(message.VisitorId) {
+			//不在线，则忽略该消息
+			return errors.New("the visitor has been offline, this message should be ignored")
+		}
+	}
 	//客服接受到了游客发送过来的消息
 	if message.KefuId < 1 && message.MsgType == VisitorMsgType && message.VisitorId > 0 {
 		//会有多个客服接收到该信息，谁先拿到算谁的，所以要确认是否已被其他客服拿到了
 		kefuId := OnlineVisitor.Get(message.VisitorId)
+		//如果没有被其它客服接待
 		if kefuId < 1 {
 			OnlineVisitor.Set(message.VisitorId, c.Kefu.Id)
 			//检查更新数据库中的数据
@@ -156,15 +184,24 @@ func (c *KefuClient) recevierMessageHandler(message *model.Message) error {
 				c.Logger.Error(err)
 				return err
 			}
+			if visitor.Status == 2 {
+				return errors.New("the current visitor has been blacklisted")
+			}
 			if visitor.KefuId != c.Kefu.Id {
 				//更新为当前客服的id
-				message.KefuId = c.Kefu.Id
+				visitor.KefuId = c.Kefu.Id
 				err = c.svcCtx.VisitorModel.Update(c.ctx, visitor)
 				if err != nil {
+					c.Logger.Error(err)
 					return err
 				}
 			}
+		} else if kefuId != c.Kefu.Id {
+			//如果已经被其它客服接待了，则抛弃当前消息
+			return errors.New("the current message has been received and processed by other kefu")
 		}
+		//将该消息的kefu_id改为当前客服id
+		message.KefuId = c.Kefu.Id
 	}
 	return nil
 }
@@ -196,6 +233,30 @@ func (c *KefuClient) SendHistoryMessages(visitorId int64) error {
 		return err
 	}
 	return c.writeToWebsocket(messages...)
+}
+
+// 客服上线后，通知游客
+func (c *KefuClient) onlineNotification() error {
+	visitorIds := OnlineVisitor.FindsByVal(c.Kefu.Id)
+	for _, visitorId := range visitorIds {
+		msg := c.NewOnlineMessage("已上線", c.Kefu.Id, visitorId)
+		if err := c.sendMessageToVisitor(msg); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// 客服下线后，通知游客
+func (c *KefuClient) offlineNotification() error {
+	visitorIds := OnlineVisitor.FindsByVal(c.Kefu.Id)
+	for _, visitorId := range visitorIds {
+		msg := c.NewOfflineMessage("已離線", c.Kefu.Id, visitorId)
+		if err := c.sendMessageToVisitor(msg); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // func (c *KefuClient) update() error {

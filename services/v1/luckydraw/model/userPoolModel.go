@@ -33,6 +33,7 @@ func NewUserPoolModel(conn sqlx.SqlConn, c cache.CacheConf) UserPoolModel {
 	userPoolRowsExpectAutoSet = strings.Join(stringx.Remove(userPoolFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段
 	userPoolRowsWithPlaceHolder = strings.Join(stringx.Remove(userPoolFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	cacheUserPoolIdPrefix = "cache:luckydraw:userPool:id:" // modifying cache id prefix by genzero
 	return &customUserPoolModel{
 		defaultUserPoolModel: newUserPoolModel(conn, c),
 	}

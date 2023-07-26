@@ -44,20 +44,23 @@ func (l *KefuServerLogic) KefuServer(req *types.ConnWebsocketReq) (_ error) {
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return nil
 	}
-	claims, ok := jwtx.ValidateToken(string(token), l.svcCtx.Config.VisitorAuthSecret)
+	claims, ok := jwtx.ValidateToken(token, "")
 	if !ok {
 		//鉴权失败
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
 	id, ok := jwtx.GetId(claims)
 	if !ok {
 		//鉴权失败
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
+	if id < 1 {
+		//不存在
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 	//查找客服是否存在
 	adminerResp, err := l.svcCtx.AdminRpc.GetAdminer(l.ctx, &admin_pb.GetAdminerReq{Id: id})
 	if err != nil {
@@ -70,8 +73,17 @@ func (l *KefuServerLogic) KefuServer(req *types.ConnWebsocketReq) (_ error) {
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
+	if adminerResp.Adminer.Status != 1 {
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 	kefu := adminerResp.Adminer
+
+	if adminerResp.Adminer.ProjectId < 1 {
+		//不存在
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 
 	//查找项目是否存在
 	projectResp, err := l.svcCtx.AdminRpc.GetProject(l.ctx, &admin_pb.GetProjectReq{Id: kefu.ProjectId})
@@ -82,6 +94,11 @@ func (l *KefuServerLogic) KefuServer(req *types.ConnWebsocketReq) (_ error) {
 	}
 	if projectResp.Project == nil {
 		//不存在
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	//检查状态
+	if projectResp.Project.Status != 1 {
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}

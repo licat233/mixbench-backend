@@ -2,6 +2,7 @@ package visitor
 
 import (
 	"context"
+	"time"
 
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
@@ -29,20 +30,22 @@ func NewGetVisitorListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 
 func (l *GetVisitorListLogic) GetVisitorList(req *types.GetVisitorListReq) (any, error) {
 	in := &model.Visitor{
-		Id:        req.Id,
-		Uuid:      req.Uuid,
-		Name:      req.Name,
-		Ip:        req.Ip,
-		KefuId:    req.KefuId,
-		ProjectId: req.ProjectId,
-		Status:    req.Status,
-		Referer:   req.Referer,
-		Region:    req.Region,
-		City:      req.City,
-		Platform:  req.Platform,
-		Os:        req.Os,
-		Browser:   req.Browser,
-		Language:  req.Language,
+		Id:          req.Id,
+		Uuid:        req.Uuid,
+		Name:        req.Name,
+		Comment:     req.Comment,
+		Ip:          req.Ip,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		Status:      req.Status,
+		Referer:     req.Referer,
+		Region:      req.Region,
+		City:        req.City,
+		Platform:    req.Platform,
+		Os:          req.Os,
+		Browser:     req.Browser,
+		Language:    req.Language,
+		LastLoginAt: time.Unix(req.LastLoginAt, 0).Local(),
 	}
 	mdList, total, err := l.svcCtx.VisitorModel.FindList(l.ctx, req.PageSize, req.Page, req.Keyword, in)
 	if err != nil {

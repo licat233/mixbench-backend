@@ -2,6 +2,7 @@ package mysqlx
 
 import (
 	"bufio"
+	"context"
 	"database/sql"
 	"fmt"
 	"mixbench/common/utils"
@@ -10,20 +11,23 @@ import (
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
+	goredis "github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
 type Mysqlx struct {
-	DB *sql.DB
+	DB     *sql.DB
+	rdb    *goredis.Client
+	dbName string
 }
 
 func NewMysql(dsn string, opts ...sqlx.SqlOption) (sqlx.SqlConn, error) {
 	dbName := utils.ExtractDatabaseNameFromDSN(dsn)
-	mysqlx, err := New()
+	mysqlx, err := New(dbName)
 	if err != nil {
 		return nil, err
 	}
-	if err := mysqlx.InitDatabase(dbName); err != nil {
+	if err := mysqlx.InitDatabase(); err != nil {
 		return nil, err
 	}
 	defer mysqlx.Close()
@@ -35,15 +39,22 @@ func NewMysql(dsn string, opts ...sqlx.SqlOption) (sqlx.SqlConn, error) {
 	return conn, db.Ping()
 }
 
-func New() (*Mysqlx, error) {
+func New(dbName string) (*Mysqlx, error) {
 	//连接到默认数据库
 	dsn := utils.NewStringByEnv("root:${MYSQL_ROOT_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/?${MYSQL_CONN_OPTIONS}")
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err
 	}
+	rdb := goredis.NewClient(&goredis.Options{
+		Addr:     fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_HOST")),
+		Password: os.Getenv("REDIS_PASSWORD"),
+		DB:       0,
+	})
 	return &Mysqlx{
-		DB: db,
+		DB:     db,
+		rdb:    rdb,
+		dbName: dbName,
 	}, nil
 }
 
@@ -92,7 +103,7 @@ func (m *Mysqlx) ExecSqlFile(sqlFile string, dsn string) error {
 	return nil
 }
 
-func (m *Mysqlx) InitDatabase(databaseName string) error {
+func (m *Mysqlx) InitDatabase() error {
 	lockName := "initMysqlDB.lock"
 	lockfile := path.Join(utils.ProjectRoot, lockName)
 	//判断当前目录下是否存在 mysql.lock文件
@@ -104,7 +115,7 @@ func (m *Mysqlx) InitDatabase(databaseName string) error {
 		}
 		fileContent := strings.TrimSpace(string(content))
 		// 判断是否存在 databaseName
-		if strings.Contains(fileContent, databaseName) {
+		if strings.Contains(fileContent, m.dbName) {
 			//已存在数据库 databaseName, 忽略，不操作
 			return nil
 		}
@@ -116,19 +127,19 @@ func (m *Mysqlx) InitDatabase(databaseName string) error {
 		}
 	}
 
-	if err := m.ExecServiceSqlFile(databaseName); err != nil {
+	if err := m.ExecServiceSqlFile(); err != nil {
 		return err
 	}
 
 	//追加写入 dadabaseName
-	if err := utils.InsertFileContentAfter(lockfile, databaseName); err != nil {
+	if err := utils.InsertFileContentAfter(lockfile, m.dbName); err != nil {
 		return fmt.Errorf("写入%s文件内容失败: %s", lockName, err)
 	}
 
 	return nil
 }
 
-func (m *Mysqlx) ExecServiceSqlFile(databaseName string) error {
+func (m *Mysqlx) ExecServiceSqlFile() error {
 	// 判断数据库是否存在
 	// rows, err := m.DB.Query(fmt.Sprintf("SHOW DATABASES LIKE '%s'", databaseName))
 	// if err != nil {
@@ -143,19 +154,19 @@ func (m *Mysqlx) ExecServiceSqlFile(databaseName string) error {
 	// }
 
 	//创建该数据库
-	_, err := m.DB.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", databaseName))
+	_, err := m.DB.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", m.dbName))
 	if err != nil {
-		return fmt.Errorf("failed to create '%s' database: %v", databaseName, err)
+		return fmt.Errorf("failed to create '%s' database: %v", m.dbName, err)
 	}
 
 	//切换到该数据库
-	_, err = m.DB.Exec(fmt.Sprintf("USE %s", databaseName))
+	_, err = m.DB.Exec(fmt.Sprintf("USE %s", m.dbName))
 	if err != nil {
-		return fmt.Errorf("failed switch to '%s' database: %v", databaseName, err)
+		return fmt.Errorf("failed switch to '%s' database: %v", m.dbName, err)
 	}
 
 	//获取sql文件名称，即服务名
-	parts := strings.SplitN(databaseName, "_", 2)
+	parts := strings.SplitN(m.dbName, "_", 2)
 	serviceName := parts[0]
 	if len(parts) > 1 {
 		serviceName = parts[1]
@@ -172,7 +183,7 @@ func (m *Mysqlx) ExecServiceSqlFile(databaseName string) error {
 	defer file.Close()
 
 	//文件存在且可读取，则开始清空数据库
-	if err := m.DropTables(""); err != nil {
+	if err := m.DropTables(); err != nil {
 		return err
 	}
 
@@ -191,18 +202,20 @@ func (m *Mysqlx) ExecServiceSqlFile(databaseName string) error {
 		}
 	}
 
-	fmt.Printf("mysql database '%s' create successfully!\n", databaseName)
+	fmt.Printf("mysql database '%s' create successfully!\n", m.dbName)
 	return nil
 }
 
-func (m *Mysqlx) DropTables(databaseName string) error {
+func (m *Mysqlx) DropTables() error {
 	db := m.DB
-	if databaseName != "" {
+	if m.dbName != "" {
 		// 切换到该数据库
-		_, err := m.DB.Exec(fmt.Sprintf("USE %s", databaseName))
+		_, err := m.DB.Exec(fmt.Sprintf("USE %s", m.dbName))
 		if err != nil {
-			return fmt.Errorf("failed switch to '%s' database: %v", databaseName, err)
+			return fmt.Errorf("failed switch to '%s' database: %v", m.dbName, err)
 		}
+	} else {
+		return nil
 	}
 
 	// 获取所有表
@@ -231,6 +244,12 @@ func (m *Mysqlx) DropTables(databaseName string) error {
 		if err != nil {
 			return err
 		}
+		//清空redis
+		err = m.ClearRedis(table)
+		if err != nil {
+			fmt.Printf("清空%s的redis数据失败\n", m.dbName)
+			return err
+		}
 	}
 
 	// 删除存储过程、触发器、视图等对象
@@ -243,6 +262,26 @@ func (m *Mysqlx) DropTables(databaseName string) error {
 		}
 	}
 
-	fmt.Println(databaseName + "数据库已清空")
+	fmt.Printf("数据库%s已清空\n", m.dbName)
+
+	return nil
+}
+
+func (m *Mysqlx) ClearRedis(tableName string) error {
+	// 获取所有以 "cache:" 开头的键
+	key := fmt.Sprintf("cache:%s:*", utils.ToLowerCamel(tableName))
+	keys, err := m.rdb.Keys(context.Background(), key).Result()
+	if err != nil {
+		fmt.Println("获取键列表时出错:", err)
+		return err
+	}
+	// 删除匹配的键
+	if len(keys) > 0 {
+		_, err = m.rdb.Del(context.Background(), keys...).Result()
+		if err != nil {
+			fmt.Println("删除键时出错:", err)
+			return err
+		}
+	}
 	return nil
 }

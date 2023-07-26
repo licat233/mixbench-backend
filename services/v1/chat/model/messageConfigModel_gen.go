@@ -18,8 +18,8 @@ import (
 var (
 	messageConfigFieldNames          = builder.RawFieldNames(&MessageConfig{})
 	messageConfigRows                = strings.Join(messageConfigFieldNames, ",")
-	messageConfigRowsExpectAutoSet   = strings.Join(stringx.Remove(messageConfigFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	messageConfigRowsWithPlaceHolder = strings.Join(stringx.Remove(messageConfigFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	messageConfigRowsExpectAutoSet   = strings.Join(stringx.Remove(messageConfigFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	messageConfigRowsWithPlaceHolder = strings.Join(stringx.Remove(messageConfigFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheMessageConfigIdPrefix     = "cache:messageConfig:id:"
 	cacheMessageConfigMsgkeyPrefix = "cache:messageConfig:msgkey:"

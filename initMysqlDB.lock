@@ -1,5 +1,5 @@
 # 删除将会重置数据库
-mixbench_admin
 mixbench_authentication
-mixbench_chat
 mixbench_luckydraw
+mixbench_admin
+mixbench_chat

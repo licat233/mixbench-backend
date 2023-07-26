@@ -19,8 +19,8 @@ import (
 var (
 	luckyFieldNames          = builder.RawFieldNames(&Lucky{})
 	luckyRows                = strings.Join(luckyFieldNames, ",")
-	luckyRowsExpectAutoSet   = strings.Join(stringx.Remove(luckyFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	luckyRowsWithPlaceHolder = strings.Join(stringx.Remove(luckyFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	luckyRowsExpectAutoSet   = strings.Join(stringx.Remove(luckyFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	luckyRowsWithPlaceHolder = strings.Join(stringx.Remove(luckyFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheLuckyIdPrefix = "cache:lucky:id:"
 )
@@ -95,8 +95,8 @@ func (m *defaultLuckyModel) FindOne(ctx context.Context, id int64) (*Lucky, erro
 func (m *defaultLuckyModel) Insert(ctx context.Context, data *Lucky) (sql.Result, error) {
 	luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, luckyRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, luckyRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip)
 	}, luckyIdKey)
 	return ret, err
 }
@@ -105,7 +105,7 @@ func (m *defaultLuckyModel) Update(ctx context.Context, data *Lucky) error {
 	luckyIdKey := fmt.Sprintf("%s%v", cacheLuckyIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, luckyRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip, data.CreateAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.UserId, data.PrizePoolId, data.Status, data.LuckDate, data.Ip, data.Id)
 	}, luckyIdKey)
 	return err
 }

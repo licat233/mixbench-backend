@@ -27,6 +27,7 @@ type (
 
 // NewAdminerModel returns a model for the database table.
 func NewAdminerModel(conn sqlx.SqlConn, c cache.CacheConf) AdminerModel {
+	cacheAdminerIdPrefix = "cache:admin:adminer:id:" // modifying cache id prefix by genzero
 	return &customAdminerModel{
 		defaultAdminerModel: newAdminerModel(conn, c),
 	}

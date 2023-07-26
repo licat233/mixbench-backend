@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -269,8 +271,13 @@ func (m *defaultUserModel) FindsByIds(ctx context.Context, ids []int64) ([]*User
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -279,8 +286,9 @@ func (m *defaultUserModel) FindsByUuids(ctx context.Context, uuids []string) ([]
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -289,8 +297,9 @@ func (m *defaultUserModel) FindsByPassports(ctx context.Context, passports []str
 	if len(passports) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(passports, ",")
 	query := fmt.Sprintf("select %s from %s where `passport` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, passports)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -299,8 +308,9 @@ func (m *defaultUserModel) FindsByEmails(ctx context.Context, emails []string) (
 	if len(emails) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(emails, ",")
 	query := fmt.Sprintf("select %s from %s where `email` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, emails)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -309,8 +319,9 @@ func (m *defaultUserModel) FindsByPhones(ctx context.Context, phones []string) (
 	if len(phones) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(phones, ",")
 	query := fmt.Sprintf("select %s from %s where `phone` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, phones)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -319,8 +330,9 @@ func (m *defaultUserModel) FindsByNames(ctx context.Context, names []string) ([]
 	if len(names) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(names, ",")
 	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -329,8 +341,9 @@ func (m *defaultUserModel) FindsByAddresslist(ctx context.Context, addresslist [
 	if len(addresslist) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(addresslist, ",")
 	query := fmt.Sprintf("select %s from %s where `address` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, addresslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -339,8 +352,13 @@ func (m *defaultUserModel) FindsByScores(ctx context.Context, scores []int64) ([
 	if len(scores) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range scores {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `score` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, scores)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -349,8 +367,13 @@ func (m *defaultUserModel) FindsByStatuslist(ctx context.Context, statuslist []i
 	if len(statuslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range statuslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", userRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

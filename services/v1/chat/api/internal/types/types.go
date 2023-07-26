@@ -119,6 +119,28 @@ type ConnWebsocketReq struct {
 	Token string `form:"token,optional"`
 }
 
+type VisitorLastMessageReq struct {
+	VisitorId int64 `json:"visitorId"`
+}
+
+type GetVisitorMessagesReq struct {
+	VisitorId int64 `json:"visitorId"`
+}
+
+type PutVisitorCommentReq struct {
+	VisitorId int64  `json:"visitorId"`
+	Comment   string `json:"comment"`
+}
+
+type VisitorListItem struct {
+	LastMessage *Message `json:"lastMessage,optional"`
+	Visitor     *Visitor `json:"visitor"`
+}
+
+type VisitorList struct {
+	Data []*VisitorListItem `json:"data"`
+}
+
 type Message struct {
 	Id          int64  `json:"id"`          //表主键
 	Uuid        string `json:"uuid"`        //UUID
@@ -170,7 +192,7 @@ type DelMessageReq struct {
 }
 
 type GetMessageReq struct {
-	Id int64 `json:"id"` //消息 ID
+	Id int64 `form:"id"` //消息 ID
 }
 
 type GetMessageListReq struct {
@@ -225,7 +247,7 @@ type DelMessageConfigReq struct {
 }
 
 type GetMessageConfigReq struct {
-	Id int64 `json:"id"` //消息配置 ID
+	Id int64 `form:"id"` //消息配置 ID
 }
 
 type GetMessageConfigListReq struct {
@@ -245,52 +267,58 @@ type GetMessageConfigEnumsReq struct {
 }
 
 type Visitor struct {
-	Id        int64  `json:"id"`        //表主键
-	Uuid      string `json:"uuid"`      //UUID
-	Name      string `json:"name"`      //游客名
-	Ip        string `json:"ip"`        //IP
-	KefuId    int64  `json:"kefuId"`    //客服id，0表示没有客服接待
-	ProjectId int64  `json:"projectId"` //项目id
-	Status    int64  `json:"status"`    //状态:0离线，1在线，2拉黑
-	Referer   string `json:"referer"`   //来源，从哪个网址发起的聊天
-	Region    string `json:"region"`    //地区
-	City      string `json:"city"`      //城市
-	Platform  string `json:"platform"`  //设备平台:移动设备,电脑,平板,Xbox
-	Os        string `json:"os"`        //系统: andriod,ios,macOS,windows
-	Browser   string `json:"browser"`   //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language  string `json:"language"`  //语言
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	Name        string `json:"name"`        //游客名
+	Comment     string `json:"comment"`     //备注
+	Ip          string `json:"ip"`          //IP
+	KefuId      int64  `json:"kefuId"`      //客服id，0表示没有客服接待
+	ProjectId   int64  `json:"projectId"`   //项目id
+	Status      int64  `json:"status"`      //状态:0离线，1在线，2拉黑
+	Referer     string `json:"referer"`     //来源，从哪个网址发起的聊天
+	Region      string `json:"region"`      //地区
+	City        string `json:"city"`        //城市
+	Platform    string `json:"platform"`    //设备平台:移动设备,电脑,平板,Xbox
+	Os          string `json:"os"`          //系统: andriod,ios,macOS,windows
+	Browser     string `json:"browser"`     //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language    string `json:"language"`    //语言
+	LastLoginAt int64  `json:"lastLoginAt"` //最后一次登录时间
 }
 
 type AddVisitorReq struct {
-	Name      string `json:"name"`      //游客名
-	Ip        string `json:"ip"`        //IP
-	KefuId    int64  `json:"kefuId"`    //客服id，0表示没有客服接待
-	ProjectId int64  `json:"projectId"` //项目id
-	Status    int64  `json:"status"`    //状态:0离线，1在线，2拉黑
-	Referer   string `json:"referer"`   //来源，从哪个网址发起的聊天
-	Region    string `json:"region"`    //地区
-	City      string `json:"city"`      //城市
-	Platform  string `json:"platform"`  //设备平台:移动设备,电脑,平板,Xbox
-	Os        string `json:"os"`        //系统: andriod,ios,macOS,windows
-	Browser   string `json:"browser"`   //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language  string `json:"language"`  //语言
+	Name        string `json:"name"`        //游客名
+	Comment     string `json:"comment"`     //备注
+	Ip          string `json:"ip"`          //IP
+	KefuId      int64  `json:"kefuId"`      //客服id，0表示没有客服接待
+	ProjectId   int64  `json:"projectId"`   //项目id
+	Status      int64  `json:"status"`      //状态:0离线，1在线，2拉黑
+	Referer     string `json:"referer"`     //来源，从哪个网址发起的聊天
+	Region      string `json:"region"`      //地区
+	City        string `json:"city"`        //城市
+	Platform    string `json:"platform"`    //设备平台:移动设备,电脑,平板,Xbox
+	Os          string `json:"os"`          //系统: andriod,ios,macOS,windows
+	Browser     string `json:"browser"`     //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language    string `json:"language"`    //语言
+	LastLoginAt int64  `json:"lastLoginAt"` //最后一次登录时间
 }
 
 type PutVisitorReq struct {
-	Id        int64  `json:"id"`        //表主键
-	Uuid      string `json:"uuid"`      //UUID
-	Name      string `json:"name"`      //游客名
-	Ip        string `json:"ip"`        //IP
-	KefuId    int64  `json:"kefuId"`    //客服id，0表示没有客服接待
-	ProjectId int64  `json:"projectId"` //项目id
-	Status    int64  `json:"status"`    //状态:0离线，1在线，2拉黑
-	Referer   string `json:"referer"`   //来源，从哪个网址发起的聊天
-	Region    string `json:"region"`    //地区
-	City      string `json:"city"`      //城市
-	Platform  string `json:"platform"`  //设备平台:移动设备,电脑,平板,Xbox
-	Os        string `json:"os"`        //系统: andriod,ios,macOS,windows
-	Browser   string `json:"browser"`   //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language  string `json:"language"`  //语言
+	Id          int64  `json:"id"`          //表主键
+	Uuid        string `json:"uuid"`        //UUID
+	Name        string `json:"name"`        //游客名
+	Comment     string `json:"comment"`     //备注
+	Ip          string `json:"ip"`          //IP
+	KefuId      int64  `json:"kefuId"`      //客服id，0表示没有客服接待
+	ProjectId   int64  `json:"projectId"`   //项目id
+	Status      int64  `json:"status"`      //状态:0离线，1在线，2拉黑
+	Referer     string `json:"referer"`     //来源，从哪个网址发起的聊天
+	Region      string `json:"region"`      //地区
+	City        string `json:"city"`        //城市
+	Platform    string `json:"platform"`    //设备平台:移动设备,电脑,平板,Xbox
+	Os          string `json:"os"`          //系统: andriod,ios,macOS,windows
+	Browser     string `json:"browser"`     //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language    string `json:"language"`    //语言
+	LastLoginAt int64  `json:"lastLoginAt"` //最后一次登录时间
 }
 
 type DelVisitorReq struct {
@@ -298,28 +326,30 @@ type DelVisitorReq struct {
 }
 
 type GetVisitorReq struct {
-	Id int64 `json:"id"` //游客 ID
+	Id int64 `form:"id"` //游客 ID
 }
 
 type GetVisitorListReq struct {
-	PageSize  int64  `form:"pageSize,optional,default=20"`  //页面容量，默认20，可选
-	Page      int64  `form:"page,optional,default=1"`       //当前页码，默认1，可选
-	Current   int64  `form:"current,optional,default=1"`    //当前页码，默认1，用于对接umijs，可选
-	Keyword   string `form:"keyword,optional"`              //关键词，可选
-	Id        int64  `form:"id,optional,default=-1"`        //表主键
-	Uuid      string `form:"uuid,optional"`                 //UUID
-	Name      string `form:"name,optional"`                 //游客名
-	Ip        string `form:"ip,optional"`                   //IP
-	KefuId    int64  `form:"kefuId,optional,default=-1"`    //客服id，0表示没有客服接待
-	ProjectId int64  `form:"projectId,optional,default=-1"` //项目id
-	Status    int64  `form:"status,optional,default=-1"`    //状态:0离线，1在线，2拉黑
-	Referer   string `form:"referer,optional"`              //来源，从哪个网址发起的聊天
-	Region    string `form:"region,optional"`               //地区
-	City      string `form:"city,optional"`                 //城市
-	Platform  string `form:"platform,optional"`             //设备平台:移动设备,电脑,平板,Xbox
-	Os        string `form:"os,optional"`                   //系统: andriod,ios,macOS,windows
-	Browser   string `form:"browser,optional"`              //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
-	Language  string `form:"language,optional"`             //语言
+	PageSize    int64  `form:"pageSize,optional,default=20"`   //页面容量，默认20，可选
+	Page        int64  `form:"page,optional,default=1"`        //当前页码，默认1，可选
+	Current     int64  `form:"current,optional,default=1"`     //当前页码，默认1，用于对接umijs，可选
+	Keyword     string `form:"keyword,optional"`               //关键词，可选
+	Id          int64  `form:"id,optional,default=-1"`         //表主键
+	Uuid        string `form:"uuid,optional"`                  //UUID
+	Name        string `form:"name,optional"`                  //游客名
+	Comment     string `form:"comment,optional"`               //备注
+	Ip          string `form:"ip,optional"`                    //IP
+	KefuId      int64  `form:"kefuId,optional,default=-1"`     //客服id，0表示没有客服接待
+	ProjectId   int64  `form:"projectId,optional,default=-1"`  //项目id
+	Status      int64  `form:"status,optional,default=-1"`     //状态:0离线，1在线，2拉黑
+	Referer     string `form:"referer,optional"`               //来源，从哪个网址发起的聊天
+	Region      string `form:"region,optional"`                //地区
+	City        string `form:"city,optional"`                  //城市
+	Platform    string `form:"platform,optional"`              //设备平台:移动设备,电脑,平板,Xbox
+	Os          string `form:"os,optional"`                    //系统: andriod,ios,macOS,windows
+	Browser     string `form:"browser,optional"`               //浏览器: Chrome,Safari,InternalExplorer,Firefox,Edge
+	Language    string `form:"language,optional"`              //语言
+	LastLoginAt int64  `form:"lastLoginAt,optional,default=0"` //最后一次登录时间
 }
 
 type GetVisitorEnumsReq struct {

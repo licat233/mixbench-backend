@@ -19,8 +19,8 @@ import (
 var (
 	adminerFieldNames          = builder.RawFieldNames(&Adminer{})
 	adminerRows                = strings.Join(adminerFieldNames, ",")
-	adminerRowsExpectAutoSet   = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	adminerRowsWithPlaceHolder = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	adminerRowsExpectAutoSet   = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	adminerRowsWithPlaceHolder = strings.Join(stringx.Remove(adminerFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheAdminerIdPrefix = "cache:adminer:id:"
 )
@@ -47,7 +47,7 @@ type (
 		Passport     string    `db:"passport"`       // 账号
 		Password     string    `db:"password"`       // 密码
 		Email        string    `db:"email"`          // 邮箱
-		Status       int64     `db:"status"`         // 账号状态，是否可用
+		Status       int64     `db:"status"`         // 账号状态，是否可用, 0不可用，1可用
 		IsSuperAdmin int64     `db:"is_super_admin"` // 是否为超级管理员
 		CompanyId    int64     `db:"company_id"`     // 公司id
 		ProjectId    int64     `db:"project_id"`     // 项目id
@@ -102,8 +102,8 @@ func (m *defaultAdminerModel) FindOne(ctx context.Context, id int64) (*Adminer, 
 func (m *defaultAdminerModel) Insert(ctx context.Context, data *Adminer) (sql.Result, error) {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, adminerRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt)
 	}, adminerIdKey)
 	return ret, err
 }
@@ -112,7 +112,7 @@ func (m *defaultAdminerModel) Update(ctx context.Context, data *Adminer) error {
 	adminerIdKey := fmt.Sprintf("%s%v", cacheAdminerIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, adminerRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.CreateAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.Avatar, data.Access, data.Passport, data.Password, data.Email, data.Status, data.IsSuperAdmin, data.CompanyId, data.ProjectId, data.LoginCount, data.LastLoginAt, data.Id)
 	}, adminerIdKey)
 	return err
 }

@@ -35,11 +35,17 @@ const (
 	// 公告信息 key，务必保持与 数据库 中的key一致
 	PublicMessageKey = "public_message"
 
-	//消息来源
-	VisitorMsgType = 0
-	KefuMsgType    = 1
-	PublicMsgType  = 2
-	SystemMsgType  = 3
+	// 上线信息 key，务必保持与 数据库 中的key一致
+	OnlineMessageKey = "online_message"
+
+	//消息类型
+
+	VisitorMsgType = 0 //游客消息
+	KefuMsgType    = 1 //客服消息
+	PublicMsgType  = 2 //公告消息
+	SystemMsgType  = 3 //系统消息
+	OnlineMsgType  = 4 //上线消息
+	OfflineMsgType = 5 //离线消息
 
 	//消息内容类型:0文本，1图片，2表情，3视频, 4错误信息
 	TextContentType  = 0
@@ -50,6 +56,9 @@ const (
 
 	//无客服接待的游客的redis channel值
 	WaiteKefuChannelValue = "waite-kefu-redis-channel-value"
+
+	//是否开启ChatGPT
+	UseChatGPT = false
 )
 
 var (

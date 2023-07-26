@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -204,8 +206,13 @@ func (m *defaultWebModel) FindsByIds(ctx context.Context, ids []int64) ([]*Web, 
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -214,8 +221,9 @@ func (m *defaultWebModel) FindsByUuids(ctx context.Context, uuids []string) ([]*
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -224,8 +232,13 @@ func (m *defaultWebModel) FindsByProjectIds(ctx context.Context, projectIds []in
 	if len(projectIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range projectIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -234,8 +247,9 @@ func (m *defaultWebModel) FindsByUrls(ctx context.Context, urls []string) ([]*We
 	if len(urls) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(urls, ",")
 	query := fmt.Sprintf("select %s from %s where `url` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, urls)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -244,8 +258,9 @@ func (m *defaultWebModel) FindsByDescriptions(ctx context.Context, descriptions 
 	if len(descriptions) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(descriptions, ",")
 	query := fmt.Sprintf("select %s from %s where `description` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, descriptions)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -254,8 +269,9 @@ func (m *defaultWebModel) FindsByCodes(ctx context.Context, codes []string) ([]*
 	if len(codes) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(codes, ",")
 	query := fmt.Sprintf("select %s from %s where `code` in (?) and `is_deleted` = '0' ", webRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, codes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

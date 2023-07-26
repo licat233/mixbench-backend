@@ -141,7 +141,7 @@ type Adminer struct {
 	Passport     string `json:"passport"`     //账号
 	Password     string `json:"password"`     //密码
 	Email        string `json:"email"`        //邮箱
-	Status       int64  `json:"status"`       //账号状态，是否可用
+	Status       int64  `json:"status"`       //账号状态，是否可用, 0不可用，1可用
 	IsSuperAdmin int64  `json:"isSuperAdmin"` //是否为超级管理员
 	CompanyId    int64  `json:"companyId"`    //公司id
 	ProjectId    int64  `json:"projectId"`    //项目id
@@ -156,7 +156,7 @@ type AddAdminerReq struct {
 	Passport     string `json:"passport"`     //账号
 	Password     string `json:"password"`     //密码
 	Email        string `json:"email"`        //邮箱
-	Status       int64  `json:"status"`       //账号状态，是否可用
+	Status       int64  `json:"status"`       //账号状态，是否可用, 0不可用，1可用
 	IsSuperAdmin int64  `json:"isSuperAdmin"` //是否为超级管理员
 	CompanyId    int64  `json:"companyId"`    //公司id
 	ProjectId    int64  `json:"projectId"`    //项目id
@@ -173,7 +173,7 @@ type PutAdminerReq struct {
 	Passport     string `json:"passport"`     //账号
 	Password     string `json:"password"`     //密码
 	Email        string `json:"email"`        //邮箱
-	Status       int64  `json:"status"`       //账号状态，是否可用
+	Status       int64  `json:"status"`       //账号状态，是否可用, 0不可用，1可用
 	IsSuperAdmin int64  `json:"isSuperAdmin"` //是否为超级管理员
 	CompanyId    int64  `json:"companyId"`    //公司id
 	ProjectId    int64  `json:"projectId"`    //项目id
@@ -186,7 +186,7 @@ type DelAdminerReq struct {
 }
 
 type GetAdminerReq struct {
-	Id int64 `json:"id"` //管理员 ID
+	Id int64 `form:"id"` //管理员 ID
 }
 
 type GetAdminerListReq struct {
@@ -202,7 +202,7 @@ type GetAdminerListReq struct {
 	Passport     string `form:"passport,optional"`                //账号
 	Password     string `form:"password,optional"`                //密码
 	Email        string `form:"email,optional"`                   //邮箱
-	Status       int64  `form:"status,optional,default=-1"`       //账号状态，是否可用
+	Status       int64  `form:"status,optional,default=-1"`       //账号状态，是否可用, 0不可用，1可用
 	IsSuperAdmin int64  `form:"isSuperAdmin,optional,default=-1"` //是否为超级管理员
 	CompanyId    int64  `form:"companyId,optional,default=-1"`    //公司id
 	ProjectId    int64  `form:"projectId,optional,default=-1"`    //项目id
@@ -280,7 +280,7 @@ type DelCampaignReq struct {
 }
 
 type GetCampaignReq struct {
-	Id int64 `json:"id"` //活动 ID
+	Id int64 `form:"id"` //活动 ID
 }
 
 type GetCampaignListReq struct {
@@ -328,7 +328,7 @@ type DelCompanyReq struct {
 }
 
 type GetCompanyReq struct {
-	Id int64 `json:"id"` //公司 ID
+	Id int64 `form:"id"` //公司 ID
 }
 
 type GetCompanyListReq struct {
@@ -373,7 +373,7 @@ type DelProjectReq struct {
 }
 
 type GetProjectReq struct {
-	Id int64 `json:"id"` //项目 ID
+	Id int64 `form:"id"` //项目 ID
 }
 
 type GetProjectListReq struct {
@@ -422,7 +422,7 @@ type DelWebReq struct {
 }
 
 type GetWebReq struct {
-	Id int64 `json:"id"` //网站 ID
+	Id int64 `form:"id"` //网站 ID
 }
 
 type GetWebListReq struct {

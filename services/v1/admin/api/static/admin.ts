@@ -98,10 +98,10 @@ export function putAdminer(req: components.PutAdminerReq) {
 
 /**
  * @description "获取管理员 基础API"
- * @param req
+ * @param params
  */
-export function getAdminer(req: components.GetAdminerReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer`, req)
+export function getAdminer(params: components.GetAdminerReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/adminer`, params)
 }
 
 /**
@@ -185,10 +185,10 @@ export function putCampaign(req: components.PutCampaignReq) {
 
 /**
  * @description "获取活动 基础API"
- * @param req
+ * @param params
  */
-export function getCampaign(req: components.GetCampaignReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/campaign`, req)
+export function getCampaign(params: components.GetCampaignReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/campaign`, params)
 }
 
 /**
@@ -233,10 +233,10 @@ export function putCompany(req: components.PutCompanyReq) {
 
 /**
  * @description "获取公司 基础API"
- * @param req
+ * @param params
  */
-export function getCompany(req: components.GetCompanyReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/company`, req)
+export function getCompany(params: components.GetCompanyReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/company`, params)
 }
 
 /**
@@ -281,10 +281,10 @@ export function putProject(req: components.PutProjectReq) {
 
 /**
  * @description "获取项目 基础API"
- * @param req
+ * @param params
  */
-export function getProject(req: components.GetProjectReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/project`, req)
+export function getProject(params: components.GetProjectReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/project`, params)
 }
 
 /**
@@ -329,10 +329,10 @@ export function putWeb(req: components.PutWebReq) {
 
 /**
  * @description "获取网站 基础API"
- * @param req
+ * @param params
  */
-export function getWeb(req: components.GetWebReq) {
-	return webapi.get<components.BaseResp>(`/v1/api/admin/web`, req)
+export function getWeb(params: components.GetWebReqParams) {
+	return webapi.get<components.BaseResp>(`/v1/api/admin/web`, params)
 }
 
 /**

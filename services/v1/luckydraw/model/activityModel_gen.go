@@ -19,8 +19,8 @@ import (
 var (
 	activityFieldNames          = builder.RawFieldNames(&Activity{})
 	activityRows                = strings.Join(activityFieldNames, ",")
-	activityRowsExpectAutoSet   = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	activityRowsWithPlaceHolder = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	activityRowsExpectAutoSet   = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	activityRowsWithPlaceHolder = strings.Join(stringx.Remove(activityFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheActivityIdPrefix = "cache:activity:id:"
 )
@@ -98,8 +98,8 @@ func (m *defaultActivityModel) FindOne(ctx context.Context, id int64) (*Activity
 func (m *defaultActivityModel) Insert(ctx context.Context, data *Activity) (sql.Result, error) {
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, activityRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime)
 	}, activityIdKey)
 	return ret, err
 }
@@ -108,7 +108,7 @@ func (m *defaultActivityModel) Update(ctx context.Context, data *Activity) error
 	activityIdKey := fmt.Sprintf("%s%v", cacheActivityIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, activityRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.CreateAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.Id)
 	}, activityIdKey)
 	return err
 }

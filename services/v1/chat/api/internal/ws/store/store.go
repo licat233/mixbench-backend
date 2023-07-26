@@ -1,6 +1,8 @@
 package store
 
-import "sync"
+import (
+	"sync"
+)
 
 // 存储在线的客服和游客
 
@@ -18,6 +20,14 @@ type onlineVisitor struct {
 	*OnlineUser
 }
 
+func (l *onlineVisitor) Set(visitorId int64, kefuId int64) {
+	l.OnlineUser.Set(visitorId, kefuId)
+}
+
+func (l *onlineVisitor) FindsByVal(kefuId int64) (ids []int64) {
+	return l.OnlineUser.FindsByVal(kefuId)
+}
+
 func NewOnlineVisitor() *onlineVisitor {
 	return &onlineVisitor{
 		NewOnlineUser(),
@@ -26,7 +36,7 @@ func NewOnlineVisitor() *onlineVisitor {
 
 type OnlineUser struct {
 	//对于kefu来说：map[kefuId]count 客服ID-游客数
-	//对于visitor来说：map[visitorId]kefuId 游客ID-客服ID
+	//对于visitor来说：map[visitorId]any 游客ID-待定
 	Store   map[int64]int64
 	RwMutex *sync.RWMutex
 }
@@ -77,27 +87,6 @@ func (l *OnlineUser) Len() int {
 	l.RwMutex.RLock()
 	defer l.RwMutex.RUnlock()
 	return len(l.Store)
-}
-
-// 分配一个负载最小的用户出来
-func (l *OnlineUser) AssignKefu() int64 {
-	// 前提是有客服在线
-	l.RwMutex.RLock()
-	defer l.RwMutex.RUnlock()
-	if len(l.Store) == 0 {
-		// 没有客服在线，表示未分配状态，应该执行消息自动回复机制
-		return 0
-	}
-	// 获取最小值
-	var minCount int64
-	var kefuId int64
-	for id, count := range l.Store {
-		if minCount >= count {
-			minCount = count
-			kefuId = id
-		}
-	}
-	return kefuId
 }
 
 func (l *OnlineUser) FindsByVal(val int64) (ids []int64) {

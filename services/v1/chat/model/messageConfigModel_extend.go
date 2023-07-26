@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -186,8 +188,13 @@ func (m *defaultMessageConfigModel) FindsByIds(ctx context.Context, ids []int64)
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?)", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -196,8 +203,13 @@ func (m *defaultMessageConfigModel) FindsByProjectIds(ctx context.Context, proje
 	if len(projectIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range projectIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `project_id` in (?)", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -206,8 +218,9 @@ func (m *defaultMessageConfigModel) FindsByNames(ctx context.Context, names []st
 	if len(names) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(names, ",")
 	query := fmt.Sprintf("select %s from %s where `name` in (?)", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -216,8 +229,9 @@ func (m *defaultMessageConfigModel) FindsByMsgkeys(ctx context.Context, msgkeys 
 	if len(msgkeys) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(msgkeys, ",")
 	query := fmt.Sprintf("select %s from %s where `msgkey` in (?)", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgkeys)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -226,8 +240,9 @@ func (m *defaultMessageConfigModel) FindsByContents(ctx context.Context, content
 	if len(contents) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(contents, ",")
 	query := fmt.Sprintf("select %s from %s where `content` in (?)", messageConfigRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contents)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

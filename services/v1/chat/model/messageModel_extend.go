@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -345,8 +347,13 @@ func (m *defaultMessageModel) FindsByIds(ctx context.Context, ids []int64) ([]*M
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -355,8 +362,9 @@ func (m *defaultMessageModel) FindsByUuids(ctx context.Context, uuids []string) 
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -365,8 +373,9 @@ func (m *defaultMessageModel) FindsByContents(ctx context.Context, contents []st
 	if len(contents) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(contents, ",")
 	query := fmt.Sprintf("select %s from %s where `content` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contents)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -375,8 +384,13 @@ func (m *defaultMessageModel) FindsByContentTypes(ctx context.Context, contentTy
 	if len(contentTypes) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range contentTypes {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `content_type` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, contentTypes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -385,8 +399,13 @@ func (m *defaultMessageModel) FindsByVisitorIds(ctx context.Context, visitorIds 
 	if len(visitorIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range visitorIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `visitor_id` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, visitorIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -395,8 +414,13 @@ func (m *defaultMessageModel) FindsByKefuIds(ctx context.Context, kefuIds []int6
 	if len(kefuIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range kefuIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `kefu_id` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -405,8 +429,13 @@ func (m *defaultMessageModel) FindsByProjectIds(ctx context.Context, projectIds 
 	if len(projectIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range projectIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -415,8 +444,13 @@ func (m *defaultMessageModel) FindsByMsgTypes(ctx context.Context, msgTypes []in
 	if len(msgTypes) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range msgTypes {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `msg_type` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, msgTypes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -425,8 +459,13 @@ func (m *defaultMessageModel) FindsByStatuslist(ctx context.Context, statuslist 
 	if len(statuslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range statuslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -435,8 +474,13 @@ func (m *defaultMessageModel) FindsByIsReads(ctx context.Context, isReads []int6
 	if len(isReads) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range isReads {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `is_read` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isReads)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -445,8 +489,13 @@ func (m *defaultMessageModel) FindsByIsSends(ctx context.Context, isSends []int6
 	if len(isSends) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range isSends {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `is_send` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, isSends)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -455,8 +504,13 @@ func (m *defaultMessageModel) FindsBySendTimes(ctx context.Context, sendTimes []
 	if len(sendTimes) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range sendTimes {
+		strs = append(strs, v.Format("2006-01-02 15:04:05"))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `send_time` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, sendTimes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -465,8 +519,13 @@ func (m *defaultMessageModel) FindsByExpireTimes(ctx context.Context, expireTime
 	if len(expireTimes) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range expireTimes {
+		strs = append(strs, v.Format("2006-01-02 15:04:05"))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `expire_time` in (?) and `is_deleted` = '0' ", messageRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, expireTimes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

@@ -34,6 +34,7 @@ func NewUserModel(conn sqlx.SqlConn, c cache.CacheConf) UserModel {
 	userRowsExpectAutoSet = strings.Join(stringx.Remove(userFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段
 	userRowsWithPlaceHolder = strings.Join(stringx.Remove(userFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	cacheUserIdPrefix = "cache:luckydraw:user:id:" // modifying cache id prefix by genzero
 	return &customUserModel{
 		defaultUserModel: newUserModel(conn, c),
 	}

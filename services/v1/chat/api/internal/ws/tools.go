@@ -3,11 +3,14 @@ package ws
 import (
 	"bytes"
 	"context"
+	"math"
+	"math/rand"
 	"mixbench/common/errorx"
 	"mixbench/services/v1/admin/rpc/admin_pb"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/model"
 	"strings"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -66,4 +69,68 @@ func TransferVisitor(ctx context.Context, svcCtx *svc.ServiceContext, visitorId,
 	}
 
 	return nil
+}
+
+// 分配客服，核心分配算法
+func AssignKefu() int64 {
+	kefuCount := OnlineKefu.Len()
+	// 前提是有客服在线
+	if kefuCount == 0 {
+		// 没有客服在线，0表示未分配状态，应该执行消息自动回复机制
+		return 0
+	}
+	OnlineVisitor.RwMutex.RLock()
+	// 统计每个 kefuId 对应的 visitorId 的数量
+	count := make(map[int64]int64) //kefuId - visitorCount
+	for _, kefuId := range OnlineVisitor.Store {
+		count[kefuId]++
+	}
+	OnlineVisitor.RwMutex.RUnlock()
+
+	//可能有kefuId没有分配到onlieVisitor中，所以还需要检查onlineKefu是否有为分配到onlineVisitor中的kefuId
+	OnlineKefu.RwMutex.RLock()
+	for kefuId := range OnlineKefu.Store {
+		if _, ok := count[kefuId]; !ok {
+			//如果没有，就统计进去, 0表示没有在线游客分配到该kefu
+			count[kefuId] = 0
+		}
+	}
+	OnlineKefu.RwMutex.RUnlock()
+
+	minVisitorCount := int64(math.MaxInt64) // 设置一个较大的初始值
+	minKefuId := int64(0)
+	for kefuId, visitorCount := range count {
+		if visitorCount < minVisitorCount {
+			minVisitorCount = visitorCount
+			minKefuId = kefuId
+		}
+	}
+
+	if minKefuId < 1 {
+		return 0
+	}
+
+	//检查最小游客量的kefu是否有多个，如果有多个，应该采取随机抽取一个
+	kefuIds := []int64{}
+	for kefuId, visitorCount := range count {
+		if visitorCount == minVisitorCount {
+			kefuIds = append(kefuIds, kefuId)
+		}
+	}
+
+	n := len(kefuIds)
+
+	if n == 0 {
+		return 0
+	} else if n == 1 {
+		return kefuIds[0]
+	}
+
+	// 创建随机数生成器
+	random := rand.New(rand.NewSource(time.Now().UnixNano()))
+	// 生成随机索引并获取随机键
+	randomIndex := random.Intn(len(kefuIds))
+	randomKefuId := kefuIds[randomIndex]
+
+	return randomKefuId
 }

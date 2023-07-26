@@ -83,7 +83,7 @@ func newClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.ResponseW
 
 	channls := []string{u.GetUuid()}
 	if u.IsKefu() {
-		//如果是客服，上线的时候，应该即使接待没有客服的游客
+		//如果是客服，上线的时候，应该及时接待没有客服的游客
 		channls = append(channls, WaiteKefuChannelValue)
 	}
 	pubsub := svcCtx.RedisCli.Subscribe(ctx, channls...)
@@ -115,7 +115,6 @@ func (c *client) Close() {
 		if c.user.IsVisitor() {
 			OnlineVisitor.Del(c.user.GetId())
 		}
-
 	})
 }
 
@@ -140,6 +139,38 @@ func (c *client) NewPublicMessage(content string, kefuId, visitorId int64) *mode
 		KefuId:      kefuId,
 		ProjectId:   c.user.GetProjectId(),
 		MsgType:     PublicMsgType,
+		Status:      0,
+		IsRead:      0,
+		IsSend:      0,
+	}
+}
+
+func (c *client) NewOnlineMessage(content string, kefuId, visitorId int64) *model.Message {
+	return &model.Message{
+		Id:          0,
+		Uuid:        uniqueid.NewUUID(),
+		Content:     content,
+		ContentType: TextContentType,
+		VisitorId:   visitorId,
+		KefuId:      kefuId,
+		ProjectId:   c.user.GetProjectId(),
+		MsgType:     OnlineMsgType,
+		Status:      0,
+		IsRead:      0,
+		IsSend:      0,
+	}
+}
+
+func (c *client) NewOfflineMessage(content string, kefuId, visitorId int64) *model.Message {
+	return &model.Message{
+		Id:          0,
+		Uuid:        uniqueid.NewUUID(),
+		Content:     content,
+		ContentType: TextContentType,
+		VisitorId:   visitorId,
+		KefuId:      kefuId,
+		ProjectId:   c.user.GetProjectId(),
+		MsgType:     OfflineMsgType,
 		Status:      0,
 		IsRead:      0,
 		IsSend:      0,
@@ -191,6 +222,11 @@ func (c *client) sendMessageToKefu(message *model.Message) error {
 			return errors.New("adminer(kefu) not found")
 		}
 		kefuUuid = resp.Adminer.Uuid
+	} else {
+		//预留的接口
+		if UseChatGPT {
+			c.SendToChatGPT(message)
+		}
 	}
 
 	return c.publishMessage(kefuUuid, message)
@@ -206,6 +242,7 @@ func (c *client) sendMessageToVisitor(message *model.Message) error {
 	if visitorId < 1 {
 		return nil
 	}
+
 	visitor, err := c.svcCtx.VisitorModel.FindById(c.ctx, visitorId)
 	if err != nil && err != model.ErrNotFound {
 		return err
@@ -217,23 +254,17 @@ func (c *client) sendMessageToVisitor(message *model.Message) error {
 	return c.publishMessage(visitorUuid, message)
 }
 
-// SendPresetMessage 发送预设的公告消息
-// 不经过 redis 订阅，直接写入ws
+// SendPresetMessage 发送预设的公告消息给当前用户
+// 不经过 redis 订阅，直接写入当前用户的ws
 func (c *client) sendPresetMessage(msgKey string, kefuId, visitorId int64) error {
-	if msgKey = strings.TrimSpace(msgKey); msgKey == "" {
-		return nil
-	}
-
-	msgList, err := c.svcCtx.MessageConfigModel.FindsByMsgkeyProjectId(c.ctx, msgKey, c.user.GetProjectId())
+	messages, err := c.newPresetMessage(msgKey)
 	if err != nil {
-		c.Logger.Error(err)
 		return err
 	}
-	// 如果存在，则发送
-	var messages []*model.Message
-	for _, msg := range msgList {
+	for _, msg := range messages {
 		if content := strings.TrimSpace(msg.Content); content != "" {
-			messages = append(messages, c.NewPublicMessage(content, kefuId, visitorId))
+			msg.KefuId = kefuId
+			msg.VisitorId = visitorId
 		}
 	}
 	return c.writeToWebsocket(messages...)
@@ -260,9 +291,32 @@ func (c *client) writeToWebsocket(messages ...*model.Message) error {
 }
 
 // 分配客服
-func (c *client) assignKefu() (kefuId int64) {
-	id := OnlineKefu.AssignKefu()
-	return id
+// func (c *client) assignKefu() (kefuId int64) {
+// 	id := OnlineKefu.AssignKefu()
+// 	return id
+// }
+
+// 获取当前项目的预设消息
+// 如果msgkey不存在，会报错
+func (c *client) newPresetMessage(msgkey string) ([]*model.Message, error) {
+	if msgkey = strings.TrimSpace(msgkey); msgkey == "" {
+		return nil, nil
+	}
+	msgList, err := c.svcCtx.MessageConfigModel.FindsByMsgkeyProjectId(c.ctx, msgkey, c.user.GetProjectId())
+	if err != nil {
+		c.Logger.Error(err)
+		return nil, err
+	}
+	if len(msgList) == 0 {
+		return nil, fmt.Errorf("msgkey(%s) not found", msgkey)
+	}
+	var messages []*model.Message
+	for _, msg := range msgList {
+		if content := strings.TrimSpace(msg.Content); content != "" {
+			messages = append(messages, c.NewPublicMessage(content, 0, 0))
+		}
+	}
+	return messages, err
 }
 
 func (c *client) publishMessage(channel string, message *model.Message) error {
@@ -295,12 +349,8 @@ func (c *client) readPump(payloadHandler payloadHandler) {
 			if messageType == websocket.CloseMessage {
 				// 连接已被客户端关闭
 				return
-			} else if messageType == websocket.PingMessage {
-				continue
-			} else if messageType == websocket.PongMessage {
-				continue
-			} else if messageType == websocket.BinaryMessage {
-				//二进制消息，丢弃，暂不支持
+			} else if messageType == websocket.PingMessage || messageType == websocket.PongMessage || messageType == websocket.BinaryMessage {
+				//BinaryMessage二进制消息，丢弃，暂不支持
 				continue
 			}
 
@@ -383,5 +433,9 @@ func (c *client) writeMessage(message *model.Message) error {
 		}
 		return err
 	}
+	return nil
+}
+
+func (c *client) SendToChatGPT(message *model.Message) error {
 	return nil
 }

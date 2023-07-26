@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -264,8 +266,13 @@ func (m *defaultPrizePoolModel) FindsByIds(ctx context.Context, ids []int64) ([]
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -274,8 +281,9 @@ func (m *defaultPrizePoolModel) FindsByUuids(ctx context.Context, uuids []string
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -284,8 +292,13 @@ func (m *defaultPrizePoolModel) FindsByActivityIds(ctx context.Context, activity
 	if len(activityIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range activityIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `activity_id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, activityIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -294,8 +307,13 @@ func (m *defaultPrizePoolModel) FindsByPrizeIds(ctx context.Context, prizeIds []
 	if len(prizeIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range prizeIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `prize_id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizeIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -304,8 +322,13 @@ func (m *defaultPrizePoolModel) FindsByGradeIds(ctx context.Context, gradeIds []
 	if len(gradeIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range gradeIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `grade_id` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, gradeIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -314,8 +337,13 @@ func (m *defaultPrizePoolModel) FindsByLuckValues(ctx context.Context, luckValue
 	if len(luckValues) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range luckValues {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `luck_value` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckValues)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -324,8 +352,13 @@ func (m *defaultPrizePoolModel) FindsByStatuslist(ctx context.Context, statuslis
 	if len(statuslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range statuslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -334,8 +367,13 @@ func (m *defaultPrizePoolModel) FindsByTotals(ctx context.Context, totals []int6
 	if len(totals) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range totals {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `total` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, totals)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -344,8 +382,13 @@ func (m *defaultPrizePoolModel) FindsByRemainders(ctx context.Context, remainder
 	if len(remainders) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range remainders {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `remainder` in (?) and `is_deleted` = '0' ", prizePoolRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, remainders)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

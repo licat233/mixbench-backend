@@ -19,8 +19,8 @@ import (
 var (
 	messageFieldNames          = builder.RawFieldNames(&Message{})
 	messageRows                = strings.Join(messageFieldNames, ",")
-	messageRowsExpectAutoSet   = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	messageRowsWithPlaceHolder = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	messageRowsExpectAutoSet   = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	messageRowsWithPlaceHolder = strings.Join(stringx.Remove(messageFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheMessageIdPrefix = "cache:message:id:"
 )
@@ -101,8 +101,8 @@ func (m *defaultMessageModel) FindOne(ctx context.Context, id int64) (*Message, 
 func (m *defaultMessageModel) Insert(ctx context.Context, data *Message) (sql.Result, error) {
 	messageIdKey := fmt.Sprintf("%s%v", cacheMessageIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, messageRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.ContentType, data.VisitorId, data.KefuId, data.ProjectId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, messageRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.ContentType, data.VisitorId, data.KefuId, data.ProjectId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime)
 	}, messageIdKey)
 	return ret, err
 }
@@ -111,7 +111,7 @@ func (m *defaultMessageModel) Update(ctx context.Context, data *Message) error {
 	messageIdKey := fmt.Sprintf("%s%v", cacheMessageIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, messageRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.ContentType, data.VisitorId, data.KefuId, data.ProjectId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.CreateAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Content, data.ContentType, data.VisitorId, data.KefuId, data.ProjectId, data.MsgType, data.Status, data.IsRead, data.IsSend, data.SendTime, data.ExpireTime, data.Id)
 	}, messageIdKey)
 	return err
 }

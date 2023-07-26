@@ -42,16 +42,17 @@ type ResponseError struct {
 }
 
 const (
-	ERROR_CODE_INTERNAL         = 500  //内部错误
-	ERROR_CODE_EXTERNAL         = 400  //外部错误（默认）会给与提示
-	ERROR_CODE_EXTERNAL_SECRECY = 4001 //外部错误，但错误原因保密
-	ERROR_CODE_AUTH             = 401  //外部错误（默认）
-	ERROR_CODE_ACCESS           = 403  //服务器禁止访问
-	SHOW_TYPE                   = 2    //信息错误
+	_ERROR_CODE_INTERNAL         = 500  //内部错误
+	_ERROR_CODE_EXTERNAL         = 400  //外部错误（默认）会给与提示
+	_ERROR_CODE_EXTERNAL_SECRECY = 4001 //外部错误，但错误原因保密
+	_ERROR_CODE_AUTH             = 401  //外部错误（默认）
+	_ERROR_CODE_ACCESS           = 403  //服务器禁止访问
+	_SHOW_TYPE                   = 2    //信息错误
 )
 
-var Debug = os.Getenv("SERVICE_MODE") == "dev"
-var Mode = os.Getenv("SERVICE_MODE")
+var debug = os.Getenv("SERVICE_MODE") == "dev"
+
+// var mode = os.Getenv("SERVICE_MODE")
 var ServerError = InternalError
 var RequestError = ExternalError
 
@@ -160,10 +161,10 @@ func Alert(msg any) error {
 	return &Errorx{
 		Status:       false,
 		Success:      false,
-		ErrorCode:    ERROR_CODE_EXTERNAL,
+		ErrorCode:    _ERROR_CODE_EXTERNAL,
 		ErrorMessage: alertMsg,
 		TraceMessage: "",
-		ShowType:     SHOW_TYPE,
+		ShowType:     _SHOW_TYPE,
 		TraceId:      uniqueid.NewUUID(),
 		Host:         Ip,
 	}
@@ -175,9 +176,9 @@ func internalError(alert any, trace any) *Errorx {
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = ServerErrorMsg
 	}
-	errorx.ErrorCode = ERROR_CODE_INTERNAL
+	errorx.ErrorCode = _ERROR_CODE_INTERNAL
 	//非调试模式，统一报：服务器错误
-	if !Debug {
+	if !debug {
 		errorx.ErrorMessage = ServerErrorMsg
 		errorx.TraceMessage = "There is an error in the server, please contact the administrator licat233@gmail.com"
 	}
@@ -189,7 +190,7 @@ func externalError(alert any, trace any) *Errorx {
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = RequestErrorMsg
 	}
-	errorx.ErrorCode = ERROR_CODE_EXTERNAL
+	errorx.ErrorCode = _ERROR_CODE_EXTERNAL
 	return errorx
 }
 
@@ -198,7 +199,7 @@ func authError(alert any, trace any) *Errorx {
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = AuthErrorMsg
 	}
-	errorx.ErrorCode = ERROR_CODE_AUTH
+	errorx.ErrorCode = _ERROR_CODE_AUTH
 	return errorx
 }
 
@@ -207,7 +208,7 @@ func accessError(alert any, trace any) *Errorx {
 	if len(errorx.ErrorMessage) == 0 {
 		errorx.ErrorMessage = AuthErrorMsg
 	}
-	errorx.ErrorCode = ERROR_CODE_ACCESS
+	errorx.ErrorCode = _ERROR_CODE_ACCESS
 	return errorx
 }
 
@@ -221,16 +222,16 @@ func newErrorx(alert any, trace any) *Errorx {
 		alertMsg = RequestErrorMsg
 	}
 	//调试模式下，展现错误调试信息
-	if Debug && trace != nil {
+	if debug && trace != nil {
 		traceMsg = strings.TrimSpace(fmt.Sprint(trace))
 	}
 	errorx := &Errorx{
 		Status:       false,
 		Success:      false,
-		ErrorCode:    ERROR_CODE_EXTERNAL,
+		ErrorCode:    _ERROR_CODE_EXTERNAL,
 		ErrorMessage: alertMsg,
 		TraceMessage: traceMsg,
-		ShowType:     SHOW_TYPE,
+		ShowType:     _SHOW_TYPE,
 		TraceId:      uniqueid.NewUUID(),
 		Host:         Ip,
 	}
@@ -334,19 +335,19 @@ func ResponseErrorHandlerCtx(ctx context.Context, err error) (int, interface{}) 
 
 // 将error转化成External RPC status.Status，主要用于rpc服务中
 func ExtRpcErr(err error) (statusError error) {
-	statusError = status.Error(ERROR_CODE_EXTERNAL, err.Error())
+	statusError = status.Error(_ERROR_CODE_EXTERNAL, err.Error())
 	return
 }
 
 // 将error转化成Internal RPC status.Status，主要用于rpc服务中
 func IntRpcErr(err error) (statusError error) {
-	statusError = status.Error(ERROR_CODE_INTERNAL, err.Error())
+	statusError = status.Error(_ERROR_CODE_INTERNAL, err.Error())
 	return
 }
 
 // 将error转化成Internal RPC status.Status，主要用于rpc服务中，外部错误，但错误信息保密
 func SecRpcErr(err error) (statusError error) {
-	statusError = status.Error(ERROR_CODE_EXTERNAL_SECRECY, err.Error())
+	statusError = status.Error(_ERROR_CODE_EXTERNAL_SECRECY, err.Error())
 	return
 }
 
@@ -359,15 +360,15 @@ func FromRpcErr(statusErr error) (errorx *Errorx) {
 // status.Error转化为errorx
 func StatusErrToErrorx(statusErr *status.Status) (errorx *Errorx) {
 	switch statusErr.Code() {
-	case ERROR_CODE_INTERNAL:
+	case _ERROR_CODE_INTERNAL:
 		errorx = internalError(ServerErrorMsg, errors.New(statusErr.Message()))
-	case ERROR_CODE_EXTERNAL:
+	case _ERROR_CODE_EXTERNAL:
 		errorx = externalError(statusErr.Message(), nil)
-	case ERROR_CODE_EXTERNAL_SECRECY:
+	case _ERROR_CODE_EXTERNAL_SECRECY:
 		errorx = externalError(RequestErrorMsg, errors.New(statusErr.Message()))
-	case ERROR_CODE_AUTH:
+	case _ERROR_CODE_AUTH:
 		errorx = authError(statusErr.Message(), nil)
-	case ERROR_CODE_ACCESS:
+	case _ERROR_CODE_ACCESS:
 		errorx = accessError(RequestFailedMsg, errors.New(statusErr.Message()))
 	default:
 		//未知错误，可能是panic引起的，内部错误，不抛给前端
@@ -385,7 +386,7 @@ func ToStatusErr(errorx error) (statusErr error) {
 		return status.Error(codes.Code(errx.ErrorCode), errx.ErrorMessage)
 	}
 	//原生错误，我们默认转化为500错误
-	return status.Error(ERROR_CODE_INTERNAL, errorx.Error())
+	return status.Error(_ERROR_CODE_INTERNAL, errorx.Error())
 }
 
 // 转化为status.Error

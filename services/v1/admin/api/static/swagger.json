@@ -299,7 +299,7 @@
           },
           {
             "name": "status",
-            "description": "账号状态，是否可用",
+            "description": "账号状态，是否可用, 0不可用，1可用",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -1726,7 +1726,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": "账号状态，是否可用"
+          "description": "账号状态，是否可用, 0不可用，1可用"
         },
         "isSuperAdmin": {
           "type": "integer",
@@ -1937,7 +1937,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": "账号状态，是否可用"
+          "description": "账号状态，是否可用, 0不可用，1可用"
         },
         "isSuperAdmin": {
           "type": "integer",
@@ -2393,7 +2393,7 @@
           "type": "integer",
           "format": "int64",
           "default": "-1",
-          "description": "账号状态，是否可用"
+          "description": "账号状态，是否可用, 0不可用，1可用"
         },
         "isSuperAdmin": {
           "type": "integer",
@@ -2959,7 +2959,7 @@
         "status": {
           "type": "integer",
           "format": "int64",
-          "description": "账号状态，是否可用"
+          "description": "账号状态，是否可用, 0不可用，1可用"
         },
         "isSuperAdmin": {
           "type": "integer",

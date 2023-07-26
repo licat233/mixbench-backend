@@ -72,7 +72,7 @@
 
 ## 注意事项
 
-本地调试的时候，请关闭vpn
+由于gozero框架设计的缺陷，在不同的database中，务必确保各个database中无同名的table，否则会导致redis缓存数据冲突！！
 
 ## 部署方式
 

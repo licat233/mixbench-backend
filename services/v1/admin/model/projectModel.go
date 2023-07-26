@@ -22,6 +22,7 @@ type (
 
 // NewProjectModel returns a model for the database table.
 func NewProjectModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) ProjectModel {
+	cacheProjectIdPrefix = "cache:admin:project:id:" // modifying cache id prefix by genzero
 	return &customProjectModel{
 		defaultProjectModel: newProjectModel(conn, c, opts...),
 	}

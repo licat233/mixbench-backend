@@ -19,8 +19,8 @@ import (
 var (
 	prizeGradeFieldNames          = builder.RawFieldNames(&PrizeGrade{})
 	prizeGradeRows                = strings.Join(prizeGradeFieldNames, ",")
-	prizeGradeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	prizeGradeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	prizeGradeRowsExpectAutoSet   = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	prizeGradeRowsWithPlaceHolder = strings.Join(stringx.Remove(prizeGradeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cachePrizeGradeIdPrefix = "cache:prizeGrade:id:"
 )
@@ -92,8 +92,8 @@ func (m *defaultPrizeGradeModel) FindOne(ctx context.Context, id int64) (*PrizeG
 func (m *defaultPrizeGradeModel) Insert(ctx context.Context, data *PrizeGrade) (sql.Result, error) {
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, prizeGradeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, prizeGradeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin)
 	}, prizeGradeIdKey)
 	return ret, err
 }
@@ -102,7 +102,7 @@ func (m *defaultPrizeGradeModel) Update(ctx context.Context, data *PrizeGrade) e
 	prizeGradeIdKey := fmt.Sprintf("%s%v", cachePrizeGradeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, prizeGradeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.CreateAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.IsWin, data.Id)
 	}, prizeGradeIdKey)
 	return err
 }

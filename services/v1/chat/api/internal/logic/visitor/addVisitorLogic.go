@@ -2,6 +2,7 @@ package visitor
 
 import (
 	"context"
+	"time"
 
 	"mixbench/common/errorx"
 	"mixbench/common/respx"
@@ -29,19 +30,21 @@ func NewAddVisitorLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddVis
 
 func (l *AddVisitorLogic) AddVisitor(req *types.AddVisitorReq) (any, error) {
 	in := &model.Visitor{
-		Uuid:      uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
-		Name:      req.Name,
-		Ip:        req.Ip,
-		KefuId:    req.KefuId,
-		ProjectId: req.ProjectId,
-		Status:    req.Status,
-		Referer:   req.Referer,
-		Region:    req.Region,
-		City:      req.City,
-		Platform:  req.Platform,
-		Os:        req.Os,
-		Browser:   req.Browser,
-		Language:  req.Language,
+		Uuid:        uniqueid.NewUUID(), // 这里的uniqueid包，请自己定义
+		Name:        req.Name,
+		Comment:     req.Comment,
+		Ip:          req.Ip,
+		KefuId:      req.KefuId,
+		ProjectId:   req.ProjectId,
+		Status:      req.Status,
+		Referer:     req.Referer,
+		Region:      req.Region,
+		City:        req.City,
+		Platform:    req.Platform,
+		Os:          req.Os,
+		Browser:     req.Browser,
+		Language:    req.Language,
+		LastLoginAt: time.Unix(req.LastLoginAt, 0).Local(),
 	}
 	if _, err := l.svcCtx.VisitorModel.Insert(l.ctx, in); err != nil {
 		l.Logger.Error("failed to insert visitor, error: ", err)

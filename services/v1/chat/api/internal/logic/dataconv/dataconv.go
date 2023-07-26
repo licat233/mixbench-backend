@@ -66,20 +66,22 @@ func MdVisitorToApiVisitor(md *model.Visitor) *types.Visitor {
 		return nil
 	}
 	return &types.Visitor{
-		Id:        md.Id,
-		Uuid:      md.Uuid,
-		Name:      md.Name,
-		Ip:        md.Ip,
-		KefuId:    md.KefuId,
-		ProjectId: md.ProjectId,
-		Status:    md.Status,
-		Referer:   md.Referer,
-		Region:    md.Region,
-		City:      md.City,
-		Platform:  md.Platform,
-		Os:        md.Os,
-		Browser:   md.Browser,
-		Language:  md.Language,
+		Id:          md.Id,
+		Uuid:        md.Uuid,
+		Name:        md.Name,
+		Comment:     md.Comment,
+		Ip:          md.Ip,
+		KefuId:      md.KefuId,
+		ProjectId:   md.ProjectId,
+		Status:      md.Status,
+		Referer:     md.Referer,
+		Region:      md.Region,
+		City:        md.City,
+		Platform:    md.Platform,
+		Os:          md.Os,
+		Browser:     md.Browser,
+		Language:    md.Language,
+		LastLoginAt: md.LastLoginAt.Unix(),
 	}
 }
 

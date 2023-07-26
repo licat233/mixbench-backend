@@ -22,6 +22,7 @@ type (
 
 // NewCompanyModel returns a model for the database table.
 func NewCompanyModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) CompanyModel {
+	cacheCompanyIdPrefix = "cache:admin:company:id:" // modifying cache id prefix by genzero
 	return &customCompanyModel{
 		defaultCompanyModel: newCompanyModel(conn, c, opts...),
 	}

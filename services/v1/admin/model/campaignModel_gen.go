@@ -19,8 +19,8 @@ import (
 var (
 	campaignFieldNames          = builder.RawFieldNames(&Campaign{})
 	campaignRows                = strings.Join(campaignFieldNames, ",")
-	campaignRowsExpectAutoSet   = strings.Join(stringx.Remove(campaignFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), ",")
-	campaignRowsWithPlaceHolder = strings.Join(stringx.Remove(campaignFieldNames, "`id`", "`[create_at`", "`create_time`", "`created_at`", "`is_deleted]`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+	campaignRowsExpectAutoSet   = strings.Join(stringx.Remove(campaignFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	campaignRowsWithPlaceHolder = strings.Join(stringx.Remove(campaignFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`del_time`", "`delete_at`", "`delete_time`", "`deleted_at`", "`is_del`", "`is_delete`", "`is_deleted`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheCampaignIdPrefix = "cache:campaign:id:"
 )
@@ -98,8 +98,8 @@ func (m *defaultCampaignModel) FindOne(ctx context.Context, id int64) (*Campaign
 func (m *defaultCampaignModel) Insert(ctx context.Context, data *Campaign) (sql.Result, error) {
 	campaignIdKey := fmt.Sprintf("%s%v", cacheCampaignIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, campaignRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.CreateAt, data.IsDeleted)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, campaignRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime)
 	}, campaignIdKey)
 	return ret, err
 }
@@ -108,7 +108,7 @@ func (m *defaultCampaignModel) Update(ctx context.Context, data *Campaign) error
 	campaignIdKey := fmt.Sprintf("%s%v", cacheCampaignIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, campaignRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.CreateAt, data.IsDeleted, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uuid, data.Name, data.ProjectId, data.Status, data.Pattern, data.MaxCount, data.MaxPrizes, data.StartTime, data.EndTime, data.Id)
 	}, campaignIdKey)
 	return err
 }

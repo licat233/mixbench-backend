@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -290,8 +292,13 @@ func (m *defaultCampaignModel) FindsByIds(ctx context.Context, ids []int64) ([]*
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -300,8 +307,9 @@ func (m *defaultCampaignModel) FindsByUuids(ctx context.Context, uuids []string)
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -310,8 +318,9 @@ func (m *defaultCampaignModel) FindsByNames(ctx context.Context, names []string)
 	if len(names) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(names, ",")
 	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -320,8 +329,13 @@ func (m *defaultCampaignModel) FindsByProjectIds(ctx context.Context, projectIds
 	if len(projectIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range projectIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -330,8 +344,13 @@ func (m *defaultCampaignModel) FindsByStatuslist(ctx context.Context, statuslist
 	if len(statuslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range statuslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -340,8 +359,13 @@ func (m *defaultCampaignModel) FindsByPatterns(ctx context.Context, patterns []i
 	if len(patterns) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range patterns {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `pattern` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, patterns)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -350,8 +374,13 @@ func (m *defaultCampaignModel) FindsByMaxCounts(ctx context.Context, maxCounts [
 	if len(maxCounts) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range maxCounts {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `max_count` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxCounts)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -360,8 +389,13 @@ func (m *defaultCampaignModel) FindsByMaxPrizeslist(ctx context.Context, maxPriz
 	if len(maxPrizeslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range maxPrizeslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `max_prizes` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, maxPrizeslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -370,8 +404,13 @@ func (m *defaultCampaignModel) FindsByStartTimes(ctx context.Context, startTimes
 	if len(startTimes) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range startTimes {
+		strs = append(strs, v.Format("2006-01-02 15:04:05"))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `start_time` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, startTimes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -380,8 +419,13 @@ func (m *defaultCampaignModel) FindsByEndTimes(ctx context.Context, endTimes []t
 	if len(endTimes) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range endTimes {
+		strs = append(strs, v.Format("2006-01-02 15:04:05"))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `end_time` in (?) and `is_deleted` = '0' ", campaignRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, endTimes)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

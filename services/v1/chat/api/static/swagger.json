@@ -609,6 +609,29 @@
         ]
       }
     },
+    "/v1/api/chat/public/ws/kefu": {
+      "get": {
+        "summary": "kefu建立ws连接",
+        "operationId": "KefuServer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "chat"
+        ]
+      }
+    },
     "/v1/api/chat/public/ws/visitor": {
       "get": {
         "summary": "visitor建立ws连接",
@@ -625,6 +648,33 @@
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/v1/api/chat/putVisitorComment": {
+      "post": {
+        "summary": "更改某个游客的备注",
+        "operationId": "PutVisitorComment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutVisitorCommentReq"
+            }
           }
         ],
         "tags": [
@@ -890,6 +940,13 @@
             "type": "string"
           },
           {
+            "name": "comment",
+            "description": "备注",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "ip",
             "description": "IP",
             "in": "query",
@@ -971,10 +1028,46 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "lastLoginAt",
+            "description": "最后一次登录时间",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "0"
           }
         ],
         "tags": [
           "visitor"
+        ]
+      }
+    },
+    "/v1/api/chat/visitorLastMessage": {
+      "post": {
+        "summary": "获取某个游客的最后一条消息",
+        "operationId": "VisitorLastMessage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/visitorLastMessageReq"
+            }
+          }
+        ],
+        "tags": [
+          "chat"
         ]
       }
     },
@@ -1005,22 +1098,26 @@
         ]
       }
     },
-    "/v1/api/chat/ws/kefu": {
-      "get": {
-        "summary": "kefu建立ws连接",
-        "operationId": "KefuServer",
+    "/v1/api/chat/visitorMessages": {
+      "post": {
+        "summary": "获取某个游客的全部消息",
+        "operationId": "GetVisitorMessages",
         "responses": {
           "200": {
             "description": "A successful response.",
-            "schema": {}
+            "schema": {
+              "$ref": "#/definitions/BaseResp"
+            }
           }
         },
         "parameters": [
           {
-            "name": "token",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetVisitorMessagesReq"
+            }
           }
         ],
         "tags": [
@@ -1139,6 +1236,10 @@
           "type": "string",
           "description": "游客名"
         },
+        "comment": {
+          "type": "string",
+          "description": "备注"
+        },
         "ip": {
           "type": "string",
           "description": "IP"
@@ -1185,11 +1286,17 @@
         "language": {
           "type": "string",
           "description": "语言"
+        },
+        "lastLoginAt": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
         }
       },
       "title": "AddVisitorReq",
       "required": [
         "name",
+        "comment",
         "ip",
         "kefuId",
         "projectId",
@@ -1200,7 +1307,8 @@
         "platform",
         "os",
         "browser",
-        "language"
+        "language",
+        "lastLoginAt"
       ]
     },
     "BaseResp": {
@@ -1657,6 +1765,10 @@
           "type": "string",
           "description": "游客名"
         },
+        "comment": {
+          "type": "string",
+          "description": "备注"
+        },
         "ip": {
           "type": "string",
           "description": "IP"
@@ -1706,9 +1818,28 @@
         "language": {
           "type": "string",
           "description": "语言"
+        },
+        "lastLoginAt": {
+          "type": "integer",
+          "format": "int64",
+          "default": "0",
+          "description": "最后一次登录时间"
         }
       },
       "title": "GetVisitorListReq"
+    },
+    "GetVisitorMessagesReq": {
+      "type": "object",
+      "properties": {
+        "visitorId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "GetVisitorMessagesReq",
+      "required": [
+        "visitorId"
+      ]
     },
     "GetVisitorReq": {
       "type": "object",
@@ -2107,6 +2238,23 @@
         "expireTime"
       ]
     },
+    "PutVisitorCommentReq": {
+      "type": "object",
+      "properties": {
+        "visitorId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "title": "PutVisitorCommentReq",
+      "required": [
+        "visitorId",
+        "comment"
+      ]
+    },
     "PutVisitorReq": {
       "type": "object",
       "properties": {
@@ -2122,6 +2270,10 @@
         "name": {
           "type": "string",
           "description": "游客名"
+        },
+        "comment": {
+          "type": "string",
+          "description": "备注"
         },
         "ip": {
           "type": "string",
@@ -2169,6 +2321,11 @@
         "language": {
           "type": "string",
           "description": "语言"
+        },
+        "lastLoginAt": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
         }
       },
       "title": "PutVisitorReq",
@@ -2176,6 +2333,7 @@
         "id",
         "uuid",
         "name",
+        "comment",
         "ip",
         "kefuId",
         "projectId",
@@ -2186,7 +2344,8 @@
         "platform",
         "os",
         "browser",
-        "language"
+        "language",
+        "lastLoginAt"
       ]
     },
     "Resp": {
@@ -2300,6 +2459,10 @@
           "type": "string",
           "description": "游客名"
         },
+        "comment": {
+          "type": "string",
+          "description": "备注"
+        },
         "ip": {
           "type": "string",
           "description": "IP"
@@ -2346,6 +2509,11 @@
         "language": {
           "type": "string",
           "description": "语言"
+        },
+        "lastLoginAt": {
+          "type": "integer",
+          "format": "int64",
+          "description": "最后一次登录时间"
         }
       },
       "title": "Visitor",
@@ -2353,6 +2521,7 @@
         "id",
         "uuid",
         "name",
+        "comment",
         "ip",
         "kefuId",
         "projectId",
@@ -2363,7 +2532,38 @@
         "platform",
         "os",
         "browser",
-        "language"
+        "language",
+        "lastLoginAt"
+      ]
+    },
+    "VisitorList": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VisitorListItem"
+          }
+        }
+      },
+      "title": "VisitorList",
+      "required": [
+        "data"
+      ]
+    },
+    "VisitorListItem": {
+      "type": "object",
+      "properties": {
+        "lastMessage": {
+          "$ref": "#/definitions/Message"
+        },
+        "visitor": {
+          "$ref": "#/definitions/Visitor"
+        }
+      },
+      "title": "VisitorListItem",
+      "required": [
+        "visitor"
       ]
     },
     "VisitorListReq": {
@@ -2397,6 +2597,19 @@
     "VisitorLoginReq": {
       "type": "object",
       "title": "VisitorLoginReq"
+    },
+    "visitorLastMessageReq": {
+      "type": "object",
+      "properties": {
+        "visitorId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "visitorLastMessageReq",
+      "required": [
+        "visitorId"
+      ]
     }
   },
   "securityDefinitions": {

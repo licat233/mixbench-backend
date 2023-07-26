@@ -5,6 +5,9 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -21,6 +24,7 @@ type visitor_model interface {
 	FindById(ctx context.Context, id int64) (*Visitor, error)
 	FindByUuid(ctx context.Context, uuid string) (*Visitor, error)
 	FindByName(ctx context.Context, name string) (*Visitor, error)
+	FindByComment(ctx context.Context, comment string) (*Visitor, error)
 	FindByIp(ctx context.Context, ip string) (*Visitor, error)
 	FindByKefuId(ctx context.Context, kefuId int64) (*Visitor, error)
 	FindByProjectId(ctx context.Context, projectId int64) (*Visitor, error)
@@ -32,9 +36,11 @@ type visitor_model interface {
 	FindByOs(ctx context.Context, os string) (*Visitor, error)
 	FindByBrowser(ctx context.Context, browser string) (*Visitor, error)
 	FindByLanguage(ctx context.Context, language string) (*Visitor, error)
+	FindByLastLoginAt(ctx context.Context, lastLoginAt time.Time) (*Visitor, error)
 	FindsByIds(ctx context.Context, ids []int64) ([]*Visitor, error)
 	FindsByUuids(ctx context.Context, uuids []string) ([]*Visitor, error)
 	FindsByNames(ctx context.Context, names []string) ([]*Visitor, error)
+	FindsByComments(ctx context.Context, comments []string) ([]*Visitor, error)
 	FindsByIps(ctx context.Context, ips []string) ([]*Visitor, error)
 	FindsByKefuIds(ctx context.Context, kefuIds []int64) ([]*Visitor, error)
 	FindsByProjectIds(ctx context.Context, projectIds []int64) ([]*Visitor, error)
@@ -46,10 +52,12 @@ type visitor_model interface {
 	FindsByOslist(ctx context.Context, oslist []string) ([]*Visitor, error)
 	FindsByBrowsers(ctx context.Context, browsers []string) ([]*Visitor, error)
 	FindsByLanguages(ctx context.Context, languages []string) ([]*Visitor, error)
+	FindsByLastLoginAts(ctx context.Context, lastLoginAts []time.Time) ([]*Visitor, error)
 
 	FindsById(ctx context.Context, id int64) ([]*Visitor, error)
 	FindsByUuid(ctx context.Context, uuid string) ([]*Visitor, error)
 	FindsByName(ctx context.Context, name string) ([]*Visitor, error)
+	FindsByComment(ctx context.Context, comment string) ([]*Visitor, error)
 	FindsByIp(ctx context.Context, ip string) ([]*Visitor, error)
 	FindsByKefuId(ctx context.Context, kefuId int64) ([]*Visitor, error)
 	FindsByProjectId(ctx context.Context, projectId int64) ([]*Visitor, error)
@@ -61,6 +69,7 @@ type visitor_model interface {
 	FindsByOs(ctx context.Context, os string) ([]*Visitor, error)
 	FindsByBrowser(ctx context.Context, browser string) ([]*Visitor, error)
 	FindsByLanguage(ctx context.Context, language string) ([]*Visitor, error)
+	FindsByLastLoginAt(ctx context.Context, lastLoginAt time.Time) ([]*Visitor, error)
 
 	formatUuidKey(uuid string) string
 	SoftDelete(ctx context.Context, id int64) error
@@ -101,6 +110,9 @@ func (m *defaultVisitorModel) FindList(ctx context.Context, pageSize, page int64
 			sq = sq.Where("`name` = ?", visitor.Name)
 			hasName = true
 		}
+		if visitor.Comment != "" {
+			sq = sq.Where("`comment` = ?", visitor.Comment)
+		}
 		if visitor.Ip != "" {
 			sq = sq.Where("`ip` = ?", visitor.Ip)
 		}
@@ -133,6 +145,9 @@ func (m *defaultVisitorModel) FindList(ctx context.Context, pageSize, page int64
 		}
 		if visitor.Language != "" {
 			sq = sq.Where("`language` = ?", visitor.Language)
+		}
+		if visitor.LastLoginAt.After(time.Unix(0, 0)) {
+			sq = sq.Where("`last_login_at` = ?", visitor.LastLoginAt.Format("2006-01-02 15:04:05"))
 		}
 	}
 	if keyword != "" && hasName {
@@ -200,6 +215,20 @@ func (m *defaultVisitorModel) FindByName(ctx context.Context, name string) (*Vis
 	var resp Visitor
 	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' limit 1", visitorRows, m.table)
 	err := m.QueryRowNoCacheCtx(ctx, &resp, query, name)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultVisitorModel) FindByComment(ctx context.Context, comment string) (*Visitor, error) {
+	var resp Visitor
+	query := fmt.Sprintf("select %s from %s where `comment` = ? and `is_deleted` = '0' limit 1", visitorRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, comment)
 	switch err {
 	case nil:
 		return &resp, nil
@@ -364,13 +393,32 @@ func (m *defaultVisitorModel) FindByLanguage(ctx context.Context, language strin
 	}
 }
 
+func (m *defaultVisitorModel) FindByLastLoginAt(ctx context.Context, lastLoginAt time.Time) (*Visitor, error) {
+	var resp Visitor
+	query := fmt.Sprintf("select %s from %s where `last_login_at` = ? and `is_deleted` = '0' limit 1", visitorRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, lastLoginAt.Format("2006-01-02 15:04:05"))
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultVisitorModel) FindsByIds(ctx context.Context, ids []int64) ([]*Visitor, error) {
 	var resp = make([]*Visitor, 0)
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -379,8 +427,9 @@ func (m *defaultVisitorModel) FindsByUuids(ctx context.Context, uuids []string) 
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -389,8 +438,20 @@ func (m *defaultVisitorModel) FindsByNames(ctx context.Context, names []string) 
 	if len(names) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(names, ",")
 	query := fmt.Sprintf("select %s from %s where `name` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, names)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByComments(ctx context.Context, comments []string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	if len(comments) == 0 {
+		return resp, nil
+	}
+	agr := strings.Join(comments, ",")
+	query := fmt.Sprintf("select %s from %s where `comment` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -399,8 +460,9 @@ func (m *defaultVisitorModel) FindsByIps(ctx context.Context, ips []string) ([]*
 	if len(ips) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(ips, ",")
 	query := fmt.Sprintf("select %s from %s where `ip` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ips)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -409,8 +471,13 @@ func (m *defaultVisitorModel) FindsByKefuIds(ctx context.Context, kefuIds []int6
 	if len(kefuIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range kefuIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `kefu_id` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -419,8 +486,13 @@ func (m *defaultVisitorModel) FindsByProjectIds(ctx context.Context, projectIds 
 	if len(projectIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range projectIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `project_id` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, projectIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -429,8 +501,13 @@ func (m *defaultVisitorModel) FindsByStatuslist(ctx context.Context, statuslist 
 	if len(statuslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range statuslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -439,8 +516,9 @@ func (m *defaultVisitorModel) FindsByReferers(ctx context.Context, referers []st
 	if len(referers) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(referers, ",")
 	query := fmt.Sprintf("select %s from %s where `referer` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, referers)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -449,8 +527,9 @@ func (m *defaultVisitorModel) FindsByRegions(ctx context.Context, regions []stri
 	if len(regions) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(regions, ",")
 	query := fmt.Sprintf("select %s from %s where `region` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, regions)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -459,8 +538,9 @@ func (m *defaultVisitorModel) FindsByCities(ctx context.Context, cities []string
 	if len(cities) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(cities, ",")
 	query := fmt.Sprintf("select %s from %s where `city` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, cities)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -469,8 +549,9 @@ func (m *defaultVisitorModel) FindsByPlatforms(ctx context.Context, platforms []
 	if len(platforms) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(platforms, ",")
 	query := fmt.Sprintf("select %s from %s where `platform` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, platforms)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -479,8 +560,9 @@ func (m *defaultVisitorModel) FindsByOslist(ctx context.Context, oslist []string
 	if len(oslist) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(oslist, ",")
 	query := fmt.Sprintf("select %s from %s where `os` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, oslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -489,8 +571,9 @@ func (m *defaultVisitorModel) FindsByBrowsers(ctx context.Context, browsers []st
 	if len(browsers) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(browsers, ",")
 	query := fmt.Sprintf("select %s from %s where `browser` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, browsers)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -499,8 +582,24 @@ func (m *defaultVisitorModel) FindsByLanguages(ctx context.Context, languages []
 	if len(languages) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(languages, ",")
 	query := fmt.Sprintf("select %s from %s where `language` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, languages)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByLastLoginAts(ctx context.Context, lastLoginAts []time.Time) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	if len(lastLoginAts) == 0 {
+		return resp, nil
+	}
+	strs := []string{}
+	for _, v := range lastLoginAts {
+		strs = append(strs, v.Format("2006-01-02 15:04:05"))
+	}
+	agr := strings.Join(strs, ",")
+	query := fmt.Sprintf("select %s from %s where `last_login_at` in (?) and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -522,6 +621,13 @@ func (m *defaultVisitorModel) FindsByName(ctx context.Context, name string) ([]*
 	var resp = make([]*Visitor, 0)
 	query := fmt.Sprintf("select %s from %s where `name` = ? and `is_deleted` = '0' ", visitorRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, name)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByComment(ctx context.Context, comment string) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `comment` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, comment)
 	return resp, err
 }
 
@@ -599,6 +705,13 @@ func (m *defaultVisitorModel) FindsByLanguage(ctx context.Context, language stri
 	var resp = make([]*Visitor, 0)
 	query := fmt.Sprintf("select %s from %s where `language` = ? and `is_deleted` = '0' ", visitorRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, language)
+	return resp, err
+}
+
+func (m *defaultVisitorModel) FindsByLastLoginAt(ctx context.Context, lastLoginAt time.Time) ([]*Visitor, error) {
+	var resp = make([]*Visitor, 0)
+	query := fmt.Sprintf("select %s from %s where `last_login_at` = ? and `is_deleted` = '0' ", visitorRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, lastLoginAt)
 	return resp, err
 }
 

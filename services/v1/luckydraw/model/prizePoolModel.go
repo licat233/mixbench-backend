@@ -39,6 +39,7 @@ func NewPrizePoolModel(conn sqlx.SqlConn, c cache.CacheConf) PrizePoolModel {
 	prizePoolRowsExpectAutoSet = strings.Join(stringx.Remove(prizePoolFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段
 	prizePoolRowsWithPlaceHolder = strings.Join(stringx.Remove(prizePoolFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	cachePrizePoolIdPrefix = "cache:luckydraw:prizePool:id:" // modifying cache id prefix by genzero
 	return &customPrizePoolModel{
 		defaultPrizePoolModel: newPrizePoolModel(conn, c),
 	}

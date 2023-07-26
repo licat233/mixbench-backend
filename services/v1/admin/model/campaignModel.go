@@ -22,6 +22,7 @@ type (
 
 // NewCampaignModel returns a model for the database table.
 func NewCampaignModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) CampaignModel {
+	cacheCampaignIdPrefix = "cache:admin:campaign:id:" // modifying cache id prefix by genzero
 	return &customCampaignModel{
 		defaultCampaignModel: newCampaignModel(conn, c, opts...),
 	}

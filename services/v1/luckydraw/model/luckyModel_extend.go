@@ -5,6 +5,8 @@ package model
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -225,8 +227,13 @@ func (m *defaultLuckyModel) FindsByIds(ctx context.Context, ids []int64) ([]*Luc
 	if len(ids) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range ids {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `id` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -235,8 +242,9 @@ func (m *defaultLuckyModel) FindsByUuids(ctx context.Context, uuids []string) ([
 	if len(uuids) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(uuids, ",")
 	query := fmt.Sprintf("select %s from %s where `uuid` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, uuids)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -245,8 +253,13 @@ func (m *defaultLuckyModel) FindsByUserIds(ctx context.Context, userIds []int64)
 	if len(userIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range userIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `user_id` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, userIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -255,8 +268,13 @@ func (m *defaultLuckyModel) FindsByPrizePoolIds(ctx context.Context, prizePoolId
 	if len(prizePoolIds) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range prizePoolIds {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `prize_pool_id` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, prizePoolIds)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -265,8 +283,13 @@ func (m *defaultLuckyModel) FindsByStatuslist(ctx context.Context, statuslist []
 	if len(statuslist) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range statuslist {
+		strs = append(strs, strconv.FormatInt(v, 10))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `status` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, statuslist)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -275,8 +298,13 @@ func (m *defaultLuckyModel) FindsByLuckDates(ctx context.Context, luckDates []ti
 	if len(luckDates) == 0 {
 		return resp, nil
 	}
+	strs := []string{}
+	for _, v := range luckDates {
+		strs = append(strs, v.Format("2006-01-02 15:04:05"))
+	}
+	agr := strings.Join(strs, ",")
 	query := fmt.Sprintf("select %s from %s where `luck_date` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, luckDates)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 
@@ -285,8 +313,9 @@ func (m *defaultLuckyModel) FindsByIps(ctx context.Context, ips []string) ([]*Lu
 	if len(ips) == 0 {
 		return resp, nil
 	}
+	agr := strings.Join(ips, ",")
 	query := fmt.Sprintf("select %s from %s where `ip` in (?) and `is_deleted` = '0' ", luckyRows, m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, ips)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, agr)
 	return resp, err
 }
 

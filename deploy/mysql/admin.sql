@@ -31,10 +31,10 @@ CREATE TABLE `adminer` (
   `passport` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '账号',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '密码',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '邮箱',
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '账号状态，是否可用',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '账号状态，是否可用, 0不可用，1可用',
   `is_super_admin` tinyint NOT NULL DEFAULT '0' COMMENT '是否为超级管理员',
-  `company_id` int NOT NULL DEFAULT '0' COMMENT '公司id',
-  `project_id` int NOT NULL DEFAULT '0' COMMENT '项目id',
+  `company_id` int NOT NULL DEFAULT '1' COMMENT '公司id',
+  `project_id` int NOT NULL DEFAULT '1' COMMENT '项目id',
   `login_count` int NOT NULL DEFAULT '0' COMMENT '登录次数',
   `last_login_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '最后一次登录时间',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -51,7 +51,7 @@ CREATE TABLE `adminer` (
 -- Records of adminer
 -- ----------------------------
 BEGIN;
-INSERT INTO `adminer` VALUES (1, 'b4a1d67c-97cc-463f-a366-65b5caa5e3aa', '超管', '//mixbench.net/static/avatar/avatar_1_1663575200688027000.jpg', 'superAdmin', 'licat', '$2a$10$in/bw.cASq41miAYh2soTOeUg7e1Z/0r0LlKazmiSTlWvA5dSjzsi', '1697470538@qq.com', 1, 1, 1, 0, 18, '2022-10-14 17:04:03', '2022-07-29 09:47:08', '2022-10-14 17:04:02', 0);
+INSERT INTO `adminer` VALUES (1, 'b4a1d67c-97cc-463f-a366-65b5caa5e3aa', '超管', '//mixbench.net/static/avatar/avatar_1_1663575200688027000.jpg', 'superAdmin', 'licat', '$2a$10$in/bw.cASq41miAYh2soTOeUg7e1Z/0r0LlKazmiSTlWvA5dSjzsi', '1697470538@qq.com', 1, 1, 1, 1, 1, '2022-10-14 17:04:03', '2022-07-29 09:47:08', '2022-10-14 17:04:02', 0);
 COMMIT;
 
 -- ----------------------------

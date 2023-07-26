@@ -27,6 +27,7 @@ type (
 
 // NewMessageConfigModel returns a model for the database table.
 func NewMessageConfigModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) MessageConfigModel {
+	cacheMessageConfigIdPrefix = "cache:chat:messageConfig:id:" // modifying cache id prefix by genzero
 	return &customMessageConfigModel{
 		defaultMessageConfigModel: newMessageConfigModel(conn, c, opts...),
 	}

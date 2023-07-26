@@ -29,6 +29,7 @@ func NewProjectModel(conn sqlx.SqlConn, c cache.CacheConf) ProjectModel {
 	projectRowsExpectAutoSet = strings.Join(stringx.Remove(projectFieldNames, BaseInsertOmitField...), ",")
 	//用于更新数据的字段
 	projectRowsWithPlaceHolder = strings.Join(stringx.Remove(projectFieldNames, BaseUpdateOmitField...), "=?,") + "=?"
+	cacheProjectIdPrefix = "cache:luckydraw:project:id:" // modifying cache id prefix by genzero
 	return &customProjectModel{
 		defaultProjectModel: newProjectModel(conn, c),
 	}

@@ -46,8 +46,11 @@ func CreateToken(claims jwt.MapClaims, secret string) (string, error) {
 
 // 解析token, 返回原生error
 func ParseToken(tokenString string, secret string) (jwt.MapClaims, error) {
-	if secret == "" {
-		return nil, errors.New("jwt secret equal nil")
+	if secret = strings.TrimSpace(secret); secret == "" {
+		secret = os.Getenv("JWT_SECRET")
+		if secret = strings.TrimSpace(secret); secret == "" {
+			return nil, errors.New("the environment variable JWT_SECRET equal nil")
+		}
 	}
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, e error) {
 		// 返回用于验证签名的密钥
@@ -195,8 +198,8 @@ func GetString(claims jwt.MapClaims, key string) (res string, exist bool) {
 
 func GetIdByRequest(r *http.Request, secret string) (int64, error) {
 	if secret = strings.TrimSpace(secret); secret == "" {
-		secret := os.Getenv("JWT_SECRET")
-		if secret = strings.TrimSpace(secret); secret != "" {
+		secret = os.Getenv("JWT_SECRET")
+		if secret = strings.TrimSpace(secret); secret == "" {
 			return 0, errors.New("the environment variable JWT_SECRET equal nil")
 		}
 	}
@@ -217,7 +220,7 @@ func GetIdByToken(token string, secret string) (int64, error) {
 	}
 	if secret = strings.TrimSpace(secret); secret == "" {
 		secret := os.Getenv("JWT_SECRET")
-		if secret = strings.TrimSpace(secret); secret != "" {
+		if secret = strings.TrimSpace(secret); secret == "" {
 			return 0, errors.New("the environment variable JWT_SECRET equal nil")
 		}
 	}

@@ -150,7 +150,7 @@ export interface Adminer {
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱
-	status: number // 账号状态，是否可用
+	status: number // 账号状态，是否可用, 0不可用，1可用
 	isSuperAdmin: number // 是否为超级管理员
 	companyId: number // 公司id
 	projectId: number // 项目id
@@ -165,7 +165,7 @@ export interface AddAdminerReq {
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱
-	status: number // 账号状态，是否可用
+	status: number // 账号状态，是否可用, 0不可用，1可用
 	isSuperAdmin: number // 是否为超级管理员
 	companyId: number // 公司id
 	projectId: number // 项目id
@@ -182,7 +182,7 @@ export interface PutAdminerReq {
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱
-	status: number // 账号状态，是否可用
+	status: number // 账号状态，是否可用, 0不可用，1可用
 	isSuperAdmin: number // 是否为超级管理员
 	companyId: number // 公司id
 	projectId: number // 项目id
@@ -195,6 +195,8 @@ export interface DelAdminerReq {
 }
 
 export interface GetAdminerReq {
+}
+export interface GetAdminerReqParams {
 	id: number // 管理员 ID
 }
 
@@ -213,7 +215,7 @@ export interface GetAdminerListReqParams {
 	passport: string // 账号
 	password: string // 密码
 	email: string // 邮箱
-	status: number // 账号状态，是否可用
+	status: number // 账号状态，是否可用, 0不可用，1可用
 	isSuperAdmin: number // 是否为超级管理员
 	companyId: number // 公司id
 	projectId: number // 项目id
@@ -293,6 +295,8 @@ export interface DelCampaignReq {
 }
 
 export interface GetCampaignReq {
+}
+export interface GetCampaignReqParams {
 	id: number // 活动 ID
 }
 
@@ -343,6 +347,8 @@ export interface DelCompanyReq {
 }
 
 export interface GetCompanyReq {
+}
+export interface GetCompanyReqParams {
 	id: number // 公司 ID
 }
 
@@ -390,6 +396,8 @@ export interface DelProjectReq {
 }
 
 export interface GetProjectReq {
+}
+export interface GetProjectReqParams {
 	id: number // 项目 ID
 }
 
@@ -441,6 +449,8 @@ export interface DelWebReq {
 }
 
 export interface GetWebReq {
+}
+export interface GetWebReqParams {
 	id: number // 网站 ID
 }
 

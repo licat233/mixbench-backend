@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -29,6 +30,8 @@ type (
 		FindsToKefuByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
 		FindsToVisitorByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
 		FindsToVisitorByKefuId(ctx context.Context, kefuId int64) ([]*Message, error)
+		FindLastByVisitorId(ctx context.Context, visitorId int64) (*Message, error)
+		FindsByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error)
 	}
 
 	customMessageModel struct {
@@ -38,6 +41,7 @@ type (
 
 // NewMessageModel returns a model for the database table.
 func NewMessageModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) MessageModel {
+	cacheMessageIdPrefix = "cache:chat:message:id:" // modifying cache id prefix by genzero
 	return &customMessageModel{
 		defaultMessageModel: newMessageModel(conn, c, opts...),
 	}
@@ -119,5 +123,28 @@ func (m *customMessageModel) FindsByVisitorIdAndKefuId(ctx context.Context, visi
 	var resp = make([]*Message, 0)
 	query := fmt.Sprintf("select %s from %s where `kefu_id` = ? and `visitor_id` = ? and `is_deleted` = '0' ", messageRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, kefuId, visitorId)
+	return resp, err
+}
+
+// 获取某个游客的最新信息
+func (m *customMessageModel) FindLastByVisitorId(ctx context.Context, visitorId int64) (*Message, error) {
+	var resp Message
+	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `is_deleted` = '0' order by `send_time` desc limit 1", messageRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, visitorId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// 获取某个游客的全部消息
+func (m *customMessageModel) FindsByVisitorId(ctx context.Context, visitorId int64) ([]*Message, error) {
+	var resp = make([]*Message, 0)
+	query := fmt.Sprintf("select %s from %s where `visitor_id` = ? and `is_deleted` = '0' order by `send_time` asc", messageRows, m.table)
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, visitorId)
 	return resp, err
 }

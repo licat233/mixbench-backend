@@ -40,13 +40,12 @@ func (l *VisitorServerLogic) VisitorServer(req *types.ConnWebsocketReq) (_ error
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	claims, ok := jwtx.ValidateToken(string(token), l.svcCtx.Config.VisitorAuthSecret)
+	claims, ok := jwtx.ValidateToken(token, l.svcCtx.Config.VisitorAuthSecret)
 	if !ok {
 		//鉴权失败
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
 	id, ok := jwtx.GetId(claims)
 	if !ok {
 		//鉴权失败
@@ -55,6 +54,11 @@ func (l *VisitorServerLogic) VisitorServer(req *types.ConnWebsocketReq) (_ error
 	}
 
 	//查找游客是否存在
+	if id < 1 {
+		//游客不存在
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 	visitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, id)
 	if err == model.ErrNotFound {
 		//游客不存在
@@ -66,7 +70,17 @@ func (l *VisitorServerLogic) VisitorServer(req *types.ConnWebsocketReq) (_ error
 		return
 	}
 
+	//如果该游客已被拉黑 status == 2
+	if visitor.Status != 1 && visitor.Status != 0 {
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
 	//查找项目是否存在
+	if visitor.ProjectId < 1 {
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 	projectResp, err := l.svcCtx.AdminRpc.GetProject(l.ctx, &admin_pb.GetProjectReq{
 		Id: visitor.ProjectId,
 	})
@@ -79,6 +93,13 @@ func (l *VisitorServerLogic) VisitorServer(req *types.ConnWebsocketReq) (_ error
 		l.w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
+	//检查状态
+	if projectResp.Project.Status != 1 {
+		l.w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	//至此，鉴权结束
 
 	cli, err := ws.NewVisitorClient(l.ctx, l.svcCtx, l.w, l.r, &ws.VisitorInfo{Visitor: visitor})
 	if err != nil {

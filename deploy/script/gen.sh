@@ -183,7 +183,7 @@ gen_model() {
         return
     fi
     cd "${project_root}/services/v1/${name}/docs" || exit
-    if ! goctl model mysql ddl --src="${sql_file}" --dir="../model" --cache="true" --style="goZero" --ignore-columns="[create_at,created_at,create_time,update_at,updated_at,update_time,is_deleted]"; then
+    if ! goctl model mysql ddl --src="${sql_file}" --dir="../model" --cache="true" --style="goZero" --ignore-columns="create_at,created_at,create_time,update_at,updated_at,update_time,is_deleted,is_del,is_delete,delete_at,deleted_at,delete_time,del_time"; then
         exit
     fi
 }
