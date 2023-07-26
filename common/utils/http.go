@@ -28,7 +28,11 @@ func RemoteIp(req *http.Request) string {
 	addr := httpx.GetRemoteAddr(req)
 	//可能会被仿冒，我们取最后一个IP，也就是原始IP
 	strs := strings.Split(addr, ",")
-	return strings.TrimSpace(strs[len(strs)-1])
+	if ip := strings.TrimSpace(strs[len(strs)-1]); ip != "" {
+		return strings.Split(ip, ":")[0]
+	}
+
+	return strings.Split(req.RemoteAddr, ":")[0]
 }
 
 // 获取请求头中的Origin

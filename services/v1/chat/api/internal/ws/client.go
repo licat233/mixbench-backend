@@ -129,6 +129,22 @@ func (c *client) Stop() {
 	}
 }
 
+func (c *client) NewSystemMessage(content string, kefuId, visitorId int64) *model.Message {
+	return &model.Message{
+		Id:          0,
+		Uuid:        uniqueid.NewUUID(),
+		Content:     content,
+		ContentType: TextContentType,
+		VisitorId:   visitorId,
+		KefuId:      kefuId,
+		ProjectId:   c.user.GetProjectId(),
+		MsgType:     SystemMsgType,
+		Status:      0,
+		IsRead:      0,
+		IsSend:      0,
+	}
+}
+
 func (c *client) NewPublicMessage(content string, kefuId, visitorId int64) *model.Message {
 	return &model.Message{
 		Id:          0,

@@ -259,25 +259,6 @@ func (c *KefuClient) offlineNotification() error {
 	return nil
 }
 
-// func (c *KefuClient) update() error {
-// 	kefu := c.Kefu.Adminer
-// 	_, err := c.svcCtx.AdminRpc.PutAdminer(c.ctx, &admin_pb.PutAdminerReq{
-// 		Id:           kefu.Id,
-// 		Uuid:         kefu.Uuid,
-// 		Name:         kefu.Name,
-// 		Avatar:       kefu.Avatar,
-// 		Access:       kefu.Access,
-// 		Passport:     kefu.Passport,
-// 		Password:     kefu.Password,
-// 		Email:        kefu.Email,
-// 		Status:       kefu.Status,
-// 		IsSuperAdmin: kefu.IsSuperAdmin,
-// 		ProjectId:    kefu.ProjectId,
-// 		LoginCount:   kefu.LoginCount,
-// 		LastLogin:    kefu.LastLogin,
-// 	})
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+func (c *KefuClient) update() error {
+	return nil
+}

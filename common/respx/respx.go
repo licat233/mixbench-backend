@@ -129,7 +129,7 @@ func ListResp(alertMsg string, listData any, totalRecord, pageSize, Page int64) 
 	// } else {
 	// 	data = []any{}
 	// }
-	if listData == nil || totalRecord == 0 || pageSize == 0 {
+	if listData == nil {
 		listData = make([]any, 0)
 	}
 	if pageSize == 0 {

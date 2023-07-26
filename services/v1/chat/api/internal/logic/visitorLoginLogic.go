@@ -64,15 +64,19 @@ const VisitorTokenKey = "Authorization"
 
 // 该接口主要用于生成 jwt-token
 func (l *VisitorLoginLogic) VisitorLogin(req *types.VisitorLoginReq) (any, error) {
-	return l.Validator(strings.TrimSpace(l.r.Header.Get(VisitorTokenKey)))
+	token, _, err := l.Validator(strings.TrimSpace(l.r.Header.Get(VisitorTokenKey)))
+	if err != nil {
+		return nil, err
+	}
+	return respx.NewData(token), nil
 }
 
-func (l *VisitorLoginLogic) Validator(jwtToken string) (any, error) {
+func (l *VisitorLoginLogic) Validator(jwtToken string) (string, *model.Visitor, error) {
 	// 获取设备信息
 	l.ua = useragent.New(utils.RemoteUserAgent(l.r))
 	//如果是机器人
 	if l.ua.Bot() {
-		return nil, errorx.ExternalError(errors.New("the current request is a bot"))
+		return "", nil, errorx.ExternalError(errors.New("the current request is a bot"))
 	}
 	// 获取语言
 	l.language = strings.Join(utils.RemoteLanguage(l.r), ",")
@@ -102,14 +106,16 @@ func (l *VisitorLoginLogic) Validator(jwtToken string) (any, error) {
 		l.referer = "未知"
 	}
 
+	weburl = l.referer
+
 	if weburl == "" || !govalidator.IsURL(weburl) {
 		//未知referer
-		return nil, errorx.AuthError("referer is " + weburl)
+		return "", nil, errorx.AuthError("referer is " + weburl)
 	}
 
 	parsedURL, err := url.Parse(weburl)
 	if err != nil {
-		return nil, errorx.InternalError(fmt.Errorf("failed to parse URL: %s", err.Error()))
+		return "", nil, errorx.InternalError(fmt.Errorf("failed to parse URL: %s", err.Error()))
 	}
 	isDev := strings.HasPrefix(parsedURL.Host, "localhost")
 	if !isDev {
@@ -118,12 +124,12 @@ func (l *VisitorLoginLogic) Validator(jwtToken string) (any, error) {
 			Url: weburl,
 		})
 		if err != nil {
-			return nil, err
+			return "", nil, err
 		}
 
 		if webResp.Web == nil {
 			//如果无此url对应的web，则返回
-			return nil, errorx.ExternalError("unknown referer")
+			return "", nil, errorx.ExternalError("unknown referer")
 		}
 		l.ProjectId = webResp.Web.ProjectId
 	} else {
@@ -147,7 +153,7 @@ func (l *VisitorLoginLogic) Validator(jwtToken string) (any, error) {
 					visitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, id)
 					if err != nil && err != model.ErrNotFound {
 						l.Logger.Error(err)
-						return nil, errorx.InternalError(err)
+						return "", nil, errorx.InternalError(err)
 					}
 					// 表示存在该visitor
 					if err == nil {
@@ -156,7 +162,7 @@ func (l *VisitorLoginLogic) Validator(jwtToken string) (any, error) {
 						projectResp, err := l.svcCtx.AdminRpc.GetProject(l.ctx, &admin_pb.GetProjectReq{Id: visitor.ProjectId})
 						if err != nil {
 							l.Logger.Error(err)
-							return nil, errorx.InternalError(err)
+							return "", nil, errorx.InternalError(err)
 						}
 						if projectResp.Project == nil {
 							//项目已不存在，游客将重新注册
@@ -187,28 +193,27 @@ func (l *VisitorLoginLogic) Validator(jwtToken string) (any, error) {
 
 	// 检查projectId
 	if l.ProjectId < 1 {
-		return nil, errorx.AuthError("project not found")
+		return "", nil, errorx.AuthError("project not found")
 	}
 
-	var newToken string
 	// 如果存在 visitorId，则表示老客户
 	if visitorId > 0 {
 		l.token = jwtToken
-		newToken, err = l.isOldVisitor()
+		fmt.Print("老用户")
+		return l.isOldVisitor()
 	} else {
-		newToken, err = l.isNewVisitor()
+		return l.isNewVisitor()
 	}
-	return respx.NewData(newToken), err
 }
 
-func (l *VisitorLoginLogic) isOldVisitor() (string, error) {
+func (l *VisitorLoginLogic) isOldVisitor() (string, *model.Visitor, error) {
 	// 获取接待的客服id
 	var kefuId int64
 	// 获取其kefuId
 	visitor, err := l.svcCtx.VisitorModel.FindById(l.ctx, l.id)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 	if err == model.ErrNotFound {
 		// 表明不存在，将作为新客户处理
@@ -216,7 +221,7 @@ func (l *VisitorLoginLogic) isOldVisitor() (string, error) {
 	}
 	//如果该游客已被拉黑 status == 2
 	if visitor.Status != 1 && visitor.Status != 0 {
-		return "", errorx.ErrAuth
+		return "", nil, errorx.ErrAuth
 	}
 
 	kefuId = visitor.KefuId
@@ -237,14 +242,14 @@ func (l *VisitorLoginLogic) isOldVisitor() (string, error) {
 	visitor.LastLoginAt = time.Now().Local()
 	if err := l.svcCtx.VisitorModel.Update(l.ctx, visitor); err != nil {
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 
 	// 如果该客服在线，则没啥事了，因为这里的token是永久有效的，所以无需生产新的token
-	return l.token, nil
+	return l.token, visitor, nil
 }
 
-func (l *VisitorLoginLogic) isNewVisitor() (string, error) {
+func (l *VisitorLoginLogic) isNewVisitor() (string, *model.Visitor, error) {
 	//表示为新客户，接下来为其分配客服
 	kefuId := ws.AssignKefu()
 
@@ -283,37 +288,37 @@ func (l *VisitorLoginLogic) isNewVisitor() (string, error) {
 	res, err := l.svcCtx.VisitorModel.Insert(l.ctx, visitor)
 	if err != nil {
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 
 	//获取id
 	newId, err := res.LastInsertId()
 	if err != nil {
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 
 	//取出数据库中的记录
 	visitorMd, err := l.svcCtx.VisitorModel.FindById(l.ctx, newId)
 	if err != nil && err != model.ErrNotFound {
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 	if err == model.ErrNotFound {
 		//见鬼了，可能是缓存未更新
 		err = errors.New("the newly inserted data in the MySQL database is missing")
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 
 	// 生成 token
 	token, err := GenVisitorToken(l.svcCtx.Config.VisitorAuthSecret, visitorMd)
 	if err != nil {
 		l.Logger.Error(err)
-		return "", errorx.InternalError(err)
+		return "", nil, errorx.InternalError(err)
 	}
 
-	return token, nil
+	return token, visitorMd, nil
 }
 
 func GenVisitorToken(secret string, visitor *model.Visitor) (string, error) {

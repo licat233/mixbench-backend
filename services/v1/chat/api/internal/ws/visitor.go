@@ -28,9 +28,10 @@ type VisitorClient struct {
 	Visitor *VisitorInfo
 	//游客近期通过ws发送过来的信息
 	RecentMessages *store.RecentMessage
+	token          string
 }
 
-func NewVisitorClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.ResponseWriter, r *http.Request, visitor *VisitorInfo) (*VisitorClient, error) {
+func NewVisitorClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.ResponseWriter, r *http.Request, visitor *VisitorInfo, token string) (*VisitorClient, error) {
 	if visitor == nil || visitor.Uuid == "" || visitor.ProjectId < 1 {
 		return nil, errors.New("visitor field value error")
 	}
@@ -42,6 +43,7 @@ func NewVisitorClient(ctx context.Context, svcCtx *svc.ServiceContext, w http.Re
 		client:         client,
 		Visitor:        visitor,
 		RecentMessages: store.NewRecentMessage(),
+		token:          token,
 	}
 	return c, nil
 }
@@ -74,8 +76,15 @@ func (c *VisitorClient) Init() error {
 		return err
 	}
 
+	var err error
+	// 发送 token
+	err = c.SendTokenMessages()
+	if err != nil {
+		return err
+	}
+
 	// 发送历史聊天记录
-	err := c.SendHistoryMessages()
+	err = c.SendHistoryMessages()
 	if err != nil {
 		return err
 	}
@@ -125,6 +134,11 @@ func (c *VisitorClient) done() error {
 	//游客离线后的操作
 	//通知其客服，自己已下线
 	if err := c.offlineNotification(); err != nil {
+		return err
+	}
+	//更新数据库
+	c.Visitor.Status = 0
+	if err := c.svcCtx.VisitorModel.Update(c.ctx, c.Visitor.Visitor); err != nil {
 		return err
 	}
 	return nil
@@ -216,6 +230,11 @@ func (c *VisitorClient) newMessage(content string) *model.Message {
 		SendTime:    time.Now().Local(),
 		ExpireTime:  time.Now().Local().Add(time.Hour * 24 * 30), //30天
 	}
+}
+
+func (c *VisitorClient) SendTokenMessages() error {
+	msg := c.NewSystemMessage("token:"+c.token, 0, c.Visitor.Id)
+	return c.writeToWebsocket(msg)
 }
 
 // sendHistoryMessages 发送历史聊天记录给当前用户
