@@ -227,7 +227,39 @@ goctl api ts -api captcha.api -dir .
 `go install github.com/licat233/genzero`
 
 ```shell
-genzero -h
+$ genzero -h
+This is a tool to generate gozero service based on mysql.
+The goctl tool must be installed before use.
+
+Github: https://github.com/licat233/genzero
+
+Usage:
+  genzero [flags]
+  genzero [command]
+
+Available Commands:
+  api         Generate .api files
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  init        Create the default genzero configuration file in the current directory
+  logic       Modify logic files, this feature has not been developed yet
+  model       Generate model code
+  pb          Generate .proto files
+  start       Use yaml file configuration to start genzero
+  upgrade     Upgrade genzero to latest version
+  version     Print the version number of genzero
+
+Flags:
+      --dev                      dev mode, print error message
+      --dsn string               data source name (DSN) to use when connecting to the database
+  -h, --help                     help for genzero
+      --ignore_columns strings   ignore column string, default is none，split multiple value by ','
+      --ignore_tables strings    ignore table string, default is none，split multiple value by ','
+      --src string               sql file to use when connecting to the database
+      --tables strings           need to generate tables, default is all tables，split multiple value by ','
+  -v, --version                  version for genzero
+
+Use "genzero [command] --help" for more information about a command.
 ```
 
 ## 存在的bug处理

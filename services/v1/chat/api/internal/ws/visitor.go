@@ -185,13 +185,14 @@ func (c *VisitorClient) wsPayloadHandler(payload []byte) (*model.Message, error)
 	return message, nil
 }
 
-func (c *VisitorClient) recevierMessageHandler(message *model.Message) error {
+func (c *VisitorClient) recevierMessageHandler(message *model.Message) (*model.Message, error) {
 	//如果是客服的上线通知
 	if message.MsgType == OnlineMsgType {
 		//此时可能已经有一段时间了，判断该客服是否还在线
 		if !OnlineKefu.Exist(message.KefuId) {
 			//不在线，则忽略该消息
-			return errors.New("the kefu has been offline, this message should be ignored")
+			c.Logger.Error(errors.New("the kefu has been offline, this message should be ignored"))
+			return nil, nil
 		}
 	}
 	//如果当前游客没有指定客服
@@ -200,13 +201,15 @@ func (c *VisitorClient) recevierMessageHandler(message *model.Message) error {
 	if c.Visitor.KefuId < 1 && message.KefuId > 0 && message.MsgType == KefuMsgType {
 		c.Visitor.KefuId = message.KefuId
 		if err := c.update(); err != nil {
-			return err
+			return nil, err
 		}
 	}
 	if !validatePayload([]byte(message.Content)) {
-		return errors.New("message content equal nil")
+		//errors.New("message content equal nil")
+		//忽略
+		return nil, nil
 	}
-	return nil
+	return message, nil
 }
 
 func (c *VisitorClient) update() error {

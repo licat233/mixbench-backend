@@ -79,7 +79,6 @@ CREATE TABLE `visitor` (
   `last_login_at` datetime NOT NULL DEFAULT '2005-01-02 15:04:05' COMMENT '最后一次登录时间',
   `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否已删除',
   PRIMARY KEY (`id`),
   KEY `uuid` (`uuid`),
   KEY `status` (`status`),

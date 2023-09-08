@@ -199,7 +199,6 @@ func (l *VisitorLoginLogic) Validator(jwtToken string) (string, *model.Visitor, 
 	// 如果存在 visitorId，则表示老客户
 	if visitorId > 0 {
 		l.token = jwtToken
-		fmt.Print("老用户")
 		return l.isOldVisitor()
 	} else {
 		return l.isNewVisitor()

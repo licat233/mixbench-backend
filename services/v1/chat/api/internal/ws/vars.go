@@ -80,7 +80,7 @@ var ErrSystem = errors.New("server internal error! 伺服器故障! ")
 // 将payload转化为message
 type payloadHandler func(payload []byte) (*model.Message, error)
 
-type recevierMessageHandler func(message *model.Message) error
+type recevierMessageHandler func(message *model.Message) (*model.Message, error)
 
 // 对于kefu来说：map[kefuId]count 客服ID-游客数
 var OnlineKefu = store.NewOnlineKefu()

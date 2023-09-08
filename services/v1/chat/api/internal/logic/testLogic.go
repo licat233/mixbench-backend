@@ -4,7 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"mixbench/common/errorx"
 	"mixbench/common/respx"
+	"mixbench/services/v1/chat/api/internal/logic/dataconv"
 	"mixbench/services/v1/chat/api/internal/svc"
 	"mixbench/services/v1/chat/api/internal/types"
 
@@ -28,11 +30,11 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Reque
 }
 
 func (l *TestLogic) Test(req *types.TestReq) (any, error) {
-	// ids := []int64{1, 22}
-	// data, err := l.svcCtx.VisitorModel.FindsByIds(l.ctx, ids)
-	// if err != nil {
-	// 	return nil, errorx.InternalError(err)
-	// }
-	// res := dataconv.MdVisitors2ApiVisitors(data)
-	return respx.NewData("hello world"), nil
+	ids := []int64{22}
+	data, err := l.svcCtx.VisitorModel.FindsByIds(l.ctx, ids)
+	if err != nil {
+		return nil, errorx.InternalError(err)
+	}
+	res := dataconv.MdVisitors2ApiVisitors(data)
+	return respx.NewData(res), nil
 }

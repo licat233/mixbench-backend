@@ -160,13 +160,15 @@ func (c *KefuClient) wsPayloadHandler(payload []byte) (*model.Message, error) {
 	return message, nil
 }
 
-func (c *KefuClient) recevierMessageHandler(message *model.Message) error {
+// 处理订阅的消息
+func (c *KefuClient) recevierMessageHandler(message *model.Message) (*model.Message, error) {
 	//如果是游客的上线通知
 	if message.MsgType == OnlineMsgType {
 		//此时可能已经有一段时间了，判断该游客是否还在线
 		if !OnlineVisitor.Exist(message.VisitorId) {
 			//不在线，则忽略该消息
-			return errors.New("the visitor has been offline, this message should be ignored")
+			c.Logger.Error(errors.New("the visitor has been offline, this message should be ignored"))
+			return nil, nil
 		}
 	}
 	//客服接受到了游客发送过来的消息
@@ -179,13 +181,16 @@ func (c *KefuClient) recevierMessageHandler(message *model.Message) error {
 			//检查更新数据库中的数据
 			visitor, err := c.svcCtx.VisitorModel.FindById(c.ctx, message.Id)
 			if err == model.ErrNotFound {
-				return err
+				//不存在该游客，忽略
+				return nil, nil
 			} else if err != nil {
 				c.Logger.Error(err)
-				return err
+				return nil, err
 			}
 			if visitor.Status == 2 {
-				return errors.New("the current visitor has been blacklisted")
+				// errors.New("the current visitor has been blacklisted")
+				//忽略
+				return nil, nil
 			}
 			if visitor.KefuId != c.Kefu.Id {
 				//更新为当前客服的id
@@ -193,17 +198,18 @@ func (c *KefuClient) recevierMessageHandler(message *model.Message) error {
 				err = c.svcCtx.VisitorModel.Update(c.ctx, visitor)
 				if err != nil {
 					c.Logger.Error(err)
-					return err
+					return nil, err
 				}
 			}
 		} else if kefuId != c.Kefu.Id {
 			//如果已经被其它客服接待了，则抛弃当前消息
-			return errors.New("the current message has been received and processed by other kefu")
+			c.Logger.Error(errors.New("the current message has been received and processed by other kefu"))
+			return nil, nil //忽略
 		}
 		//将该消息的kefu_id改为当前客服id
 		message.KefuId = c.Kefu.Id
 	}
-	return nil
+	return message, nil
 }
 
 func (c *KefuClient) newMessage(content string, visitorId int64) *model.Message {
@@ -259,6 +265,6 @@ func (c *KefuClient) offlineNotification() error {
 	return nil
 }
 
-func (c *KefuClient) update() error {
-	return nil
-}
+// func (c *KefuClient) update() error {
+// 	return nil
+// }

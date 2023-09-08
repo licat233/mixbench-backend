@@ -264,7 +264,9 @@ func (c *client) sendMessageToVisitor(message *model.Message) error {
 		return err
 	}
 	if err == model.ErrNotFound {
-		return errors.New("visitor not found")
+		//如果游客不存在了，则抛弃
+		return nil
+		// return fmt.Errorf("visitor not found: %d", visitorId)
 	}
 	visitorUuid := visitor.Uuid
 	return c.publishMessage(visitorUuid, message)
@@ -411,10 +413,14 @@ func (c *client) writePump(recevierMessageHandler recevierMessageHandler) {
 				//不合规的消息体。丢弃
 				continue
 			}
-			if err := recevierMessageHandler(&message); err != nil {
+			m, err := recevierMessageHandler(&message)
+			if err != nil {
 				return
 			}
-			if err := c.writeMessage(&message); err != nil {
+			if m == nil {
+				continue
+			}
+			if err = c.writeMessage(m); err != nil {
 				return
 			}
 		case <-ticker.C:
